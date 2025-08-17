@@ -8,16 +8,7 @@ export default function CurvedPhotoGrid({ images, reverse = false }: { images: s
 					<Image src={images[0]} alt="photo" fill className="object-cover" />
 				</div>
 			</div>
-			<div className="rounded-3xl overflow-hidden">
-				<div className="relative h-32 sm:h-40 md:h-44">
-					<Image src={images[1]} alt="photo" fill className="object-cover" />
-				</div>
-			</div>
-			<div className="rounded-3xl overflow-hidden">
-				<div className="relative h-32 sm:h-40 md:h-44">
-					<Image src={images[2]} alt="photo" fill className="object-cover" />
-				</div>
-			</div>
+			
 		</div>
 	)
 }

@@ -3,9 +3,9 @@ import Link from 'next/link'
 
 export default function Benefit() {
 	return (
-		<section id="benefit" className="section mt-10">
-			<div className="container-padding">
-				<div className="bg-brand-coral text-white section-rounded overflow-hidden">
+		<section id="benefit" className="section">
+			<div className="">
+				<div className="bg-brand-coral text-white overflow-hidden">
 					<div className="grid md:grid-cols-2 items-center">
 						<div className="p-8 sm:p-12 order-2 md:order-1">
 							<p className="text-lg">How you</p>

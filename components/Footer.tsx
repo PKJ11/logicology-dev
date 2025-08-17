@@ -3,7 +3,7 @@ import { FiInstagram, FiFacebook, FiTwitter, FiPhone } from 'react-icons/fi'
 
 const SiteFooter = () => {
 	return (
-		<footer id="footer" className="mt-10">
+		<footer id="footer" className="">
 			<div className="bg-brand-tealDark text-white">
 				<div className="container-padding py-12">
 					<div className="grid md:grid-cols-4 gap-10 items-start">
@@ -36,6 +36,7 @@ const SiteFooter = () => {
 								</div>
 							</div>
 						</div>
+					</div>
 					</div>
 			</div>
 			<div className="bg-slate-100 text-slate-600 text-center text-sm py-4">

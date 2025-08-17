@@ -4,8 +4,8 @@ import Link from 'next/link'
 export default function Community() {
 	return (
 		<section className="section mt-10">
-			<div className="container-padding">
-				<div className="bg-brand-teal text-white section-rounded overflow-hidden">
+			<div className="">
+				<div className="bg-brand-teal text-white overflow-hidden">
 					<div className="grid md:grid-cols-2 items-center">
 						<CurvedPhotoGrid
 							images={[
