@@ -12,30 +12,25 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/games/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/games/page.js"
-    ],
     "/books/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/books/page.js"
     ],
-    "/subscriptions/page": [
+    "/books/logicoland1/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/subscriptions/page.js"
+      "static/chunks/app/books/logicoland1/page.js"
     ],
-    "/about/page": [
+    "/games/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/about/page.js"
+      "static/chunks/app/games/page.js"
     ],
-    "/_not-found/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/login/page.js"
     ]
   }
 }

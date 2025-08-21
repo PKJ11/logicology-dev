@@ -9,7 +9,7 @@ export default function WhyImportant() {
 					<div className="grid md:grid-cols-2 items-center">
 						<CurvedPhotoGrid
 							images={[
-								'https://ik.imagekit.io/pratik2002/logiology-img1.JPG?updatedAt=1755268314939',
+								'https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524',
 							]}
 						/>
 						

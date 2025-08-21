@@ -22,7 +22,7 @@ export default function Hero() {
       title: "Interactive Learning",
       subtitle: "Through Play",
       description: "Our innovative approach combines education with entertainment for maximum engagement.",
-      image: "https://ik.imagekit.io/pratik2002/logiology-img1.JPG?updatedAt=1755268314939",
+      image: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524",
       cta: "Discover more"
     },
     // Add more slides as needed

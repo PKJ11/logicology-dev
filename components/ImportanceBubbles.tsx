@@ -1,31 +1,110 @@
+"use client";
+import Image from "next/image";
+import { motion, Variants, Transition } from "framer-motion";
+
 export default function ImportanceBubbles() {
-	const items = [
-		{ color: '#1F9C8F' },
-		{ color: '#D7AD57' },
-		{ color: '#E45C48' },
-		{ color: '#0D5C5C' },
-	]
-	return (
-		<section className="section mt-10">
-			<div className="container-padding">
-				<div className="bg-white section-rounded border border-slate-200">
-					<div className="px-6 sm:px-10 md:px-14 py-10 md:py-14 text-center">
-						<h3 className="heading-md">Why is it <span className="text-slate-900">Important?</span></h3>
-						<p className="lead mt-2">At Logicology we endeavour to make learning fun so that children learn while the play.</p>
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
-							{items.map((it, idx) => (
-								<div key={idx} className="flex flex-col items-center gap-3">
-									<div className="relative">
-										<div className="rounded-full" style={{ width: 140, height: 140, backgroundColor: it.color }} />
-										<div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[16px] border-l-transparent border-r-transparent" style={{ borderTopColor: it.color }} />
-									</div>
-									<p className="text-sm max-w-[160px] text-slate-600">At Logicology we endeavour to make learning fun so that children learn while the play.</p>
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	)
+  const text =
+    "At Logicology we endeavour to make learning fun so that children learn while they play.";
+
+  const items = [
+    {
+      color: "#1F9C8F",
+      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_49%20AM.png?updatedAt=1755479245741",
+    },
+    {
+      color: "#D7AD57",
+      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_31_59%20AM.png?updatedAt=1755479197487",
+    },
+    {
+      color: "#E45C48",
+      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_56%20AM.png?updatedAt=1755479216126",
+    },
+    {
+      color: "#0D5C5C",
+      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_52%20AM.png?updatedAt=1755479231450",
+    },
+  ];
+
+  // Properly typed animation variants
+  const floatingVariants: Variants = {
+    float: {
+      y: ["0%", "-10%", "0%", "5%", "0%"],
+      x: ["0%", "3%", "0%", "-3%", "0%"],
+      rotate: ["0deg", "2deg", "0deg", "-2deg", "0deg"],
+      transition: {
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      } as Transition,
+    },
+  };
+
+  return (
+    <section className="section mt-10">
+      <div className="container-padding">
+        <div className="bg-white section-rounded border border-slate-200">
+          <div className="px-6 sm:px-10 md:px-14 py-10 md:py-14 text-center">
+            <h3 className="heading-md">
+              Why is it <span className="text-slate-900">Important?</span>
+            </h3>
+            <p className="lead mt-2">
+              At Logicology we endeavour to make learning fun so that children
+              learn while they play.
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mt-10">
+              {items.map((it, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-5">
+                  {/* Animated Bubble with text inside */}
+                  <motion.div 
+                    className="relative"
+                    variants={floatingVariants}
+                    animate="float"
+                  >
+                    <div
+                      className="
+                        rounded-full text-white flex items-center justify-center
+                        text-[11px] leading-snug sm:text-sm md:text-[13px]
+                        px-4 text-center shadow-sm
+                      "
+                      style={{
+                        width: 165,
+                        height: 165,
+                        backgroundColor: it.color,
+                      }}
+                    >
+                      {text}
+                    </div>
+                    {/* tail */}
+                    <div
+                      className="
+                        absolute -bottom-3 left-1/2 -translate-x-1/2
+                        w-0 h-0 border-l-[12px] border-r-[12px] border-t-[20px]
+                        border-l-transparent border-r-transparent
+                      "
+                      style={{ borderTopColor: it.color }}
+                    />
+                  </motion.div>
+
+                  {/* Larger Kid image below bubble with subtle animation */}
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <Image
+                      src={it.img}
+                      alt="child illustration"
+                      width={120}
+                      height={120}
+                      className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-contain"
+                    />
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

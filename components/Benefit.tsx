@@ -18,9 +18,7 @@ export default function Benefit() {
 						<CurvedPhotoGrid
 							reverse
 							images={[
-								'https://images.unsplash.com/photo-1496080174650-637e3f22fa03?q=80&w=1600&auto=format&fit=crop',
-								'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1200&auto=format&fit=crop',
-								'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1200&auto=format&fit=crop',
+								"https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2007_19_36%20AM.png?updatedAt=1755481819013"
 							]}
 						/>
 					</div>
