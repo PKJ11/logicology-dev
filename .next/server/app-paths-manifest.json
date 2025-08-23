@@ -1,6 +1,13 @@
 {
-  "/page": "app/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
   "/books/logicoland1/page": "app/books/logicoland1/page.js",
   "/books/page": "app/books/page.js",
-  "/games/page": "app/games/page.js"
+  "/cart/page": "app/cart/page.js",
+  "/games/page": "app/games/page.js",
+  "/page": "app/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/subscriptions/page": "app/subscriptions/page.js",
+  "/search/page": "app/search/page.js",
+  "/login/page": "app/login/page.js"
 }
