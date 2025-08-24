@@ -158,6 +158,74 @@ export default function Logicoland1Page() {
             </div>
           </div>
         </section>
+
+        {/* Games Section */}
+        <section className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
+              Interactive Learning Games
+            </h2>
+            <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
+              Try these fun games that complement the Logicoland experience and help develop logical thinking skills.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Game 1 */}
+            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+                Pattern Recognition Game
+              </h3>
+              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+                <iframe 
+                  style={{ maxWidth: '100%' }} 
+                  src="https://wordwall.net/embed/play/96298/037/880" 
+                  width="100%" 
+                  height="100%" 
+                  frameBorder="0"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+              <p className="mt-4 text-center text-brand-tealDark/80">
+                Identify patterns and sequences to boost logical thinking.
+              </p>
+            </div>
+
+            {/* Game 2 */}
+            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+                Logic Puzzle Challenge
+              </h3>
+              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+                <iframe 
+                  style={{ maxWidth: '100%' }} 
+                  src="https://wordwall.net/embed/play/96298/689/270" 
+                  width="100%" 
+                  height="100%" 
+                  frameBorder="0"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+              <p className="mt-4 text-center text-brand-tealDark/80">
+                Solve puzzles that enhance problem-solving and deduction skills.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-brand-tealDark/80 mb-6">
+              Enjoying these games? There's more where that came from in the full Logicoland experience!
+            </p>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-block bg-brand-teal hover:bg-[#1a736e] text-white font-bold py-3 px-8 rounded-2xl transition-colors"
+            >
+              Get the Full Experience
+            </button>
+          </div>
+        </section>
       </div>
 
       {/* Community Signup Modal */}

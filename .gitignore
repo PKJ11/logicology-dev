@@ -39,3 +39,7 @@ Thumbs.db
 *.log
 *.tmp
 *.temp
+# Next.js build output
+.next/
+.next/cache/
+.out/
