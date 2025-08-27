@@ -27,22 +27,40 @@ export default function PrimeTimeLanding() {
 }
 
 // --------------------- Hero ---------------------
+// --------------------- Hero ---------------------
 function Hero() {
   const router = useRouter();
   const slides = [
     {
       id: 1,
-      title: "Through STEM Play and",
-      subtitle: "Logic-Based Learning",
-      description:
-        "At Logicology we endeavour to make learning fun so that children learn while they play.",
-      image:
-        "https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg",
+      pretitle: 'Introducing Prime Time',
+      title: "Where kids learn effortlessly and ",
+      subtitle: "adults get hooked.",
+      description: "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
+      image: "https://ik.imagekit.io/pratik2002/thumbnail2.png?updatedAt=1756264541926",
       cta: "Learn more",
-      ctaLink: "/philosophy", // Added link to philosophy page
+      ctaLink: "/philosophy",
     },
-
-    // Add more slides as needed
+    {
+      id: 2,
+      pretitle: 'From classrooms to living rooms',
+      title: "Prime Time makes numbers fun",
+      subtitle: "for everyone.",
+      description: "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
+      image: "https://ik.imagekit.io/pratik2002/thumbnail3.png?updatedAt=1756264542776",
+      cta: "Discover how",
+      ctaLink: "/how-it-works",
+    },
+    {
+      id: 3,
+      pretitle: 'Say hello to Prime Time',
+      title: "Where numbers, luck & strategy",
+      subtitle: "all come together!",
+      description: "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
+      image: "https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg",
+      cta: "Get started",
+      ctaLink: "/get-started",
+    }
   ];
 
   return (
@@ -76,27 +94,26 @@ function Hero() {
               <SwiperSlide key={slide.id}>
                 {/* Full background image container */}
                 <div
-                  className="absolute inset-0 z-0 flex items-center justify-center opacity-80"
+                  className="absolute inset-0 z-0 flex items-center justify-center"
                   style={{
-                    backgroundImage: `url('https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg')`,
-                    backgroundSize: "cover", // Changed from 'cover' to 'contain'
+                    backgroundImage: `url('${slide.image}')`,
+                    backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    // backgroundColor: '#f5f5f5' // Added fallback background color
                   }}
                 ></div>
 
                 {/* Semi-transparent overlay for better text readability */}
-                {/* <div className="absolute inset-0 bg-black/30 z-1"></div> */}
+                <div className="absolute inset-0 bg-black/40 z-1"></div>
 
                 <div className="grid md:grid-cols-2 gap-6 items-center relative z-10 min-h-[700px]">
                   <div className="p-8 sm:p-12">
                     <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
-                      Empowering Minds
+                      {slide.pretitle}
                     </p>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-brand-coral">
                       {slide.title}
-                      <span className="block text-white">{slide.subtitle}</span>
+                      <span className="block text-brand-coral">{slide.subtitle}</span>
                     </h1>
                     <p className="text-white mt-4 text-base sm:text-lg max-w-md">
                       {slide.description}
@@ -129,16 +146,7 @@ function Hero() {
           </Swiper>
 
           {/* Custom Navigation Arrows */}
-          {/* <div className="swiper-button-prev !hidden md:!flex">
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </div>
-      <div className="swiper-button-next !hidden md:!flex">
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div> */}
+          
         </div>
       </div>
 

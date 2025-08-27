@@ -41,9 +41,9 @@ export default function NavBar() {
 						))}
 					</nav>
 					<div className="hidden md:flex items-center gap-5 text-slate-700">
-						<Link href="/login" className="hover:text-brand-tealDark flex items-center gap-1"><FiLogIn /> <span>Login</span></Link>
+						{/* <Link href="/login" className="hover:text-brand-tealDark flex items-center gap-1"><FiLogIn /> <span>Login</span></Link>
 						<Link href="/search" aria-label="Search" className="hover:text-brand-tealDark"><FiSearch /></Link>
-						<Link href="/cart" aria-label="Cart" className="hover:text-brand-tealDark"><FiShoppingCart /></Link>
+						<Link href="/cart" aria-label="Cart" className="hover:text-brand-tealDark"><FiShoppingCart /></Link> */}
 					</div>
 					<button onClick={() => setOpen((s) => !s)} className="md:hidden text-2xl p-2" aria-label="Toggle menu">
 						{open ? <FiX /> : <FiMenu />}
