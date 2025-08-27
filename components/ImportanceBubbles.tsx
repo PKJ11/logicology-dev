@@ -3,26 +3,31 @@ import Image from "next/image";
 import { motion, Variants, Transition } from "framer-motion";
 
 export default function ImportanceBubbles() {
-  const text =
-    "At Logicology we endeavour to make learning fun so that children learn while they play.";
-
   const items = [
     {
       color: "#1F9C8F",
       img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_49%20AM.png?updatedAt=1755479245741",
+      text: "If you do not want your kids to spend too much time on screen",
+      title: "Board Games & Card Games"
     },
     {
       color: "#D7AD57",
       img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_31_59%20AM.png?updatedAt=1755479197487",
+      text: "If you like the age old tradition of books fused with activities that keep the children's minds engaged and yours free",
+      title: "Activity Books"
     },
     {
       color: "#E45C48",
       img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_56%20AM.png?updatedAt=1755479216126",
+      text: "Coming soon - Continuous comprehensive assessment of your child's progress in the world of Logic",
+      title: "Evaluation Packs"
     },
     {
       color: "#0D5C5C",
       img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_52%20AM.png?updatedAt=1755479231450",
-    },
+      text: "Hands-on learning materials that develop critical thinking through tactile experiences",
+      title: "Learning Kits"
+    }
   ];
 
   // Properly typed animation variants
@@ -40,16 +45,15 @@ export default function ImportanceBubbles() {
   };
 
   return (
-    <section className="section mt-10">
+    <section className="section mt-10" id="offerings">
       <div className="container-padding">
         <div className="bg-white section-rounded border border-slate-200">
           <div className="px-6 sm:px-10 md:px-14 py-10 md:py-14 text-center">
             <h3 className="heading-md">
-              Why is it <span className="text-slate-900">Important?</span>
+              Our Offerings for <span className="text-slate-900">you.</span>
             </h3>
             <p className="lead mt-2">
-              At Logicology we endeavour to make learning fun so that children
-              learn while they play.
+              You can choose from a wide variety of formats and engagement types
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mt-10">
@@ -63,9 +67,8 @@ export default function ImportanceBubbles() {
                   >
                     <div
                       className="
-                        rounded-full text-white flex items-center justify-center
-                        text-[11px] leading-snug sm:text-sm md:text-[13px]
-                        px-4 text-center shadow-sm
+                        rounded-full text-white flex flex-col items-center justify-center p-4
+                        text-center shadow-sm relative
                       "
                       style={{
                         width: 165,
@@ -73,7 +76,8 @@ export default function ImportanceBubbles() {
                         backgroundColor: it.color,
                       }}
                     >
-                      {text}
+                      <h4 className="font-bold text-sm mb-1">{it.title}</h4>
+                      <p className="text-xs leading-tight">{it.text}</p>
                     </div>
                     {/* tail */}
                     <div

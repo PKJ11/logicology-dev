@@ -28,45 +28,13 @@ export default function GamesPage() {
       title: 'PrimeTime',
       imageUrl: 'https://ik.imagekit.io/pratik2002/primetime-game-cover.png?updatedAt=1755475994053',
       description: 'A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.',
-      author: 'MathWizards Inc',
+      author: 'Gayatri',
       rating: 4.9,
       category: 'Math Strategy',
       players: '2-6',
       duration: '15-30 min'
     },
-    {
-      id: 2,
-      title: 'Logicoland',
-      imageUrl: 'https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_42_36%20AM.png?updatedAt=1755475994053',
-      description: 'A fascinating journey through the world of logical puzzles and mind-bending challenges that will test your reasoning skills to the limit.',
-      author: 'Gayatri',
-      rating: 4.8,
-      category: 'Logic Puzzles',
-      players: '1-4',
-      duration: '20-45 min'
-    },
-    {
-      id: 3,
-      title: 'WordCraft',
-      imageUrl: 'https://ik.imagekit.io/pratik2002/word-game-cover.png?updatedAt=1755475994053',
-      description: 'Build words and craft strategies in this fast-paced vocabulary game. Expand your lexicon while competing against friends or AI opponents.',
-      author: 'Linguistic Games',
-      rating: 4.7,
-      category: 'Word Game',
-      players: '2-4',
-      duration: '20-40 min'
-    },
-    {
-      id: 4,
-      title: 'EcoBalance',
-      imageUrl: 'https://ik.imagekit.io/pratik2002/eco-game-cover.png?updatedAt=1755475994053',
-      description: 'Manage resources and balance ecosystems in this environmental strategy game. Learn about sustainability while having fun with friends and family.',
-      author: 'GreenPlay Studios',
-      rating: 4.6,
-      category: 'Strategy',
-      players: '2-5',
-      duration: '45-60 min'
-    },
+    
   ];
 
   const openModal = (game: Game) => {
@@ -259,7 +227,7 @@ export default function GamesPage() {
                     <p className="text-brand-tealDark/85 mb-8">{selectedGame.description}</p>
 
                     <button className="bg-brand-coral hover:bg-[#d55241] text-white font-bold py-3 px-6 rounded-2xl transition-colors w-full" onClick={handleGetStarted}>
-                      Play Now
+                      Know More about {selectedGame.title}
                     </button>
                   </div>
                 </div>

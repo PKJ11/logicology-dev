@@ -159,6 +159,8 @@ export default function Logicoland1Page() {
           </div>
         </section>
 
+        {/* Games Section */}
+        
       </div>
 
       {/* Community Signup Modal */}

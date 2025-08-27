@@ -8,11 +8,11 @@ export default function Benefit() {
 				<div className="bg-brand-coral text-white overflow-hidden">
 					<div className="grid md:grid-cols-2 items-center">
 						<div className="p-8 sm:p-12 order-2 md:order-1">
-							<p className="text-lg">How you</p>
-							<h2 className="heading-lg">Benefit?</h2>
-							<p className="mt-4 max-w-xl text-white/90">At Logicology we endeavour to make learning fun so that children learn while the play.</p>
+							<p className="text-lg">How we </p>
+							<h2 className="heading-lg">Help?</h2>
+							<p className="mt-4 max-w-xl text-white/90">At Logicology we have a bouquet of products and subscriptions that help your child develop Logical Reasoning and Critical Thinking Skills. Choose from books, board games, online puzzles, worksheets or subscriptions.</p>
 							<div className="mt-6">
-								<Link href="#importance" className="btn btn-light">Learn more</Link>
+								<Link href="#offerings" className="btn btn-light">Learn more</Link>
 							</div>
 						</div>
 						<CurvedPhotoGrid

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { FiMenu, FiX, FiShoppingCart, FiSearch, FiLogIn } from 'react-icons/fi'
+import Image from 'next/image'
 
 const navItems = [
 	{ name: 'Home', href: '/' },
@@ -20,8 +21,16 @@ export default function NavBar() {
 				<div className="flex items-center justify-between py-3">
 					<div className="flex items-center gap-3">
 						<Link href="/" className="flex items-center gap-2">
-							<div className="h-9 w-9 rounded-full bg-brand-tealDark grid place-items-center text-white font-bold">L</div>
-							<span className="font-semibold text-lg">Logicology</span>
+							{/* Logo with 150px width */}
+							<div className="w-[150px] h-auto relative">
+								<Image
+									src="https://ik.imagekit.io/pratik2002/logicology-logo_74-P-ICfG?updatedAt=1756257433107"
+									alt="Logicology Logo"
+									width={150}
+									height={60} // Adjust height based on your logo's aspect ratio
+									className="object-contain"
+								/>
+							</div>
 						</Link>
 					</div>
 					<nav className="hidden md:flex items-center gap-6 text-sm text-slate-700">
