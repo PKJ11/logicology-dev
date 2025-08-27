@@ -8,7 +8,6 @@ import {
   signInWithPhoneNumber,
   ConfirmationResult,
 } from "firebase/auth";
-import { useRouter } from "next/router";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -25,7 +24,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Extend Window interface to include recaptchaVerifierRenderId if needed
 declare global {
   interface Window {
     recaptchaVerifierRenderId?: number;
@@ -35,11 +33,56 @@ declare global {
 interface CommunitySignupModalProps {
   open: boolean;
   onClose: () => void;
+  onNavigateToCommunity?: () => void;
 }
+
+interface ApiError {
+  msg: string;
+  param?: string;
+}
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+// Utility function to check if JWT token is valid
+const hasValidToken = (): boolean => {
+  if (typeof window === "undefined") return false;
+  
+  const token = localStorage.getItem("communityToken");
+  if (!token) return false;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 > Date.now();
+  } catch (error) {
+    console.error("Error checking token validity:", error);
+    return false;
+  }
+};
+
+// Utility function to get user data from storage
+const getUserData = (): UserData | null => {
+  if (typeof window === "undefined") return null;
+  
+  const userData = localStorage.getItem("userData");
+  if (!userData) return null;
+  
+  try {
+    return JSON.parse(userData);
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    return null;
+  }
+};
 
 export default function CommunitySignupModal({
   open,
   onClose,
+  onNavigateToCommunity,
 }: CommunitySignupModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -48,59 +91,60 @@ export default function CommunitySignupModal({
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult | null>(null);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [hasExistingSession, setHasExistingSession] = useState(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
-  // const router = useRouter();
 
-  // Initialize and clean up reCAPTCHA
+  // Check for existing session when modal opens
+  useEffect(() => {
+    if (open) {
+      const sessionExists = hasValidToken();
+      setHasExistingSession(sessionExists);
+      if (sessionExists) {
+        setUserData(getUserData());
+      }
+      setErrorMessage(null);
+    }
+  }, [open]);
+
+  // Initialize reCAPTCHA
   useEffect(() => {
     if (!open) return;
 
-    const initializeRecaptcha = () => {
-      try {
-        // Clear any existing reCAPTCHA
+    try {
+      if (recaptchaVerifier.current) {
+        recaptchaVerifier.current.clear();
+      }
+
+      recaptchaVerifier.current = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: () => console.log("reCAPTCHA solved"),
+          "expired-callback": () => {
+            console.log("reCAPTCHA expired");
+            resetRecaptcha();
+          },
+        }
+      );
+
+      return () => {
         if (recaptchaVerifier.current) {
           try {
             recaptchaVerifier.current.clear();
-          } catch (clearError) {
-            console.log("Error clearing old reCAPTCHA:", clearError);
+          } catch (error) {
+            console.log("Error during reCAPTCHA cleanup:", error);
           }
         }
-
-        // Initialize new reCAPTCHA
-        recaptchaVerifier.current = new RecaptchaVerifier(
-          auth,
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: () => console.log("reCAPTCHA solved"),
-            "expired-callback": () => {
-              console.log("reCAPTCHA expired");
-              resetRecaptcha();
-            },
-          }
-        );
-
-        return () => {
-          // Cleanup on unmount or when modal closes
-          if (recaptchaVerifier.current) {
-            try {
-              recaptchaVerifier.current.clear();
-            } catch (error) {
-              console.log("Error during reCAPTCHA cleanup:", error);
-            }
-            recaptchaVerifier.current = null;
-          }
-        };
-      } catch (error) {
-        console.error("Error initializing reCAPTCHA:", error);
-        return undefined;
-      }
-    };
-
-    const cleanup = initializeRecaptcha();
-    return cleanup;
+      };
+    } catch (error) {
+      console.error("Error initializing reCAPTCHA:", error);
+      setErrorMessage("Failed to initialize security verification. Please refresh the page.");
+    }
   }, [open]);
 
   const resetRecaptcha = () => {
@@ -120,17 +164,19 @@ export default function CommunitySignupModal({
       );
     } catch (error) {
       console.error("Error resetting reCAPTCHA:", error);
+      setErrorMessage("Failed to reset security verification. Please refresh the page.");
     }
   };
 
   const handleSendOtp = async () => {
     if (!phone || phone.length < 10) {
-      alert("Please enter a valid 10-digit mobile number");
+      setErrorMessage("Please enter a valid 10-digit mobile number");
       return;
     }
 
     try {
       setLoading(true);
+      setErrorMessage(null);
       const formattedPhone = `+91${phone}`;
 
       if (!recaptchaVerifier.current) {
@@ -145,14 +191,9 @@ export default function CommunitySignupModal({
 
       setConfirmationResult(result);
       setOtpSent(true);
-      alert(`OTP sent to ${phone}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending OTP:", error);
-      alert(
-        `Failed to send OTP: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      setErrorMessage(`Failed to send OTP: ${error.message || "Unknown error"}`);
       resetRecaptcha();
     } finally {
       setLoading(false);
@@ -161,27 +202,23 @@ export default function CommunitySignupModal({
 
   const handleVerifyOtp = async () => {
     if (!otp || otp.length !== 6) {
-      alert("Please enter a valid 6-digit OTP");
+      setErrorMessage("Please enter a valid 6-digit OTP");
       return;
     }
 
     if (!confirmationResult) {
-      alert("OTP verification not initialized");
+      setErrorMessage("OTP verification not initialized. Please try sending the OTP again.");
       return;
     }
 
     try {
       setLoading(true);
+      setErrorMessage(null);
       await confirmationResult.confirm(otp);
       setOtpVerified(true);
-      alert("Phone number verified successfully!");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error verifying OTP:", error);
-      alert(
-        `Invalid OTP: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
     } finally {
       setLoading(false);
     }
@@ -191,13 +228,15 @@ export default function CommunitySignupModal({
     e.preventDefault();
 
     if (!otpVerified) {
-      alert("Please verify your phone number first");
+      setErrorMessage("Please verify your phone number first");
       return;
     }
 
     try {
       setLoading(true);
+      setErrorMessage(null);
 
+      // Real API call to register user
       const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: {
@@ -207,36 +246,62 @@ export default function CommunitySignupModal({
           name,
           email,
           phone,
-          password: "defaultPassword",
+          password: "defaultPassword", // In a real app, you might want to generate a random password
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.errors) {
+        if (data.errors && Array.isArray(data.errors)) {
           const errorMessage = data.errors
-            .map((err: any) => err.msg)
+            .map((err: ApiError) => err.msg)
             .join(", ");
           throw new Error(errorMessage);
         }
         throw new Error(data.message || "Registration failed");
       }
 
-      alert("Registration successful! Welcome to our community!");
-      resetForm();
-      onClose();
-      // router.push("/community");
-    } catch (error) {
+      // Store the token and user data
+      if (data.token) {
+        localStorage.setItem("communityToken", data.token);
+        
+        // Store user data if available in response
+        if (data.user) {
+          localStorage.setItem("userData", JSON.stringify(data.user));
+          setUserData(data.user);
+        } else {
+          // Create user data from form inputs if not provided by API
+          const userData = { id: Date.now().toString(), name, email, phone };
+          localStorage.setItem("userData", JSON.stringify(userData));
+          setUserData(userData);
+        }
+      }
+
+      setRegistrationSuccess(true);
+      setHasExistingSession(true);
+    } catch (error: any) {
       console.error("Error submitting form:", error);
-      alert(
-        `Registration failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      setErrorMessage(`Registration failed: ${error.message || "Unknown error"}`);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoToCommunity = () => {
+    resetForm();
+    onClose();
+    if (onNavigateToCommunity) {
+      onNavigateToCommunity();
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("communityToken");
+    localStorage.removeItem("userData");
+    setHasExistingSession(false);
+    setUserData(null);
+    resetForm();
   };
 
   const resetForm = () => {
@@ -247,147 +312,197 @@ export default function CommunitySignupModal({
     setOtpSent(false);
     setOtpVerified(false);
     setConfirmationResult(null);
-
-    // Reset reCAPTCHA when form is reset
-    if (recaptchaVerifier.current) {
-      try {
-        recaptchaVerifier.current.clear();
-      } catch (error) {
-        console.log("Error clearing reCAPTCHA on form reset:", error);
-      }
-    }
+    setRegistrationSuccess(false);
+    setErrorMessage(null);
   };
 
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
+        <button
+          onClick={() => {
+            resetForm();
+            onClose();
+          }}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
+        >
+          &times;
+        </button>
+
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
-            Join Our Community
+            {hasExistingSession 
+              ? "Welcome Back!" 
+              : registrationSuccess 
+                ? "Welcome to Our Community!" 
+                : "Join Our Community"
+            }
           </h2>
-          <button
-            onClick={() => {
-              resetForm();
-              onClose();
-            }}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            &times;
-          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+        {errorMessage && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+            {errorMessage}
           </div>
+        )}
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Mobile Number
-            </label>
-            <div className="flex gap-2">
-              <input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                required
-                disabled={otpSent}
-                maxLength={10}
-                placeholder="10-digit number"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-              />
+        {hasExistingSession ? (
+          <div className="text-center py-4">
+            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl text-blue-600 font-semibold">
+                {userData?.name?.charAt(0) || 'U'}
+              </span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              {userData?.name || 'User'}
+            </h3>
+            <p className="text-gray-600 mb-2">{userData?.email}</p>
+            <p className="text-gray-600 mb-6">{userData?.phone}</p>
+            
+            <div className="flex flex-col gap-3">
               <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={otpSent || !phone || phone.length < 10 || loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
+                onClick={handleGoToCommunity}
+                className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
               >
-                {otpSent ? "Sent" : "Send OTP"}
+                Go to Community
+              </button>
+              <button
+                onClick={handleLogout}
+                className="w-full py-2 px-4 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-100 transition-colors"
+              >
+                Logout
               </button>
             </div>
           </div>
-
-          {otpSent && (
+        ) : registrationSuccess ? (
+          <div className="text-center py-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Success!</h3>
+            <p className="text-gray-700 mb-6">
+              Your account has been created successfully. You're now part of our community.
+            </p>
+            <button
+              onClick={handleGoToCommunity}
+              className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Go to Community
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label
-                htmlFor="otp"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Enter OTP
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your full name"
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address *
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Mobile Number *
               </label>
               <div className="flex gap-2">
-                <input
-                  id="otp"
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  placeholder="6-digit OTP"
-                  maxLength={6}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div className="flex-1 relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <span className="text-gray-500">+91</span>
+                  </div>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                    required
+                    disabled={otpSent || loading}
+                    maxLength={10}
+                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                    placeholder="10-digit number"
+                  />
+                </div>
                 <button
                   type="button"
-                  onClick={handleVerifyOtp}
-                  disabled={otpVerified || !otp || otp.length !== 6 || loading}
-                  className={`px-4 py-2 rounded-md ${
-                    otpVerified
-                      ? "bg-green-600 text-white"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  } disabled:bg-gray-300 disabled:cursor-not-allowed`}
+                  onClick={handleSendOtp}
+                  disabled={otpSent || !phone || phone.length < 10 || loading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
                 >
-                  {otpVerified ? "Verified" : "Verify"}
+                  {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
                 </button>
               </div>
             </div>
-          )}
 
-          {/* Hidden reCAPTCHA container */}
-          <div id="recaptcha-container"></div>
+            {otpSent && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Enter OTP *
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                    placeholder="6-digit OTP"
+                    maxLength={6}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={loading || otpVerified}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    disabled={otpVerified || !otp || otp.length !== 6 || loading}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      otpVerified
+                        ? "bg-green-600 text-white"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                    } disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap`}
+                  >
+                    {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
+                  </button>
+                </div>
+              </div>
+            )}
 
-          <button
-            type="submit"
-            disabled={!otpVerified || loading}
-            className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {loading ? "Processing..." : "Join Community"}
-          </button>
-        </form>
+            <div id="recaptcha-container"></div>
+
+            <button
+              type="submit"
+              disabled={!otpVerified || loading}
+              className="w-full py-3 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? "Processing..." : "Join Community"}
+            </button>
+
+            <p className="text-xs text-gray-500 text-center mt-4">
+              By joining, you agree to our Terms of Service and Privacy Policy
+            </p>
+          </form>
+        )}
       </div>
     </div>
   );

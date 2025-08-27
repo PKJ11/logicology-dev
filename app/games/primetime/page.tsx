@@ -27,7 +27,6 @@ export default function PrimeTimeLanding() {
 }
 
 // --------------------- Hero ---------------------
-// --------------------- Hero ---------------------
 function Hero() {
   const router = useRouter();
   const slides = [
