@@ -74,9 +74,9 @@ export default function Hero() {
                     <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
                       {slide.pretitle}
                     </p>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-brand-coral">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white">
                       {slide.title}
-                      <span className="block text-brand-coral">
+                      <span className="block text-white">
                         {slide.subtitle}
                       </span>
                     </h1>
