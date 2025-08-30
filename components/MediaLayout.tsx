@@ -13,7 +13,7 @@ export default function MediaLayout({
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
 
   return (
-    <div className="relative max-w-[500px] max-h-[500px] w-[95%] my-2 mx-2">
+    <div className="relative max-w-[500px] mx-h-[500px] w-[95%] my-2 mx-2">
       {/* Main content container */}
       <div className="rounded-[28px] bg-white p-5 shadow-lg">
         <div className="relative rounded-[22px] overflow-hidden">
@@ -30,31 +30,31 @@ export default function MediaLayout({
         </div>
       </div>
 
-      {/* Video container positioned at bottom right */}
+      {/* Video container with transition animation */}
       <div
         className={`
-          absolute z-20 
+          absolute z-20 top-0 left-0 
           transition-all duration-500 ease-in-out
           ${
             isVideoExpanded
-              ? "w-full h-full top-0 left-0 rounded-[22px] bg-white"
-              : "w-40 sm:w-56 h-auto bottom-5 right-5 rounded-[18px] bg-white/90 backdrop-blur-sm"
+              ? "w-full h-full !rounded-[22px]"
+              : "rounded-br-[5px] rounded-tl-[22px]"
           }
-          shadow-lg cursor-pointer
+          bg-white p-5 shadow-lg cursor-pointer
           overflow-hidden
-          flex items-center justify-center
         `}
         onClick={() => setIsVideoExpanded(!isVideoExpanded)}
       >
         <div
           className={`
+            rounded-[18px] overflow-hidden
             transition-all duration-500 ease-in-out
             ${
               isVideoExpanded
-                ? "w-full h-full"
-                : "w-full aspect-video"
+                ? "w-full h-full aspect-video"
+                : "w-40 sm:w-56 aspect-video"
             }
-            flex items-center justify-center
+            bg-white
           `}
         >
           <video
@@ -63,22 +63,19 @@ export default function MediaLayout({
             muted
             loop
             playsInline
-            className={`
-              ${isVideoExpanded ? "w-full h-full" : "w-full"}
-              object-contain
-            `}
+            className="w-full h-full object-cover"
           />
 
           {/* Play/Close button overlay */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0  transition-all duration-300">
             <div
               className={`
               flex items-center justify-center rounded-full bg-white bg-opacity-90
-              transition-all duration-200
+              transition-all duration-300
               ${
                 isVideoExpanded
                   ? "w-16 h-16 opacity-100"
-                  : "w-10 h-10 opacity-70 hover:opacity-100"
+                  : "w-12 h-12 opacity-0 hover:opacity-100"
               }
             `}
             >
@@ -92,7 +89,7 @@ export default function MediaLayout({
                 </svg>
               ) : (
                 <svg
-                  className="w-5 h-5 text-gray-800 ml-1"
+                  className="w-6 h-6 text-gray-800 ml-1"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
