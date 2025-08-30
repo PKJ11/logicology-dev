@@ -320,190 +320,196 @@ export default function CommunitySignupModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
-        <button
-          onClick={() => {
-            resetForm();
-            onClose();
-          }}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
-        >
-          &times;
-        </button>
+  <div className="bg-white rounded-2xl shadow-brand max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+    <button
+      onClick={() => {
+        resetForm();
+        onClose();
+      }}
+      className="absolute top-6 right-6 text-brand-tealDark hover:text-brand-coral text-2xl transition-colors"
+    >
+      &times;
+    </button>
 
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            {hasExistingSession 
-              ? "Welcome Back!" 
-              : registrationSuccess 
-                ? "Welcome to Our Community!" 
-                : "Join Our Community"
-            }
-          </h2>
+    <div className="text-center mb-8">
+      <h2 className="text-3xl font-bold text-brand-tealDark">
+        {hasExistingSession 
+          ? "Welcome Back!" 
+          : registrationSuccess 
+            ? "Welcome to Our Community!" 
+            : "Join Our Community"
+        }
+      </h2>
+      <div className="w-20 h-1 bg-brand-gold mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    {errorMessage && (
+      <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
+        <div className="flex items-center">
+          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+          {errorMessage}
+        </div>
+      </div>
+    )}
+
+    {hasExistingSession ? (
+      <div className="text-center py-4">
+        <div className="w-24 h-24 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span className="text-3xl text-brand-teal font-semibold">
+            {userData?.name?.charAt(0)?.toUpperCase() || 'U'}
+          </span>
+        </div>
+        <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
+          {userData?.name || 'User'}
+        </h3>
+        <p className="text-brand-tealDark/80 mb-3">{userData?.email}</p>
+        <p className="text-brand-tealDark/80 mb-8">{userData?.phone}</p>
+        
+        <div className="flex flex-col gap-4">
+          <button
+            onClick={handleGoToCommunity}
+            className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+          >
+            Go to Community
+          </button>
+          <button
+            onClick={handleLogout}
+            className="w-full py-2.5 px-6 border border-brand-teal/30 text-brand-teal font-medium rounded-xl hover:bg-brand-teal/5 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    ) : registrationSuccess ? (
+      <div className="text-center py-6">
+        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h3 className="text-xl font-semibold text-brand-tealDark mb-3">Success!</h3>
+        <p className="text-brand-tealDark/80 mb-8">
+          Your account has been created successfully. You're now part of our community.
+        </p>
+        <button
+          onClick={handleGoToCommunity}
+          className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+        >
+          Go to Community
+        </button>
+      </div>
+    ) : (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-brand-tealDark mb-2">
+            Full Name *
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+            placeholder="Enter your full name"
+            disabled={loading}
+          />
         </div>
 
-        {errorMessage && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-            {errorMessage}
-          </div>
-        )}
+        <div>
+          <label className="block text-sm font-medium text-brand-tealDark mb-2">
+            Email Address *
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+            placeholder="Enter your email"
+            disabled={loading}
+          />
+        </div>
 
-        {hasExistingSession ? (
-          <div className="text-center py-4">
-            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl text-blue-600 font-semibold">
-                {userData?.name?.charAt(0) || 'U'}
-              </span>
+        <div>
+          <label className="block text-sm font-medium text-brand-tealDark mb-2">
+            Mobile Number *
+          </label>
+          <div className="flex gap-3">
+            <div className="flex-1 relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <span className="text-brand-tealDark/60">+91</span>
+              </div>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                required
+                disabled={otpSent || loading}
+                maxLength={10}
+                className="w-full pl-12 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all disabled:bg-brand-grayBg"
+                placeholder="10-digit number"
+              />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              {userData?.name || 'User'}
-            </h3>
-            <p className="text-gray-600 mb-2">{userData?.email}</p>
-            <p className="text-gray-600 mb-6">{userData?.phone}</p>
-            
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={handleGoToCommunity}
-                className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Go to Community
-              </button>
-              <button
-                onClick={handleLogout}
-                className="w-full py-2 px-4 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-100 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        ) : registrationSuccess ? (
-          <div className="text-center py-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Success!</h3>
-            <p className="text-gray-700 mb-6">
-              Your account has been created successfully. You're now part of our community.
-            </p>
             <button
-              onClick={handleGoToCommunity}
-              className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+              type="button"
+              onClick={handleSendOtp}
+              disabled={otpSent || !phone || phone.length < 10 || loading}
+              className="px-5 py-3 bg-brand-teal text-white rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors whitespace-nowrap shadow-md"
             >
-              Go to Community
+              {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
             </button>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name *
-              </label>
+        </div>
+
+        {otpSent && (
+          <div>
+            <label className="block text-sm font-medium text-brand-tealDark mb-2">
+              Enter OTP *
+            </label>
+            <div className="flex gap-3">
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your full name"
-                disabled={loading}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                placeholder="6-digit OTP"
+                maxLength={6}
+                className="flex-1 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                disabled={loading || otpVerified}
               />
+              <button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={otpVerified || !otp || otp.length !== 6 || loading}
+                className={`px-5 py-3 rounded-xl transition-colors shadow-md ${
+                  otpVerified
+                    ? "bg-green-600 text-white hover:bg-green-700"
+                    : "bg-brand-teal text-white hover:bg-brand-tealDark"
+                } disabled:bg-brand-teal/40 disabled:cursor-not-allowed whitespace-nowrap`}
+              >
+                {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
+              </button>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your email"
-                disabled={loading}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mobile Number *
-              </label>
-              <div className="flex gap-2">
-                <div className="flex-1 relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <span className="text-gray-500">+91</span>
-                  </div>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                    required
-                    disabled={otpSent || loading}
-                    maxLength={10}
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                    placeholder="10-digit number"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  disabled={otpSent || !phone || phone.length < 10 || loading}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-                >
-                  {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
-                </button>
-              </div>
-            </div>
-
-            {otpSent && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Enter OTP *
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                    placeholder="6-digit OTP"
-                    maxLength={6}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    disabled={loading || otpVerified}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleVerifyOtp}
-                    disabled={otpVerified || !otp || otp.length !== 6 || loading}
-                    className={`px-4 py-2 rounded-md transition-colors ${
-                      otpVerified
-                        ? "bg-green-600 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    } disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap`}
-                  >
-                    {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            <div id="recaptcha-container"></div>
-
-            <button
-              type="submit"
-              disabled={!otpVerified || loading}
-              className="w-full py-3 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? "Processing..." : "Join Community"}
-            </button>
-
-            <p className="text-xs text-gray-500 text-center mt-4">
-              By joining, you agree to our Terms of Service and Privacy Policy
-            </p>
-          </form>
+          </div>
         )}
-      </div>
-    </div>
+
+        <div id="recaptcha-container"></div>
+
+        <button
+          type="submit"
+          disabled={!otpVerified || loading}
+          className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors shadow-md"
+        >
+          {loading ? "Processing..." : "Join Community"}
+        </button>
+
+        <p className="text-xs text-brand-tealDark/60 text-center mt-6">
+          By joining, you agree to our Terms of Service and Privacy Policy
+        </p>
+      </form>
+    )}
+  </div>
+</div>
   );
 }
