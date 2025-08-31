@@ -198,7 +198,7 @@ export default function BooksPage() {
                     <p className="text-brand-tealDark/85 mb-8">{selectedBook.description}</p>
 
                     <button className="bg-brand-coral hover:bg-[#d55241] text-white font-bold py-3 px-6 rounded-2xl transition-colors w-full" onClick={handleGetStarted}>
-                      Get Started
+                      Know more about {selectedBook.title}
                     </button>
                   </div>
                 </div>
