@@ -70,15 +70,39 @@ export default function Logicoland1Page() {
               <button
                 onClick={toggleFullscreen}
                 className="absolute bottom-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                aria-label={
+                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                }
               >
                 {!isFullscreen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                    />
                   </svg>
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                    />
                   </svg>
                 )}
               </button>
@@ -87,17 +111,32 @@ export default function Logicoland1Page() {
         </section>
 
         {/* ================= LOGICOLAND V1 ================= */}
-        <section id="buy" className="py-6 sm:py-8 md:py-10 px-3 sm:px-5 bg-brand-gold">
+        <section
+          id="buy"
+          className="py-6 sm:py-8 md:py-10 px-3 sm:px-5 bg-brand-gold"
+        >
           <div className="max-w-6xl mx-auto rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-extrabold text-brand-tealDark">Logicoland Volume 1</h2>
-              <p className="text-brand-tealDark/80 mt-2">Logic through coloring!</p>
+              <h2 className="text-3xl font-extrabold text-brand-tealDark">
+                Logicoland Volume 1
+              </h2>
+              <p className="text-brand-tealDark/80 mt-2">
+                Logic through coloring!
+              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-10 items-center">
               <div className="space-y-10">
-                <BulletWithLine side="left" title="50+ brain-boosting challenges" desc="Blend logic puzzles with creative coloring fun." />
-                <BulletWithLine side="left" title="Intro to Sudoku" desc="A playful, visual way to ease kids into logical thinking." />
+                <BulletWithLine
+                  side="left"
+                  title="50+ brain-boosting challenges"
+                  desc="Blend logic puzzles with creative coloring fun."
+                />
+                <BulletWithLine
+                  side="left"
+                  title="Intro to Sudoku"
+                  desc="A playful, visual way to ease kids into logical thinking."
+                />
               </div>
 
               <div className="flex items-center justify-center">
@@ -113,13 +152,24 @@ export default function Logicoland1Page() {
               </div>
 
               <div className="space-y-10">
-                <BulletWithLine side="right" title="Skill-building disguised as fun" desc="Sharpens deduction, focus, and pattern recognition." />
-                <BulletWithLine side="right" title="Perfect for ages 6–12" desc="Great for home learning, travel, or screen-free entertainment." />
+                <BulletWithLine
+                  side="right"
+                  title="Skill-building disguised as fun"
+                  desc="Sharpens deduction, focus, and pattern recognition."
+                />
+                <BulletWithLine
+                  side="right"
+                  title="Perfect for ages 6–12"
+                  desc="Great for home learning, travel, or screen-free entertainment."
+                />
               </div>
             </div>
 
             <div className="text-center mt-10">
-              <Link href="#" className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold">
+              <Link
+                href="#"
+                className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold"
+              >
                 Buy now
               </Link>
             </div>
@@ -132,8 +182,13 @@ export default function Logicoland1Page() {
             <div>
               <p className="text-lg">Interactive</p>
               <h3 className="text-4xl font-extrabold">Puzzles</h3>
-              <p className="mt-4 text-white/90">Solve the following drag and drop puzzles</p>
-              <a href="#puzzle" className="inline-block mt-6 bg-white/90 text-brand-tealDark px-5 py-3 rounded-2xl font-semibold hover:bg-white">
+              <p className="mt-4 text-white/90">
+                Solve the following drag and drop puzzles
+              </p>
+              <a
+                href="#puzzle"
+                className="inline-block mt-6 bg-white/90 text-brand-tealDark px-5 py-3 rounded-2xl font-semibold hover:bg-white"
+              >
                 Solve now
               </a>
             </div>
@@ -151,9 +206,12 @@ export default function Logicoland1Page() {
         {/* ================= PRINTABLES ================= */}
         <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-5">
           <div className="max-w-6xl mx-auto rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-            <h3 className="text-center text-3xl font-extrabold text-brand-tealDark">Printables</h3>
+            <h3 className="text-center text-3xl font-extrabold text-brand-tealDark">
+              Printables
+            </h3>
             <p className="text-center text-brand-tealDark/80 mt-2">
-              Done with Logicoland 1 already? Here are a few more 4×4 Sudoku puzzles to color.
+              Done with Logicoland 1 already? Here are a few more 4×4 Sudoku
+              puzzles to color.
             </p>
 
             <div className="grid md:grid-cols-2 gap-8 mt-10">
@@ -161,7 +219,9 @@ export default function Logicoland1Page() {
               <PrintableCard colorClass="bg-[#E45C48]" />
             </div>
 
-            <p className="text-center mt-8 text-brand-tealDark/70">For more join our community</p>
+            <p className="text-center mt-8 text-brand-tealDark/70">
+              For more join our community
+            </p>
           </div>
         </section>
 
@@ -183,7 +243,8 @@ export default function Logicoland1Page() {
               <p>Join the</p>
               <h3 className="text-4xl font-extrabold">Community</h3>
               <p className="mt-4 text-white/90">
-                At Logicology we endeavour to make learning fun so that children learn while the play.
+                At Logicology we endeavour to make learning fun so that children
+                learn while the play.
               </p>
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -198,7 +259,10 @@ export default function Logicoland1Page() {
         <SiteFooter />
       </main>
 
-      <CommunitySignupModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CommunitySignupModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 }
@@ -209,7 +273,10 @@ export default function Logicoland1Page() {
 type ColorKey = "R" | "G" | "B" | "Y";
 type Cell = { value: ColorKey | null; locked?: boolean };
 
-const COLOR_META: Record<ColorKey, { label: string; class: string; hex: string }> = {
+const COLOR_META: Record<
+  ColorKey,
+  { label: string; class: string; hex: string }
+> = {
   R: { label: "Red", class: "bg-[#E45C48]", hex: "#E45C48" },
   G: { label: "Green", class: "bg-[#4CAF50]", hex: "#4CAF50" },
   B: { label: "Blue", class: "bg-[#4C8BD9]", hex: "#4C8BD9" },
@@ -221,8 +288,8 @@ const START: (ColorKey | null)[][] = [
   // A   B     C     D
   [null, "R", null, "G"], // Row 1
   [null, null, null, null], // Row 2
-  ["R",  null, null, "B"], // Row 3
-  ["G",  null, "Y",  "R"], // Row 4
+  ["R", null, null, "B"], // Row 3
+  ["G", null, "Y", "R"], // Row 4
 ];
 
 // --- Unique valid solution for the above puzzle ---
@@ -234,7 +301,9 @@ const SOLUTION_FIXED: ColorKey[][] = [
 ];
 
 function ColorSudoku() {
-  const [grid, setGrid] = useState<Cell[][]>(() => START.map((row) => row.map((v) => ({ value: v, locked: v !== null }))));
+  const [grid, setGrid] = useState<Cell[][]>(() =>
+    START.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
+  );
   const [selectedColor, setSelectedColor] = useState<ColorKey | null>(null);
   const [showMistakes, setShowMistakes] = useState(true);
   const [won, setWon] = useState(false);
@@ -267,7 +336,8 @@ function ColorSudoku() {
 
   function handleCellDrop(e: React.DragEvent, r: number, c: number) {
     e.preventDefault();
-    const data = (e.dataTransfer.getData("text/color") || e.dataTransfer.getData("text/plain")) as ColorKey | "";
+    const data = (e.dataTransfer.getData("text/color") ||
+      e.dataTransfer.getData("text/plain")) as ColorKey | "";
     if (!data) return;
     if (!["R", "G", "B", "Y"].includes(data)) return;
     onDropCell(r, c, data as ColorKey);
@@ -287,7 +357,9 @@ function ColorSudoku() {
   }
 
   function reset() {
-    setGrid(START.map((row) => row.map((v) => ({ value: v, locked: v !== null }))));
+    setGrid(
+      START.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
+    );
     setSelectedColor(null);
     setShowMistakes(true);
     setWon(false);
@@ -305,9 +377,9 @@ function ColorSudoku() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[min(92vw,520px)] mx-auto">
       {/* palette */}
-      <div className="mb-4 flex items-center gap-3">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
         {(["R", "G", "B", "Y"] as ColorKey[]).map((k) => {
           const active = selectedColor === k;
           return (
@@ -315,8 +387,12 @@ function ColorSudoku() {
               key={k}
               draggable
               onDragStart={(e) => handleDragStart(e, k)}
-              onClick={() => setSelectedColor((prev) => (prev === k ? null : k))}
-              className={`h-10 w-10 rounded-full ring-2 ring-white shadow ${COLOR_META[k].class} cursor-grab active:cursor-grabbing outline-offset-2 ${
+              onClick={() =>
+                setSelectedColor((prev) => (prev === k ? null : k))
+              }
+              className={`h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white shadow ${
+                COLOR_META[k].class
+              } cursor-grab active:cursor-grabbing outline-offset-2 ${
                 active ? "outline outline-2 outline-black/70" : ""
               }`}
               title={`Drag or tap ${COLOR_META[k].label}`}
@@ -333,17 +409,23 @@ function ColorSudoku() {
           >
             {showMistakes ? "Hide Mistakes" : "Show Mistakes"}
           </button>
-          <button onClick={fillComplete} className="text-xs rounded-full px-3 py-1 bg-white text-brand-tealDark">
+          <button
+            onClick={fillComplete}
+            className="text-xs rounded-full px-3 py-1 bg-white text-brand-tealDark"
+          >
             Fill Complete
           </button>
-          <button onClick={reset} className="text-xs rounded-full px-3 py-1 bg-black/70 text-white">
+          <button
+            onClick={reset}
+            className="text-xs rounded-full px-3 py-1 bg-black/70 text-white"
+          >
             Reset
           </button>
         </div>
       </div>
 
       {/* board */}
-      <div className="grid grid-cols-4 gap-0 rounded-[20px] overflow-hidden bg-white ring-1 ring-black/10 select-none">
+      <div className="grid grid-cols-4 gap-0 rounded-[20px] overflow-hidden bg-white ring-1 ring-black/10 select-none w-full touch-manipulation">
         {grid.map((row, r) =>
           row.map((cell, c) => {
             const key = `${r}-${c}`;
@@ -360,27 +442,59 @@ function ColorSudoku() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleCellDrop(e, r, c)}
                 onClick={() => handleCellClick(r, c)}
-                className={`relative h-20 sm:h-24 md:h-28 ${thickBorder} border-black/20 flex items-center justify-center transition-colors ${
-                  cell.locked ? "bg-brand-grayBg/50" : "bg-white"
-                } ${hasConflict ? "outline outline-2 outline-red-500/70" : ""}`}
+                className={`relative w-full aspect-square ${thickBorder} border-black/20 flex items-center justify-center transition-colors
+  ${
+    cell.value
+      ? COLOR_META[cell.value].class // <-- fill the entire cell
+      : cell.locked
+      ? "bg-brand-grayBg/50"
+      : "bg-white"
+  }
+${hasConflict ? "border-10 border-red-500" : ""}`}
                 role="button"
-                aria-label={`Row ${r + 1} column ${c + 1}${cell.value ? ` ${COLOR_META[cell.value].label}` : " empty"}`}
-                title={cell.locked ? "Locked cell" : "Click to place/clear or drop a color"}
+                aria-label={`Row ${r + 1} column ${c + 1}${
+                  cell.value ? ` ${COLOR_META[cell.value].label}` : " empty"
+                }`}
+                title={
+                  cell.locked
+                    ? "Locked cell"
+                    : "Click to place/clear or drop a color"
+                }
               >
-                {cell.value && <span className={`h-12 w-12 sm:h-14 sm:w-14 rounded-xl shadow-inner ${COLOR_META[cell.value].class}`} />}
-                {!cell.value && !cell.locked && <span className="text-xs text-black/40">Drop / Tap</span>}
-                {cell.locked && <span className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 rounded bg-black/10 text-black/60">•</span>}
+                {cell.value && (
+                  <span
+                    className={`w-3/5 h-3/5 rounded-xl shadow-inner ${
+                      COLOR_META[cell.value].class
+                    }`}
+                  />
+                )}
+                {!cell.value && !cell.locked && (
+                  <span className="text-[10px] sm:text-xs text-black/40">
+                    Drop / Tap
+                  </span>
+                )}
+                {cell.locked && (
+                  <span className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 rounded bg-black/10 text-black/60">
+                    •
+                  </span>
+                )}
               </div>
             );
           })
         )}
       </div>
 
-      {won && <div className="mt-4 rounded-xl bg-[#DDB24D] text-white px-4 py-3 text-center font-semibold">🎉 Great job! You solved it.</div>}
+      {won && (
+        <div className="mt-4 rounded-xl bg-[#DDB24D] text-white px-4 py-3 text-center font-semibold">
+          🎉 Great job! You solved it.
+        </div>
+      )}
 
       <p className="mt-3 text-xs text-black/50">
-        Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains all four colors exactly once. Drag a color from the palette or tap a color,
-        then tap a cell to place it. {showMistakes && "Conflicts are highlighted in red."}
+        Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains
+        all four colors exactly once. Drag a color from the palette or tap a
+        color, then tap a cell to place it.{" "}
+        {showMistakes && "Conflicts are highlighted in red."}
       </p>
     </div>
   );
@@ -475,21 +589,56 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
    Little helpers from your original code
 ============================================================ */
 
-const BULLET_ICON = "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
+const BULLET_ICON =
+  "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
 
-function BulletWithLine({ side, title, desc }: { side: "left" | "right"; title: string; desc: string }) {
+function BulletWithLine({
+  side,
+  title,
+  desc,
+}: {
+  side: "left" | "right";
+  title: string;
+  desc: string;
+}) {
   const isLeft = side === "left";
   return (
-    <div className={`md:flex md:items-start md:gap-0 ${isLeft ? "md:flex-row" : "md:flex-row-reverse"}`}>
+    <div
+      className={`md:flex md:items-start md:gap-0 ${
+        isLeft ? "md:flex-row" : "md:flex-row-reverse"
+      }`}
+    >
       <div className="shrink-0">
-        <Image src={BULLET_ICON} alt="" width={48} height={48} className="h-12 w-12 rounded-full object-contain" />
+        <Image
+          src={BULLET_ICON}
+          alt=""
+          width={48}
+          height={48}
+          className="h-12 w-12 rounded-full object-contain"
+        />
       </div>
-      <div className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-28 lg:w-40 ${isLeft ? "ml-3 mr-4" : "mr-3 ml-4"} translate-y-6`}>
-        <span className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${isLeft ? "right-0" : "left-0"}`} />
+      <div
+        className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-28 lg:w-40 ${
+          isLeft ? "ml-3 mr-4" : "mr-3 ml-4"
+        } translate-y-6`}
+      >
+        <span
+          className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${
+            isLeft ? "right-0" : "left-0"
+          }`}
+        />
       </div>
-      <div className={`${isLeft ? "md:ml-0" : "md:mr-0"} ${isLeft ? "ml-4" : "mr-4"} md:ml-0 md:mr-0 max-w-[320px]`}>
-        <div className="text-sm font-semibold text-brand-tealDark leading-tight">{title}</div>
-        <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">{desc}</p>
+      <div
+        className={`${isLeft ? "md:ml-0" : "md:mr-0"} ${
+          isLeft ? "ml-4" : "mr-4"
+        } md:ml-0 md:mr-0 max-w-[320px]`}
+      >
+        <div className="text-sm font-semibold text-brand-tealDark leading-tight">
+          {title}
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">
+          {desc}
+        </p>
       </div>
     </div>
   );
