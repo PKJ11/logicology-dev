@@ -182,9 +182,26 @@ export default function Logicoland1Page() {
             <div>
               <p className="text-lg">Interactive</p>
               <h3 className="text-4xl font-extrabold">Puzzles</h3>
+
               <p className="mt-4 text-white/90">
-                Solve the following drag and drop puzzles
+                Solve the 4×4 Sudoku puzzles given here. The rules that you need
+                to follow are:
               </p>
+              <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
+                <li>
+                  Each standing line should have all 4 colours appearing exactly
+                  once.
+                </li>
+                <li>
+                  Each sleeping line should have all 4 colours appearing exactly
+                  once.
+                </li>
+                <li>
+                  Each 2×2 grid should have all 4 colours appearing exactly
+                  once.
+                </li>
+              </ol>
+
               <a
                 href="#puzzle"
                 className="inline-block mt-6 bg-white/90 text-brand-tealDark px-5 py-3 rounded-2xl font-semibold hover:bg-white"
@@ -196,7 +213,8 @@ export default function Logicoland1Page() {
             <div id="puzzle" className="relative">
               <div className="rounded-[26px] bg-white p-3">
                 <div className="relative rounded-[20px] bg-brand-grayBg p-4 overflow-hidden">
-                  <ColorSudoku />
+                  {/* ▶▶ SLIDER WITH MULTIPLE SUDOKU GAMES ◀◀ */}
+                  <SudokuSlider />
                 </div>
               </div>
             </div>
@@ -268,7 +286,7 @@ export default function Logicoland1Page() {
 }
 
 /* ============================================================
-   COLOR SUDOKU (4×4) – fixed + robust
+   COLOR SUDOKU (4×4) – constants and types
 ============================================================ */
 type ColorKey = "R" | "G" | "B" | "Y";
 type Cell = { value: ColorKey | null; locked?: boolean };
@@ -283,26 +301,139 @@ const COLOR_META: Record<
   Y: { label: "Yellow", class: "bg-[#DDB24D]", hex: "#DDB24D" },
 };
 
-// ✅ Start puzzle now matches the solution
-const START: (ColorKey | null)[][] = [
-  // A   B     C     D
-  [null, "R", null, "G"], // Row 1
-  [null, null, null, null], // Row 2
-  ["R", null, null, "B"], // Row 3
-  ["G", null, "Y", "R"], // Row 4
-];
+/* ============================================================
+   MULTI-PUZZLE SLIDER (3 games matching your image palette)
+   - Each puzzle has a unique solution
+============================================================ */
+type Puzzle = {
+  name: string;
+  start: (ColorKey | null)[][];
+  solution: ColorKey[][];
+};
 
-// --- Unique valid solution for the above puzzle ---
-const SOLUTION_FIXED: ColorKey[][] = [
+/* Base Latin-4 solution */
+const SOL1: ColorKey[][] = [
   ["Y", "R", "B", "G"],
   ["B", "G", "R", "Y"],
   ["R", "Y", "G", "B"],
   ["G", "B", "Y", "R"],
 ];
 
-function ColorSudoku() {
+/* Row/column permutations create new valid solutions */
+const SOL2: ColorKey[][] = [
+  ["B", "Y", "R", "G"],
+  ["R", "G", "Y", "B"],
+  ["Y", "B", "G", "R"],
+  ["G", "R", "B", "Y"],
+];
+
+const SOL3: ColorKey[][] = [
+  ["B", "G", "Y", "R"],
+  ["R", "Y", "G", "B"],
+  ["G", "B", "R", "Y"],
+  ["Y", "R", "B", "G"],
+];
+
+/* Starts are light (from your image vibe) but solvable/unique */
+const PUZZLES: Puzzle[] = [
+  {
+    name: "Puzzle 1",
+    start: [
+      [null, "R", null, "G"],
+      [null, null, null, null],
+      ["R", null, null, "B"],
+      ["G", null, "Y", "R"],
+    ],
+    solution: SOL1,
+  },
+  {
+    name: "Puzzle 2",
+    start: [
+      ["B", null, "Y", null],
+      [null, "Y", null, "R"],
+      [null, "G", "R", null],
+      ["R", null, null, "Y"],
+    ],
+    solution: SOL2,
+  },
+  {
+    name: "Puzzle 3",
+    start: [
+      [null, "G", null, "R"],
+      ["R", null, "Y", null],
+      [null, "B", null, "Y"],
+      ["Y", null, "B", null],
+    ],
+    solution: SOL3,
+  },
+];
+
+function SudokuSlider() {
+  const [idx, setIdx] = useState(0);
+  const total = PUZZLES.length;
+
+  const next = () => setIdx((i) => (i + 1) % total);
+  const prev = () => setIdx((i) => (i - 1 + total) % total);
+
+  return (
+    <div className="w-full">
+      {/* Header + controls */}
+      <div className="mb-3 flex items-center justify-between">
+        <div className="font-semibold text-brand-tealDark">
+          {PUZZLES[idx].name}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={prev}
+            className="px-3 py-1.5 rounded-full bg-white text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
+          >
+            ◀
+          </button>
+          <button
+            onClick={next}
+            className="px-3 py-1.5 rounded-full bg-white text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
+          >
+            ▶
+          </button>
+        </div>
+      </div>
+
+      {/* Active puzzle */}
+      <ColorSudoku
+        key={idx} // ensures state resets when slide changes
+        start={PUZZLES[idx].start}
+        solution={PUZZLES[idx].solution}
+      />
+
+      {/* Dots */}
+      <div className="mt-3 flex justify-center gap-2">
+        {PUZZLES.map((_, i) => (
+          <button
+            key={i}
+            aria-label={`Go to puzzle ${i + 1}`}
+            onClick={() => setIdx(i)}
+            className={`h-2.5 w-2.5 rounded-full ${
+              i === idx ? "bg-brand-tealDark" : "bg-black/20"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   COLOR SUDOKU component (now accepts start + solution)
+============================================================ */
+function ColorSudoku({
+  start,
+  solution,
+}: {
+  start: (ColorKey | null)[][];
+  solution: ColorKey[][];
+}) {
   const [grid, setGrid] = useState<Cell[][]>(() =>
-    START.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
+    start.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
   );
   const [selectedColor, setSelectedColor] = useState<ColorKey | null>(null);
   const [showMistakes, setShowMistakes] = useState(true);
@@ -358,7 +489,7 @@ function ColorSudoku() {
 
   function reset() {
     setGrid(
-      START.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
+      start.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
     );
     setSelectedColor(null);
     setShowMistakes(true);
@@ -367,10 +498,10 @@ function ColorSudoku() {
 
   function fillComplete() {
     setGrid(
-      SOLUTION_FIXED.map((row, r) =>
+      solution.map((row, r) =>
         row.map((color, c) => ({
           value: color,
-          locked: START[r][c] !== null,
+          locked: start[r][c] !== null,
         }))
       )
     );
@@ -445,12 +576,12 @@ function ColorSudoku() {
                 className={`relative w-full aspect-square ${thickBorder} border-black/20 flex items-center justify-center transition-colors
   ${
     cell.value
-      ? COLOR_META[cell.value].class // <-- fill the entire cell
+      ? COLOR_META[cell.value].class
       : cell.locked
       ? "bg-brand-grayBg/50"
       : "bg-white"
   }
-${hasConflict ? "border-10 border-red-500" : ""}`}
+${hasConflict ? "border-4 border-red-500" : ""}`}
                 role="button"
                 aria-label={`Row ${r + 1} column ${c + 1}${
                   cell.value ? ` ${COLOR_META[cell.value].label}` : " empty"
@@ -501,21 +632,20 @@ ${hasConflict ? "border-10 border-red-500" : ""}`}
 }
 
 /* ============================================================
-   computeConflicts - ES5 compatible version
+   Conflict detection (unchanged logic)
 ============================================================ */
 function computeConflicts(grid: Cell[][]): Record<string, boolean> {
   const size = 4;
   const box = 2;
   const conflicts: Record<string, boolean> = {};
 
-  // Initialize conflicts object
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       conflicts[`${r}-${c}`] = false;
     }
   }
 
-  // Check rows for conflicts
+  // rows
   for (let r = 0; r < size; r++) {
     const seen = new Map<ColorKey, number[]>();
     for (let c = 0; c < size; c++) {
@@ -526,17 +656,13 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
         seen.set(v, arr);
       }
     }
-    // Use forEach instead of for...of
     seen.forEach((cols) => {
-      if (cols.length > 1) {
-        cols.forEach((cc) => {
-          conflicts[`${r}-${cc}`] = true;
-        });
-      }
+      if (cols.length > 1)
+        cols.forEach((cc) => (conflicts[`${r}-${cc}`] = true));
     });
   }
 
-  // Check columns for conflicts
+  // cols
   for (let c = 0; c < size; c++) {
     const seen = new Map<ColorKey, number[]>();
     for (let r = 0; r < size; r++) {
@@ -547,17 +673,13 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
         seen.set(v, arr);
       }
     }
-    // Use forEach instead of for...of
     seen.forEach((rows) => {
-      if (rows.length > 1) {
-        rows.forEach((rr) => {
-          conflicts[`${rr}-${c}`] = true;
-        });
-      }
+      if (rows.length > 1)
+        rows.forEach((rr) => (conflicts[`${rr}-${c}`] = true));
     });
   }
 
-  // Check 2x2 boxes for conflicts
+  // boxes
   for (let br = 0; br < size; br += box) {
     for (let bc = 0; bc < size; bc += box) {
       const seen = new Map<ColorKey, [number, number][]>();
@@ -571,24 +693,18 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
           }
         }
       }
-      // Use forEach instead of for...of
       seen.forEach((coords) => {
-        if (coords.length > 1) {
-          coords.forEach(([r, c]) => {
-            conflicts[`${r}-${c}`] = true;
-          });
-        }
+        if (coords.length > 1)
+          coords.forEach(([r, c]) => (conflicts[`${r}-${c}`] = true));
       });
     }
   }
-
   return conflicts;
 }
 
 /* ============================================================
    Little helpers from your original code
 ============================================================ */
-
 const BULLET_ICON =
   "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
 
