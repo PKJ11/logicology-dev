@@ -302,8 +302,7 @@ const COLOR_META: Record<
 };
 
 /* ============================================================
-   MULTI-PUZZLE SLIDER (3 games matching your image palette)
-   - Each puzzle has a unique solution
+   MULTI-PUZZLE SLIDER (3 games)
 ============================================================ */
 type Puzzle = {
   name: string;
@@ -311,20 +310,18 @@ type Puzzle = {
   solution: ColorKey[][];
 };
 
-/* Base Latin-4 solution */
 const SOL1: ColorKey[][] = [
-  ["Y", "R", "B", "G"],
+  ["Y", "R", "G", "B"],
   ["B", "G", "R", "Y"],
-  ["R", "Y", "G", "B"],
+  ["R", "Y", "B", "G"],
   ["G", "B", "Y", "R"],
 ];
 
-/* Row/column permutations create new valid solutions */
 const SOL2: ColorKey[][] = [
-  ["B", "Y", "R", "G"],
-  ["R", "G", "Y", "B"],
-  ["Y", "B", "G", "R"],
-  ["G", "R", "B", "Y"],
+  ["B", "R", "Y", "G"],
+  ["G", "Y", "B", "R"],
+  ["Y", "G", "R", "B"],
+  ["R", "B", "G", "Y"],
 ];
 
 const SOL3: ColorKey[][] = [
@@ -334,37 +331,41 @@ const SOL3: ColorKey[][] = [
   ["Y", "R", "B", "G"],
 ];
 
-/* Starts are light (from your image vibe) but solvable/unique */
 const PUZZLES: Puzzle[] = [
   {
     name: "Puzzle 1",
     start: [
-      [null, "R", null, "G"],
+      ["Y", "R", null, null], // row 1: Y, R are colored givens
       [null, null, null, null],
-      ["R", null, null, "B"],
-      ["G", null, "Y", "R"],
+      [null, "Y", "B", null], // row 3: Y and B are colored givens
+      ["G", null, null, "R"], // row 4: G and R are colored givens
     ],
     solution: SOL1,
   },
   {
     name: "Puzzle 2",
     start: [
-      ["B", null, "Y", null],
-      [null, "Y", null, "R"],
-      [null, "G", "R", null],
-      ["R", null, null, "Y"],
+      ["B", null, null, "G"], // row 1: solid B and G
+      [null, "Y", "B", null], // row 2: solid Y and B
+      [null, "G", null, null], // row 3: solid G
+      ["R", null, null, null], // row 4: solid R
     ],
     solution: SOL2,
   },
   {
     name: "Puzzle 3",
     start: [
-      [null, "G", null, "R"],
-      ["R", null, "Y", null],
+      [null, null, "Y", null],
+      ["R", null, "G", null],
       [null, "B", null, "Y"],
-      ["Y", null, "B", null],
+      [null, "R", null, null],
     ],
-    solution: SOL3,
+    solution: [
+      ["B", "G", "Y", "R"],
+      ["R", "Y", "G", "B"],
+      ["G", "B", "R", "Y"],
+      ["Y", "R", "B", "G"],
+    ],
   },
 ];
 
@@ -377,7 +378,6 @@ function SudokuSlider() {
 
   return (
     <div className="w-full">
-      {/* Header + controls */}
       <div className="mb-3 flex items-center justify-between">
         <div className="font-semibold text-brand-tealDark">
           {PUZZLES[idx].name}
@@ -398,14 +398,12 @@ function SudokuSlider() {
         </div>
       </div>
 
-      {/* Active puzzle */}
       <ColorSudoku
-        key={idx} // ensures state resets when slide changes
+        key={idx}
         start={PUZZLES[idx].start}
         solution={PUZZLES[idx].solution}
       />
 
-      {/* Dots */}
       <div className="mt-3 flex justify-center gap-2">
         {PUZZLES.map((_, i) => (
           <button
@@ -423,7 +421,19 @@ function SudokuSlider() {
 }
 
 /* ============================================================
-   COLOR SUDOKU component (now accepts start + solution)
+   Grid border helper (THICK 2×2 sub-grids + outer frame)
+============================================================ */
+function cellBorders(r: number, c: number) {
+  const top = r === 0 ? "border-t-4" : r === 2 ? "border-t-4" : "border-t";
+  const bottom = r === 3 ? "border-b-4" : "border-b";
+  const left = c === 0 ? "border-l-4" : c === 2 ? "border-l-4" : "border-l";
+  const right = c === 3 ? "border-r-4" : "border-r";
+  return `${top} ${right} ${bottom} ${left} border-black/30`;
+}
+
+/* ============================================================
+   COLOR SUDOKU component
+   - Black conflict ring + dark overlay on wrong cells
 ============================================================ */
 function ColorSudoku({
   start,
@@ -439,7 +449,6 @@ function ColorSudoku({
   const [showMistakes, setShowMistakes] = useState(true);
   const [won, setWon] = useState(false);
 
-  // compute conflicts
   const conflicts = useMemo(() => computeConflicts(grid), [grid]);
 
   useEffect(() => {
@@ -561,27 +570,23 @@ function ColorSudoku({
           row.map((cell, c) => {
             const key = `${r}-${c}`;
             const hasConflict = showMistakes && conflicts[key];
-            const thickBorder = `
-              ${r % 2 === 0 ? "border-t-2" : "border-t"}
-              ${c % 2 === 0 ? "border-l-2" : "border-l"}
-              ${r === 3 ? "border-b-2" : "border-b"}
-              ${c === 3 ? "border-r-2" : "border-r"}
-            `;
+
             return (
               <div
                 key={key}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleCellDrop(e, r, c)}
                 onClick={() => handleCellClick(r, c)}
-                className={`relative w-full aspect-square ${thickBorder} border-black/20 flex items-center justify-center transition-colors
-  ${
-    cell.value
-      ? COLOR_META[cell.value].class
-      : cell.locked
-      ? "bg-brand-grayBg/50"
-      : "bg-white"
-  }
-${hasConflict ? "border-4 border-red-500" : ""}`}
+                className={`relative w-full aspect-square ${cellBorders(
+                  r,
+                  c
+                )} flex items-center justify-center transition-colors ${
+                  cell.value
+                    ? COLOR_META[cell.value].class
+                    : cell.locked
+                    ? "bg-brand-grayBg/50"
+                    : "bg-white"
+                }`}
                 role="button"
                 aria-label={`Row ${r + 1} column ${c + 1}${
                   cell.value ? ` ${COLOR_META[cell.value].label}` : " empty"
@@ -599,15 +604,22 @@ ${hasConflict ? "border-4 border-red-500" : ""}`}
                     }`}
                   />
                 )}
+
                 {!cell.value && !cell.locked && (
                   <span className="text-[10px] sm:text-xs text-black/40">
                     Drop / Tap
                   </span>
                 )}
+
                 {cell.locked && (
                   <span className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 rounded bg-black/10 text-black/60">
                     •
                   </span>
+                )}
+
+                {/* conflict highlight: black border on all sides + dark overlay */}
+                {hasConflict && (
+                  <span className="pointer-events-none absolute inset-0 border-4 border-black bg-black/35" />
                 )}
               </div>
             );
@@ -625,14 +637,15 @@ ${hasConflict ? "border-4 border-red-500" : ""}`}
         Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains
         all four colors exactly once. Drag a color from the palette or tap a
         color, then tap a cell to place it.{" "}
-        {showMistakes && "Conflicts are highlighted in red."}
+        {showMistakes &&
+          "Conflicts are highlighted with a black ring and dark overlay."}
       </p>
     </div>
   );
 }
 
 /* ============================================================
-   Conflict detection (unchanged logic)
+   Conflict detection
 ============================================================ */
 function computeConflicts(grid: Cell[][]): Record<string, boolean> {
   const size = 4;
@@ -703,7 +716,7 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
 }
 
 /* ============================================================
-   Little helpers from your original code
+   Little helpers
 ============================================================ */
 const BULLET_ICON =
   "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
