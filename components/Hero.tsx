@@ -86,7 +86,7 @@ export default function Hero() {
                     <div className="mt-6">
                       <Link
                         href={slide.ctaLink}
-                        className="btn btn-dark inline-flex items-center group"
+                        className="btn btn-primary inline-flex items-center group"
                       >
                         {slide.cta}
                         <svg

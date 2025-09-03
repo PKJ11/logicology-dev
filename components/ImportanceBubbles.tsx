@@ -45,10 +45,10 @@ export default function ImportanceBubbles() {
   };
 
   return (
-    <section className="section mt-10" id="offerings">
-      <div className="container-padding">
-        <div className="bg-white section-rounded border border-slate-200">
-          <div className="px-6 sm:px-10 md:px-14 py-10 md:py-14 text-center">
+    <section className="w-full bg-white mt-10" id="offerings">
+      <div className="lg:max-w-[80vw] mx-auto px-6 sm:px-10 md:px-14 py-10 md:py-14">
+        <div className="bg-white rounded-4xl border border-slate-200 p-6 sm:p-10 md:p-14">
+          <div className="text-center">
             <h3 className="heading-md">
               Our Offerings for <span className="text-slate-900">you.</span>
             </h3>

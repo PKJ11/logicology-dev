@@ -3,9 +3,9 @@ import MediaLayout from "./MediaLayout";
 
 export default function WhyImportant() {
   return (
-    <section id="why" className="section mt-10">
-      <div className="">
-        <div className="bg-[#D8AE4F] text-[#3F2F14] overflow-hidden py-7">
+    <section id="why" className="w-full bg-[#D8AE4F] mt-10">
+      <div className="lg:max-w-[80vw] mx-auto">
+        <div className="text-[#3F2F14] overflow-hidden py-12">
           {/* Flex container replacing grid */}
           <div className="flex flex-col md:flex-row items-center">
             {/* MediaLayout on left for larger screens, top for mobile */}

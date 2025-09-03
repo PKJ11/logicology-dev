@@ -7,8 +7,8 @@ export default function Community() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   return (
-    <section id="community" className="bg-brand-teal">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+    <section id="community" className="w-full bg-brand-teal">
+      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1fr,1.2fr] gap-10 items-center">
           <div className="max-w-md mx-auto md:mx-0 w-full">
             <div className="rounded-4xl overflow-hidden shadow-brand ring-1 ring-black/10">

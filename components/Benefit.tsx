@@ -3,9 +3,9 @@ import MediaLayout from "./MediaLayout";
 
 export default function Benefit() {
   return (
-    <section id="benefit" className="section">
-      <div className="">
-        <div className="bg-brand-coral text-white overflow-hidden py-7">
+    <section id="benefit" className="w-full bg-brand-coral">
+      <div className="lg:max-w-[80vw] mx-auto">
+        <div className="text-white overflow-hidden py-12">
           {/* Flex container */}
           <div className="flex flex-col md:flex-row items-center">
             {/* Content on left for larger screens, top for mobile */}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function MediaLayout({
   videoSrc,
@@ -11,13 +11,31 @@ export default function MediaLayout({
   image: string;
 }) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleVideoToggle = () => {
+    if (!isVideoExpanded) {
+      // Expanding - play the video
+      setIsVideoExpanded(true);
+      if (videoRef.current) {
+        videoRef.current.play().catch(console.error);
+      }
+    } else {
+      // Collapsing - pause the video
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0; // Reset to beginning
+      }
+      setIsVideoExpanded(false);
+    }
+  };
 
   return (
-    <div className="relative max-w-[500px] mx-h-[500px] w-[95%] my-2 mx-2">
+    <div className="relative max-w-[500px] max-h-[500px] w-[95%] my-2 mx-2 aspect-square">
       {/* Main content container */}
-      <div className="rounded-[28px] bg-white p-5 shadow-lg">
-        <div className="relative rounded-[22px] overflow-hidden">
-          <div className="relative w-full h-0 pb-[66.666%]">
+      <div className="rounded-[28px] bg-white p-5 shadow-lg h-full">
+        <div className="relative rounded-[22px] overflow-hidden h-full">
+          <div className="relative w-full h-full">
             <Image
               src={image}
               alt="Main visual"
@@ -38,12 +56,13 @@ export default function MediaLayout({
           ${
             isVideoExpanded
               ? "w-full h-full !rounded-[22px]"
-              : "rounded-br-[5px] rounded-tl-[22px]"
+              : "rounded-br-[22px] rounded-tl-[22px]"
           }
-          bg-white p-5 shadow-lg cursor-pointer
+          bg-white p-5 cursor-pointer
           overflow-hidden
+          aspect-square
         `}
-        onClick={() => setIsVideoExpanded(!isVideoExpanded)}
+        onClick={handleVideoToggle}
       >
         <div
           className={`
@@ -51,23 +70,25 @@ export default function MediaLayout({
             transition-all duration-500 ease-in-out
             ${
               isVideoExpanded
-                ? "w-full h-full aspect-video"
-                : "w-40 sm:w-56 aspect-video"
+                ? "w-full h-full"
+                : "w-40 sm:w-56"
             }
             bg-white
+            aspect-square
           `}
         >
           <video
+            ref={videoRef}
             src={videoSrc}
-            autoPlay
             muted
             loop
             playsInline
             className="w-full h-full object-cover"
+            // Initially paused (no autoPlay attribute)
           />
 
           {/* Play/Close button overlay */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0  transition-all duration-300">
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300">
             <div
               className={`
               flex items-center justify-center rounded-full bg-white bg-opacity-90

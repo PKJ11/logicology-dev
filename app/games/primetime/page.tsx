@@ -28,7 +28,6 @@ export default function PrimeTimeLanding() {
 
 // --------------------- Hero ---------------------
 function Hero() {
-  const router = useRouter();
   const slides = [
     {
       id: 1,
@@ -251,8 +250,8 @@ function Hero() {
 // --------------------- Game Details (Gold) ---------------------
 function GameDetails() {
   return (
-    <section id="game" className="bg-brand-gold/90">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+    <section className="w-full bg-brand-gold/90">
+      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1fr,1.2fr] gap-10 items-center">
           <div className="max-w-md mx-auto md:mx-0 w-full">
             <div className="rounded-4xl overflow-hidden shadow-soft ring-1 ring-black/10">
@@ -329,8 +328,8 @@ function InstructionVideos() {
   }, [active]);
 
   return (
-    <section id="videos" className="bg-brand-coral relative">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+    <section className="w-full bg-brand-coral relative">
+      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
           <div>
             <p className="text-white/90 text-sm tracking-wide uppercase">
@@ -438,58 +437,60 @@ function InstructionVideos() {
 function InteractiveGames() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <section className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-20">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
-          Interactive Learning Games
-        </h2>
-        <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
-          Try these fun games that complement the Logicoland experience and help
-          develop logical thinking skills.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Game 1 */}
-        <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-          <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
-            Prime Number Explorer
-          </h3>
-          <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
-            <iframe
-              style={{ maxWidth: "100%" }}
-              src="https://wordwall.net/embed/play/96298/037/880"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
-          </div>
-          <p className="mt-4 text-center text-brand-tealDark/80">
-            Identify Prime Number......
+    <section className="w-full bg-brand-grayBg">
+      <div className="lg:max-w-[80vw] mx-auto px-6 py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
+            Interactive Learning Games
+          </h2>
+          <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
+            Try these fun games that complement the Logicoland experience and help
+            develop logical thinking skills.
           </p>
         </div>
 
-        {/* Game 2 */}
-        <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-          <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
-            Composite Number Challenge
-          </h3>
-          <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
-            <iframe
-              style={{ maxWidth: "100%" }}
-              src="https://wordwall.net/embed/play/96298/689/270"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Game 1 */}
+          <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+            <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+              Prime Number Explorer
+            </h3>
+            <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+              <iframe
+                style={{ maxWidth: "100%" }}
+                src="https://wordwall.net/embed/play/96298/037/880"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+            <p className="mt-4 text-center text-brand-tealDark/80">
+              Identify Prime Number......
+            </p>
           </div>
-          <p className="mt-4 text-center text-brand-tealDark/80">
-            Find Composite Number....
-          </p>
+
+          {/* Game 2 */}
+          <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+            <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+              Composite Number Challenge
+            </h3>
+            <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+              <iframe
+                style={{ maxWidth: "100%" }}
+                src="https://wordwall.net/embed/play/96298/689/270"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+            <p className="mt-4 text-center text-brand-tealDark/80">
+              Find Composite Number....
+            </p>
+          </div>
         </div>
       </div>
     </section>
