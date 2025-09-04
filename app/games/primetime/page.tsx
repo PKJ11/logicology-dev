@@ -21,7 +21,7 @@ export default function PrimeTimeLanding() {
       <GameDetails />
       <InstructionVideos />
       <InteractiveGames />
-      <LostCardHelper/>
+      <LostCardHelper />
       <Community />
       <Footer />
     </main>
@@ -364,49 +364,43 @@ function InstructionVideos() {
           </div>
 
           {/* White background container only for videos */}
-          <div className="bg-white rounded-4xl p-6 sm:p-8 shadow-soft">
-            <div className="grid grid-cols-3 gap-4 sm:gap-6">
-              {videos.map((src, i) => (
-                <div
-                  key={i}
-                  onClick={() => handleVideoClick(i)}
-                  className="relative aspect-[4/5] min-h-[180px] rounded-xl overflow-hidden 
-                   bg-gray-100 ring-1 ring-gray-200 cursor-pointer group"
-                >
-                  <video
-                    src={src}
-                    muted
-                    loop
-                    playsInline
-                    className="h-full w-full object-cover transition-transform duration-300 
-                     group-hover:scale-110"
-                  />
-                  <div
-                    className="absolute inset-0 flex items-center justify-center 
-                        bg-black/10 group-hover:bg-black/20 transition-all"
-                  >
-                    <div
-                      className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center 
-                          group-hover:scale-110 transition-transform"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-6 h-6 text-gray-900 ml-0.5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* White background container only for videos */}
+<div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 shadow-soft">
+  {/* 2 cols on phones, 3 cols from sm/md up */}
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+    {videos.map((src, i) => (
+      <div
+        key={i}
+        onClick={() => handleVideoClick(i)}
+        className="relative aspect-[9/16] min-h-[200px] sm:min-h-[220px] md:min-h-[260px]
+                   rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200
+                   cursor-pointer group"
+      >
+        <video
+          src={src}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        {/* Play overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-all">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 ml-0.5">
+              <path
+                fillRule="evenodd"
+                d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
         </div>
       </div>
 
@@ -572,7 +566,9 @@ function LostCardHelper() {
 
     if (!nextUrl) {
       setLoading(false);
-      setError("We couldn't find that card image yet. Please try another number.");
+      setError(
+        "We couldn't find that card image yet. Please try another number."
+      );
       return;
     }
 
@@ -613,7 +609,9 @@ function LostCardHelper() {
                 />
               </div>
               {loading && (
-                <p className="mt-3 text-sm text-gray-600">Loading card image…</p>
+                <p className="mt-3 text-sm text-gray-600">
+                  Loading card image…
+                </p>
               )}
             </div>
 
@@ -626,8 +624,8 @@ function LostCardHelper() {
                 Lost a card? We’ve got you covered.
               </h2>
               <p className="mt-3 text-brand-tealDark/90 max-w-prose">
-                The box comes with four blank cards just for this purpose. Enter the
-                card number below and we’ll show you the correct card image.
+                The box comes with four blank cards just for this purpose. Enter
+                the card number below and we’ll show you the correct card image.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -663,4 +661,3 @@ function LostCardHelper() {
     </section>
   );
 }
-
