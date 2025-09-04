@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Community from "@/components/Community";
+import MediaLayout from "@/components/MediaLayout";
 
 export default function PrimeTimeLanding() {
   return (
@@ -20,6 +21,7 @@ export default function PrimeTimeLanding() {
       <GameDetails />
       <InstructionVideos />
       <InteractiveGames />
+      <LostCardHelper/>
       <Community />
       <Footer />
     </main>
@@ -31,34 +33,40 @@ function Hero() {
   const slides = [
     {
       id: 1,
-      pretitle: 'Introducing Prime Time',
+      pretitle: "Introducing Prime Time",
       title: "Where kids learn effortlessly and ",
       subtitle: "adults get hooked.",
-      description: "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
-      image: "https://ik.imagekit.io/pratik2002/thumbnail2.png?updatedAt=1756264541926",
+      description:
+        "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
+      image:
+        "https://ik.imagekit.io/pratik2002/thumbnail2.png?updatedAt=1756264541926",
       cta: "Learn more",
       ctaLink: "/philosophy",
     },
     {
       id: 2,
-      pretitle: 'From classrooms to living rooms',
+      pretitle: "From classrooms to living rooms",
       title: "Prime Time makes numbers fun",
       subtitle: "for everyone.",
-      description: "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
-      image: "https://ik.imagekit.io/pratik2002/thumbnail3.png?updatedAt=1756264542776",
+      description:
+        "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
+      image:
+        "https://ik.imagekit.io/pratik2002/thumbnail3.png?updatedAt=1756264542776",
       cta: "Discover how",
       ctaLink: "/how-it-works",
     },
     {
       id: 3,
-      pretitle: 'Say hello to Prime Time',
+      pretitle: "Say hello to Prime Time",
       title: "Where numbers, luck & strategy",
       subtitle: "all come together!",
-      description: "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
-      image: "https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg",
+      description:
+        "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
+      image:
+        "https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg",
       cta: "Get started",
       ctaLink: "/get-started",
-    }
+    },
   ];
 
   return (
@@ -144,7 +152,6 @@ function Hero() {
           </Swiper>
 
           {/* Custom Navigation Arrows */}
-          
         </div>
       </div>
 
@@ -248,18 +255,23 @@ function Hero() {
 }
 
 // --------------------- Game Details (Gold) ---------------------
+
 function GameDetails() {
   return (
     <section className="w-full bg-brand-gold/90">
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid md:grid-cols-[1fr,1.2fr] gap-10 items-center">
-          <div className="max-w-md mx-auto md:mx-0 w-full">
-            <div className="rounded-4xl overflow-hidden shadow-soft ring-1 ring-black/10">
-              <div className="aspect-[4/3] bg-[url('https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524')] bg-cover bg-center" />
-            </div>
+        {/* Flex container replacing grid */}
+        <div className="flex flex-col md:flex-row items-center">
+          {/* MediaLayout on left for larger screens, top for mobile */}
+          <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
+            <MediaLayout
+              image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
+              videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
+            />
           </div>
 
-          <div>
+          {/* Content on right for larger screens, bottom for mobile */}
+          <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
             <p className="text-sm tracking-wide text-brand-tealDark/80 uppercase">
               Detailed about the
             </p>
@@ -271,12 +283,12 @@ function GameDetails() {
               prime‑factor insights. Perfect for 2–6 players, ages 8+.
             </p>
             <div className="mt-6">
-              <a
+              <Link
                 href="#learn-more"
                 className="inline-flex items-center rounded-full bg-white/90 px-5 py-3 text-sm font-medium text-brand-tealDark shadow-soft hover:bg-white"
               >
                 Learn more
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -351,38 +363,49 @@ function InstructionVideos() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {videos.map((src, i) => (
-              <div
-                key={i}
-                onClick={() => handleVideoClick(i)}
-                className="relative aspect-square rounded-2xl overflow-hidden bg-black/20 ring-1 ring-white/20 cursor-pointer group"
-              >
-                <video
-                  src={src}
-                  muted
-                  loop
-                  playsInline
-                  className="h-full w-full object-cover opacity-70 group-hover:opacity-90 transition-opacity"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6 text-gray-900 ml-1"
+          {/* White background container only for videos */}
+          <div className="bg-white rounded-4xl p-6 sm:p-8 shadow-soft">
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              {videos.map((src, i) => (
+                <div
+                  key={i}
+                  onClick={() => handleVideoClick(i)}
+                  className="relative aspect-[4/5] min-h-[180px] rounded-xl overflow-hidden 
+                   bg-gray-100 ring-1 ring-gray-200 cursor-pointer group"
+                >
+                  <video
+                    src={src}
+                    muted
+                    loop
+                    playsInline
+                    className="h-full w-full object-cover transition-transform duration-300 
+                     group-hover:scale-110"
+                  />
+                  <div
+                    className="absolute inset-0 flex items-center justify-center 
+                        bg-black/10 group-hover:bg-black/20 transition-all"
+                  >
+                    <div
+                      className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center 
+                          group-hover:scale-110 transition-transform"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6 text-gray-900 ml-0.5"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -432,64 +455,65 @@ function InstructionVideos() {
     </section>
   );
 }
-
 // --------------------- Interactive Games (Gray) ---------------------
 function InteractiveGames() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <section className="w-full bg-brand-grayBg">
-      <div className="lg:max-w-[80vw] mx-auto px-6 py-12 sm:py-16 md:py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
-            Interactive Learning Games
-          </h2>
-          <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
-            Try these fun games that complement the Logicoland experience and help
-            develop logical thinking skills.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Game 1 */}
-          <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-            <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
-              Prime Number Explorer
-            </h3>
-            <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
-              <iframe
-                style={{ maxWidth: "100%" }}
-                src="https://wordwall.net/embed/play/96298/037/880"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              ></iframe>
-            </div>
-            <p className="mt-4 text-center text-brand-tealDark/80">
-              Identify Prime Number......
+      <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
+        <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
+              Interactive Learning Games
+            </h2>
+            <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
+              Try these fun games that complement the Logicoland experience and
+              help develop logical thinking skills.
             </p>
           </div>
 
-          {/* Game 2 */}
-          <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-            <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
-              Composite Number Challenge
-            </h3>
-            <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
-              <iframe
-                style={{ maxWidth: "100%" }}
-                src="https://wordwall.net/embed/play/96298/689/270"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              ></iframe>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Game 1 */}
+            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+                Prime Number Explorer
+              </h3>
+              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+                <iframe
+                  style={{ maxWidth: "100%" }}
+                  src="https://wordwall.net/embed/play/96298/037/880"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+              <p className="mt-4 text-center text-brand-tealDark/80">
+                Identify Prime Number......
+              </p>
             </div>
-            <p className="mt-4 text-center text-brand-tealDark/80">
-              Find Composite Number....
-            </p>
+
+            {/* Game 2 */}
+            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
+              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+                Composite Number Challenge
+              </h3>
+              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+                <iframe
+                  style={{ maxWidth: "100%" }}
+                  src="https://wordwall.net/embed/play/96298/689/270"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
+              <p className="mt-4 text-center text-brand-tealDark/80">
+                Find Composite Number....
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -497,33 +521,146 @@ function InteractiveGames() {
   );
 }
 
+// --------------------- Lost Card Helper (Green #84C341) ---------------------
+function LostCardHelper() {
+  // Map known card numbers to images (extend to full set)
+  const cardImages: Record<string, string> = {
+    "1": "https://ik.imagekit.io/pratik2002/cards/1.png",
+    "2": "https://ik.imagekit.io/pratik2002/cards/2.png",
+    "3": "https://ik.imagekit.io/pratik2002/cards/3.png",
+    "5": "https://ik.imagekit.io/pratik2002/cards/5.png",
+    // ...add more
+  };
 
-// --------------------- Footer ---------------------
-function SiteFooter() {
+  // Random tray image initially
+  const trayImages = [
+    "https://ik.imagekit.io/pratik2002/tray/tray-1.jpg",
+    "https://ik.imagekit.io/pratik2002/tray/tray-2.jpg",
+    "https://ik.imagekit.io/pratik2002/tray/tray-3.jpg",
+  ];
+
+  const [cardNo, setCardNo] = React.useState("");
+  const [imgSrc, setImgSrc] = React.useState(
+    trayImages[Math.floor(Math.random() * trayImages.length)]
+  );
+  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
+
+  // Optional predictable pattern:
+  // const buildPatternUrl = (n: string) => `https://ik.imagekit.io/pratik2002/cards/${n}.png`;
+
+  const showCard = async () => {
+    setError(null);
+
+    const n = cardNo.trim();
+    if (!n) {
+      setError("Please enter a card number.");
+      return;
+    }
+    if (!/^\d+$/.test(n)) {
+      setError("Card number should be numeric.");
+      return;
+    }
+
+    setLoading(true);
+
+    // 1) Try explicit mapping first
+    let nextUrl = cardImages[n];
+
+    // 2) Or derive from a pattern:
+    // if (!nextUrl) nextUrl = buildPatternUrl(n);
+
+    if (!nextUrl) {
+      setLoading(false);
+      setError("We couldn't find that card image yet. Please try another number.");
+      return;
+    }
+
+    // Preload using the DOM constructor (avoid Next.js Image name collision)
+    const img = new window.Image();
+    img.onload = () => {
+      setImgSrc(nextUrl);
+      setLoading(false);
+    };
+    img.onerror = () => {
+      setLoading(false);
+      setError("That image isn't available right now.");
+    };
+    img.src = nextUrl;
+  };
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === "Enter") showCard();
+  };
+
   return (
-    <footer className="bg-brand-tealDark text-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid md:grid-cols-3 gap-8 items-center">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-white/10" />
-            <div>
-              <p className="font-semibold">Logicology</p>
-              <p className="text-white/70 text-sm">PrimeTime</p>
+    <section className="w-full bg-[#84C341]">
+      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="rounded-[22px] bg-white/95 p-6 sm:p-10 shadow-soft">
+          <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 items-center">
+            {/* Left: Image */}
+            <div className="order-2 md:order-1">
+              <div className="relative w-full h-[320px] md:h-[420px] rounded-2xl overflow-hidden ring-1 ring-black/5 bg-gray-50">
+                <Image
+                  src={imgSrc}
+                  alt="Card preview"
+                  fill
+                  sizes="(min-width: 768px) 600px, 100vw"
+                  className={`object-cover transition-opacity ${
+                    loading ? "opacity-60" : "opacity-100"
+                  }`}
+                  priority={false}
+                />
+              </div>
+              {loading && (
+                <p className="mt-3 text-sm text-gray-600">Loading card image…</p>
+              )}
+            </div>
+
+            {/* Right: Text + Input */}
+            <div className="order-1 md:order-2">
+              <p className="text-sm tracking-wide text-brand-tealDark/80 uppercase">
+                Card replacement helper
+              </p>
+              <h2 className="mt-1 text-3xl font-bold text-brand-tealDark">
+                Lost a card? We’ve got you covered.
+              </h2>
+              <p className="mt-3 text-brand-tealDark/90 max-w-prose">
+                The box comes with four blank cards just for this purpose. Enter the
+                card number below and we’ll show you the correct card image.
+              </p>
+
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <label className="sr-only" htmlFor="card-number">
+                  Card number
+                </label>
+                <input
+                  id="card-number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Enter card number"
+                  value={cardNo}
+                  onChange={(e) => setCardNo(e.target.value)}
+                  onKeyDown={onKeyDown}
+                  className="w-full sm:max-w-xs rounded-full border border-gray-300 px-5 py-3 text-sm outline-none
+                             focus:ring-2 focus:ring-brand-teal/40"
+                />
+                <button
+                  onClick={showCard}
+                  className="rounded-full bg-brand-teal px-6 py-3 text-white font-medium hover:bg-brand-teal/90
+                             transition-colors"
+                >
+                  Show card
+                </button>
+              </div>
+
+              {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
             </div>
           </div>
-          <div className="text-center text-white/80 text-sm">
-            <p>Contact • Careers • Be a Mentor</p>
-          </div>
-          <div className="flex md:justify-end gap-4">
-            <div className="h-9 w-9 rounded-full bg-white/10" />
-            <div className="h-9 w-9 rounded-full bg-white/10" />
-            <div className="h-9 w-9 rounded-full bg-white/10" />
-          </div>
-        </div>
-        <div className="mt-8 border-t border-white/10 pt-6 text-center text-xs text-white/60">
-          Copyright © Logicology 2025. All rights reserved.
         </div>
       </div>
-    </footer>
+    </section>
   );
 }
+

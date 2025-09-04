@@ -58,7 +58,7 @@ export default function NavBar() {
               href="/login"
               className="hover:text-brand-tealDark flex items-center gap-1"
             >
-              <FiLogIn /> <span>Login</span>
+              <span>Login</span>
             </Link>
             <Link
               href="/search"

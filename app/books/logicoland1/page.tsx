@@ -113,69 +113,69 @@ export default function Logicoland1Page() {
         </section>
 
         {/* ================= LOGICOLAND V1 ================= */}
-        <section id="buy" className="w-full bg-brand-gold">
-          <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-            <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-extrabold text-brand-tealDark">
-                  Logicoland Volume 1
-                </h2>
-                <p className="text-brand-tealDark/80 mt-2">
-                  Logic through coloring!
-                </p>
-              </div>
+<section id="buy" className="w-full bg-brand-gold">
+  <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
+    <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-extrabold text-brand-teal">
+          Logicoland Volume 1
+        </h2>
+        <p className="text-brand-tealDark/80 mt-2">Logic through coloring!</p>
+      </div>
 
-              <div className="grid md:grid-cols-3 gap-10 items-center">
-                <div className="space-y-10">
-                  <BulletWithLine
-                    side="left"
-                    title="50+ brain-boosting challenges"
-                    desc="Blend logic puzzles with creative coloring fun."
-                  />
-                  <BulletWithLine
-                    side="left"
-                    title="Intro to Sudoku"
-                    desc="A playful, visual way to ease kids into logical thinking."
-                  />
-                </div>
+      <div className="grid md:grid-cols-3 gap-10 items-center">
+        <div className="space-y-10">
+          <BulletWithLine
+            side="left"
+            title="50+ brain-boosting challenges"
+            desc="Blend logic puzzles with creative coloring fun."
+          />
+          <BulletWithLine
+            side="left"
+            title="Intro to Sudoku"
+            desc="A playful, visual way to ease kids into logical thinking."
+          />
+        </div>
 
-                <div className="flex items-center justify-center">
-                  <div className="relative w-56 sm:w-64 md:w-72 aspect-[3/4]">
-                    <Image
-                      src="https://ik.imagekit.io/pratik2002/logicolandbook.jpg?updatedAt=1756384482628"
-                      alt="Logicoland Book"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-10">
-                  <BulletWithLine
-                    side="right"
-                    title="Skill-building disguised as fun"
-                    desc="Sharpens deduction, focus, and pattern recognition."
-                  />
-                  <BulletWithLine
-                    side="right"
-                    title="Perfect for ages 6–12"
-                    desc="Great for home learning, travel, or screen-free entertainment."
-                  />
-                </div>
-              </div>
-
-              <div className="text-center mt-10">
-                <Link
-                  href="#"
-                  className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold"
-                >
-                  Buy now
-                </Link>
-              </div>
-            </div>
+        {/* BIGGER IMAGE */}
+        <div className="flex items-center justify-center">
+          <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
+            <Image
+              src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
+              alt="Logicoland Book"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
-        </section>
+        </div>
+
+        <div className="space-y-10">
+          <BulletWithLine
+            side="right"
+            title="Skill-building disguised as fun"
+            desc="Sharpens deduction, focus, and pattern recognition."
+          />
+          <BulletWithLine
+            side="right"
+            title="Perfect for ages 6–12"
+            desc="Great for home learning, travel, or screen-free entertainment."
+          />
+        </div>
+      </div>
+
+      <div className="text-center mt-10">
+        <Link
+          href="#"
+          className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold"
+        >
+          Buy now
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
+
 
         {/* ================= INTERACTIVE PUZZLES ================= */}
         <section className="w-full bg-brand-coral text-white">
