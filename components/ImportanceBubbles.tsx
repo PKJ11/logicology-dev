@@ -3,44 +3,54 @@ import Image from "next/image";
 import { motion, Variants, Transition } from "framer-motion";
 
 export default function ImportanceBubbles() {
-  const items = [
-    {
-      color: "#1F9C8F",
-      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_49%20AM.png?updatedAt=1755479245741",
-      text: "If you do not want your kids to spend too much time on screen",
-      title: "Board Games & Card Games"
-    },
-    {
-      color: "#D7AD57",
-      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_31_59%20AM.png?updatedAt=1755479197487",
-      text: "If you like the age old tradition of books fused with activities that keep the children's minds engaged and yours free",
-      title: "Activity Books"
-    },
-    {
-      color: "#E45C48",
-      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_56%20AM.png?updatedAt=1755479216126",
-      text: "Coming soon - Continuous comprehensive assessment of your child's progress in the world of Logic",
-      title: "Evaluation Packs"
-    },
-    {
-      color: "#0D5C5C",
-      img: "https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2006_29_52%20AM.png?updatedAt=1755479231450",
-      text: "Hands-on learning materials that develop critical thinking through tactile experiences",
-      title: "Learning Kits"
-    }
+  // your bubble & kid assets
+  const bubbleImgs = [
+    "https://ik.imagekit.io/pratik2002/BUBBLE%201.png?updatedAt=1757035882810",
+    "https://ik.imagekit.io/pratik2002/BUBBLE%202.png?updatedAt=1757035882839",
+    "https://ik.imagekit.io/pratik2002/BUBBLE%203.png?updatedAt=1757035883281",
+    "https://ik.imagekit.io/pratik2002/BUBBLE%204.png?updatedAt=1757035883179",
+  ];
+  const kidImgs = [
+    "https://ik.imagekit.io/pratik2002/KID%201.png?updatedAt=1757035882681",
+    "https://ik.imagekit.io/pratik2002/KID%202.png?updatedAt=1757035882826",
+    "https://ik.imagekit.io/pratik2002/KID%203.png?updatedAt=1757035882763",
+    "https://ik.imagekit.io/pratik2002/KID%204.png?updatedAt=1757035886499",
   ];
 
-  // Properly typed animation variants
+  // content (same as before)
+  const baseItems = [
+    {
+      title: "Board Games & Card Games",
+      text: "If you do not want your kids to spend too much time on screen",
+    },
+    {
+      title: "Activity Books",
+      text: "If you like the age old tradition of books fused with activities that keep the children's minds engaged and yours free",
+    },
+    {
+      title: "Evaluation Packs",
+      text: "Coming soon - Continuous comprehensive assessment of your child's progress in the world of Logic",
+    },
+    {
+      title: "Learning Kits",
+      text: "Hands-on learning materials that develop critical thinking through tactile experiences",
+    },
+  ];
+
+  // attach bubble & kid images by index
+  const items = baseItems.map((it, i) => ({
+    ...it,
+    bubble: bubbleImgs[i],
+    kid: kidImgs[i],
+  }));
+
+  // same animation
   const floatingVariants: Variants = {
     float: {
       y: ["0%", "-10%", "0%", "5%", "0%"],
       x: ["0%", "3%", "0%", "-3%", "0%"],
       rotate: ["0deg", "2deg", "0deg", "-2deg", "0deg"],
-      transition: {
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut",
-      } as Transition,
+      transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } as Transition,
     },
   };
 
@@ -59,48 +69,33 @@ export default function ImportanceBubbles() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mt-10">
               {items.map((it, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-5">
-                  {/* Animated Bubble with text inside */}
-                  <motion.div 
-                    className="relative"
-                    variants={floatingVariants}
-                    animate="float"
-                  >
-                    <div
-                      className="
-                        rounded-full text-white flex flex-col items-center justify-center p-4
-                        text-center shadow-sm relative
-                      "
-                      style={{
-                        width: 165,
-                        height: 165,
-                        backgroundColor: it.color,
-                      }}
-                    >
-                      <h4 className="font-bold text-sm mb-1">{it.title}</h4>
-                      <p className="text-xs leading-tight">{it.text}</p>
+                  {/* Animated bubble image with text overlay */}
+                  <motion.div className="relative" variants={floatingVariants} animate="float">
+                    <div className="relative" style={{ width: 165, height: 165 }}>
+                      {/* Bubble PNG */}
+                      <Image
+                        src={it.bubble}
+                        alt={`bubble for ${it.title}`}
+                        fill
+                        className="object-contain"
+                        sizes="165px"
+                        priority={false}
+                      />
                     </div>
-                    {/* tail */}
-                    <div
-                      className="
-                        absolute -bottom-3 left-1/2 -translate-x-1/2
-                        w-0 h-0 border-l-[12px] border-r-[12px] border-t-[20px]
-                        border-l-transparent border-r-transparent
-                      "
-                      style={{ borderTopColor: it.color }}
-                    />
                   </motion.div>
 
-                  {/* Larger Kid image below bubble with subtle animation */}
+                  {/* Kid image below bubble */}
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   >
                     <Image
-                      src={it.img}
-                      alt="child illustration"
+                      src={it.kid}
+                      alt={`illustration for ${it.title}`}
                       width={120}
                       height={120}
                       className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-contain"
+                      priority={false}
                     />
                   </motion.div>
                 </div>

@@ -10,6 +10,10 @@
 html, body {
 	height: 100%;
 }
+@layer base {
+  body { @apply bg-white text-slate-800 antialiased font-sans; } /* Roboto */
+  h1, h2, h3, .heading-xl, .heading-lg, .heading-md { @apply font-heading; }   /* Outfit */
+}
 
 body {
 	@apply bg-white text-slate-800 antialiased;

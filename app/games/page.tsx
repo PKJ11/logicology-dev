@@ -26,7 +26,7 @@ export default function GamesPage() {
     {
       id: 1,
       title: 'PrimeTime',
-      imageUrl: 'https://ik.imagekit.io/pratik2002/primetime-game-cover.png?updatedAt=1755475994053',
+      imageUrl: 'https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370',
       description: 'A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.',
       author: 'Gayatri',
       rating: 4.9,
@@ -106,7 +106,7 @@ export default function GamesPage() {
                 </div>
 
                 <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">{game.title}</h3>
+                  <h3 className="text-2xl font-bold text-brand-teal">{game.title}</h3>
                   <p className="text-sm text-brand-tealDark/70">by {game.author}</p>
                   
                   <div className="mt-2 flex items-center">

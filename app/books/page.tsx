@@ -24,9 +24,9 @@ export default function BooksPage() {
       id: 1,
       title: 'Logicoland',
       imageUrl:
-        'https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_42_36%20AM.png?updatedAt=1755475994053',
+        'https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658',
       description:
-        'A fascinating journey through the world of logical puzzles and mind-bending challenges that will test your reasoning skills to the limit.',
+        'Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.',
       author: 'Gayatri',
       rating: 4.8,
     },
@@ -155,10 +155,10 @@ export default function BooksPage() {
                 <div className="grid md:grid-cols-2">
                   <div className="relative h-72 md:h-full">
                     <Image
-                      src={selectedBook.imageUrl}
+                      src="https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-2-IMAGE.png?updatedAt=1757035431654"
                       alt={selectedBook.title}
                       fill
-                      className="object-cover rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none"
+                      className="block w-full h-auto"
                     />
                   </div>
 

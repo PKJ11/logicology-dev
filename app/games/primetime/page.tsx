@@ -63,7 +63,7 @@ function Hero() {
       description:
         "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
       image:
-        "https://res.cloudinary.com/deunonql5/image/upload/v1756256595/SGS08636_1_urdnz5.jpg",
+        "https://ik.imagekit.io/pratik2002/logicology-img1.png?updatedAt=1757034142387",
       cta: "Get started",
       ctaLink: "/get-started",
     },
@@ -77,182 +77,118 @@ function Hero() {
             spaceBetween={0}
             slidesPerView={1}
             loop={true}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
             pagination={{
               clickable: true,
               bulletClass: "custom-bullet",
               bulletActiveClass: "custom-bullet-active",
-              renderBullet: function (index, className) {
-                return `<span class="${className}"><i></i></span>`;
-              },
+              renderBullet: (i, c) => `<span class="${c}"><i></i></span>`,
             }}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            }}
+            navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
             modules={[Autoplay, Pagination, Navigation]}
             className="hero-swiper"
           >
             {slides.map((slide) => (
               <SwiperSlide key={slide.id}>
-                {/* Full background image container */}
+                {/* Full-bleed background */}
                 <div
-                  className="absolute inset-0 z-0 flex items-center justify-center"
+                  className="absolute inset-0 z-0"
                   style={{
                     backgroundImage: `url('${slide.image}')`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                   }}
-                ></div>
+                />
 
-                {/* Semi-transparent overlay for better text readability */}
-                <div className="absolute inset-0 bg-black/40 z-1"></div>
-
-                <div className="grid md:grid-cols-2 gap-6 items-center relative z-10 min-h-[700px]">
-                  <div className="p-8 sm:p-12">
-                    <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
-                      {slide.pretitle}
-                    </p>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white leading-tight">
-                      {slide.title}
-                      <span className="block text-white">{slide.subtitle}</span>
-                    </h1>
-                    <p className="text-white mt-4 text-base sm:text-lg max-w-md">
-                      {slide.description}
-                    </p>
-                    <div className="mt-6">
-                      <Link
-                        href={slide.ctaLink}
-                        className="btn btn-dark inline-flex items-center group"
-                      >
-                        {slide.cta}
-                        <svg
-                          className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </Link>
+                {/* Centered content, max 80vw */}
+                <div className="relative z-10 min-h-[700px] flex items-center">
+                  <div className="lg:mx-auto lg:w-[80vw] lg:max-w-[80vw]">
+                    <div className="grid md:grid-cols-2 gap-6 items-center">
+                      <div className="p-8 sm:p-12">
+                        <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
+                          {slide.pretitle}
+                        </p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white leading-tight">
+                          {slide.title}
+                          <span className="block text-white">{slide.subtitle}</span>
+                        </h1>
+                        <p className="text-white mt-4 text-base sm:text-lg max-w-md">
+                          {slide.description}
+                        </p>
+                        <div className="mt-6">
+                          <Link
+                            href={slide.ctaLink}
+                            className="inline-flex items-center group rounded-full px-6 py-3
+                                       bg-white text-brand-teal font-medium
+                                       transition-colors duration-200
+                                       hover:bg-brand-teal hover:text-white
+                                       focus:outline-none focus:ring-2 focus:ring-white/70"
+                          >
+                            {slide.cta}
+                            <svg
+                              className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
-
-          {/* Custom Navigation Arrows */}
         </div>
       </div>
 
       <style jsx global>{`
-        .hero-swiper {
-          width: 100%;
-          height: 100%;
-        }
+        .hero-swiper { width: 100%; height: 100%; }
+        .hero-swiper .swiper-slide { height: auto; min-height: 700px; overflow: hidden; }
 
-        /* Ensure swiper slide takes full height */
-        .hero-swiper .swiper-slide {
-          height: auto;
-          min-height: 700px;
-        }
-
-        /* Pagination Styles */
         .swiper-pagination {
           bottom: 20px !important;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 8px;
-          z-index: 20;
+          display: flex; justify-content: center; align-items: center;
+          gap: 8px; z-index: 20;
         }
-
         .custom-bullet {
-          width: 12px;
-          height: 12px;
-          display: inline-block;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.6);
-          cursor: pointer;
-          transition: all 0.3s ease;
-          position: relative;
+          width: 12px; height: 12px; display: inline-block; border-radius: 50%;
+          background: rgba(255,255,255,0.6); cursor: pointer; transition: all .3s ease; position: relative;
         }
-
         .custom-bullet i {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: white;
-          opacity: 0;
-          transition: opacity 0.3s ease;
+          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity .3s ease;
         }
+        .custom-bullet-active { background: transparent; border: 2px solid #fff; width: 16px; height: 16px; }
+        .custom-bullet-active i { opacity: 1; }
 
-        .custom-bullet-active {
-          background: transparent;
-          border: 2px solid white;
-          width: 16px;
-          height: 16px;
+        .swiper-button-next, .swiper-button-prev {
+          color: #3f2f14; background: rgba(255,255,255,0.8);
+          width: 48px; height: 48px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all .3s ease; z-index: 20;
         }
+        .swiper-button-next:after, .swiper-button-prev:after { content: none; }
+        .swiper-button-next:hover, .swiper-button-prev:hover { background: #fff; transform: scale(1.05); }
 
-        .custom-bullet-active i {
-          opacity: 1;
-        }
-
-        /* Navigation Styles */
-        .swiper-button-next,
-        .swiper-button-prev {
-          color: #3f2f14;
-          background: rgba(255, 255, 255, 0.8);
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
-          z-index: 20;
-        }
-
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-          content: none;
-        }
-
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-          background: white;
-          transform: scale(1.05);
-        }
-
-        /* Responsive adjustments */
         @media (max-width: 767px) {
-          .swiper-pagination {
-            bottom: 10px !important;
-          }
-
-          .hero-swiper .swiper-slide {
-            min-height: 600px;
-          }
+          .swiper-pagination { bottom: 10px !important; }
+          .hero-swiper .swiper-slide { min-height: 600px; }
         }
       `}</style>
     </section>
   );
 }
+
 
 // --------------------- Game Details (Gold) ---------------------
 
@@ -364,43 +300,46 @@ function InstructionVideos() {
           </div>
 
           {/* White background container only for videos */}
-          {/* White background container only for videos */}
-<div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 shadow-soft">
-  {/* 2 cols on phones, 3 cols from sm/md up */}
-  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-    {videos.map((src, i) => (
-      <div
-        key={i}
-        onClick={() => handleVideoClick(i)}
-        className="relative aspect-[9/16] min-h-[200px] sm:min-h-[220px] md:min-h-[260px]
+          <div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 shadow-soft">
+            {/* 2 cols on phones, 3 cols from sm/md up */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              {videos.map((src, i) => (
+                <div
+                  key={i}
+                  onClick={() => handleVideoClick(i)}
+                  className="relative aspect-[9/16] min-h-[200px] sm:min-h-[220px] md:min-h-[260px]
                    rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200
                    cursor-pointer group"
-      >
-        <video
-          src={src}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        {/* Play overlay */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 ml-0.5">
-              <path
-                fillRule="evenodd"
-                d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                clipRule="evenodd"
-              />
-            </svg>
+                >
+                  <video
+                    src={src}
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {/* Play overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-all">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 ml-0.5"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
         </div>
       </div>
 
@@ -515,74 +454,54 @@ function InteractiveGames() {
   );
 }
 
-// --------------------- Lost Card Helper (Green #84C341) ---------------------
 function LostCardHelper() {
-  // Map known card numbers to images (extend to full set)
-  const cardImages: Record<string, string> = {
-    "1": "https://ik.imagekit.io/pratik2002/cards/1.png",
-    "2": "https://ik.imagekit.io/pratik2002/cards/2.png",
-    "3": "https://ik.imagekit.io/pratik2002/cards/3.png",
-    "5": "https://ik.imagekit.io/pratik2002/cards/5.png",
-    // ...add more
-  };
-
-  // Random tray image initially
   const trayImages = [
-    "https://ik.imagekit.io/pratik2002/tray/tray-1.jpg",
-    "https://ik.imagekit.io/pratik2002/tray/tray-2.jpg",
-    "https://ik.imagekit.io/pratik2002/tray/tray-3.jpg",
+    "https://ik.imagekit.io/pratik2002/primetime_imag2.png?updatedAt=1757032084405",
   ];
+  const randomTray = () => trayImages[Math.floor(Math.random() * trayImages.length)];
+  const buildCardUrl = (n: number) => `/Images/CARD ${n}.png`;
 
   const [cardNo, setCardNo] = React.useState("");
-  const [imgSrc, setImgSrc] = React.useState(
-    trayImages[Math.floor(Math.random() * trayImages.length)]
-  );
+  const [imgSrc, setImgSrc] = React.useState<string>(randomTray());
+  const [isTray, setIsTray] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  // Optional predictable pattern:
-  // const buildPatternUrl = (n: string) => `https://ik.imagekit.io/pratik2002/cards/${n}.png`;
+  const resetToTray = () => {
+    const t = randomTray();
+    setImgSrc(t);
+    setIsTray(true);
+    setCardNo("");
+    setError(null);
+    setLoading(false);
+  };
 
-  const showCard = async () => {
+  const showCard = () => {
     setError(null);
 
-    const n = cardNo.trim();
-    if (!n) {
-      setError("Please enter a card number.");
+    if (!cardNo.trim()) {
+      resetToTray();
       return;
     }
-    if (!/^\d+$/.test(n)) {
-      setError("Card number should be numeric.");
-      return;
-    }
+
+    if (!/^\d+$/.test(cardNo.trim())) return setError("Card number should be numeric.");
+    const num = Number(cardNo);
+    if (num < 1 || num > 55) return setError("Enter a number between 1 and 55.");
 
     setLoading(true);
+    const nextUrl = buildCardUrl(num);
 
-    // 1) Try explicit mapping first
-    let nextUrl = cardImages[n];
-
-    // 2) Or derive from a pattern:
-    // if (!nextUrl) nextUrl = buildPatternUrl(n);
-
-    if (!nextUrl) {
-      setLoading(false);
-      setError(
-        "We couldn't find that card image yet. Please try another number."
-      );
-      return;
-    }
-
-    // Preload using the DOM constructor (avoid Next.js Image name collision)
-    const img = new window.Image();
-    img.onload = () => {
+    const probe = new window.Image();
+    probe.onload = () => {
       setImgSrc(nextUrl);
+      setIsTray(false);
       setLoading(false);
     };
-    img.onerror = () => {
+    probe.onerror = () => {
       setLoading(false);
-      setError("That image isn't available right now.");
+      setError("That card image is not available. Check the number or filename.");
     };
-    img.src = nextUrl;
+    probe.src = nextUrl;
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -592,40 +511,53 @@ function LostCardHelper() {
   return (
     <section className="w-full bg-[#84C341]">
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="rounded-[22px] bg-white/95 p-6 sm:p-10 shadow-soft">
+        <div className="rounded-[22px] p-6 sm:p-10">
           <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 items-center">
-            {/* Left: Image */}
+            {/* Left: Image container */}
             <div className="order-2 md:order-1">
-              <div className="relative w-full h-[320px] md:h-[420px] rounded-2xl overflow-hidden ring-1 ring-black/5 bg-gray-50">
-                <Image
-                  src={imgSrc}
-                  alt="Card preview"
-                  fill
-                  sizes="(min-width: 768px) 600px, 100vw"
-                  className={`object-cover transition-opacity ${
-                    loading ? "opacity-60" : "opacity-100"
-                  }`}
-                  priority={false}
-                />
+              <div className="relative w-full h-[320px] md:h-[420px] rounded-2xl 
+                              overflow-hidden bg-white flex items-center justify-center 
+                              border-8 border-gray-200 shadow-soft">
+                {isTray ? (
+                  // TRAY: fill container fully
+                  <Image
+                    src={imgSrc}
+                    alt="Tray"
+                    fill
+                    sizes="(min-width: 768px) 600px, 100vw"
+                    className={`object-cover transition-opacity ${
+                      loading ? "opacity-60" : "opacity-100"
+                    }`}
+                    priority={false}
+                  />
+                ) : (
+                  // CARD: smaller image with shadow
+                  <Image
+                    src={imgSrc}
+                    alt="Card"
+                    width={180}
+                    height={240}
+                    className={`object-contain rounded-xl shadow-2xl transition-opacity ${
+                      loading ? "opacity-60" : "opacity-100"
+                    }`}
+                    priority={false}
+                  />
+                )}
               </div>
+
               {loading && (
-                <p className="mt-3 text-sm text-gray-600">
-                  Loading card image…
-                </p>
+                <p className="mt-3 text-sm text-gray-200 text-center">Loading image…</p>
               )}
             </div>
 
-            {/* Right: Text + Input */}
-            <div className="order-1 md:order-2">
-              <p className="text-sm tracking-wide text-brand-tealDark/80 uppercase">
+            {/* Right: Controls & Text */}
+            <div className="order-1 md:order-2 text-white">
+              <p className="text-sm tracking-wide uppercase opacity-80">
                 Card replacement helper
               </p>
-              <h2 className="mt-1 text-3xl font-bold text-brand-tealDark">
-                Lost a card? We’ve got you covered.
-              </h2>
-              <p className="mt-3 text-brand-tealDark/90 max-w-prose">
-                The box comes with four blank cards just for this purpose. Enter
-                the card number below and we’ll show you the correct card image.
+              <h2 className="mt-1 text-3xl font-bold">Lost a card? We’ve got you covered.</h2>
+              <p className="mt-3 max-w-prose opacity-90">
+                Enter a card number to preview it. Leave empty to see a tray image.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -637,23 +569,35 @@ function LostCardHelper() {
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  placeholder="Enter card number"
+                  placeholder="1–55 (or leave empty)"
                   value={cardNo}
-                  onChange={(e) => setCardNo(e.target.value)}
+                  onChange={(e) => {
+                    setCardNo(e.target.value);
+                    if (error) setError(null);
+                  }}
                   onKeyDown={onKeyDown}
-                  className="w-full sm:max-w-xs rounded-full border border-gray-300 px-5 py-3 text-sm outline-none
+                  className="w-full sm:max-w-xs rounded-full border border-gray-300 
+                             px-5 py-3 text-sm outline-none text-gray-900
                              focus:ring-2 focus:ring-brand-teal/40"
                 />
                 <button
                   onClick={showCard}
-                  className="rounded-full bg-brand-teal px-6 py-3 text-white font-medium hover:bg-brand-teal/90
-                             transition-colors"
+                  className="rounded-full bg-brand-teal px-6 py-3 text-white font-medium 
+                             hover:bg-brand-teal/90 transition-colors"
                 >
                   Show card
                 </button>
+                <button
+                  onClick={resetToTray}
+                  type="button"
+                  className="rounded-full bg-white/90 px-6 py-3 text-brand-tealDark 
+                             font-medium hover:bg-white transition-colors"
+                >
+                  Reset
+                </button>
               </div>
 
-              {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+              {error && <p className="mt-3 text-sm text-red-200">{error}</p>}
             </div>
           </div>
         </div>
@@ -661,3 +605,6 @@ function LostCardHelper() {
     </section>
   );
 }
+
+
+

@@ -24,6 +24,10 @@ const config: Config = {
         "brand-hero":
           "radial-gradient(800px 400px at 10% -10%, rgba(14,138,128,0.10), transparent 55%), radial-gradient(700px 360px at 95% -15%, rgba(228,92,72,0.10), transparent 55%), linear-gradient(180deg, #F5F6F7 0%, #FFFFFF 100%)",
       },
+      fontFamily: {
+        heading: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-roboto)", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],
