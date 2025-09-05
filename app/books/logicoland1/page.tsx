@@ -33,136 +33,163 @@ export default function Logicoland1Page() {
       <main className="bg-brand-grayBg text-brand-tealDark">
         {/* ================= HERO ================= */}
         <section className="w-full bg-white">
-  <div className="px-3 sm:px-5 pt-4">
-    <div className="relative rounded-[28px] bg-white p-2">
-      <div className="relative rounded-[22px] overflow-hidden">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          playsInline
-          className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
-        >
-          <source
-            src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-            type="video/mp4"
-          />
-        </video>
+          <div className="px-3 sm:px-5 pt-4">
+            <div className="relative rounded-[28px] bg-white p-2">
+              <div className="relative rounded-[22px] overflow-hidden">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  loop
+                  playsInline
+                  className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
+                >
+                  <source
+                    src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                    type="video/mp4"
+                  />
+                </video>
 
-        {/* gradient under text */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+                {/* gradient under text */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
-        {/* centered overlay content, max 80vw */}
-        <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-          <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
-            <p className="text-sm sm:text-base mb-3">Empowering Minds</p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-              Through STEM Play and
-              <br /> Logic-Based Learning
-            </h1>
-            <p className="mt-4 max-w-md text-white/90">
-              At Logicology we endeavour to make learning fun so that children
-              learn while they play.
-            </p>
-            <Link
-              href="#buy"
-              className="inline-block mt-6 rounded-2xl px-5 py-3
+                {/* centered overlay content, max 80vw */}
+                <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+                  <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+                    <p className="text-sm sm:text-base mb-3">
+                      Empowering Minds
+                    </p>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+                      Through STEM Play and
+                      <br /> Logic-Based Learning
+                    </h1>
+                    <p className="mt-4 max-w-md text-white/90">
+                      At Logicology we endeavour to make learning fun so that
+                      children learn while they play.
+                    </p>
+                    <Link
+                      href="#buy"
+                      className="inline-block mt-6 rounded-2xl px-5 py-3
                          bg-white text-brand-tealDark font-semibold
                          transition-colors hover:bg-brand-teal hover:text-white
                          focus:outline-none focus:ring-2 focus:ring-white/80"
-            >
-              Learn more
-            </Link>
+                    >
+                      Learn more
+                    </Link>
+                  </div>
+                </div>
+
+                {/* fullscreen button on top */}
+                <button
+                  onClick={toggleFullscreen}
+                  className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                  aria-label={
+                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                  }
+                >
+                  {!isFullscreen ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= LOGICOLAND V1 ================= */}
+        <section id="buy" className="w-full bg-brand-gold">
+  <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
+    <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-extrabold text-brand-teal">
+          Logicoland Volume 1
+        </h2>
+        <p className="text-brand-tealDark/80 mt-2">Logic through coloring!</p>
+      </div>
+
+      {/* Order: line → logo → text (desktop and mobile) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+        {/* 1) LEFT: bullets with line on the RIGHT (pointing to book) */}
+        <div className="space-y-10 order-1">
+          <BulletWithLine
+            side="right"
+            title="50+ brain-boosting challenges"
+            desc="Blend logic puzzles with creative coloring fun."
+          />
+          <BulletWithLine
+            side="right"
+            title="Intro to Sudoku"
+            desc="A playful, visual way to ease kids into logical thinking."
+          />
+        </div>
+
+        {/* 2) CENTER: book image */}
+        <div className="flex items-center justify-center order-2">
+          <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
+            <Image
+              src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
+              alt="Logicoland Book"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
         </div>
 
-        {/* fullscreen button on top */}
-        <button
-          onClick={toggleFullscreen}
-          className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+        {/* 3) RIGHT: bullets with line on the LEFT (pointing to book) */}
+        <div className="space-y-10 order-3">
+          <BulletWithLine
+            side="left"
+            title="Skill-building disguised as fun"
+            desc="Sharpens deduction, focus, and pattern recognition."
+          />
+          <BulletWithLine
+            side="left"
+            title="Perfect for ages 6–12"
+            desc="Great for home learning, travel, or screen-free entertainment."
+          />
+        </div>
+      </div>
+
+      <div className="text-center mt-10">
+        <Link
+          href="#"
+          className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold hover:bg-[#c99d4e] transition-colors"
         >
-          {!isFullscreen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4" />
-            </svg>
-          )}
-        </button>
+          Buy now
+        </Link>
       </div>
     </div>
   </div>
 </section>
 
-
-        {/* ================= LOGICOLAND V1 ================= */}
-        <section id="buy" className="w-full bg-brand-gold">
-          <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-            <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-extrabold text-brand-teal">
-                  Logicoland Volume 1
-                </h2>
-                <p className="text-brand-tealDark/80 mt-2">
-                  Logic through coloring!
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-10 items-center">
-                <div className="space-y-10">
-                  <BulletWithLine
-                    side="left"
-                    title="50+ brain-boosting challenges"
-                    desc="Blend logic puzzles with creative coloring fun."
-                  />
-                  <BulletWithLine
-                    side="left"
-                    title="Intro to Sudoku"
-                    desc="A playful, visual way to ease kids into logical thinking."
-                  />
-                </div>
-
-                {/* BIGGER IMAGE */}
-                <div className="flex items-center justify-center">
-                  <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
-                    <Image
-                      src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
-                      alt="Logicoland Book"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-10">
-                  <BulletWithLine
-                    side="right"
-                    title="Skill-building disguised as fun"
-                    desc="Sharpens deduction, focus, and pattern recognition."
-                  />
-                  <BulletWithLine
-                    side="right"
-                    title="Perfect for ages 6–12"
-                    desc="Great for home learning, travel, or screen-free entertainment."
-                  />
-                </div>
-              </div>
-
-              <div className="text-center mt-10">
-                <Link
-                  href="#"
-                  className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold"
-                >
-                  Buy now
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* ================= INTERACTIVE PUZZLES ================= */}
         <section className="w-full bg-brand-coral text-white">

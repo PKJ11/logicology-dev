@@ -10,7 +10,7 @@ export default function Benefit() {
           <div className="flex flex-col md:flex-row items-center">
             {/* Content on left for larger screens, top for mobile */}
             <div className="flex flex-col w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-1 justify-end ">
-              <p className="text-lg">How we </p>
+              <p className="heading-lg">How we </p>
               <h2 className="heading-lg">Help?</h2>
               <p className="mt-4 max-w-xl text-white/90">
                 At Logicology we have a bouquet of products and subscriptions that help 

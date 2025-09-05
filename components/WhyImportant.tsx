@@ -18,7 +18,7 @@ export default function WhyImportant() {
 
             {/* Content on right for larger screens, bottom for mobile */}
             <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-              <p className="text-lg">Why is it</p>
+              <p className="heading-lg text-[#3F2F14] font-heading">Why is it</p>
               <h2 className="heading-lg text-[#3F2F14]">Important?</h2>
               <p className="mt-4 max-w-xl">
                 Logical reasoning turns children from passive learners into

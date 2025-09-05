@@ -208,10 +208,10 @@ function GameDetails() {
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-            <p className="text-sm tracking-wide text-brand-tealDark/80 uppercase">
+            <p className="text-3xl font-bold tracking-wide text-brand-tealDark/80 uppercase">
               Detailed about the
             </p>
-            <h2 className="mt-1 text-3xl font-bold text-brand-tealDark">
+            <h2 className="mt-1 text-3xl font-bold text-brand-tealDark/80">
               Game
             </h2>
             <p className="mt-3 text-brand-tealDark/90 max-w-2xl">
