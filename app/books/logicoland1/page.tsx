@@ -6,6 +6,8 @@ import NavBar from "@/components/NavBar";
 import { useEffect, useRef, useState, useMemo } from "react";
 import CommunitySignupModal from "@/components/CommunitySignupModal";
 import SiteFooter from "@/components/Footer";
+import CTAButton from "@/components/CTAButton";
+import Community from "@/components/Community";
 
 /* ============================================================
    PAGE
@@ -24,7 +26,288 @@ export default function Logicoland1Page() {
       document.exitFullscreen();
       setIsFullscreen(false);
     }
+  }
+
+ function HeroVideo() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
   };
+
+  const toggleFullscreen = () => {
+    if (!videoRef.current) return;
+    if (!document.fullscreenElement) {
+      videoRef.current.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
+    }
+  };
+
+  return (
+    <section className="w-full bg-white">
+      <div className="px-3 sm:px-5 pt-4">
+        <div className="relative rounded-[28px] bg-white p-2">
+          <div className="relative rounded-[22px] overflow-hidden">
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              playsInline
+              muted={isMuted}
+              className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
+            >
+              <source
+                src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                type="video/mp4"
+              />
+            </video>
+
+            {/* gradient under text */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+
+            {/* centered overlay content */}
+            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+              <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+                <p className="text-sm sm:text-base mb-3">Empowering Minds</p>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+                  Through STEM Play and
+                  <br /> Logic-Based Learning
+                </h1>
+                <p className="mt-4 max-w-md text-white/90">
+                  At Logicology we endeavour to make learning fun so that
+                  children learn while they play.
+                </p>
+                <div className="mt-6">
+                  <CTAButton
+                    text="Learn More"
+                    href="#buy"
+                    bg="#FFFFFF"
+                    color="#0A8A80"
+                    hoverBg="#0A8A80"
+                    hoverColor="#FFFFFF"
+                    size="md"
+                    rightIcon={
+                      <svg
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Mute/Unmute button */}
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-4 left-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+              aria-label={isMuted ? "Unmute video" : "Mute video"}
+            >
+              {isMuted ? (
+                // Muted icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
+                  />
+                </svg>
+              ) : (
+                // Unmuted (volume) icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5L6 9H3v6h3l5 4V5z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
+                  />
+                </svg>
+              )}
+            </button>
+
+            {/* Fullscreen button */}
+            <button
+              onClick={toggleFullscreen}
+              className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            >
+              {!isFullscreen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+// import BulletWithLine and CTAButton as you already do
+
+type Bullet = { title: string; desc: string };
+
+const BASE_BULLETS: Bullet[] = [
+  { title: "50+ brain-boosting challenges", desc: "Blend logic puzzles with creative coloring fun." },
+  { title: "Intro to Sudoku", desc: "A playful, visual way to ease kids into logical thinking." },
+  { title: "Skill-building disguised as fun", desc: "Sharpens deduction, focus, and pattern recognition." },
+  { title: "Perfect for ages 6–12", desc: "Great for home learning, travel, or screen-free entertainment." },
+];
+
+// Fisher–Yates shuffle (pure)
+function shuffle<T>(arr: T[]) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function BuySection() {
+  const [bullets, setBullets] = useState<Bullet[]>(BASE_BULLETS);
+
+  // Randomize once on client to avoid SSR/CSR mismatch
+  useEffect(() => {
+    setBullets(shuffle(BASE_BULLETS));
+  }, []);
+
+  // Split into two columns (left/right). If odd, left gets the extra.
+  const { leftBullets, rightBullets } = useMemo(() => {
+    const mid = Math.ceil(bullets.length / 2);
+    return {
+      leftBullets: bullets.slice(0, mid),
+      rightBullets: bullets.slice(mid),
+    };
+  }, [bullets]);
+
+  return (
+    <section id="buy" className="w-full bg-brand-gold">
+      <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
+        <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-extrabold text-brand-teal font-heading">
+              Logicoland Volume 1
+            </h2>
+            <p className="text-brand-tealDark/80 mt-2 font-sans">Logic through coloring!</p>
+          </div>
+
+          {/* Order: line → logo → text */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+            {/* LEFT: bullets (lines point RIGHT, towards book) */}
+            <div className="space-y-10 order-1">
+              {leftBullets.map((b, i) => (
+                <BulletWithLine key={`L-${i}-${b.title}`} side="right" title={b.title} desc={b.desc} />
+              ))}
+            </div>
+
+            {/* CENTER: book image */}
+            <div className="flex items-center justify-center order-2">
+              <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
+                <Image
+                  src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
+                  alt="Logicoland Book"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* RIGHT: bullets (lines point LEFT, towards book) */}
+            <div className="space-y-10 order-3">
+              {rightBullets.map((b, i) => (
+                <BulletWithLine key={`R-${i}-${b.title}`} side="left" title={b.title} desc={b.desc} />
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <div className="mt-6">
+              <CTAButton
+                text="Buy Now"
+                href="#buy"
+                bg="#D7AD57"
+                color="#FFFFFF"
+                hoverBg="#D7AD57"
+                hoverColor="#FFFFFF"
+                size="md"
+                rightIcon={
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
   return (
     <>
@@ -32,174 +315,19 @@ export default function Logicoland1Page() {
 
       <main className="bg-brand-grayBg text-brand-tealDark">
         {/* ================= HERO ================= */}
-        <section className="w-full bg-white">
-          <div className="px-3 sm:px-5 pt-4">
-            <div className="relative rounded-[28px] bg-white p-2">
-              <div className="relative rounded-[22px] overflow-hidden">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  loop
-                  playsInline
-                  className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
-                >
-                  <source
-                    src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-                    type="video/mp4"
-                  />
-                </video>
-
-                {/* gradient under text */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
-
-                {/* centered overlay content, max 80vw */}
-                <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-                  <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
-                    <p className="text-sm sm:text-base mb-3">
-                      Empowering Minds
-                    </p>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-                      Through STEM Play and
-                      <br /> Logic-Based Learning
-                    </h1>
-                    <p className="mt-4 max-w-md text-white/90">
-                      At Logicology we endeavour to make learning fun so that
-                      children learn while they play.
-                    </p>
-                    <Link
-                      href="#buy"
-                      className="inline-block mt-6 rounded-2xl px-5 py-3
-                         bg-white text-brand-tealDark font-semibold
-                         transition-colors hover:bg-brand-teal hover:text-white
-                         focus:outline-none focus:ring-2 focus:ring-white/80"
-                    >
-                      Learn more
-                    </Link>
-                  </div>
-                </div>
-
-                {/* fullscreen button on top */}
-                <button
-                  onClick={toggleFullscreen}
-                  className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                  aria-label={
-                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                  }
-                >
-                  {!isFullscreen ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroVideo />
 
         {/* ================= LOGICOLAND V1 ================= */}
-        <section id="buy" className="w-full bg-brand-gold">
-  <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-    <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-extrabold text-brand-teal">
-          Logicoland Volume 1
-        </h2>
-        <p className="text-brand-tealDark/80 mt-2">Logic through coloring!</p>
-      </div>
-
-      {/* Order: line → logo → text (desktop and mobile) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-        {/* 1) LEFT: bullets with line on the RIGHT (pointing to book) */}
-        <div className="space-y-10 order-1">
-          <BulletWithLine
-            side="right"
-            title="50+ brain-boosting challenges"
-            desc="Blend logic puzzles with creative coloring fun."
-          />
-          <BulletWithLine
-            side="right"
-            title="Intro to Sudoku"
-            desc="A playful, visual way to ease kids into logical thinking."
-          />
-        </div>
-
-        {/* 2) CENTER: book image */}
-        <div className="flex items-center justify-center order-2">
-          <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
-            <Image
-              src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
-              alt="Logicoland Book"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-        </div>
-
-        {/* 3) RIGHT: bullets with line on the LEFT (pointing to book) */}
-        <div className="space-y-10 order-3">
-          <BulletWithLine
-            side="left"
-            title="Skill-building disguised as fun"
-            desc="Sharpens deduction, focus, and pattern recognition."
-          />
-          <BulletWithLine
-            side="left"
-            title="Perfect for ages 6–12"
-            desc="Great for home learning, travel, or screen-free entertainment."
-          />
-        </div>
-      </div>
-
-      <div className="text-center mt-10">
-        <Link
-          href="#"
-          className="inline-block bg-brand-gold text-white px-6 py-3 rounded-2xl font-semibold hover:bg-[#c99d4e] transition-colors"
-        >
-          Buy now
-        </Link>
-      </div>
-    </div>
-  </div>
-</section>
-
-
+        <BuySection />
         {/* ================= INTERACTIVE PUZZLES ================= */}
         <section className="w-full bg-brand-coral text-white">
           <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <p className="text-lg">Interactive</p>
-                <h3 className="text-4xl font-extrabold">Puzzles</h3>
+                {/* <p className="text-lg">Interactive</p> */}
+                <h3 className="text-4xl font-extrabold font-heading">Interactive Puzzles</h3>
 
-                <p className="mt-4 text-white/90">
+                <p className="mt-4 text-white/90 font-sans">
                   Solve the 4×4 Sudoku puzzles given here. The rules that you
                   need to follow are:
                 </p>
@@ -218,12 +346,32 @@ export default function Logicoland1Page() {
                   </li>
                 </ol>
 
-                <a
-                  href="#puzzle"
-                  className="inline-block mt-6 bg-white/90 text-brand-tealDark px-5 py-3 rounded-2xl font-semibold hover:bg-white"
-                >
-                  Solve now
-                </a>
+                <div className="mt-6">
+                  <CTAButton
+                    text="Solve Now"
+                    href="#buy"
+                    bg="#FFFFFF"
+                    color="#0A8A80" // brand teal text
+                    hoverBg="#FFFFFF" // brand teal bg on hover
+                    hoverColor="#0A8A80" // white text on hover
+                    size="md"
+                    rightIcon={
+                      <svg
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    }
+                  />
+                </div>
               </div>
 
               <div id="puzzle" className="relative">
@@ -263,37 +411,7 @@ export default function Logicoland1Page() {
         </section>
 
         {/* ================= COMMUNITY ================= */}
-        <section className="w-full bg-brand-teal">
-          <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
-            <div className="grid md:grid-cols-2 gap-10 items-center">
-              <div className="rounded-[26px] bg-white p-3 w-full max-w-xl">
-                <div className="relative rounded-[20px] overflow-hidden aspect-[4/3]">
-                  <Image
-                    src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1200&auto=format&fit=crop"
-                    alt="Kids community"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-
-              <div className="text-white">
-                <p>Join the</p>
-                <h3 className="text-4xl font-extrabold">Community</h3>
-                <p className="mt-4 text-white/90">
-                  At Logicology we endeavour to make learning fun so that
-                  children learn while the play.
-                </p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="mt-6 bg-white text-brand-tealDark px-5 py-3 rounded-2xl font-semibold hover:bg-white/90"
-                >
-                  Join Community
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Community/>
 
         <SiteFooter />
       </main>
@@ -798,9 +916,34 @@ function PrintableCard({ colorClass }: { colorClass: string }) {
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
       <div className={`rounded-[14px] h-64 ${colorClass} relative`}>
-        <button className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1 rounded-full">
-          Download pdf
-        </button>
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
+          <div className="mt-6">
+            <CTAButton
+              text="Download Pdf"
+              href=""
+              bg="#FFFFFF"
+              color="#0A8A80" // brand teal text
+              hoverBg="#0A8A80" // brand teal bg on hover
+              hoverColor="#FFFFFF" // white text on hover
+              size="md"
+              rightIcon={
+                <svg
+                  className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              }
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

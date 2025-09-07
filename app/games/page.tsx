@@ -226,7 +226,7 @@ export default function GamesPage() {
 
                     <p className="text-brand-tealDark/85 mb-8">{selectedGame.description}</p>
 
-                    <button className="bg-brand-coral hover:bg-[#d55241] text-white font-bold py-3 px-6 rounded-2xl transition-colors w-full" onClick={handleGetStarted}>
+                    <button className="bg-brand-coral hover:bg-[#d55241] text-white font-bold py-3 px-6 rounded-full transition-colors w-full" onClick={handleGetStarted}>
                       Know More about {selectedGame.title}
                     </button>
                   </div>

@@ -6,6 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CTAButton from "./CTAButton";
 
 export default function Hero() {
   const router = useRouter();
@@ -40,7 +41,10 @@ export default function Hero() {
               renderBullet: (index, className) =>
                 `<span class="${className}"><i></i></span>`,
             }}
-            navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
             modules={[Autoplay, Pagination, Navigation]}
             className="hero-swiper"
           >
@@ -60,43 +64,46 @@ export default function Hero() {
 
                 {/* Content: centered, max 80vw */}
                 <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[80vw] lg:max-w-[80vw]">
-                    <div className="grid md:grid-cols-2 gap-6 items-center">
+                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[75vw] md:max-w-[75vw] ">
+                    <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
+                        <p className="text-white font-semibold text-3xl sm:text-base tracking-wide font-heading">
                           {slide.pretitle}
                         </p>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white font-heading">
                           {slide.title}
-                          <span className="block text-white">{slide.subtitle}</span>
+                          <span className="block text-white font-heading">
+                            {slide.subtitle}
+                          </span>
                         </h1>
-                        <p className="text-white mt-4 text-base sm:text-lg max-w-md">
+                        <p className="text-white mt-4 text-base sm:text-lg max-w-md font-heading">
                           {slide.description}
                         </p>
                         <div className="mt-6">
-                          <Link
+                          <CTAButton
+                            text={slide.cta}
                             href={slide.ctaLink}
-                            className="inline-flex items-center group rounded-full px-6 py-3
-                                       bg-white text-brand-teal font-medium
-                                       transition-colors duration-200
-                                       hover:bg-brand-teal hover:text-white
-                                       focus:outline-none focus:ring-2 focus:ring-white/70"
-                          >
-                            {slide.cta}
-                            <svg
-                              className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </Link>
+                            bg="#FFFFFF"
+                            color="#0A8A80" // brand teal text
+                            hoverBg="#0A8A80" // brand teal bg on hover
+                            hoverColor="#FFFFFF" // white text on hover
+                            size="md"
+                            rightIcon={
+                              <svg
+                                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            }
+                          />
                         </div>
                       </div>
                     </div>

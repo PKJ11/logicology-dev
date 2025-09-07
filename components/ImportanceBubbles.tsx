@@ -18,13 +18,29 @@ export default function ImportanceBubbles() {
   ];
 
   const baseItems = [
-    { title: "Board Games & Card Games", text: "If you do not want your kids to spend too much time on screen" },
-    { title: "Activity Books", text: "If you like the age old tradition of books fused with activities that keep the children's minds engaged and yours free" },
-    { title: "Evaluation Packs", text: "Coming soon - Continuous comprehensive assessment of your child's progress in the world of Logic" },
-    { title: "Learning Kits", text: "Hands-on learning materials that develop critical thinking through tactile experiences" },
+    {
+      title: "Board Games & Card Games",
+      text: "If you do not want your kids to spend too much time on screen",
+    },
+    {
+      title: "Activity Books",
+      text: "If you like the age old tradition of books fused with activities that keep the children's minds engaged and yours free",
+    },
+    {
+      title: "Evaluation Packs",
+      text: "Coming soon - Continuous comprehensive assessment of your child's progress in the world of Logic",
+    },
+    {
+      title: "Learning Kits",
+      text: "Hands-on learning materials that develop critical thinking through tactile experiences",
+    },
   ];
 
-  const items = baseItems.map((it, i) => ({ ...it, bubble: bubbleImgs[i], kid: kidImgs[i] }));
+  const items = baseItems.map((it, i) => ({
+    ...it,
+    bubble: bubbleImgs[i],
+    kid: kidImgs[i],
+  }));
 
   // same animation
   const floatingVariants: Variants = {
@@ -32,7 +48,11 @@ export default function ImportanceBubbles() {
       y: ["0%", "-10%", "0%", "5%", "0%"],
       x: ["0%", "3%", "0%", "-3%", "0%"],
       rotate: ["0deg", "2deg", "0deg", "-2deg", "0deg"],
-      transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } as Transition,
+      transition: {
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      } as Transition,
     },
   };
 
@@ -43,11 +63,12 @@ export default function ImportanceBubbles() {
         {/* white container */}
         <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
           <div className="text-center mb-4">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-3">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-3 font-heading">
               Our Offerings for you
             </h2>
-            <p className="text-lg sm:text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
-              You can choose from a wide variety of formats and engagement types.
+            <p className="text-lg sm:text-xl text-brand-tealDark/80 max-w-3xl mx-auto font-sans">
+              You can choose from a wide variety of formats and engagement
+              types.
             </p>
           </div>
 
@@ -55,14 +76,18 @@ export default function ImportanceBubbles() {
             {items.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center gap-5">
                 {/* Animated bubble image */}
-                <motion.div className="relative" variants={floatingVariants} animate="float">
-                  <div className="relative" style={{ width: 165, height: 165 }}>
+                <motion.div
+                  className="relative"
+                  variants={floatingVariants}
+                  animate="float"
+                >
+                  <div className="relative" style={{ width: 220, height: 220 }}>
                     <Image
                       src={it.bubble}
                       alt={`bubble for ${it.title}`}
                       fill
                       className="object-contain"
-                      sizes="165px"
+                      sizes="220px"
                     />
                   </div>
                 </motion.div>
@@ -75,13 +100,11 @@ export default function ImportanceBubbles() {
                   <Image
                     src={it.kid}
                     alt={`illustration for ${it.title}`}
-                    width={120}
-                    height={120}
-                    className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] object-contain"
+                    width={90}
+                    height={90}
+                    className="w-[80px] h-[80px] md:w-[90px] md:h-[90px] object-contain"
                   />
                 </motion.div>
-
-               
               </div>
             ))}
           </div>

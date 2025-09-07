@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Community from "@/components/Community";
 import MediaLayout from "@/components/MediaLayout";
+import CTAButton from "@/components/CTAButton";
 
 export default function PrimeTimeLanding() {
   return (
@@ -84,7 +85,10 @@ function Hero() {
               bulletActiveClass: "custom-bullet-active",
               renderBullet: (i, c) => `<span class="${c}"><i></i></span>`,
             }}
-            navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
             modules={[Autoplay, Pagination, Navigation]}
             className="hero-swiper"
           >
@@ -103,43 +107,46 @@ function Hero() {
 
                 {/* Centered content, max 80vw */}
                 <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[80vw] lg:max-w-[80vw]">
-                    <div className="grid md:grid-cols-2 gap-6 items-center">
+                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[80vw] md:max-w-[80vw]">
+                    <div className="flex">
                       <div className="p-8 sm:p-12">
                         <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
                           {slide.pretitle}
                         </p>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white leading-tight">
                           {slide.title}
-                          <span className="block text-white">{slide.subtitle}</span>
+                          <span className="block text-white">
+                            {slide.subtitle}
+                          </span>
                         </h1>
                         <p className="text-white mt-4 text-base sm:text-lg max-w-md">
                           {slide.description}
                         </p>
                         <div className="mt-6">
-                          <Link
+                          <CTAButton
+                            text={slide.cta}
                             href={slide.ctaLink}
-                            className="inline-flex items-center group rounded-full px-6 py-3
-                                       bg-white text-brand-teal font-medium
-                                       transition-colors duration-200
-                                       hover:bg-brand-teal hover:text-white
-                                       focus:outline-none focus:ring-2 focus:ring-white/70"
-                          >
-                            {slide.cta}
-                            <svg
-                              className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </Link>
+                            bg="#FFFFFF"
+                            color="#0A8A80" // brand teal text
+                            hoverBg="#0A8A80" // brand teal bg on hover
+                            hoverColor="#FFFFFF" // white text on hover
+                            size="md"
+                            rightIcon={
+                              <svg
+                                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            }
+                          />
                         </div>
                       </div>
                     </div>
@@ -152,43 +159,92 @@ function Hero() {
       </div>
 
       <style jsx global>{`
-        .hero-swiper { width: 100%; height: 100%; }
-        .hero-swiper .swiper-slide { height: auto; min-height: 700px; overflow: hidden; }
+        .hero-swiper {
+          width: 100%;
+          height: 100%;
+        }
+        .hero-swiper .swiper-slide {
+          height: auto;
+          min-height: 700px;
+          overflow: hidden;
+        }
 
         .swiper-pagination {
           bottom: 20px !important;
-          display: flex; justify-content: center; align-items: center;
-          gap: 8px; z-index: 20;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          z-index: 20;
         }
         .custom-bullet {
-          width: 12px; height: 12px; display: inline-block; border-radius: 50%;
-          background: rgba(255,255,255,0.6); cursor: pointer; transition: all .3s ease; position: relative;
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.6);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
         }
         .custom-bullet i {
-          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity .3s ease;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #fff;
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
-        .custom-bullet-active { background: transparent; border: 2px solid #fff; width: 16px; height: 16px; }
-        .custom-bullet-active i { opacity: 1; }
+        .custom-bullet-active {
+          background: transparent;
+          border: 2px solid #fff;
+          width: 16px;
+          height: 16px;
+        }
+        .custom-bullet-active i {
+          opacity: 1;
+        }
 
-        .swiper-button-next, .swiper-button-prev {
-          color: #3f2f14; background: rgba(255,255,255,0.8);
-          width: 48px; height: 48px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all .3s ease; z-index: 20;
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #3f2f14;
+          background: rgba(255, 255, 255, 0.8);
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          z-index: 20;
         }
-        .swiper-button-next:after, .swiper-button-prev:after { content: none; }
-        .swiper-button-next:hover, .swiper-button-prev:hover { background: #fff; transform: scale(1.05); }
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+          content: none;
+        }
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+          background: #fff;
+          transform: scale(1.05);
+        }
 
         @media (max-width: 767px) {
-          .swiper-pagination { bottom: 10px !important; }
-          .hero-swiper .swiper-slide { min-height: 600px; }
+          .swiper-pagination {
+            bottom: 10px !important;
+          }
+          .hero-swiper .swiper-slide {
+            min-height: 600px;
+          }
         }
       `}</style>
     </section>
   );
 }
-
 
 // --------------------- Game Details (Gold) ---------------------
 
@@ -208,23 +264,39 @@ function GameDetails() {
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-            <p className="text-3xl font-bold tracking-wide text-brand-tealDark/80 uppercase">
-              Detailed about the
-            </p>
-            <h2 className="mt-1 text-3xl font-bold text-brand-tealDark/80">
-              Game
+            <h2 className="text-3xl sm:text-4xl  text-brand-tealDark/80 font-extrabold font-heading">
+              Details About The Game
             </h2>
-            <p className="mt-3 text-brand-tealDark/90 max-w-2xl">
+
+            <p className="mt-3 text-brand-tealDark/90 max-w-2xl font-sans">
               A lightning‑quick numbers game that rewards smart matching and
               prime‑factor insights. Perfect for 2–6 players, ages 8+.
             </p>
             <div className="mt-6">
-              <Link
-                href="#learn-more"
-                className="inline-flex items-center rounded-full bg-white/90 px-5 py-3 text-sm font-medium text-brand-tealDark shadow-soft hover:bg-white"
-              >
-                Learn more
-              </Link>
+              <CTAButton
+                text="Learn more"
+                href=""
+                bg="#FFFFFF"
+                color="#0A8A80" // brand teal text
+                hoverBg="#0A8A80" // brand teal bg on hover
+                hoverColor="#FFFFFF" // white text on hover
+                size="md"
+                rightIcon={
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
             </div>
           </div>
         </div>
@@ -280,22 +352,42 @@ function InstructionVideos() {
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
           <div>
-            <p className="text-white/90 text-sm tracking-wide uppercase">
-              How to play
-            </p>
-            <h2 className="text-white mt-1 text-3xl font-bold">
-              Instruction Videos
+            <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
+              How to play Instruction Videos
             </h2>
+
             <p className="mt-3 text-white/90 max-w-prose">
               Short, punchy walkthroughs so you can learn while you play.
             </p>
+
             <div className="mt-6">
-              <a
+              <CTAButton
+                text="Start watching"
                 href="#videos"
-                className="rounded-full bg-black/20 px-5 py-3 text-white font-medium hover:bg-black/25 transition-colors"
-              >
-                Start watching
-              </a>
+                bg="#FFFFFF" // matches bg-black/20
+                color="#0A8A80" // white text
+                hoverBg="rgba(0,0,0,0.25)" // matches hover:bg-black/25
+                hoverColor="#FFFFFF"
+                roundedClass="rounded-full"
+                size="md"
+                className="font-medium transition-colors"
+                ariaLabel="Jump to videos section"
+                rightIcon={
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
             </div>
           </div>
 
@@ -458,7 +550,8 @@ function LostCardHelper() {
   const trayImages = [
     "https://ik.imagekit.io/pratik2002/primetime_imag2.png?updatedAt=1757032084405",
   ];
-  const randomTray = () => trayImages[Math.floor(Math.random() * trayImages.length)];
+  const randomTray = () =>
+    trayImages[Math.floor(Math.random() * trayImages.length)];
   const buildCardUrl = (n: number) => `/Images/CARD ${n}.png`;
 
   const [cardNo, setCardNo] = React.useState("");
@@ -484,9 +577,11 @@ function LostCardHelper() {
       return;
     }
 
-    if (!/^\d+$/.test(cardNo.trim())) return setError("Card number should be numeric.");
+    if (!/^\d+$/.test(cardNo.trim()))
+      return setError("Card number should be numeric.");
     const num = Number(cardNo);
-    if (num < 1 || num > 55) return setError("Enter a number between 1 and 55.");
+    if (num < 1 || num > 55)
+      return setError("Enter a number between 1 and 55.");
 
     setLoading(true);
     const nextUrl = buildCardUrl(num);
@@ -499,7 +594,9 @@ function LostCardHelper() {
     };
     probe.onerror = () => {
       setLoading(false);
-      setError("That card image is not available. Check the number or filename.");
+      setError(
+        "That card image is not available. Check the number or filename."
+      );
     };
     probe.src = nextUrl;
   };
@@ -515,9 +612,11 @@ function LostCardHelper() {
           <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 items-center">
             {/* Left: Image container */}
             <div className="order-2 md:order-1">
-              <div className="relative w-full h-[320px] md:h-[420px] rounded-2xl 
+              <div
+                className="relative w-full h-[320px] md:h-[420px] rounded-2xl 
                               overflow-hidden bg-white flex items-center justify-center 
-                              border-8 border-gray-200 shadow-soft">
+                              border-8 border-gray-200 shadow-soft"
+              >
                 {isTray ? (
                   // TRAY: fill container fully
                   <Image
@@ -546,18 +645,23 @@ function LostCardHelper() {
               </div>
 
               {loading && (
-                <p className="mt-3 text-sm text-gray-200 text-center">Loading image…</p>
+                <p className="mt-3 text-sm text-gray-200 text-center">
+                  Loading image…
+                </p>
               )}
             </div>
 
             {/* Right: Controls & Text */}
             <div className="order-1 md:order-2 text-white">
-              <p className="text-sm tracking-wide uppercase opacity-80">
+              <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
                 Card replacement helper
-              </p>
-              <h2 className="mt-1 text-3xl font-bold">Lost a card? We’ve got you covered.</h2>
-              <p className="mt-3 max-w-prose opacity-90">
-                Enter a card number to preview it. Leave empty to see a tray image.
+              </h2>
+              <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
+                Lost a card? We’ve got you covered.
+              </h2>
+              <p className="mt-3 max-w-prose opacity-90 font-sans">
+                Enter a card number to preview it. Leave empty to see a tray
+                image.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -590,7 +694,7 @@ function LostCardHelper() {
                 <button
                   onClick={resetToTray}
                   type="button"
-                  className="rounded-full bg-white/90 px-6 py-3 text-brand-tealDark 
+                  className="rounded-full bg-brand-teal px-6 py-3 text-white
                              font-medium hover:bg-white transition-colors"
                 >
                   Reset
@@ -605,6 +709,3 @@ function LostCardHelper() {
     </section>
   );
 }
-
-
-
