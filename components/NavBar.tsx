@@ -41,7 +41,7 @@ export default function NavBar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="relative hover:text-brand-tealDark transition-colors duration-200
+                  className="relative text-[16px] hover:text-brand-tealDark transition-colors duration-200
                          after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
                          after:h-[2px] after:w-0 after:bg-brand-teal
                          after:transition-all after:duration-300 hover:after:w-full font-heading"
@@ -56,7 +56,7 @@ export default function NavBar() {
           <div className="hidden md:flex items-center gap-5 text-slate-700">
             <Link
               href="/login"
-              className="hover:text-brand-tealDark flex items-center gap-1 font-heading"
+              className="hover:text-brand-tealDark text-[16px] flex items-center gap-1 font-heading"
             >
               <span>Login</span>
             </Link>
