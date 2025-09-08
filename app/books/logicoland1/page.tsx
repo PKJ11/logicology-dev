@@ -244,6 +244,67 @@ export default function Logicoland1Page() {
     return a;
   }
 
+  const BULLET_ICON =
+    "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
+
+  function BulletWithLine({
+    side,
+    title,
+    desc,
+    icon,
+  }: {
+    side: "left" | "right";
+    title: string;
+    desc: string;
+    icon: string;
+  }) {
+    const isLeft = side === "left";
+    return (
+      <div
+        className={`md:flex md:items-start md:gap-0 ${
+          isLeft ? "md:flex-row" : "md:flex-row-reverse"
+        }`}
+      >
+        
+
+        <div
+          className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-40 lg:w-64 ${
+            isLeft ? "ml-3 mr-4" : "mr-3 ml-4"
+          } translate-y-6`}
+        >
+          <span
+            className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${
+              isLeft ? "right-0" : "left-0"
+            }`}
+          />
+        </div>
+        <div className="shrink-0">
+          <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
+            <Image
+              src={icon || BULLET_ICON}
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 object-contain bg-[#1EB6E9]"
+            />
+          </div>
+        </div>
+        <div
+          className={`${isLeft ? "md:ml-0" : "md:mr-0 ml-2"} ${
+            isLeft ? "ml-4" : "mr-4"
+          } md:ml-0 md:mr-0 max-w-[320px]`}
+        >
+          <div className="textstyles font-semibold text-brand-tealDark leading-tight">
+            {title}
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">
+            {desc}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   function BuySection() {
     const [bullets, setBullets] = useState<Bullet[]>([
       {
@@ -296,9 +357,9 @@ export default function Logicoland1Page() {
             </div>
 
             {/* Order: line → logo → text */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3  items-center">
               {/* LEFT: bullets (lines point RIGHT, towards book) */}
-              <div className="space-y-10 order-1">
+              <div className="space-y-[150px] order-1">
                 {leftBullets.map((b, i) => (
                   <BulletWithLine
                     key={`L-${i}-${b.title}`}
@@ -312,7 +373,7 @@ export default function Logicoland1Page() {
 
               {/* CENTER: book image */}
               <div className="flex items-center justify-center order-2">
-                <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
+                <div className="relative w-[500px] sm:w-[500px] md:w-[500px] aspect-[1]">
                   <Image
                     src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
                     alt="Logicoland Book"
@@ -324,7 +385,7 @@ export default function Logicoland1Page() {
               </div>
 
               {/* RIGHT: bullets (lines point LEFT, towards book) */}
-              <div className="space-y-10 order-3">
+              <div className="space-y-[130px] order-3">
                 {rightBullets.map((b, i) => (
                   <BulletWithLine
                     key={`R-${i}-${b.title}`}
@@ -921,65 +982,6 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
 /* ============================================================
    Little helpers
 ============================================================ */
-const BULLET_ICON =
-  "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
-
-function BulletWithLine({
-  side,
-  title,
-  desc,
-  icon,
-}: {
-  side: "left" | "right";
-  title: string;
-  desc: string;
-  icon: string;
-}) {
-  const isLeft = side === "left";
-  return (
-    <div
-      className={`md:flex md:items-start md:gap-0 ${
-        isLeft ? "md:flex-row" : "md:flex-row-reverse"
-      }`}
-    >
-      <div className="shrink-0">
-        <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
-          <Image
-            src={icon || BULLET_ICON}
-            alt=""
-            width={28}
-            height={28}
-            className="h-7 w-7 object-contain bg-[#1EB6E9]"
-          />
-        </div>
-      </div>
-
-      <div
-        className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-28 lg:w-40 ${
-          isLeft ? "ml-3 mr-4" : "mr-3 ml-4"
-        } translate-y-6`}
-      >
-        <span
-          className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${
-            isLeft ? "right-0" : "left-0"
-          }`}
-        />
-      </div>
-      <div
-        className={`${isLeft ? "md:ml-0" : "md:mr-0"} ${
-          isLeft ? "ml-4" : "mr-4"
-        } md:ml-0 md:mr-0 max-w-[320px]`}
-      >
-        <div className="text-sm font-semibold text-brand-tealDark leading-tight">
-          {title}
-        </div>
-        <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">
-          {desc}
-        </p>
-      </div>
-    </div>
-  );
-}
 
 function PrintableCard({ colorClass }: { colorClass: string }) {
   return (
