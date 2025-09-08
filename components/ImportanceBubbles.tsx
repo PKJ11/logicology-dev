@@ -81,13 +81,16 @@ export default function ImportanceBubbles() {
                   variants={floatingVariants}
                   animate="float"
                 >
-                  <div className="relative" style={{ width: 220, height: 220 }}>
+                  <div className="relative" style={{ width: 300, height: 300 }}>
                     <Image
                       src={it.bubble}
                       alt={`bubble for ${it.title}`}
                       fill
-                      className="object-contain"
-                      sizes="220px"
+                      className="object-contain w-[220px] h-[220px]
+                            md:w-[240px] md:h-[240px]
+                            lg:w-[350px] lg:h-[400px]
+                            xl:w-[340px] xl:h-[340px]"
+                      
                     />
                   </div>
                 </motion.div>

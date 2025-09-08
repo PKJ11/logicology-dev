@@ -35,9 +35,9 @@ export default function Community() {
                   href=""
                   onClick={() => setIsModalOpen(true)}
                   bg="#FFFFFF"
-                  color="#0A8A80" // brand teal text
-                  hoverBg="#FFFFFF" // brand teal bg on hover
-                  hoverColor="#0A8A80" // white text on hover
+                  color="#0B3F44" // brand teal text
+                  hoverBg="#0B3F44" // brand teal bg on hover
+                  hoverColor="#FFFFFF" // white text on hover
                   size="md"
                   rightIcon={
                     <svg

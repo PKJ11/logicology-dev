@@ -64,7 +64,7 @@ export default function Hero() {
 
                 {/* Content: centered, max 80vw */}
                 <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[75vw] md:max-w-[75vw] ">
+                  <div className="lg:mx-auto lg:w-[80vw] lg:max-w-[80vw] md:mx-auto md:w-[80vw] md:max-w-[80vw] ">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
                         <h1 className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[24px] font-bold text-white font-heading">

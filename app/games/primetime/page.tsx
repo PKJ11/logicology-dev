@@ -35,8 +35,8 @@ function Hero() {
     {
       id: 1,
       pretitle: "Introducing Prime Time",
-      title: "Where kids learn effortlessly and ",
-      subtitle: "adults get hooked.",
+      title: "Where kids learn effortlessly",
+      subtitle: "and adults get hooked.",
       description:
         "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
       image:
@@ -47,8 +47,8 @@ function Hero() {
     {
       id: 2,
       pretitle: "From classrooms to living rooms",
-      title: "Prime Time makes numbers fun",
-      subtitle: "for everyone.",
+      title: "Prime Time makes numbers",
+      subtitle: "fun for everyone.",
       description:
         "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
       image:
@@ -107,7 +107,7 @@ function Hero() {
 
                 {/* Centered content, max 80vw */}
                 <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[80vw] md:max-w-[80vw]">
+                  <div className="lg:mx-auto lg:w-[80vw] lg:max-w-[80vw] md:mx-auto md:w-[80vw] md:max-w-[80vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
                         <p className="text-white font-semibold textstyles tracking-wide">
@@ -264,11 +264,11 @@ function GameDetails() {
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-            <h2 className="headingstyle leading-tight text-brand-tealDark/80 font-extrabold font-heading">
+            <h2 className="headingstyle leading-tight text-[#3F2F14] font-extrabold font-heading">
               Details About The Game
             </h2>
 
-            <p className="mt-3 textstyles text-brand-tealDark/90 max-w-2xl font-sans">
+            <p className="mt-3 textstyles text-[#3F2F14] max-w-2xl font-sans">
               A lightning‑quick numbers game that rewards smart matching and
               prime‑factor insights. Perfect for 2–6 players, ages 8+.
             </p>
@@ -277,8 +277,8 @@ function GameDetails() {
                 text="Learn more"
                 href=""
                 bg="#FFFFFF"
-                color="#0A8A80" // brand teal text
-                hoverBg="#0A8A80" // brand teal bg on hover
+                color="#7E5C2E" // brand teal text
+                hoverBg="#7E5C2E" // brand teal bg on hover
                 hoverColor="#FFFFFF" // white text on hover
                 size="md"
                 rightIcon={
@@ -365,7 +365,7 @@ function InstructionVideos() {
                 text="Start watching"
                 href="#videos"
                 bg="#FFFFFF" // matches bg-black/20
-                color="#0A8A80" // white text
+                color="#AB4637" 
                 hoverBg="rgba(0,0,0,0.25)" // matches hover:bg-black/25
                 hoverColor="#FFFFFF"
                 roundedClass="rounded-full"
@@ -392,9 +392,9 @@ function InstructionVideos() {
           </div>
 
           {/* White background container only for videos */}
-          <div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 shadow-soft">
+          <div className="bg-white rounded-4xl p-0 sm:p-0 md:p-5 shadow-soft">
             {/* 2 cols on phones, 3 cols from sm/md up */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2 md:gap-4">
               {videos.map((src, i) => (
                 <div
                   key={i}
@@ -552,7 +552,7 @@ function LostCardHelper() {
   ];
   const randomTray = () =>
     trayImages[Math.floor(Math.random() * trayImages.length)];
-  const buildCardUrl = (n: number) => `/Images/CARD ${n}.png`;
+  const buildCardUrl = (n: number) => `/Images/primetimecardImages/PRIME TIME CARD ${n}.png`;
 
   const [cardNo, setCardNo] = React.useState("");
   const [imgSrc, setImgSrc] = React.useState<string>(randomTray());
@@ -660,8 +660,7 @@ function LostCardHelper() {
                 Lost a card? We’ve got you covered.
               </h2>
               <p className="textstyles mt-3 max-w-prose font-sans">
-                Enter a card number to preview it. Leave empty to see a tray
-                image.
+                Enter a card number to preview it.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -685,20 +684,26 @@ function LostCardHelper() {
                              focus:ring-2 focus:ring-brand-teal/40"
                 />
                 <button
-                  onClick={showCard}
-                  className="rounded-full bg-brand-teal px-6 py-3 text-white font-medium 
-                             hover:bg-brand-teal/90 transition-colors"
-                >
-                  Show card
-                </button>
-                <button
-                  onClick={resetToTray}
-                  type="button"
-                  className="rounded-full bg-brand-teal px-6 py-3 text-white
-                             font-medium  transition-colors"
-                >
-                  Reset
-                </button>
+  onClick={showCard}
+  className="group rounded-full px-6 py-3 font-medium
+             border-2 border-brand-teal bg-white text-brand-teal
+             transition-colors hover:bg-brand-teal hover:text-white
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+>
+  Show card
+</button>
+
+<button
+  onClick={resetToTray}
+  type="button"
+  className="group rounded-full px-6 py-3 font-medium
+             border-2 border-brand-teal bg-white text-brand-teal
+             transition-colors hover:bg-brand-teal hover:text-white
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+>
+  Reset
+</button>
+
               </div>
 
               {error && <p className="mt-3 text-sm text-red-200">{error}</p>}

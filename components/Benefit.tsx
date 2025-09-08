@@ -23,8 +23,8 @@ export default function Benefit() {
                   text="Learn more"
                   href="#offerings"
                   bg="#FFFFFF"
-                  color="#0A8A80" // brand teal text
-                  hoverBg="#0A8A80" // brand teal bg on hover
+                  color="#AB4637" // brand teal text
+                  hoverBg="#AB4637" // brand teal bg on hover
                   hoverColor="#FFFFFF" // white text on hover
                   size="md"
                   rightIcon={

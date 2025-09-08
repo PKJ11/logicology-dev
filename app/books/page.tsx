@@ -1,9 +1,9 @@
 "use client";
-import { useState } from 'react';
-import Image from 'next/image';
-import Head from 'next/head';
-import NavBar from '@/components/NavBar';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import Image from "next/image";
+import Head from "next/head";
+import NavBar from "@/components/NavBar";
+import { useRouter } from "next/navigation";
 
 interface Book {
   id: number;
@@ -22,15 +22,14 @@ export default function BooksPage() {
   const books: Book[] = [
     {
       id: 1,
-      title: 'Logicoland',
+      title: "Logicoland",
       imageUrl:
-        'https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658',
+        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
       description:
-        'Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.',
-      author: 'Gayatri',
+        "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
+      author: "Gayatri",
       rating: 4.8,
     },
-    
   ];
 
   const openModal = (book: Book) => {
@@ -50,7 +49,9 @@ export default function BooksPage() {
       router.push("/books/logicoland1");
     } else {
       // fallback: you could route to a generic /books/[slug]
-      router.push(`/books/${selectedBook.title.toLowerCase().replace(/\s+/g, "-")}`);
+      router.push(
+        `/books/${selectedBook.title.toLowerCase().replace(/\s+/g, "-")}`
+      );
     }
   };
 
@@ -67,65 +68,73 @@ export default function BooksPage() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal">
             Books Collection
           </h1>
-          <p className="mt-2 text-brand-tealDark/75">
+          <p className="mt-2 textstyles text-brand-tealDark/75">
             Handpicked titles to spark curiosity and learning.
           </p>
         </header>
 
-        {/* Bigger cards: fewer cols + larger min width */}
-        <div
-          className="
-            grid gap-7 md:gap-8
-            grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
-          "
-        >
-          {books.map((book) => (
-            <div
-              key={book.id}
-              className="relative group cursor-pointer transition-all duration-300 hover:z-10"
-              onClick={() => openModal(book)}
-            >
-              <div className="
-                relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
-                p-4 hover:shadow-brand transition-shadow
-              ">
-                {/* Larger cover area with fixed aspect ratio */}
-                <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
-                  <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">{book.title}</h3>
-                  <p className="text-sm text-brand-tealDark/70">by {book.author}</p>
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
-                      ★ {book.rating}
-                    </span>
-                    <button
-                      className="text-sm font-semibold text-brand-teal hover:text-brand-coral transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openModal(book);
-                      }}
-                    >
-                      View details →
-                    </button>
-                  </div>
-                </div>
-
-                {/* subtle brand ring on hover */}
-                <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
-              </div>
-            </div>
-          ))}
+        {/* Cards container: center-first using flex */}
+<div
+  className="
+    flex flex-wrap justify-center gap-7 md:gap-8
+  "
+>
+  {books.map((book) => (
+    <div
+      key={book.id}
+      className="relative group cursor-pointer transition-all duration-300 hover:z-10
+                 basis-[260px] sm:basis-[300px] lg:basis-[320px] xl:basis-[340px] flex-shrink-0"
+      onClick={() => openModal(book)}
+    >
+      <div
+        className="
+          relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
+          p-4 hover:shadow-brand transition-shadow
+        "
+      >
+        {/* cover */}
+        <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
+          <Image
+            src={book.imageUrl}
+            alt={book.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
+
+        <div className="pt-5">
+          {/* Title + author centered */}
+          <h3 className="text-2xl font-bold text-brand-tealDark text-center">
+            {book.title}
+          </h3>
+          <p className="text-sm text-brand-tealDark/70 text-center">
+            by {book.author}
+          </p>
+
+          {/* keep your rating + CTA layout as-is, or center it (optional below) */}
+          <div className="mt-4 flex items-center justify-between">
+            <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
+              ★ {book.rating}
+            </span>
+            <button
+              className="text-sm font-semibold text-brand-teal hover:text-brand-coral transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                openModal(book);
+              }}
+            >
+              View details →
+            </button>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
+      </div>
+    </div>
+  ))}
+</div>
+
 
         {/* Modal */}
         {isModalOpen && selectedBook && (
@@ -166,7 +175,9 @@ export default function BooksPage() {
                     <h2 className="text-3xl font-extrabold text-brand-teal mb-1">
                       {selectedBook.title}
                     </h2>
-                    <p className="text-brand-tealDark/75 mb-4">by {selectedBook.author}</p>
+                    <p className="text-brand-tealDark/75 mb-4">
+                      by {selectedBook.author}
+                    </p>
 
                     <div className="flex items-center mb-6">
                       <div className="flex text-brand-gold">
@@ -176,8 +187,8 @@ export default function BooksPage() {
                             xmlns="http://www.w3.org/2000/svg"
                             className={`h-5 w-5 ${
                               i < Math.floor(selectedBook.rating)
-                                ? 'fill-current'
-                                : 'stroke-current fill-none'
+                                ? "fill-current"
+                                : "stroke-current fill-none"
                             }`}
                             viewBox="0 0 24 24"
                           >
@@ -195,10 +206,33 @@ export default function BooksPage() {
                       </span>
                     </div>
 
-                    <p className="text-brand-tealDark/85 mb-8">{selectedBook.description}</p>
+                    <p className="text-brand-tealDark/85 mb-8">
+                      {selectedBook.description}
+                    </p>
 
-                    <button className="bg-brand-coral hover:bg-[#d55241] text-white font-bold py-3 px-6 rounded-full transition-colors w-full" onClick={handleGetStarted}>
-                      Know more about {selectedBook.title}
+                    <button
+                      onClick={handleGetStarted}
+                      className="group inline-flex w-full items-center justify-center gap-2
+             rounded-full border-2 border-brand-coral bg-transparent
+             px-6 py-3 font-semibold text-brand-coral
+             transition-colors hover:bg-brand-coral hover:text-white
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
+             active:scale-[.99]"
+                    >
+                      Know More about {selectedBook.title}
+                      <svg
+                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </div>

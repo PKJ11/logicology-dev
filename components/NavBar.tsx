@@ -18,7 +18,7 @@ export default function NavBar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="lg:max-w-[80vw] lg:mx-auto md:max-w-[80vw] md:mx-auto px-4">
+      <div className="lg:max-w-[80vw] lg:mx-auto md:max-w-[80vw] md:mx-auto px-4 lg:px-8 ">
         <div className="flex items-center py-3">
           {/* LEFT CLUSTER: Logo + Nav */}
           <div className="flex items-center gap-6 flex-1">
@@ -41,10 +41,12 @@ export default function NavBar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="relative text-[18px] hover:text-brand-tealDark transition-colors duration-200
-                         after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-                         after:h-[2px] after:w-0 after:bg-brand-teal
-                         after:transition-all after:duration-300 hover:after:w-full font-heading"
+                  onClick={() => setOpen(false)}
+                  className="py-1 text-[18px] relative transition-colors duration-200 hover:text-brand-teal
+             after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
+             after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
+             after:origin-center after:scale-x-0 after:transition-transform after:duration-300
+             hover:after:scale-x-100"
                 >
                   {item.name}
                 </Link>
@@ -56,7 +58,11 @@ export default function NavBar() {
           <div className="hidden md:flex items-center gap-5 text-slate-700">
             <Link
               href="/login"
-              className="hover:text-brand-tealDark text-[18px] flex items-center gap-1 font-heading"
+              className="text-[18px] py-1 relative transition-colors duration-200 hover:text-brand-teal
+             after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
+             after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
+             after:origin-center after:scale-x-0 after:transition-transform after:duration-300
+             hover:after:scale-x-100"
             >
               <span>Login</span>
             </Link>

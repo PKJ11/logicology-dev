@@ -78,8 +78,8 @@ export default function Logicoland1Page() {
                 <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
                   <p className="textstyles mb-3">Empowering Minds</p>
                   <h1 className="headingstyle font-extrabold leading-tight">
-                    Through STEM Play and
-                    <br /> Logic-Based Learning
+                    Through STEM Play 
+                    <br /> and Logic-Based Learning
                   </h1>
                   <p className="textstyles mt-4 max-w-md text-white/90">
                     At Logicology we endeavour to make learning fun so that
@@ -114,93 +114,46 @@ export default function Logicoland1Page() {
                 </div>
               </div>
 
-              {/* Mute/Unmute button */}
-              <button
-                onClick={toggleMute}
-                className="absolute bottom-4 left-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                aria-label={isMuted ? "Unmute video" : "Mute video"}
-              >
-                {isMuted ? (
-                  // Muted icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
-                    />
-                  </svg>
-                ) : (
-                  // Unmuted (volume) icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5L6 9H3v6h3l5 4V5z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
-                    />
-                  </svg>
-                )}
-              </button>
+              {/* Controls group (bottom-right) */}
+<div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
+  {/* Mute/Unmute */}
+  <button
+    onClick={toggleMute}
+    className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+    aria-label={isMuted ? "Unmute video" : "Mute video"}
+  >
+    {isMuted ? (
+      // Muted icon
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z" />
+      </svg>
+    ) : (
+      // Unmuted icon
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5L6 9H3v6h3l5 4V5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73" />
+      </svg>
+    )}
+  </button>
 
-              {/* Fullscreen button */}
-              <button
-                onClick={toggleFullscreen}
-                className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                aria-label={
-                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                }
-              >
-                {!isFullscreen ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                    />
-                  </svg>
-                )}
-              </button>
+  {/* Fullscreen */}
+  <button
+    onClick={toggleFullscreen}
+    className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+    aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+  >
+    {!isFullscreen ? (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4" />
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4" />
+      </svg>
+    )}
+  </button>
+</div>
+
             </div>
           </div>
         </div>
@@ -265,8 +218,6 @@ export default function Logicoland1Page() {
           isLeft ? "md:flex-row" : "md:flex-row-reverse"
         }`}
       >
-        
-
         <div
           className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-40 lg:w-64 ${
             isLeft ? "ml-3 mr-4" : "mr-3 ml-4"
@@ -400,30 +351,30 @@ export default function Logicoland1Page() {
 
             <div className="text-center mt-10">
               <div className="mt-6">
-                <CTAButton
-                  text="Buy Now"
+                <Link
                   href="#buy"
-                  bg="#D7AD57"
-                  color="#FFFFFF"
-                  hoverBg="#D7AD57"
-                  hoverColor="#FFFFFF"
-                  size="md"
-                  rightIcon={
-                    <svg
-                      className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  }
-                />
+                  className="group inline-flex items-center gap-2 rounded-full
+             border border-[#D7AD57] bg-transparent
+             px-6 py-3 font-semibold
+             text-[#D7AD57]
+             transition-colors
+             hover:bg-[#D7AD57] hover:text-white"
+                >
+                  Buy Now
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor" // follows text color
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </Link>
               </div>
             </div>
           </div>
@@ -476,9 +427,9 @@ export default function Logicoland1Page() {
                     text="Solve Now"
                     href="#buy"
                     bg="#FFFFFF"
-                    color="#0A8A80" // brand teal text
-                    hoverBg="#FFFFFF" // brand teal bg on hover
-                    hoverColor="#0A8A80" // white text on hover
+                    color="#AB4637" // brand teal text
+                    hoverBg="#AB4637" // brand teal bg on hover
+                    hoverColor="#FFFFFF" // white text on hover
                     size="md"
                     rightIcon={
                       <svg
@@ -993,8 +944,8 @@ function PrintableCard({ colorClass }: { colorClass: string }) {
               text="Download Pdf"
               href=""
               bg="#FFFFFF"
-              color="#0A8A80" // brand teal text
-              hoverBg="#0A8A80" // brand teal bg on hover
+              color="#AB4637" // brand teal text
+              hoverBg="#AB4637" // brand teal bg on hover
               hoverColor="#FFFFFF" // white text on hover
               size="md"
               rightIcon={
