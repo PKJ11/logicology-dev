@@ -62,7 +62,7 @@ export default function Logicoland1Page() {
                 loop
                 playsInline
                 muted={isMuted}
-                className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
+                className="w-full h-[80vh] sm:h-[62vh] sm:min-h-[420px] sm:max-h-[780px] object-cover"
               >
                 <source
                   src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
@@ -209,31 +209,30 @@ export default function Logicoland1Page() {
   }
   // import BulletWithLine and CTAButton as you already do
 
-  type Bullet = { title: string; desc: string ; icon:string};
+  type Bullet = { title: string; desc: string; icon: string };
 
   const BASE_BULLETS: Bullet[] = [
-  {
-    title: "50+ brain-boosting challenges",
-    desc: "Blend logic puzzles with creative coloring fun.",
-    icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
-  },
-  {
-    title: "Intro to Sudoku",
-    desc: "A playful, visual way to ease kids into logical thinking.",
-    icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
-  },
-  {
-    title: "Skill-building disguised as fun",
-    desc: "Sharpens deduction, focus, and pattern recognition.",
-    icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
-  },
-  {
-    title: "Perfect for ages 6–12",
-    desc: "Great for home learning, travel, or screen-free entertainment.",
-    icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
-  },
-];
-
+    {
+      title: "50+ brain-boosting challenges",
+      desc: "Blend logic puzzles with creative coloring fun.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
+    },
+    {
+      title: "Intro to Sudoku",
+      desc: "A playful, visual way to ease kids into logical thinking.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
+    },
+    {
+      title: "Skill-building disguised as fun",
+      desc: "Sharpens deduction, focus, and pattern recognition.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
+    },
+    {
+      title: "Perfect for ages 6–12",
+      desc: "Great for home learning, travel, or screen-free entertainment.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
+    },
+  ];
 
   // Fisher–Yates shuffle (pure)
   function shuffle<T>(arr: T[]) {
@@ -246,132 +245,131 @@ export default function Logicoland1Page() {
   }
 
   function BuySection() {
-  const [bullets, setBullets] = useState<Bullet[]>([
-    {
-      title: "Engaging Puzzles",
-      desc: "Makes logic fun and interactive.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
-    },
-    {
-      title: "STEM Skills",
-      desc: "Strengthens problem-solving ability.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
-    },
-    {
-      title: "Creative Learning",
-      desc: "Develops imagination with logic.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
-    },
-    {
-      title: "Fun for All",
-      desc: "Perfect for group or solo play.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
-    },
-  ]);
+    const [bullets, setBullets] = useState<Bullet[]>([
+      {
+        title: "Engaging Puzzles",
+        desc: "Makes logic fun and interactive.",
+        icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
+      },
+      {
+        title: "STEM Skills",
+        desc: "Strengthens problem-solving ability.",
+        icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
+      },
+      {
+        title: "Creative Learning",
+        desc: "Develops imagination with logic.",
+        icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
+      },
+      {
+        title: "Fun for All",
+        desc: "Perfect for group or solo play.",
+        icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
+      },
+    ]);
 
-  // Randomize once on client to avoid SSR/CSR mismatch
-  useEffect(() => {
-    setBullets(shuffle(bullets));
-  }, []);
+    // Randomize once on client to avoid SSR/CSR mismatch
+    useEffect(() => {
+      setBullets(shuffle(bullets));
+    }, []);
 
-  // Split into two columns (left/right). If odd, left gets the extra.
-  const { leftBullets, rightBullets } = useMemo(() => {
-    const mid = Math.ceil(bullets.length / 2);
-    return {
-      leftBullets: bullets.slice(0, mid),
-      rightBullets: bullets.slice(mid),
-    };
-  }, [bullets]);
+    // Split into two columns (left/right). If odd, left gets the extra.
+    const { leftBullets, rightBullets } = useMemo(() => {
+      const mid = Math.ceil(bullets.length / 2);
+      return {
+        leftBullets: bullets.slice(0, mid),
+        rightBullets: bullets.slice(mid),
+      };
+    }, [bullets]);
 
-  return (
-    <section id="buy" className="w-full bg-brand-gold">
-      <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-        <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
-          <div className="text-center mb-8">
-            <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
-              Logicoland Volume 1
-            </h2>
-            <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
-              Logic through coloring!
-            </p>
-          </div>
-
-          {/* Order: line → logo → text */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-            {/* LEFT: bullets (lines point RIGHT, towards book) */}
-            <div className="space-y-10 order-1">
-              {leftBullets.map((b, i) => (
-                <BulletWithLine
-                  key={`L-${i}-${b.title}`}
-                  side="right"
-                  title={b.title}
-                  desc={b.desc}
-                  icon={b.icon} // added
-                />
-              ))}
+    return (
+      <section id="buy" className="w-full bg-brand-gold">
+        <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
+          <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
+            <div className="text-center mb-8">
+              <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
+                Logicoland Volume 1
+              </h2>
+              <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
+                Logic through coloring!
+              </p>
             </div>
 
-            {/* CENTER: book image */}
-            <div className="flex items-center justify-center order-2">
-              <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
-                <Image
-                  src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
-                  alt="Logicoland Book"
-                  fill
-                  className="object-contain"
-                  priority
-                />
+            {/* Order: line → logo → text */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+              {/* LEFT: bullets (lines point RIGHT, towards book) */}
+              <div className="space-y-10 order-1">
+                {leftBullets.map((b, i) => (
+                  <BulletWithLine
+                    key={`L-${i}-${b.title}`}
+                    side="right"
+                    title={b.title}
+                    desc={b.desc}
+                    icon={b.icon} // added
+                  />
+                ))}
+              </div>
+
+              {/* CENTER: book image */}
+              <div className="flex items-center justify-center order-2">
+                <div className="relative w-72 sm:w-80 md:w-[28rem] aspect-[3/4]">
+                  <Image
+                    src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
+                    alt="Logicoland Book"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* RIGHT: bullets (lines point LEFT, towards book) */}
+              <div className="space-y-10 order-3">
+                {rightBullets.map((b, i) => (
+                  <BulletWithLine
+                    key={`R-${i}-${b.title}`}
+                    side="left"
+                    title={b.title}
+                    desc={b.desc}
+                    icon={b.icon} // added
+                  />
+                ))}
               </div>
             </div>
 
-            {/* RIGHT: bullets (lines point LEFT, towards book) */}
-            <div className="space-y-10 order-3">
-              {rightBullets.map((b, i) => (
-                <BulletWithLine
-                  key={`R-${i}-${b.title}`}
-                  side="left"
-                  title={b.title}
-                  desc={b.desc}
-                  icon={b.icon} // added
+            <div className="text-center mt-10">
+              <div className="mt-6">
+                <CTAButton
+                  text="Buy Now"
+                  href="#buy"
+                  bg="#D7AD57"
+                  color="#FFFFFF"
+                  hoverBg="#D7AD57"
+                  hoverColor="#FFFFFF"
+                  size="md"
+                  rightIcon={
+                    <svg
+                      className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  }
                 />
-              ))}
-            </div>
-          </div>
-
-          <div className="text-center mt-10">
-            <div className="mt-6">
-              <CTAButton
-                text="Buy Now"
-                href="#buy"
-                bg="#D7AD57"
-                color="#FFFFFF"
-                hoverBg="#D7AD57"
-                hoverColor="#FFFFFF"
-                size="md"
-                rightIcon={
-                  <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                }
-              />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
+      </section>
+    );
+  }
 
   return (
     <>
@@ -945,16 +943,16 @@ function BulletWithLine({
       }`}
     >
       <div className="shrink-0">
-  <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
-    <Image
-      src={icon ||BULLET_ICON}
-      alt=""
-      width={28}
-      height={28}
-      className="h-7 w-7 object-contain bg-[#1EB6E9]"
-    />
-  </div>
-</div>
+        <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
+          <Image
+            src={icon || BULLET_ICON}
+            alt=""
+            width={28}
+            height={28}
+            className="h-7 w-7 object-contain bg-[#1EB6E9]"
+          />
+        </div>
+      </div>
 
       <div
         className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-28 lg:w-40 ${

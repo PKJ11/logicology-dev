@@ -10,7 +10,7 @@ const SiteFooter = () => {
           <div className="grid md:grid-cols-4 gap-10 items-start">
             <div className="w-[150px] h-auto relative">
               <Image
-                src="https://ik.imagekit.io/pratik2002/LOGICOLOGY%20NEW%20LOGO%20WHITE%20COLOR%20VERSION%20VARIATION%202.png?updatedAt=1757216583562"
+                src="https://ik.imagekit.io/pratik2002/LOGICOLOGY%20NEW%20LOGO%20WHITE%20COLOR%20VERSION%20VARIATION%202.png?updatedAt=1757303976131"
                 alt="Logicology Logo"
                 width={150}
                 height={60} // Adjust height based on your logo's aspect ratio
