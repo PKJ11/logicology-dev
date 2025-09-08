@@ -67,16 +67,17 @@ export default function Hero() {
                   <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[75vw] md:max-w-[75vw] ">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <p className="text-white font-semibold text-3xl sm:text-base tracking-wide font-heading">
+                        <h1 className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[24px] font-bold text-white font-heading">
                           {slide.pretitle}
-                        </p>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white font-heading">
+                        </h1>
+                        <h1 className="text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px] font-bold text-white font-heading leading-tight mt-2">
                           {slide.title}
-                          <span className="block text-white font-heading">
+
+                          <span className="block text-white font-heading text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px] leading-tight">
                             {slide.subtitle}
                           </span>
                         </h1>
-                        <p className="text-white mt-4 text-base sm:text-lg max-w-md font-heading">
+                        <p className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[24px] text-white mt-6 max-w-md font-heading">
                           {slide.description}
                         </p>
                         <div className="mt-6">

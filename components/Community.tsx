@@ -24,8 +24,8 @@ export default function Community() {
 
             {/* Content on right for larger screens, bottom for mobile */}
             <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-              <h2 className="text-3xl sm:text-4xl font-extrabold ">Join the Community</h2>
-              <p className="mt-3 text-white/90 max-w-prose">
+              <h2 className="headingstyle font-extrabold ">Join the Community</h2>
+              <p className="textstyles mt-3 text-white/90 max-w-prose">
                 A makers' community for smart learning fun. Share house rules,
                 new modes, and tournament ideas.
               </p>

@@ -14,6 +14,18 @@ html, body {
   body { @apply bg-white text-slate-800 antialiased font-sans; } /* Roboto */
   h1, h2, h3, .heading-xl, .heading-lg, .heading-md { @apply font-heading; }   /* Outfit */
 }
+@layer components {
+  .headingstyle {
+    @apply font-heading font-bold leading-tight
+           text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px];
+  }
+}
+@layer components {
+  .textstyles {
+    @apply font-heading leading-snug
+           text-[20px] sm:text-[22px] md:text-[22px] lg:text-[22px];
+  }
+}
 
 body {
 	@apply bg-white text-slate-800 antialiased;

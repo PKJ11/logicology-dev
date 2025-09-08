@@ -26,212 +26,252 @@ export default function Logicoland1Page() {
       document.exitFullscreen();
       setIsFullscreen(false);
     }
-  }
-
- function HeroVideo() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
   };
 
-  const toggleFullscreen = () => {
-    if (!videoRef.current) return;
-    if (!document.fullscreenElement) {
-      videoRef.current.requestFullscreen?.();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.();
-      setIsFullscreen(false);
-    }
-  };
+  function HeroVideo() {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [isMuted, setIsMuted] = useState(true);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
-  return (
-    <section className="w-full bg-white">
-      <div className="px-3 sm:px-5 pt-4">
-        <div className="relative rounded-[28px] bg-white p-2">
-          <div className="relative rounded-[22px] overflow-hidden">
-            <video
-              ref={videoRef}
-              autoPlay
-              loop
-              playsInline
-              muted={isMuted}
-              className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
-            >
-              <source
-                src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-                type="video/mp4"
-              />
-            </video>
+    const toggleMute = () => {
+      if (videoRef.current) {
+        videoRef.current.muted = !isMuted;
+        setIsMuted(!isMuted);
+      }
+    };
 
-            {/* gradient under text */}
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+    const toggleFullscreen = () => {
+      if (!videoRef.current) return;
+      if (!document.fullscreenElement) {
+        videoRef.current.requestFullscreen?.();
+        setIsFullscreen(true);
+      } else {
+        document.exitFullscreen?.();
+        setIsFullscreen(false);
+      }
+    };
 
-            {/* centered overlay content */}
-            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-              <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
-                <p className="text-sm sm:text-base mb-3">Empowering Minds</p>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-                  Through STEM Play and
-                  <br /> Logic-Based Learning
-                </h1>
-                <p className="mt-4 max-w-md text-white/90">
-                  At Logicology we endeavour to make learning fun so that
-                  children learn while they play.
-                </p>
-                <div className="mt-6">
-                  <CTAButton
-                    text="Learn More"
-                    href="#buy"
-                    bg="#FFFFFF"
-                    color="#0A8A80"
-                    hoverBg="#0A8A80"
-                    hoverColor="#FFFFFF"
-                    size="md"
-                    rightIcon={
-                      <svg
-                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    }
-                  />
+    return (
+      <section className="w-full bg-white">
+        <div className="px-3 sm:px-5 pt-4">
+          <div className="relative rounded-[28px] bg-white p-2">
+            <div className="relative rounded-[22px] overflow-hidden">
+              <video
+                ref={videoRef}
+                autoPlay
+                loop
+                playsInline
+                muted={isMuted}
+                className="w-full h-[62vh] min-h-[420px] max-h-[780px] object-cover"
+              >
+                <source
+                  src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                  type="video/mp4"
+                />
+              </video>
+
+              {/* gradient under text */}
+              <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+
+              {/* centered overlay content */}
+              <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+                <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+                  <p className="textstyles mb-3">Empowering Minds</p>
+                  <h1 className="headingstyle font-extrabold leading-tight">
+                    Through STEM Play and
+                    <br /> Logic-Based Learning
+                  </h1>
+                  <p className="textstyles mt-4 max-w-md text-white/90">
+                    At Logicology we endeavour to make learning fun so that
+                    children learn while they play.
+                  </p>
+                  <div className="mt-6">
+                    <CTAButton
+                      text="Learn More"
+                      href="#buy"
+                      bg="#FFFFFF"
+                      color="#0A8A80"
+                      hoverBg="#0A8A80"
+                      hoverColor="#FFFFFF"
+                      size="md"
+                      rightIcon={
+                        <svg
+                          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      }
+                    />
+                  </div>
                 </div>
               </div>
+
+              {/* Mute/Unmute button */}
+              <button
+                onClick={toggleMute}
+                className="absolute bottom-4 left-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  // Muted icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
+                    />
+                  </svg>
+                ) : (
+                  // Unmuted (volume) icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11 5L6 9H3v6h3l5 4V5z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* Fullscreen button */}
+              <button
+                onClick={toggleFullscreen}
+                className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                aria-label={
+                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                }
+              >
+                {!isFullscreen ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                    />
+                  </svg>
+                )}
+              </button>
             </div>
-
-            {/* Mute/Unmute button */}
-            <button
-              onClick={toggleMute}
-              className="absolute bottom-4 left-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-              aria-label={isMuted ? "Unmute video" : "Mute video"}
-            >
-              {isMuted ? (
-                // Muted icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
-                  />
-                </svg>
-              ) : (
-                // Unmuted (volume) icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M11 5L6 9H3v6h3l5 4V5z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
-                  />
-                </svg>
-              )}
-            </button>
-
-            {/* Fullscreen button */}
-            <button
-              onClick={toggleFullscreen}
-              className="absolute bottom-4 right-4 z-30 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            >
-              {!isFullscreen ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                  />
-                </svg>
-              )}
-            </button>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-// import BulletWithLine and CTAButton as you already do
+      </section>
+    );
+  }
+  // import BulletWithLine and CTAButton as you already do
 
-type Bullet = { title: string; desc: string };
+  type Bullet = { title: string; desc: string ; icon:string};
 
-const BASE_BULLETS: Bullet[] = [
-  { title: "50+ brain-boosting challenges", desc: "Blend logic puzzles with creative coloring fun." },
-  { title: "Intro to Sudoku", desc: "A playful, visual way to ease kids into logical thinking." },
-  { title: "Skill-building disguised as fun", desc: "Sharpens deduction, focus, and pattern recognition." },
-  { title: "Perfect for ages 6–12", desc: "Great for home learning, travel, or screen-free entertainment." },
+  const BASE_BULLETS: Bullet[] = [
+  {
+    title: "50+ brain-boosting challenges",
+    desc: "Blend logic puzzles with creative coloring fun.",
+    icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
+  },
+  {
+    title: "Intro to Sudoku",
+    desc: "A playful, visual way to ease kids into logical thinking.",
+    icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
+  },
+  {
+    title: "Skill-building disguised as fun",
+    desc: "Sharpens deduction, focus, and pattern recognition.",
+    icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
+  },
+  {
+    title: "Perfect for ages 6–12",
+    desc: "Great for home learning, travel, or screen-free entertainment.",
+    icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
+  },
 ];
 
-// Fisher–Yates shuffle (pure)
-function shuffle<T>(arr: T[]) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
-function BuySection() {
-  const [bullets, setBullets] = useState<Bullet[]>(BASE_BULLETS);
+  // Fisher–Yates shuffle (pure)
+  function shuffle<T>(arr: T[]) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function BuySection() {
+  const [bullets, setBullets] = useState<Bullet[]>([
+    {
+      title: "Engaging Puzzles",
+      desc: "Makes logic fun and interactive.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
+    },
+    {
+      title: "STEM Skills",
+      desc: "Strengthens problem-solving ability.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
+    },
+    {
+      title: "Creative Learning",
+      desc: "Develops imagination with logic.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
+    },
+    {
+      title: "Fun for All",
+      desc: "Perfect for group or solo play.",
+      icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
+    },
+  ]);
 
   // Randomize once on client to avoid SSR/CSR mismatch
   useEffect(() => {
-    setBullets(shuffle(BASE_BULLETS));
+    setBullets(shuffle(bullets));
   }, []);
 
   // Split into two columns (left/right). If odd, left gets the extra.
@@ -248,10 +288,12 @@ function BuySection() {
       <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
         <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-brand-teal font-heading">
+            <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
               Logicoland Volume 1
             </h2>
-            <p className="text-brand-tealDark/80 mt-2 font-sans">Logic through coloring!</p>
+            <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
+              Logic through coloring!
+            </p>
           </div>
 
           {/* Order: line → logo → text */}
@@ -259,7 +301,13 @@ function BuySection() {
             {/* LEFT: bullets (lines point RIGHT, towards book) */}
             <div className="space-y-10 order-1">
               {leftBullets.map((b, i) => (
-                <BulletWithLine key={`L-${i}-${b.title}`} side="right" title={b.title} desc={b.desc} />
+                <BulletWithLine
+                  key={`L-${i}-${b.title}`}
+                  side="right"
+                  title={b.title}
+                  desc={b.desc}
+                  icon={b.icon} // added
+                />
               ))}
             </div>
 
@@ -279,7 +327,13 @@ function BuySection() {
             {/* RIGHT: bullets (lines point LEFT, towards book) */}
             <div className="space-y-10 order-3">
               {rightBullets.map((b, i) => (
-                <BulletWithLine key={`R-${i}-${b.title}`} side="left" title={b.title} desc={b.desc} />
+                <BulletWithLine
+                  key={`R-${i}-${b.title}`}
+                  side="left"
+                  title={b.title}
+                  desc={b.desc}
+                  icon={b.icon} // added
+                />
               ))}
             </div>
           </div>
@@ -295,8 +349,18 @@ function BuySection() {
                 hoverColor="#FFFFFF"
                 size="md"
                 rightIcon={
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 }
               />
@@ -325,9 +389,11 @@ function BuySection() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 {/* <p className="text-lg">Interactive</p> */}
-                <h3 className="text-4xl font-extrabold font-heading">Interactive Puzzles</h3>
+                <h3 className="headingstyle font-extrabold font-heading">
+                  Interactive Puzzles
+                </h3>
 
-                <p className="mt-4 text-white/90 font-sans">
+                <p className="textstyles mt-4 text-white/90 font-sans">
                   Solve the 4×4 Sudoku puzzles given here. The rules that you
                   need to follow are:
                 </p>
@@ -390,10 +456,10 @@ function BuySection() {
         <section className="w-full bg-brand-grayBg">
           <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
             <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-              <h3 className="text-center text-3xl font-extrabold text-brand-tealDark">
+              <h3 className="text-center headingstyle font-extrabold text-brand-tealDark">
                 Printables
               </h3>
-              <p className="text-center text-brand-tealDark/80 mt-2">
+              <p className="text-center textstyles text-brand-tealDark/80 mt-2">
                 Done with Logicoland 1 already? Here are a few more 4×4 Sudoku
                 puzzles to color.
               </p>
@@ -411,7 +477,7 @@ function BuySection() {
         </section>
 
         {/* ================= COMMUNITY ================= */}
-        <Community/>
+        <Community />
 
         <SiteFooter />
       </main>
@@ -864,10 +930,12 @@ function BulletWithLine({
   side,
   title,
   desc,
+  icon,
 }: {
   side: "left" | "right";
   title: string;
   desc: string;
+  icon: string;
 }) {
   const isLeft = side === "left";
   return (
@@ -877,14 +945,17 @@ function BulletWithLine({
       }`}
     >
       <div className="shrink-0">
-        <Image
-          src={BULLET_ICON}
-          alt=""
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full object-contain"
-        />
-      </div>
+  <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
+    <Image
+      src={icon ||BULLET_ICON}
+      alt=""
+      width={28}
+      height={28}
+      className="h-7 w-7 object-contain bg-[#1EB6E9]"
+    />
+  </div>
+</div>
+
       <div
         className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-28 lg:w-40 ${
           isLeft ? "ml-3 mr-4" : "mr-3 ml-4"

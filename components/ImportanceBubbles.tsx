@@ -63,7 +63,7 @@ export default function ImportanceBubbles() {
         {/* white container */}
         <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
           <div className="text-center mb-4">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-3 font-heading">
+            <h2 className="headingstyle font-extrabold text-brand-teal mb-3 font-heading">
               Our Offerings for you
             </h2>
             <p className="text-lg sm:text-xl text-brand-tealDark/80 max-w-3xl mx-auto font-sans">

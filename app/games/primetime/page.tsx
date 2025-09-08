@@ -110,16 +110,16 @@ function Hero() {
                   <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[80vw] md:max-w-[80vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <p className="text-white font-semibold text-sm sm:text-base tracking-wide">
+                        <p className="text-white font-semibold textstyles tracking-wide">
                           {slide.pretitle}
                         </p>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white leading-tight">
+                        <h1 className="headingstyle font-bold mt-2 text-white leading-tight">
                           {slide.title}
                           <span className="block text-white">
                             {slide.subtitle}
                           </span>
                         </h1>
-                        <p className="text-white mt-4 text-base sm:text-lg max-w-md">
+                        <p className="text-white mt-4 textstyles max-w-md">
                           {slide.description}
                         </p>
                         <div className="mt-6">
@@ -264,11 +264,11 @@ function GameDetails() {
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
-            <h2 className="text-3xl sm:text-4xl  text-brand-tealDark/80 font-extrabold font-heading">
+            <h2 className="headingstyle leading-tight text-brand-tealDark/80 font-extrabold font-heading">
               Details About The Game
             </h2>
 
-            <p className="mt-3 text-brand-tealDark/90 max-w-2xl font-sans">
+            <p className="mt-3 textstyles text-brand-tealDark/90 max-w-2xl font-sans">
               A lightning‑quick numbers game that rewards smart matching and
               prime‑factor insights. Perfect for 2–6 players, ages 8+.
             </p>
@@ -352,11 +352,11 @@ function InstructionVideos() {
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
           <div>
-            <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
+            <h2 className="headingstyle text-white/90 font-extrabold font-heading">
               How to play Instruction Videos
             </h2>
 
-            <p className="mt-3 text-white/90 max-w-prose">
+            <p className="mt-3 textstyles text-white/90 max-w-prose">
               Short, punchy walkthroughs so you can learn while you play.
             </p>
 
@@ -488,10 +488,10 @@ function InteractiveGames() {
       <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
         <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-teal mb-4">
+            <h2 className="headingstyle font-extrabold text-brand-teal mb-4">
               Interactive Learning Games
             </h2>
-            <p className="text-xl text-brand-tealDark/80 max-w-3xl mx-auto">
+            <p className="textstyles text-brand-tealDark/80 max-w-3xl mx-auto">
               Try these fun games that complement the Logicoland experience and
               help develop logical thinking skills.
             </p>
@@ -580,8 +580,8 @@ function LostCardHelper() {
     if (!/^\d+$/.test(cardNo.trim()))
       return setError("Card number should be numeric.");
     const num = Number(cardNo);
-    if (num < 1 || num > 55)
-      return setError("Enter a number between 1 and 55.");
+    if (num < 1 || num > 60)
+      return setError("Enter a number between 1 and 60.");
 
     setLoading(true);
     const nextUrl = buildCardUrl(num);
@@ -653,13 +653,13 @@ function LostCardHelper() {
 
             {/* Right: Controls & Text */}
             <div className="order-1 md:order-2 text-white">
-              <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
+              <h2 className="textstyles  text-white/90 font-extrabold font-heading">
                 Card replacement helper
               </h2>
-              <h2 className="text-3xl sm:text-4xl  text-white/80 font-extrabold font-heading">
+              <h2 className="headingstyle text-white/90 font-extrabold font-heading">
                 Lost a card? We’ve got you covered.
               </h2>
-              <p className="mt-3 max-w-prose opacity-90 font-sans">
+              <p className="textstyles mt-3 max-w-prose font-sans">
                 Enter a card number to preview it. Leave empty to see a tray
                 image.
               </p>
@@ -673,7 +673,7 @@ function LostCardHelper() {
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  placeholder="1–55 (or leave empty)"
+                  placeholder="1–60 (or leave empty)"
                   value={cardNo}
                   onChange={(e) => {
                     setCardNo(e.target.value);
@@ -695,7 +695,7 @@ function LostCardHelper() {
                   onClick={resetToTray}
                   type="button"
                   className="rounded-full bg-brand-teal px-6 py-3 text-white
-                             font-medium hover:bg-white transition-colors"
+                             font-medium  transition-colors"
                 >
                   Reset
                 </button>
