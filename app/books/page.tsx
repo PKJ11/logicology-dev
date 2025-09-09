@@ -65,76 +65,75 @@ export default function BooksPage() {
         </Head>
 
         <header className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal text-center font-heading">
             Books Collection
           </h1>
-          <p className="mt-2 textstyles text-brand-tealDark/75">
+          <p className="mt-2 textstyles text-brand-tealDark/75 text-center">
             Handpicked titles to spark curiosity and learning.
           </p>
         </header>
 
         {/* Cards container: center-first using flex */}
-<div
-  className="
+        <div
+          className="
     flex flex-wrap justify-center gap-7 md:gap-8
   "
->
-  {books.map((book) => (
-    <div
-      key={book.id}
-      className="relative group cursor-pointer transition-all duration-300 hover:z-10
+        >
+          {books.map((book) => (
+            <div
+              key={book.id}
+              className="relative group cursor-pointer transition-all duration-300 hover:z-10
                  basis-[260px] sm:basis-[300px] lg:basis-[320px] xl:basis-[340px] flex-shrink-0"
-      onClick={() => openModal(book)}
-    >
-      <div
-        className="
+              onClick={() => openModal(book)}
+            >
+              <div
+                className="
           relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
           p-4 hover:shadow-brand transition-shadow
         "
-      >
-        {/* cover */}
-        <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
-          <Image
-            src={book.imageUrl}
-            alt={book.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+              >
+                {/* cover */}
+                <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
+                  <Image
+                    src={book.imageUrl}
+                    alt={book.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+
+                <div className="pt-5">
+                  {/* Title + author centered */}
+                  <h3 className="text-2xl font-bold text-brand-tealDark text-center">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-brand-tealDark/70 text-center">
+                    by {book.author}
+                  </p>
+
+                  {/* keep your rating + CTA layout as-is, or center it (optional below) */}
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
+                      ★ {book.rating}
+                    </span>
+                    <button
+                      className="text-sm font-semibold text-brand-teal hover:text-brand-coral transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openModal(book);
+                      }}
+                    >
+                      View details →
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
+              </div>
+            </div>
+          ))}
         </div>
-
-        <div className="pt-5">
-          {/* Title + author centered */}
-          <h3 className="text-2xl font-bold text-brand-tealDark text-center">
-            {book.title}
-          </h3>
-          <p className="text-sm text-brand-tealDark/70 text-center">
-            by {book.author}
-          </p>
-
-          {/* keep your rating + CTA layout as-is, or center it (optional below) */}
-          <div className="mt-4 flex items-center justify-between">
-            <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
-              ★ {book.rating}
-            </span>
-            <button
-              className="text-sm font-semibold text-brand-teal hover:text-brand-coral transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                openModal(book);
-              }}
-            >
-              View details →
-            </button>
-          </div>
-        </div>
-
-        <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
-      </div>
-    </div>
-  ))}
-</div>
-
 
         {/* Modal */}
         {isModalOpen && selectedBook && (

@@ -78,7 +78,7 @@ export default function Logicoland1Page() {
                 <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
                   <p className="textstyles mb-3">Empowering Minds</p>
                   <h1 className="headingstyle font-extrabold leading-tight">
-                    Through STEM Play 
+                    Through STEM Play
                     <br /> and Logic-Based Learning
                   </h1>
                   <p className="textstyles mt-4 max-w-md text-white/90">
@@ -115,45 +115,95 @@ export default function Logicoland1Page() {
               </div>
 
               {/* Controls group (bottom-right) */}
-<div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
-  {/* Mute/Unmute */}
-  <button
-    onClick={toggleMute}
-    className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-    aria-label={isMuted ? "Unmute video" : "Mute video"}
-  >
-    {isMuted ? (
-      // Muted icon
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z" />
-      </svg>
-    ) : (
-      // Unmuted icon
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5L6 9H3v6h3l5 4V5z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73" />
-      </svg>
-    )}
-  </button>
+              <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
+                {/* Mute/Unmute */}
+                <button
+                  onClick={toggleMute}
+                  className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                  aria-label={isMuted ? "Unmute video" : "Mute video"}
+                >
+                  {isMuted ? (
+                    // Muted icon
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
+                      />
+                    </svg>
+                  ) : (
+                    // Unmuted icon
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M11 5L6 9H3v6h3l5 4V5z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
+                      />
+                    </svg>
+                  )}
+                </button>
 
-  {/* Fullscreen */}
-  <button
-    onClick={toggleFullscreen}
-    className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-    aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-  >
-    {!isFullscreen ? (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4" />
-      </svg>
-    ) : (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4" />
-      </svg>
-    )}
-  </button>
-</div>
-
+                {/* Fullscreen */}
+                <button
+                  onClick={toggleFullscreen}
+                  className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                  aria-label={
+                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                  }
+                >
+                  {!isFullscreen ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

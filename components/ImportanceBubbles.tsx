@@ -88,9 +88,8 @@ export default function ImportanceBubbles() {
                       fill
                       className="object-contain w-[220px] h-[220px]
                             md:w-[240px] md:h-[240px]
-                            lg:w-[350px] lg:h-[400px]
+                            lg:w-[340px] lg:h-[340px]
                             xl:w-[340px] xl:h-[340px]"
-                      
                     />
                   </div>
                 </motion.div>

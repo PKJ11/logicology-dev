@@ -69,14 +69,14 @@ export default function NavBar() {
             <Link
               href="/search"
               aria-label="Search"
-              className="hover:text-brand-tealDark"
+              className="text-brand-teal hover:text-brand-tealDark"
             >
               <FiSearch />
             </Link>
             <Link
               href="/cart"
               aria-label="Cart"
-              className="hover:text-brand-tealDark"
+              className="text-brand-teal hover:text-brand-tealDark"
             >
               <FiShoppingCart />
             </Link>
