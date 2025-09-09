@@ -72,7 +72,7 @@ export default function ImportanceBubbles() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 mt-10">
             {items.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center gap-5">
                 {/* Animated bubble image */}
@@ -86,8 +86,8 @@ export default function ImportanceBubbles() {
                       src={it.bubble}
                       alt={`bubble for ${it.title}`}
                       fill
-                      className="object-contain w-[220px] h-[220px]
-                            md:w-[240px] md:h-[240px]
+                      className="object-contain w-[200px] h-[200px]
+                            md:w-[200px] md:h-[200px]
                             lg:w-[340px] lg:h-[340px]
                             xl:w-[340px] xl:h-[340px]"
                     />
