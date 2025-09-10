@@ -608,113 +608,101 @@ function LostCardHelper() {
 
   return (
     <section className="w-full bg-[#84C341]">
-  <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-    <div className="rounded-[22px] p-6 sm:p-10">
-      <div className="grid md:grid-cols-[1fr,1.2fr] gap-8 lg:gap-16 items-center">
-        {/* Left: Image container */}
-        <div className="order-2 md:order-1 flex justify-center">
-          <div
-            className="
+      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="rounded-[22px] p-6 sm:p-6">
+          {/* Flex container replacing grid */}
+          <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
+            {/* Left: Image container */}
+            <div className="w-full md:w-1/2 order-2 md:order-1 flex justify-start items-center py-6 md:py-0">
+              <div
+                className="
               relative w-[95%] max-w-[700px] aspect-square
               rounded-[28px] bg-white border-[12px] md:border-[14px]
               border-white shadow-soft p-2
             "
-          >
-            <div className="relative w-full h-full rounded-[22px] overflow-hidden flex items-center justify-center">
-              {isTray ? (
-                <Image
-                  src={imgSrc}
-                  alt="Tray"
-                  fill
-                  sizes="(min-width: 768px) 600px, 100vw"
-                  className={`object-cover transition-opacity ${
-                    loading ? "opacity-60" : "opacity-100"
-                  }`}
-                  priority={false}
-                />
-              ) : (
-                <Image
-                  src={imgSrc}
-                  alt="Card"
-                  width={180}
-                  height={240}
-                  className={`object-contain rounded-xl shadow-2xl transition-opacity ${
-                    loading ? "opacity-60" : "opacity-100"
-                  }`}
-                  priority={false}
-                />
+              >
+                <div className="relative w-full h-full rounded-[22px] overflow-hidden flex items-center justify-center">
+                  {isTray ? (
+                    <Image
+                      src={imgSrc}
+                      alt="Tray"
+                      fill
+                      sizes="(min-width: 768px) 600px, 100vw"
+                      className={`object-cover transition-opacity ${
+                        loading ? "opacity-60" : "opacity-100"
+                      }`}
+                      priority={false}
+                    />
+                  ) : (
+                    <Image
+                      src={imgSrc}
+                      alt="Card"
+                      width={180}
+                      height={240}
+                      className={`object-contain rounded-xl shadow-2xl transition-opacity ${
+                        loading ? "opacity-60" : "opacity-100"
+                      }`}
+                      priority={false}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {loading && (
+                <p className="mt-3 text-sm text-gray-200 text-center">
+                  Loading image…
+                </p>
               )}
             </div>
-          </div>
 
-          {loading && (
-            <p className="mt-3 text-sm text-gray-200 text-center">
-              Loading image…
-            </p>
-          )}
-        </div>
+            {/* Right: Controls & Text */}
+            <div className="w-full md:w-1/2 order-1 md:order-2 text-white">
+              <h2 className="textstyles text-white/90 font-extrabold font-heading">
+                Card replacement helper
+              </h2>
+              <h2 className="headingstyle text-white/90 font-extrabold font-heading">
+                Lost a card? We’ve got you covered.
+              </h2>
+              <p className="textstyles mt-3 max-w-prose font-sans">
+                Enter a card number to preview it.
+              </p>
 
-        {/* Right: Controls & Text */}
-        <div className="order-1 md:order-2 text-white">
-          <h2 className="textstyles text-white/90 font-extrabold font-heading">
-            Card replacement helper
-          </h2>
-          <h2 className="headingstyle text-white/90 font-extrabold font-heading">
-            Lost a card? We’ve got you covered.
-          </h2>
-          <p className="textstyles mt-3 max-w-prose font-sans">
-            Enter a card number to preview it.
-          </p>
-
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <label className="sr-only" htmlFor="card-number">
-              Card number
-            </label>
-            <input
-              id="card-number"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              placeholder="1–60 (or leave empty)"
-              value={cardNo}
-              onChange={(e) => {
-                setCardNo(e.target.value);
-                if (error) setError(null);
-              }}
-              onKeyDown={onKeyDown}
-              className="w-full sm:max-w-xs rounded-full border border-gray-300 
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <label className="sr-only" htmlFor="card-number">
+                  Card number
+                </label>
+                <input
+                  id="card-number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="1–60 (or leave empty)"
+                  value={cardNo}
+                  onChange={(e) => {
+                    setCardNo(e.target.value);
+                    if (error) setError(null);
+                  }}
+                  onKeyDown={onKeyDown}
+                  className="w-full sm:max-w-xs rounded-full border border-gray-300 
                          px-5 py-3 text-sm outline-none text-gray-900
                          focus:ring-2 focus:ring-brand-teal/40"
-            />
-            <button
-              onClick={showCard}
-              className="group rounded-full px-2 py-3 font-medium
+                />
+                <button
+                  onClick={showCard}
+                  className="group rounded-full px-2 py-3 font-sans font-medium
                          border-2 border-brand-teal bg-white text-brand-teal
                          transition-colors hover:bg-brand-teal hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
-            >
-              Show card
-            </button>
+                >
+                  Show card
+                </button>
+              </div>
 
-            <button
-              onClick={resetToTray}
-              type="button"
-              className="group rounded-full px-6 py-3 font-medium
-                         border-2 border-brand-teal bg-white text-brand-teal
-                         transition-colors hover:bg-brand-teal hover:text-white
-                         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
-            >
-              Reset
-            </button>
+              {error && <p className="mt-3 text-sm text-red-200">{error}</p>}
+            </div>
           </div>
-
-          {error && <p className="mt-3 text-sm text-red-200">{error}</p>}
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-
+    </section>
   );
 }
