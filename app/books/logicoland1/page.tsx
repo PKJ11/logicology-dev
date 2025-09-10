@@ -75,7 +75,7 @@ export default function Logicoland1Page() {
 
               {/* centered overlay content */}
               <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-                <div className="mx-auto w-[80vw] max-w-[80vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+                <div className="mx-auto w-[75vw] max-w-[75vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
                   <p className="textstyles mb-3">Empowering Minds</p>
                   <h1 className="headingstyle font-extrabold leading-tight">
                     Through STEM Play

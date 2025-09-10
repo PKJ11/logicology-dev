@@ -18,7 +18,7 @@ export default function NavBar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="lg:max-w-[80vw] lg:mx-auto md:max-w-[80vw] md:mx-auto px-4 lg:px-8 ">
+      <div className="lg:max-w-[75vw] lg:mx-auto md:max-w-[75vw] md:mx-auto px-4 lg:px-8 ">
         <div className="flex items-center py-3">
           {/* LEFT CLUSTER: Logo + Nav */}
           <div className="flex items-center gap-6 flex-1">
