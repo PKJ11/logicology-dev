@@ -1,10 +1,10 @@
 "use client";
-import { useState } from 'react';
-import Image from 'next/image';
-import Head from 'next/head';
-import NavBar from '@/components/NavBar';
-import { useRouter } from 'next/navigation';
-import SiteFooter from '@/components/Footer';
+import { useState } from "react";
+import Image from "next/image";
+import Head from "next/head";
+import NavBar from "@/components/NavBar";
+import { useRouter } from "next/navigation";
+import SiteFooter from "@/components/Footer";
 
 interface Game {
   id: number;
@@ -26,16 +26,17 @@ export default function GamesPage() {
   const games: Game[] = [
     {
       id: 1,
-      title: 'PrimeTime',
-      imageUrl: 'https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370',
-      description: 'A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.',
-      author: 'Gayatri',
+      title: "PrimeTime",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+      description:
+        "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
+      author: "Gayatri",
       rating: 4.9,
-      category: 'Math Strategy',
-      players: '2-6',
-      duration: '15-30 min'
+      category: "Math Strategy",
+      players: "2-6",
+      duration: "15-30 min",
     },
-    
   ];
 
   const openModal = (game: Game) => {
@@ -56,7 +57,9 @@ export default function GamesPage() {
     } else if (selectedGame.title === "PrimeTime") {
       router.push("/games/primetime");
     } else {
-      router.push(`/games/${selectedGame.title.toLowerCase().replace(/\s+/g, "-")}`);
+      router.push(
+        `/games/${selectedGame.title.toLowerCase().replace(/\s+/g, "-")}`
+      );
     }
   };
 
@@ -91,10 +94,12 @@ export default function GamesPage() {
               className="relative group cursor-pointer transition-all duration-300 hover:z-10"
               onClick={() => openModal(game)}
             >
-              <div className="
+              <div
+                className="
                 relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
                 p-4 hover:shadow-brand transition-shadow
-              ">
+              "
+              >
                 {/* Larger cover area with fixed aspect ratio */}
                 <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden">
                   <Image
@@ -107,9 +112,13 @@ export default function GamesPage() {
                 </div>
 
                 <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">{game.title}</h3>
-                  <p className="text-sm text-brand-tealDark/70">by {game.author}</p>
-                  
+                  <h3 className="text-2xl font-bold text-brand-tealDark">
+                    {game.title}
+                  </h3>
+                  <p className="text-sm text-brand-tealDark/70">
+                    by {game.author}
+                  </p>
+
                   <div className="mt-2 flex items-center">
                     <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal text-xs font-medium rounded-full">
                       {game.category}
@@ -178,8 +187,10 @@ export default function GamesPage() {
                     <h2 className="text-3xl font-extrabold text-brand-teal mb-1">
                       {selectedGame.title}
                     </h2>
-                    <p className="text-brand-tealDark/75 mb-2">by {selectedGame.author}</p>
-                    
+                    <p className="text-brand-tealDark/75 mb-2">
+                      by {selectedGame.author}
+                    </p>
+
                     <div className="flex items-center mb-4">
                       <span className="inline-block px-3 py-1 bg-brand-teal/15 text-brand-teal text-sm font-medium rounded-full">
                         {selectedGame.category}
@@ -194,8 +205,8 @@ export default function GamesPage() {
                             xmlns="http://www.w3.org/2000/svg"
                             className={`h-5 w-5 ${
                               i < Math.floor(selectedGame.rating)
-                                ? 'fill-current'
-                                : 'stroke-current fill-none'
+                                ? "fill-current"
+                                : "stroke-current fill-none"
                             }`}
                             viewBox="0 0 24 24"
                           >
@@ -212,27 +223,40 @@ export default function GamesPage() {
                         {selectedGame.rating}/5
                       </span>
                     </div>
-                    
+
                     {/* Game-specific details */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div className="bg-brand-teal/5 rounded-2xl p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">Players</p>
-                        <p className="font-semibold text-brand-teal">{selectedGame.players}</p>
+                        <p className="text-sm text-brand-tealDark/70">
+                          Players
+                        </p>
+                        <p className="font-semibold text-brand-teal">
+                          {selectedGame.players}
+                        </p>
                       </div>
                       <div className="bg-brand-teal/5 rounded-2xl p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">Duration</p>
-                        <p className="font-semibold text-brand-teal">{selectedGame.duration}</p>
+                        <p className="text-sm text-brand-tealDark/70">
+                          Duration
+                        </p>
+                        <p className="font-semibold text-brand-teal">
+                          {selectedGame.duration}
+                        </p>
                       </div>
                     </div>
 
-                    <p className="text-brand-tealDark/85 mb-8">{selectedGame.description}</p>
+                    <p className="text-brand-tealDark/85 mb-8">
+                      {selectedGame.description}
+                    </p>
 
-                    <button className="group inline-flex w-full items-center justify-center gap-2
+                    <button
+                      className="group inline-flex w-full items-center justify-center gap-2
              rounded-full border-2 border-brand-coral bg-transparent
              px-6 py-3 font-semibold text-brand-coral
              transition-colors hover:bg-brand-coral hover:text-white
              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
-             active:scale-[.99]" onClick={handleGetStarted}>
+             active:scale-[.99]"
+                      onClick={handleGetStarted}
+                    >
                       Know More about {selectedGame.title}
                     </button>
                   </div>
@@ -242,7 +266,7 @@ export default function GamesPage() {
           </div>
         )}
       </div>
-      <SiteFooter/>
+      <SiteFooter />
     </>
   );
 }

@@ -255,12 +255,12 @@ function GameDetails() {
         {/* Flex container replacing grid */}
         <div className="flex flex-col md:flex-row items-center">
           {/* MediaLayout on left for larger screens, top for mobile */}
-          <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
+          {/* <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0"> */}
             <MediaLayout
               image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
               videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
             />
-          </div>
+          {/* </div> */}
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
@@ -392,9 +392,9 @@ function InstructionVideos() {
           </div>
 
           {/* White background container only for videos */}
-          <div className="bg-white rounded-4xl p-0 sm:p-0 md:p-5 shadow-soft">
+          <div className="bg-white rounded-4xl p-4 sm:p-0 md:p-5 shadow-soft">
             {/* 2 cols on phones, 3 cols from sm/md up */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4">
               {videos.map((src, i) => (
                 <div
                   key={i}

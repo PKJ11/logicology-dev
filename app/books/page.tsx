@@ -86,10 +86,12 @@ export default function BooksPage() {
               className="relative group cursor-pointer transition-all duration-300 hover:z-10"
               onClick={() => openModal(book)}
             >
-              <div className="
+              <div
+                className="
                 relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
                 p-4 hover:shadow-brand transition-shadow
-              ">
+              "
+              >
                 {/* Larger cover area with fixed aspect ratio */}
                 <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
                   <Image
@@ -102,8 +104,12 @@ export default function BooksPage() {
                 </div>
 
                 <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">{book.title}</h3>
-                  <p className="text-sm text-brand-tealDark/70">by {book.author}</p>
+                  <h3 className="text-2xl font-bold text-brand-tealDark">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-brand-tealDark/70">
+                    by {book.author}
+                  </p>
 
                   <div className="mt-4 flex items-center justify-between">
                     <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
@@ -233,7 +239,7 @@ export default function BooksPage() {
           </div>
         )}
       </div>
-      <SiteFooter/>
+      <SiteFooter />
     </>
   );
 }
