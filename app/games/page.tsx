@@ -31,7 +31,7 @@ export default function GamesPage() {
         "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
       description:
         "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
-      author: "Gayatri",
+      author: "Logicology",
       rating: 4.9,
       category: "Math Strategy",
       players: "2-6",

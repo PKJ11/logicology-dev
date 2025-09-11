@@ -291,7 +291,7 @@ export default function Logicoland1Page() {
               <div className="grid md:grid-cols-2 gap-8 mt-10">
                 <PrintableCard
                   colorClass="bg-[#DDB24D]"
-                  buttonColor="#3F2F14"
+                  buttonColor="#7E5C2E"
                 />
                 <PrintableCard
                   colorClass="bg-[#E45C48]"

@@ -35,8 +35,8 @@ export default function WhyImportant() {
                   text="Learn more"
                   href="#offerings"
                   bg="#FFFFFF"
-                  color="#7E5C2E" // brand teal text
-                  hoverBg="#7E5C2E" // brand teal bg on hover
+                  color="#7E5C2E" 
+                  hoverBg="#7E5C2E" 
                   hoverColor="#FFFFFF" // white text on hover
                   size="md"
                   rightIcon={
