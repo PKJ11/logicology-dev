@@ -87,8 +87,8 @@ export default function ImportanceBubbles() {
                       alt={`bubble for ${it.title}`}
                       fill
                       className="object-contain w-[200px] h-[200px]
-                            md:w-[200px] md:h-[200px]
-                            lg:w-[340px] lg:h-[340px]
+                            md:w-[250px] md:h-[250px]
+                            lg:w-[320px] lg:h-[320px]
                             xl:w-[340px] xl:h-[340px]"
                     />
                   </div>
