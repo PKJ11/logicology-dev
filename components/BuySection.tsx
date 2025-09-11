@@ -101,7 +101,6 @@ const BASE_BULLETS: Bullet[] = [
   },
 ];
 
-
 /* --------------------------------- Utils ---------------------------------- */
 
 function shuffle<T>(arr: T[]) {
@@ -247,7 +246,6 @@ function BulletWithLine({
   );
 }
 
-
 /* ------------------------------- Main Section ------------------------------ */
 
 export default function BuySection() {
@@ -293,16 +291,10 @@ export default function BuySection() {
             className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft"
           >
             <div className="text-center mb-8">
-              <h2
-                className="headingstyle font-extrabold text-brand-teal font-heading"
-                
-              >
+              <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
                 Logicoland Volume 1
               </h2>
-              <p
-                className="textstyles text-brand-tealDark/80 mt-2 font-sans"
-                
-              >
+              <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
                 Logic through coloring!
               </p>
             </div>
@@ -328,9 +320,7 @@ export default function BuySection() {
               </motion.div>
 
               {/* IMAGE (center on desktop, left on mobile) */}
-              <div
-                className="flex items-center justify-center order-1 md:order-2"
-              >
+              <div className="flex items-center justify-center order-1 md:order-2">
                 <div className="relative w-full max-w-[160px] sm:max-w-[240px] md:max-w-[500px] aspect-[3/4]">
                   <Image
                     src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"

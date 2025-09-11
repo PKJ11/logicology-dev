@@ -51,12 +51,12 @@ interface UserData {
 // Utility function to check if JWT token is valid
 const hasValidToken = (): boolean => {
   if (typeof window === "undefined") return false;
-  
+
   const token = localStorage.getItem("communityToken");
   if (!token) return false;
-  
+
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split(".")[1]));
     return payload.exp * 1000 > Date.now();
   } catch (error) {
     console.error("Error checking token validity:", error);
@@ -67,10 +67,10 @@ const hasValidToken = (): boolean => {
 // Utility function to get user data from storage
 const getUserData = (): UserData | null => {
   if (typeof window === "undefined") return null;
-  
+
   const userData = localStorage.getItem("userData");
   if (!userData) return null;
-  
+
   try {
     return JSON.parse(userData);
   } catch (error) {
@@ -94,7 +94,8 @@ export default function CommunitySignupModal({
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [hasExistingSession, setHasExistingSession] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const [confirmationResult, setConfirmationResult] =
+    useState<ConfirmationResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
 
@@ -143,7 +144,9 @@ export default function CommunitySignupModal({
       };
     } catch (error) {
       console.error("Error initializing reCAPTCHA:", error);
-      setErrorMessage("Failed to initialize security verification. Please refresh the page.");
+      setErrorMessage(
+        "Failed to initialize security verification. Please refresh the page."
+      );
     }
   }, [open]);
 
@@ -164,7 +167,9 @@ export default function CommunitySignupModal({
       );
     } catch (error) {
       console.error("Error resetting reCAPTCHA:", error);
-      setErrorMessage("Failed to reset security verification. Please refresh the page.");
+      setErrorMessage(
+        "Failed to reset security verification. Please refresh the page."
+      );
     }
   };
 
@@ -193,7 +198,9 @@ export default function CommunitySignupModal({
       setOtpSent(true);
     } catch (error: any) {
       console.error("Error sending OTP:", error);
-      setErrorMessage(`Failed to send OTP: ${error.message || "Unknown error"}`);
+      setErrorMessage(
+        `Failed to send OTP: ${error.message || "Unknown error"}`
+      );
       resetRecaptcha();
     } finally {
       setLoading(false);
@@ -207,7 +214,9 @@ export default function CommunitySignupModal({
     }
 
     if (!confirmationResult) {
-      setErrorMessage("OTP verification not initialized. Please try sending the OTP again.");
+      setErrorMessage(
+        "OTP verification not initialized. Please try sending the OTP again."
+      );
       return;
     }
 
@@ -218,7 +227,9 @@ export default function CommunitySignupModal({
       setOtpVerified(true);
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
-      setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
+      setErrorMessage(
+        `Invalid OTP: ${error.message || "Please check the code and try again"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -265,7 +276,7 @@ export default function CommunitySignupModal({
       // Store the token and user data
       if (data.token) {
         localStorage.setItem("communityToken", data.token);
-        
+
         // Store user data if available in response
         if (data.user) {
           localStorage.setItem("userData", JSON.stringify(data.user));
@@ -282,7 +293,9 @@ export default function CommunitySignupModal({
       setHasExistingSession(true);
     } catch (error: any) {
       console.error("Error submitting form:", error);
-      setErrorMessage(`Registration failed: ${error.message || "Unknown error"}`);
+      setErrorMessage(
+        `Registration failed: ${error.message || "Unknown error"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -320,196 +333,224 @@ export default function CommunitySignupModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-  <div className="bg-white rounded-2xl shadow-brand max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
-    <button
-      onClick={() => {
-        resetForm();
-        onClose();
-      }}
-      className="absolute top-6 right-6 text-brand-tealDark hover:text-brand-coral text-2xl transition-colors"
-    >
-      &times;
-    </button>
-
-    <div className="text-center mb-8">
-      <h2 className="text-3xl font-bold text-brand-tealDark">
-        {hasExistingSession 
-          ? "Welcome Back!" 
-          : registrationSuccess 
-            ? "Welcome to Our Community!" 
-            : "Join Our Community"
-        }
-      </h2>
-      <div className="w-20 h-1 bg-brand-gold mx-auto mt-3 rounded-full"></div>
-    </div>
-
-    {errorMessage && (
-      <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
-        <div className="flex items-center">
-          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-          </svg>
-          {errorMessage}
-        </div>
-      </div>
-    )}
-
-    {hasExistingSession ? (
-      <div className="text-center py-4">
-        <div className="w-24 h-24 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <span className="text-3xl text-brand-teal font-semibold">
-            {userData?.name?.charAt(0)?.toUpperCase() || 'U'}
-          </span>
-        </div>
-        <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
-          {userData?.name || 'User'}
-        </h3>
-        <p className="text-brand-tealDark/80 mb-3">{userData?.email}</p>
-        <p className="text-brand-tealDark/80 mb-8">{userData?.phone}</p>
-        
-        <div className="flex flex-col gap-4">
-          <button
-            onClick={handleGoToCommunity}
-            className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
-          >
-            Go to Community
-          </button>
-          <button
-            onClick={handleLogout}
-            className="w-full py-2.5 px-6 border border-brand-teal/30 text-brand-teal font-medium rounded-xl hover:bg-brand-teal/5 transition-colors"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-    ) : registrationSuccess ? (
-      <div className="text-center py-6">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-        </div>
-        <h3 className="text-xl font-semibold text-brand-tealDark mb-3">Success!</h3>
-        <p className="text-brand-tealDark/80 mb-8">
-          Your account has been created successfully. You're now part of our community.
-        </p>
+      <div className="bg-white rounded-2xl shadow-brand max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
         <button
-          onClick={handleGoToCommunity}
-          className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+          onClick={() => {
+            resetForm();
+            onClose();
+          }}
+          className="absolute top-6 right-6 text-brand-tealDark hover:text-brand-coral text-2xl transition-colors"
         >
-          Go to Community
+          &times;
         </button>
-      </div>
-    ) : (
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-brand-tealDark mb-2">
-            Full Name *
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
-            placeholder="Enter your full name"
-            disabled={loading}
-          />
+
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-brand-tealDark">
+            {hasExistingSession
+              ? "Welcome Back!"
+              : registrationSuccess
+              ? "Welcome to Our Community!"
+              : "Join Our Community"}
+          </h2>
+          <div className="w-20 h-1 bg-brand-gold mx-auto mt-3 rounded-full"></div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-brand-tealDark mb-2">
-            Email Address *
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
-            placeholder="Enter your email"
-            disabled={loading}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-brand-tealDark mb-2">
-            Mobile Number *
-          </label>
-          <div className="flex gap-3">
-            <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <span className="text-brand-tealDark/60">+91</span>
-              </div>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                required
-                disabled={otpSent || loading}
-                maxLength={10}
-                className="w-full pl-12 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all disabled:bg-brand-grayBg"
-                placeholder="10-digit number"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleSendOtp}
-              disabled={otpSent || !phone || phone.length < 10 || loading}
-              className="px-5 py-3 bg-brand-teal text-white rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors whitespace-nowrap shadow-md"
-            >
-              {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
-            </button>
-          </div>
-        </div>
-
-        {otpSent && (
-          <div>
-            <label className="block text-sm font-medium text-brand-tealDark mb-2">
-              Enter OTP *
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                placeholder="6-digit OTP"
-                maxLength={6}
-                className="flex-1 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
-                disabled={loading || otpVerified}
-              />
-              <button
-                type="button"
-                onClick={handleVerifyOtp}
-                disabled={otpVerified || !otp || otp.length !== 6 || loading}
-                className={`px-5 py-3 rounded-xl transition-colors shadow-md ${
-                  otpVerified
-                    ? "bg-green-600 text-white hover:bg-green-700"
-                    : "bg-brand-teal text-white hover:bg-brand-tealDark"
-                } disabled:bg-brand-teal/40 disabled:cursor-not-allowed whitespace-nowrap`}
+        {errorMessage && (
+          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
+            <div className="flex items-center">
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
-                {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
-              </button>
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {errorMessage}
             </div>
           </div>
         )}
 
-        <div id="recaptcha-container"></div>
+        {hasExistingSession ? (
+          <div className="text-center py-4">
+            <div className="w-24 h-24 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="text-3xl text-brand-teal font-semibold">
+                {userData?.name?.charAt(0)?.toUpperCase() || "U"}
+              </span>
+            </div>
+            <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
+              {userData?.name || "User"}
+            </h3>
+            <p className="text-brand-tealDark/80 mb-3">{userData?.email}</p>
+            <p className="text-brand-tealDark/80 mb-8">{userData?.phone}</p>
 
-        <button
-          type="submit"
-          disabled={!otpVerified || loading}
-          className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors shadow-md"
-        >
-          {loading ? "Processing..." : "Join Community"}
-        </button>
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={handleGoToCommunity}
+                className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+              >
+                Go to Community
+              </button>
+              <button
+                onClick={handleLogout}
+                className="w-full py-2.5 px-6 border border-brand-teal/30 text-brand-teal font-medium rounded-xl hover:bg-brand-teal/5 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        ) : registrationSuccess ? (
+          <div className="text-center py-6">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
+              Success!
+            </h3>
+            <p className="text-brand-tealDark/80 mb-8">
+              Your account has been created successfully. You're now part of our
+              community.
+            </p>
+            <button
+              onClick={handleGoToCommunity}
+              className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+            >
+              Go to Community
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                placeholder="Enter your full name"
+                disabled={loading}
+              />
+            </div>
 
-        <p className="text-xs text-brand-tealDark/60 text-center mt-6">
-          By joining, you agree to our Terms of Service and Privacy Policy
-        </p>
-      </form>
-    )}
-  </div>
-</div>
+            <div>
+              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+                Email Address *
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                placeholder="Enter your email"
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+                Mobile Number *
+              </label>
+              <div className="flex gap-3">
+                <div className="flex-1 relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <span className="text-brand-tealDark/60">+91</span>
+                  </div>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) =>
+                      setPhone(e.target.value.replace(/\D/g, ""))
+                    }
+                    required
+                    disabled={otpSent || loading}
+                    maxLength={10}
+                    className="w-full pl-12 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all disabled:bg-brand-grayBg"
+                    placeholder="10-digit number"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={otpSent || !phone || phone.length < 10 || loading}
+                  className="px-5 py-3 bg-brand-teal text-white rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors whitespace-nowrap shadow-md"
+                >
+                  {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
+                </button>
+              </div>
+            </div>
+
+            {otpSent && (
+              <div>
+                <label className="block text-sm font-medium text-brand-tealDark mb-2">
+                  Enter OTP *
+                </label>
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                    placeholder="6-digit OTP"
+                    maxLength={6}
+                    className="flex-1 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                    disabled={loading || otpVerified}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    disabled={
+                      otpVerified || !otp || otp.length !== 6 || loading
+                    }
+                    className={`px-5 py-3 rounded-xl transition-colors shadow-md ${
+                      otpVerified
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-brand-teal text-white hover:bg-brand-tealDark"
+                    } disabled:bg-brand-teal/40 disabled:cursor-not-allowed whitespace-nowrap`}
+                  >
+                    {loading
+                      ? "Verifying..."
+                      : otpVerified
+                      ? "Verified"
+                      : "Verify"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div id="recaptcha-container"></div>
+
+            <button
+              type="submit"
+              disabled={!otpVerified || loading}
+              className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors shadow-md"
+            >
+              {loading ? "Processing..." : "Join Community"}
+            </button>
+
+            <p className="text-xs text-brand-tealDark/60 text-center mt-6">
+              By joining, you agree to our Terms of Service and Privacy Policy
+            </p>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }
