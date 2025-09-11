@@ -188,7 +188,7 @@ function BulletWithLine({
       variants={mobile ? bulletMobile : bulletDesktop(side)}
       initial="hidden"
       animate={isInView ? "show" : "hidden"}
-      className={`md:flex md:items-start md:gap-0 ${
+      className={`md:flex md:items-center md:gap-0 ${
         side === "left" ? "md:flex-row" : "md:flex-row-reverse"
       }`}
     >

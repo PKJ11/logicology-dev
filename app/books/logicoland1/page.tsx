@@ -15,18 +15,6 @@ export default function Logicoland1Page() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleFullscreen = () => {
-    if (!videoRef.current) return;
-    if (!document.fullscreenElement) {
-      videoRef.current.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
-    }
-  };
-
   function HeroVideo() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isMuted, setIsMuted] = useState(true);
