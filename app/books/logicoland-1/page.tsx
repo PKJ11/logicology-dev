@@ -760,7 +760,6 @@ interface PrintableCardProps {
 }
 
 function PrintableCard({ colorClass, buttonColor }: PrintableCardProps) {
-  console.log("buuton color", buttonColor);
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
       <div className={`rounded-[14px] h-64 ${colorClass} relative`}>

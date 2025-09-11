@@ -7,7 +7,6 @@ type CTAButtonProps = {
   text: string;
   href?: string;
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
-  /** Colors can be any valid CSS color: "#0A8A80", "rgb(10,138,128)", "hsl(...)" */
   bg?: string;          // default: white
   color?: string;       // default: brand teal (example)
   hoverBg?: string;     // default: brand teal

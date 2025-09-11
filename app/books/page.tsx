@@ -23,7 +23,47 @@ export default function BooksPage() {
   const books: Book[] = [
     {
       id: 1,
-      title: "Logicoland",
+      title: "Logicoland 1",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
+      description:
+        "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
+      author: "Gayatri",
+      rating: 4.8,
+    },
+    {
+      id: 1,
+      title: "Logicoland 2",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
+      description:
+        "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
+      author: "Gayatri",
+      rating: 4.8,
+    },
+    {
+      id: 1,
+      title: "Logicoland 3",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
+      description:
+        "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
+      author: "Gayatri",
+      rating: 4.8,
+    },
+    {
+      id: 1,
+      title: "Logicoland 4",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
+      description:
+        "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
+      author: "Gayatri",
+      rating: 4.8,
+    },
+    {
+      id: 1,
+      title: "Logicoland 5",
       imageUrl:
         "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
       description:
