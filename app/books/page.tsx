@@ -4,6 +4,7 @@ import Image from "next/image";
 import Head from "next/head";
 import NavBar from "@/components/NavBar";
 import { useRouter } from "next/navigation";
+import SiteFooter from "@/components/Footer";
 
 interface Book {
   id: number;
@@ -73,26 +74,23 @@ export default function BooksPage() {
           </p>
         </header>
 
-        {/* Cards container: center-first using flex */}
         <div
           className="
-    flex flex-wrap justify-center gap-7 md:gap-8
-  "
+            grid gap-7 md:gap-8
+            grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+          "
         >
           {books.map((book) => (
             <div
               key={book.id}
-              className="relative group cursor-pointer transition-all duration-300 hover:z-10
-                 basis-[260px] sm:basis-[300px] lg:basis-[320px] xl:basis-[340px] flex-shrink-0"
+              className="relative group cursor-pointer transition-all duration-300 hover:z-10"
               onClick={() => openModal(book)}
             >
-              <div
-                className="
-          relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
-          p-4 hover:shadow-brand transition-shadow
-        "
-              >
-                {/* cover */}
+              <div className="
+                relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
+                p-4 hover:shadow-brand transition-shadow
+              ">
+                {/* Larger cover area with fixed aspect ratio */}
                 <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
                   <Image
                     src={book.imageUrl}
@@ -104,15 +102,9 @@ export default function BooksPage() {
                 </div>
 
                 <div className="pt-5">
-                  {/* Title + author centered */}
-                  <h3 className="text-2xl font-bold text-brand-tealDark text-center">
-                    {book.title}
-                  </h3>
-                  <p className="text-sm text-brand-tealDark/70 text-center">
-                    by {book.author}
-                  </p>
+                  <h3 className="text-2xl font-bold text-brand-tealDark">{book.title}</h3>
+                  <p className="text-sm text-brand-tealDark/70">by {book.author}</p>
 
-                  {/* keep your rating + CTA layout as-is, or center it (optional below) */}
                   <div className="mt-4 flex items-center justify-between">
                     <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
                       ★ {book.rating}
@@ -129,6 +121,7 @@ export default function BooksPage() {
                   </div>
                 </div>
 
+                {/* subtle brand ring on hover */}
                 <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
               </div>
             </div>
@@ -240,6 +233,7 @@ export default function BooksPage() {
           </div>
         )}
       </div>
+      <SiteFooter/>
     </>
   );
 }

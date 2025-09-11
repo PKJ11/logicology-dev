@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import { useEffect, useRef, useState, useMemo } from "react";
 import CommunitySignupModal from "@/components/CommunitySignupModal";
 import SiteFooter from "@/components/Footer";
 import CTAButton from "@/components/CTAButton";
 import Community from "@/components/Community";
+import BuySection from "@/components/BuySection";
 
 /* ============================================================
    PAGE
@@ -210,229 +209,6 @@ export default function Logicoland1Page() {
       </section>
     );
   }
-  // import BulletWithLine and CTAButton as you already do
-
-  type Bullet = { title: string; desc: string; icon: string };
-
-  const BASE_BULLETS: Bullet[] = [
-    {
-      title: "50+ brain-boosting challenges",
-      desc: "Blend logic puzzles with creative coloring fun.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
-    },
-    {
-      title: "Intro to Sudoku",
-      desc: "A playful, visual way to ease kids into logical thinking.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
-    },
-    {
-      title: "Skill-building disguised as fun",
-      desc: "Sharpens deduction, focus, and pattern recognition.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
-    },
-    {
-      title: "Perfect for ages 6–12",
-      desc: "Great for home learning, travel, or screen-free entertainment.",
-      icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
-    },
-  ];
-
-  // Fisher–Yates shuffle (pure)
-  function shuffle<T>(arr: T[]) {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  const BULLET_ICON =
-    "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
-
-  function BulletWithLine({
-    side,
-    title,
-    desc,
-    icon,
-  }: {
-    side: "left" | "right";
-    title: string;
-    desc: string;
-    icon: string;
-  }) {
-    const isLeft = side === "left";
-    return (
-      <div
-        className={`md:flex md:items-start md:gap-0 ${
-          isLeft ? "md:flex-row" : "md:flex-row-reverse"
-        }`}
-      >
-        <div
-          className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 w-40 lg:w-64 ${
-            isLeft ? "ml-3 mr-4" : "mr-3 ml-4"
-          } translate-y-6`}
-        >
-          <span
-            className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${
-              isLeft ? "right-0" : "left-0"
-            }`}
-          />
-        </div>
-        <div className="shrink-0">
-          <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
-            <Image
-              src={icon || BULLET_ICON}
-              alt=""
-              width={28}
-              height={28}
-              className="h-7 w-7 object-contain bg-[#1EB6E9]"
-            />
-          </div>
-        </div>
-        <div
-          className={`${isLeft ? "md:ml-0" : "md:mr-0 ml-2"} ${
-            isLeft ? "ml-4" : "mr-4"
-          } md:ml-0 md:mr-0 max-w-[320px]`}
-        >
-          <div className="textstyles font-semibold text-brand-tealDark leading-tight">
-            {title}
-          </div>
-          <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">
-            {desc}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  function BuySection() {
-    const [bullets, setBullets] = useState<Bullet[]>([
-      {
-        title: "Engaging Puzzles",
-        desc: "Makes logic fun and interactive.",
-        icon: "https://ik.imagekit.io/pratik2002/ICON-1.png?updatedAt=1757300409075",
-      },
-      {
-        title: "STEM Skills",
-        desc: "Strengthens problem-solving ability.",
-        icon: "https://ik.imagekit.io/pratik2002/ICON-2.png?updatedAt=1757300409672",
-      },
-      {
-        title: "Creative Learning",
-        desc: "Develops imagination with logic.",
-        icon: "https://ik.imagekit.io/pratik2002/ICON-3.png?updatedAt=1757300409119",
-      },
-      {
-        title: "Fun for All",
-        desc: "Perfect for group or solo play.",
-        icon: "https://ik.imagekit.io/pratik2002/ICON-4.png?updatedAt=1757300408971",
-      },
-    ]);
-
-    // Randomize once on client to avoid SSR/CSR mismatch
-    useEffect(() => {
-      setBullets(shuffle(bullets));
-    }, []);
-
-    // Split into two columns (left/right). If odd, left gets the extra.
-    const { leftBullets, rightBullets } = useMemo(() => {
-      const mid = Math.ceil(bullets.length / 2);
-      return {
-        leftBullets: bullets.slice(0, mid),
-        rightBullets: bullets.slice(mid),
-      };
-    }, [bullets]);
-
-    return (
-      <section id="buy" className="w-full bg-brand-gold">
-        <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-          <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft">
-            <div className="text-center mb-8">
-              <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
-                Logicoland Volume 1
-              </h2>
-              <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
-                Logic through coloring!
-              </p>
-            </div>
-
-            {/* Order: line → logo → text */}
-            <div className="grid grid-cols-1 md:grid-cols-3  items-center">
-              {/* LEFT: bullets (lines point RIGHT, towards book) */}
-              <div className="space-y-[150px] order-1">
-                {leftBullets.map((b, i) => (
-                  <BulletWithLine
-                    key={`L-${i}-${b.title}`}
-                    side="right"
-                    title={b.title}
-                    desc={b.desc}
-                    icon={b.icon} // added
-                  />
-                ))}
-              </div>
-
-              {/* CENTER: book image */}
-              <div className="flex items-center justify-center order-2">
-                <div className="relative w-[500px] sm:w-[500px] md:w-[500px] aspect-[1]">
-                  <Image
-                    src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
-                    alt="Logicoland Book"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-
-              {/* RIGHT: bullets (lines point LEFT, towards book) */}
-              <div className="space-y-[130px] order-3">
-                {rightBullets.map((b, i) => (
-                  <BulletWithLine
-                    key={`R-${i}-${b.title}`}
-                    side="left"
-                    title={b.title}
-                    desc={b.desc}
-                    icon={b.icon} // added
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="text-center mt-10">
-              <div className="mt-6">
-                <Link
-                  href="#buy"
-                  className="group inline-flex items-center gap-2 rounded-full
-             border border-[#D7AD57] bg-transparent
-             px-6 py-3 font-semibold
-             text-[#D7AD57]
-             transition-colors
-             hover:bg-[#D7AD57] hover:text-white"
-                >
-                  Buy Now
-                  <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor" // follows text color
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <>
       <NavBar />
@@ -516,17 +292,23 @@ export default function Logicoland1Page() {
         <section className="w-full bg-brand-grayBg">
           <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
             <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-              <h3 className="text-center headingstyle font-extrabold text-brand-tealDark">
+              <h3 className="text-center headingstyle font-extrabold text-brand-teal">
                 Printables
               </h3>
-              <p className="text-center textstyles text-brand-tealDark/80 mt-2">
+              <p className="text-center textstyles text-brand-teal mt-2">
                 Done with Logicoland 1 already? Here are a few more 4×4 Sudoku
                 puzzles to color.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8 mt-10">
-                <PrintableCard colorClass="bg-[#DDB24D]" />
-                <PrintableCard colorClass="bg-[#E45C48]" />
+                <PrintableCard
+                  colorClass="bg-[#DDB24D]"
+                  buttonColor="#3F2F14"
+                />
+                <PrintableCard
+                  colorClass="bg-[#E45C48]"
+                  buttonColor="#AB4637"
+                />
               </div>
 
               <p className="text-center mt-8 text-brand-tealDark/70">
@@ -984,7 +766,13 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
    Little helpers
 ============================================================ */
 
-function PrintableCard({ colorClass }: { colorClass: string }) {
+interface PrintableCardProps {
+  colorClass: string;
+  buttonColor: string; // single color prop
+}
+
+function PrintableCard({ colorClass, buttonColor }: PrintableCardProps) {
+  console.log("buuton color", buttonColor);
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
       <div className={`rounded-[14px] h-64 ${colorClass} relative`}>
@@ -994,9 +782,9 @@ function PrintableCard({ colorClass }: { colorClass: string }) {
               text="Download Pdf"
               href=""
               bg="#FFFFFF"
-              color="#AB4637" // brand teal text
-              hoverBg="#AB4637" // brand teal bg on hover
-              hoverColor="#FFFFFF" // white text on hover
+              color={buttonColor} // text color = buttonColor
+              hoverBg={buttonColor} // hover bg = buttonColor
+              hoverColor="#FFFFFF" // hover text = white
               size="md"
               rightIcon={
                 <svg
