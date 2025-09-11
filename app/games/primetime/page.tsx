@@ -689,13 +689,24 @@ function LostCardHelper() {
                 />
                 <button
                   onClick={showCard}
-                  className="group rounded-full px-2 py-3 font-sans font-medium
+                  className="group rounded-full px-2 py-3 font-sans font-medium text-[14px]
                          border-2 border-brand-teal bg-white text-brand-teal
                          transition-colors hover:bg-brand-teal hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Show card
                 </button>
+                <button
+              onClick={resetToTray}
+              type="button"
+              className="group rounded-full px-6 py-3 font-medium text-[14px]
+                         border-2 border-brand-teal bg-white text-brand-teal
+                         transition-colors hover:bg-brand-teal hover:text-white
+                         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+            >
+              Reset
+            </button>
+
               </div>
 
               {error && <p className="mt-3 text-sm text-red-200">{error}</p>}
