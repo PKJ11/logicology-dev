@@ -261,12 +261,12 @@ function GameDetails() {
           </div>
 
           {/* Content on right for larger screens, bottom for mobile */}
-          <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
+          <div className="w-full md:w-1/2 py-8 px-4 sm:p-12 order-2 md:order-2">
             <h2 className="headingstyle leading-tight text-[#3F2F14] font-extrabold font-heading">
               Details About The Game
             </h2>
 
-            <p className="mt-3 textstyles text-[#3F2F14] max-w-2xl font-sans">
+            <p className="mt-3 textstyles text-[#3F2F14] max-w-xl font-sans">
               A lightning‑quick numbers game that rewards smart matching and
               prime‑factor insights. Perfect for 2–6 players, ages 8+.
             </p>

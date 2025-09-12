@@ -49,7 +49,7 @@ export default function Logicoland1Page() {
                 loop
                 playsInline
                 muted={isMuted}
-                className="w-full h-[80vh] sm:h-[62vh] sm:min-h-[420px] sm:max-h-[780px] object-cover"
+                className="w-full h-[90vh] sm:h-[62vh] sm:min-h-[420px] sm:max-h-[780px] object-cover"
               >
                 <source
                   src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
