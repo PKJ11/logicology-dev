@@ -50,7 +50,7 @@ export default function Benefit() {
             <div className="w-full md:w-1/2 order-1 md:order-2 flex justify-center items-center py-6 md:py-0">
               <MediaLayout
                 image="https://ik.imagekit.io/pratik2002/benifit-img.png?updatedAt=1757216326535"
-                videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
+                videoSrc=""
               />
             </div>
           </div>

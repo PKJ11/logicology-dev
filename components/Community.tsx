@@ -18,7 +18,7 @@ export default function Community() {
             <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
               <MediaLayout
                 image="https://ik.imagekit.io/pratik2002/community-img.png?updatedAt=1757216326184"
-                videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
+                videoSrc=""
               />
             </div>
 
@@ -33,15 +33,15 @@ export default function Community() {
               </p>
               <div className="mt-6">
                 <button
-                  className="text-[16px] group inline-flex w-full items-center justify-center gap-2 max-w-[220px]
+                  className="text-[16px] group inline-flex items-center justify-center gap-2 max-w-[220px]
              rounded-full border-2 border-white bg-transparent
-             px-4 py-3 font-semibold text-white
+             px-6 py-3 font-semibold text-white
              transition-colors hover:bg-white hover:text-brand-teal
              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
              active:scale-[.99]"
                   onClick={() => setIsModalOpen(true)}
                 >
-                  Join Community Now
+                  Join Now
                   <svg
                     className="w-4 h-4 transition-transform group-hover:translate-x-1"
                     fill="none"
