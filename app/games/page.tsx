@@ -67,16 +67,16 @@ export default function GamesPage() {
     <>
       <NavBar />
       {/* Page shell */}
-      <div className="min-h-screen text-brand-tealDark bg-brand-hero p-6 sm:p-8 md:p-10">
+      <div className="min-h-screen  text-brand-tealDark bg-brand-hero p-6 sm:p-8 md:p-10">
         <Head>
           <title>Games Collection</title>
         </Head>
 
         <header className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal text-center">
             Games Collection
           </h1>
-          <p className="mt-2 text-brand-tealDark/75">
+          <p className="mt-2 text-brand-tealDark/75 text-center">
             Handpicked games to spark curiosity, learning, and fun.
           </p>
         </header>

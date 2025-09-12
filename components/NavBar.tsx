@@ -19,9 +19,9 @@ export default function NavBar() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="lg:max-w-[75vw] lg:mx-auto md:max-w-[75vw] md:mx-auto px-4 lg:px-8 ">
-        <div className="flex items-center py-3">
+        <div className="flex justify-between py-3">
           {/* LEFT CLUSTER: Logo + Nav */}
-          <div className="flex items-center gap-6 flex-1">
+          <div className="flex ">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               <div className="w-[150px] h-auto relative">
@@ -35,6 +35,9 @@ export default function NavBar() {
               </div>
             </Link>
 
+            
+          </div>
+          <div className="py-3">
             {/* Nav Items */}
             <nav className="hidden md:flex items-center gap-6 text-sm text-slate-700 font-heading">
               {navItems.map((item) => (
@@ -42,7 +45,7 @@ export default function NavBar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="py-1 text-[18px] relative transition-colors duration-200 hover:text-brand-teal
+                  className="py-1 text-[16px]  text-[#0B3F44] relative transition-colors duration-200 hover:text-brand-teal
              after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
              after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
              after:origin-center after:scale-x-0 after:transition-transform after:duration-300
@@ -58,7 +61,7 @@ export default function NavBar() {
           <div className="hidden md:flex items-center gap-5 text-slate-700">
             <Link
               href="/login"
-              className="text-[18px] py-1 relative transition-colors duration-200 hover:text-brand-teal
+              className="text-[16px] text-[#0B3F44] py-1 relative transition-colors duration-200 hover:text-brand-teal
              after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
              after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
              after:origin-center after:scale-x-0 after:transition-transform after:duration-300

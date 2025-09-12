@@ -211,7 +211,7 @@ export default function Logicoland1Page() {
         <section className="w-full bg-brand-coral text-white">
           <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
+              <div className="sm:px-4">
                 {/* <p className="text-lg">Interactive</p> */}
                 <h3 className="headingstyle font-extrabold font-heading">
                   Interactive Puzzles

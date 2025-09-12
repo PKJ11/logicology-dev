@@ -8,8 +8,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Community from "@/components/Community";
 import MediaLayout from "@/components/MediaLayout";
 import CTAButton from "@/components/CTAButton";
@@ -250,17 +248,17 @@ function Hero() {
 
 function GameDetails() {
   return (
-    <section className="w-full bg-brand-gold/90">
+    <section className="w-full bg-brand-gold">
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         {/* Flex container replacing grid */}
         <div className="flex flex-col md:flex-row items-center">
           {/* MediaLayout on left for larger screens, top for mobile */}
-          {/* <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0"> */}
-            <MediaLayout
-              image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
-              videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
-            />
-          {/* </div> */}
+          <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
+          <MediaLayout
+            image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
+            videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
+          />
+          </div>
 
           {/* Content on right for larger screens, bottom for mobile */}
           <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
@@ -351,7 +349,7 @@ function InstructionVideos() {
     <section className="w-full bg-brand-coral relative">
       <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
-          <div>
+          <div className="px-0 sm:px-8">
             <h2 className="headingstyle text-white/90 font-extrabold font-heading">
               How to play Instruction Videos
             </h2>
@@ -690,23 +688,22 @@ function LostCardHelper() {
                 <button
                   onClick={showCard}
                   className="group rounded-full px-2 py-3 font-sans font-medium text-[14px]
-                         border-2 border-brand-teal bg-white text-brand-teal
-                         transition-colors hover:bg-brand-teal hover:text-white
+                         border-2 border-[#557f28] bg-white text-[#557f28]
+                         transition-colors hover:bg-[#557f28] hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Show card
                 </button>
                 <button
-              onClick={resetToTray}
-              type="button"
-              className="group rounded-full px-6 py-3 font-medium text-[14px]
-                         border-2 border-brand-teal bg-white text-brand-teal
-                         transition-colors hover:bg-brand-teal hover:text-white
+                  onClick={resetToTray}
+                  type="button"
+                  className="group rounded-full px-6 py-3 font-medium text-[14px]
+                         border-2 border-[#557f28] bg-white text-[#557f28]
+                         transition-colors hover:bg-[#557f28] hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
-            >
-              Reset
-            </button>
-
+                >
+                  Reset
+                </button>
               </div>
 
               {error && <p className="mt-3 text-sm text-red-200">{error}</p>}

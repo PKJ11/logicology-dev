@@ -226,9 +226,9 @@ function BulletWithLine({
           <Image
             src={icon || BULLET_ICON}
             alt=""
-            width={28}
-            height={28}
-            className="h-7 w-7 object-contain bg-[#1EB6E9]"
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain bg-[#1EB6E9]"
           />
         </div>
       </motion.div>
@@ -238,7 +238,7 @@ function BulletWithLine({
         <div className="textstyles font-semibold text-brand-tealDark leading-tight">
           {title}
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-brand-tealDark/80">
+        <p className="mt-2 text-base leading-relaxed text-brand-tealDark/80">
           {desc}
         </p>
       </div>
@@ -373,21 +373,7 @@ export default function BuySection() {
 
             {/* CTA */}
             <div className="text-center mt-10">
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={
-                  isContainerInView
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 12 }
-                }
-                transition={{
-                  type: "spring",
-                  stiffness: 240,
-                  damping: 20,
-                  delay: 0.1,
-                }}
-                className="mt-6"
-              >
+              <div className="mt-6">
                 <Link
                   href="#buy"
                   className="group inline-flex items-center gap-2 rounded-full
@@ -412,7 +398,7 @@ export default function BuySection() {
                     />
                   </svg>
                 </Link>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

@@ -58,10 +58,10 @@ export default function ImportanceBubbles() {
 
   return (
     // gradient background like the other section
-    <section className="w-full bg-brand-hero" id="offerings">
-      <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
+    <section className="section w-full bg-white sm:px-3" id="offerings">
+      <div className="mx-auto section-rounded px-3 sm:px-5 py-14 ">
         {/* white container */}
-        <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
+        <div className="rounded-[22px] bg- p-6 sm:p-10 bg-[#EDEDED]">
           <div className="text-center mb-4">
             <h2 className="headingstyle font-extrabold text-brand-teal mb-3 font-heading">
               Our Offerings for you

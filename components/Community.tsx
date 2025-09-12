@@ -32,31 +32,30 @@ export default function Community() {
                 new modes, and tournament ideas.
               </p>
               <div className="mt-6">
-                <CTAButton
-                  text="Join Community"
-                  href=""
+                <button
+                  className="text-[16px] group inline-flex w-full items-center justify-center gap-2 max-w-[220px]
+             rounded-full border-2 border-white bg-transparent
+             px-4 py-3 font-semibold text-white
+             transition-colors hover:bg-white hover:text-brand-teal
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
+             active:scale-[.99]"
                   onClick={() => setIsModalOpen(true)}
-                  bg="#FFFFFF"
-                  color="#0B3F44" // brand teal text
-                  hoverBg="#0B3F44" // brand teal bg on hover
-                  hoverColor="#FFFFFF" // white text on hover
-                  size="md"
-                  rightIcon={
-                    <svg
-                      className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  }
-                />
+                >
+                  Join Community Now
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
