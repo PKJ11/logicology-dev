@@ -72,7 +72,7 @@ export default function ImportanceBubbles() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 mt-10 max-w-[80vw] mx-auto justify-items-center">
             {items.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center gap-5">
                 {/* Animated bubble image */}

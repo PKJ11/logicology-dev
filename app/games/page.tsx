@@ -84,7 +84,7 @@ export default function GamesPage() {
         {/* Bigger cards: fewer cols + larger min width */}
         <div
           className="
-            grid gap-7 md:gap-8
+            grid gap-6 md:gap-7
             grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
           "
         >
@@ -96,12 +96,12 @@ export default function GamesPage() {
             >
               <div
                 className="
-                relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
-                p-4 hover:shadow-brand transition-shadow
+                relative overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5
+                p-3 hover:shadow-brand transition-shadow h-full flex flex-col
               "
               >
-                {/* Larger cover area with fixed aspect ratio */}
-                <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden">
+                {/* Smaller cover area with more square aspect ratio */}
+                <div className="relative w-full max-h-[48vh] aspect-[3/4] rounded-2xl overflow-hidden mb-3">
                   <Image
                     src={game.imageUrl}
                     alt={game.title}
@@ -111,26 +111,26 @@ export default function GamesPage() {
                   />
                 </div>
 
-                <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">
+                <div className="flex-1 flex flex-col">
+                  <h3 className="text-xl font-bold text-brand-tealDark mb-1">
                     {game.title}
                   </h3>
-                  <p className="text-sm text-brand-tealDark/70">
+                  <p className="text-xs text-brand-tealDark/70 mb-2">
                     by {game.author}
                   </p>
 
-                  <div className="mt-2 flex items-center">
+                  <div className="mb-3">
                     <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal text-xs font-medium rounded-full">
                       {game.category}
                     </span>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between">
+                  <div className="mt-auto flex items-center justify-between">
                     <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
                       ★ {game.rating}
                     </span>
                     <button
-                      className="text-sm font-semibold text-brand-teal hover:text-brand-coral transition-colors"
+                      className="text-xs font-semibold text-brand-teal hover:text-brand-coral transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal(game);
@@ -142,7 +142,7 @@ export default function GamesPage() {
                 </div>
 
                 {/* subtle brand ring on hover */}
-                <div className="pointer-events-none absolute inset-0 rounded-4xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
+                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
               </div>
             </div>
           ))}

@@ -133,7 +133,7 @@ export default function BooksPage() {
               "
               >
                 {/* Larger cover area with fixed aspect ratio */}
-                <div className="relative w-full aspect-[2/3] rounded-3xl overflow-hidden">
+                <div className="relative w-full max-h-[48vh] aspect-[3/4] rounded-3xl overflow-hidden">
                   <Image
                     src={book.imageUrl}
                     alt={book.title}
@@ -144,7 +144,7 @@ export default function BooksPage() {
                 </div>
 
                 <div className="pt-5">
-                  <h3 className="text-2xl font-bold text-brand-tealDark">
+                  <h3 className="text-xl font-bold text-brand-tealDark">
                     {book.title}
                   </h3>
                   <p className="text-sm text-brand-tealDark/70">
