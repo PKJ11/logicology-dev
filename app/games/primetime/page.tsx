@@ -254,10 +254,10 @@ function GameDetails() {
         <div className="flex flex-col md:flex-row items-center">
           {/* MediaLayout on left for larger screens, top for mobile */}
           <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
-          <MediaLayout
-            image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
-            videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
-          />
+            <MediaLayout
+              image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
+              videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
+            />
           </div>
 
           {/* Content on right for larger screens, bottom for mobile */}
@@ -584,7 +584,7 @@ function LostCardHelper() {
 
     setLoading(true);
     const nextUrl = buildCardUrl(num);
-
+    
     const probe = new window.Image();
     probe.onload = () => {
       setImgSrc(nextUrl);
@@ -655,14 +655,18 @@ function LostCardHelper() {
 
             {/* Right: Controls & Text */}
             <div className="w-full md:w-1/2 order-1 md:order-2 text-white">
-              <h2 className="textstyles text-white/90 font-extrabold font-heading">
+              {/* <h2 className="textstyles text-white/90 font-extrabold font-heading">
                 Card replacement helper
-              </h2>
+              </h2> */}
               <h2 className="headingstyle text-white/90 font-extrabold font-heading">
-                Lost a card? We’ve got you covered.
+                Lost a card?
               </h2>
               <p className="textstyles mt-3 max-w-prose font-sans">
-                Enter a card number to preview it.
+                Worry not! We've got you covered.
+                <br />
+                The game box comes with four blank cards just for this purpose.
+                <br />
+                Enter the card number below.
               </p>
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -688,7 +692,7 @@ function LostCardHelper() {
                 <button
                   onClick={showCard}
                   className="group rounded-full px-2 py-3 font-sans font-medium text-[14px]
-                         border-2 border-[#557f28] bg-white text-[#557f28]
+                          bg-white text-[#557f28]
                          transition-colors hover:bg-[#557f28] hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
@@ -698,7 +702,7 @@ function LostCardHelper() {
                   onClick={resetToTray}
                   type="button"
                   className="group rounded-full px-6 py-3 font-medium text-[14px]
-                         border-2 border-[#557f28] bg-white text-[#557f28]
+                       bg-white text-[#557f28]
                          transition-colors hover:bg-[#557f28] hover:text-white
                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >

@@ -24,20 +24,47 @@ export default function GamesPage() {
   const router = useRouter();
 
   const games: Game[] = [
-    {
-      id: 1,
-      title: "PrimeTime",
-      imageUrl:
-        "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
-      description:
-        "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
-      author: "Logicology",
-      rating: 4.9,
-      category: "Math Strategy",
-      players: "2-6",
-      duration: "15-30 min",
-    },
-  ];
+  {
+    id: 1,
+    title: "PrimeTime",
+    imageUrl:
+      "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+    description:
+      "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
+    author: "Logicology",
+    rating: 4.9,
+    category: "Math Strategy",
+    players: "2-6",
+    duration: "15-30 min",
+  },
+  {
+    id: 2,
+    title: "Turn the Tables",
+    imageUrl:
+      "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
+    description:
+      "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
+    author: "Logicology",
+    rating: 4.8,
+    category: "Math Strategy",
+    players: "2-6",
+    duration: "20-40 min",
+  },
+  {
+    id: 3,
+    title: "Hidden in the Jungle",
+    imageUrl:
+      "https://ik.imagekit.io/pratik11/HIDDEN%20IN%20THE%20JUNGLE%20MOCKUP.png?updatedAt=1757748179906",
+    description:
+      "A fast-paced observation and deduction card game where players race to spot hidden animals camouflaged in the jungle. Quick eyes and sharp focus are the key to winning in this exciting family-friendly adventure.",
+    author: "Logicology",
+    rating: 4.7,
+    category: "Observation & Strategy",
+    players: "2-6",
+    duration: "15-25 min",
+  },
+];
+
 
   const openModal = (game: Game) => {
     setSelectedGame(game);

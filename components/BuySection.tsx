@@ -135,10 +135,10 @@ const bulletDesktop = (side: "left" | "right"): Variants => ({
 });
 
 const bulletMobile: Variants = {
-  hidden: { opacity: 0, x: 24 },
+  hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { type: "spring", stiffness: 320, damping: 26 },
   },
 };
@@ -246,6 +246,56 @@ function BulletWithLine({
   );
 }
 
+/* ----------------------------- Mobile Bullet Component ---------------------------- */
+
+function MobileBulletItem({
+  title,
+  desc,
+  icon,
+}: {
+  title: string;
+  desc: string;
+  icon: string;
+}) {
+  const prefersReduced = useReducedMotion();
+  const [ref, isInView] = useViewportAnimation<HTMLDivElement>();
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={bulletMobile}
+      initial="hidden"
+      animate={isInView ? "show" : "hidden"}
+      className="flex flex-col items-center text-center p-4"
+    >
+      {/* icon on top */}
+      <motion.div
+        whileHover={prefersReduced ? undefined : { scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 400, damping: 24 }}
+        className="shrink-0 mb-4"
+      >
+        <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow mx-auto">
+          <Image
+            src={icon || BULLET_ICON}
+            alt=""
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain bg-[#1EB6E9]"
+          />
+        </div>
+      </motion.div>
+
+      {/* title below icon */}
+      <div className="textstyles font-semibold text-brand-tealDark leading-tight mb-2">
+        {title}
+      </div>
+
+      {/* description below title */}
+      <p className="text-base leading-relaxed text-brand-tealDark/80">{desc}</p>
+    </motion.div>
+  );
+}
+
 /* ------------------------------- Main Section ------------------------------ */
 
 export default function BuySection() {
@@ -299,8 +349,8 @@ export default function BuySection() {
               </p>
             </div>
 
-            {/* Desktop: 3 cols; Mobile: 2 cols (image left, bullets right) */}
-            <div className="grid grid-cols-2 md:grid-cols-3 items-center gap-y-10">
+            {/* Desktop: 3 cols; Mobile: image on top, 2x2 grid below */}
+            <div className="md:grid md:grid-cols-3 items-center gap-y-10">
               {/* LEFT (desktop only) */}
               <motion.div
                 variants={containerStagger}
@@ -319,8 +369,8 @@ export default function BuySection() {
                 ))}
               </motion.div>
 
-              {/* IMAGE (center on desktop, left on mobile) */}
-              <div className="flex items-center justify-center order-1 md:order-2">
+              {/* IMAGE (center on desktop, top on mobile) */}
+              <div className="flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0">
                 <div className="relative w-full max-w-[160px] sm:max-w-[240px] md:max-w-[500px] aspect-[3/4]">
                   <Image
                     src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
@@ -351,21 +401,19 @@ export default function BuySection() {
                 ))}
               </motion.div>
 
-              {/* MOBILE bullets (right column) */}
+              {/* MOBILE: 2x2 grid below the image */}
               <motion.div
                 variants={containerStagger}
                 initial="hidden"
                 animate={isContainerInView ? "show" : "hidden"}
-                className="block md:hidden order-2 space-y-6"
+                className="md:hidden order-2 grid grid-cols-2 gap-4 mt-6"
               >
                 {bullets.map((b, i) => (
-                  <BulletWithLine
+                  <MobileBulletItem
                     key={`M-${i}-${b.title}`}
-                    side="right"
                     title={b.title}
                     desc={b.desc}
                     icon={b.icon}
-                    mobile
                   />
                 ))}
               </motion.div>
@@ -374,30 +422,12 @@ export default function BuySection() {
             {/* CTA */}
             <div className="text-center mt-10">
               <div className="mt-6">
-                <Link
-                  href="#buy"
-                  className="group inline-flex items-center gap-2 rounded-full
-                    border border-[#D7AD57] bg-transparent
-                    px-6 py-3 font-semibold
-                    text-[#D7AD57]
-                    transition-colors
-                    hover:bg-[#D7AD57] hover:text-white"
+                <span
+                  className="inline-flex items-center rounded-full
+        bg-brand-teal px-6 py-3 font-semibold text-white"
                 >
-                  Buy Now
-                  <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </Link>
+                  Volumes 2 to 5 coming soon…
+                </span>
               </div>
             </div>
           </div>

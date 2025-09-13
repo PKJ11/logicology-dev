@@ -23,15 +23,24 @@ export default function BooksPage() {
   const books: Book[] = [
     {
       id: 1,
-      title: "Logicoland 1",
+      title: "Logicoland Series",
       imageUrl:
-        "https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-1-IMAGE.png?updatedAt=1757035431658",
+        "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
       description:
         "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
       author: "Logicology",
       rating: 4.8,
     },
-    
+    {
+      id: 2,
+      title: "Speed Maths",
+      imageUrl:
+        "https://ik.imagekit.io/pratik11/SPEED%20MATHS%20COVER%20MOCKUP.png?updatedAt=1757748179754",
+      description:
+        "Sharpen your mental math skills with Speed Maths! Packed with fun drills, rapid challenges, and clever tricks, this book trains children to calculate faster while enjoying the thrill of beating the clock. A perfect blend of practice and play to build confidence in arithmetic.",
+      author: "Logicology",
+      rating: 4.7,
+    },
   ];
 
   const openModal = (book: Book) => {
@@ -163,7 +172,7 @@ export default function BooksPage() {
                 <div className="grid md:grid-cols-2">
                   <div className="relative h-72 md:h-full">
                     <Image
-                      src="https://ik.imagekit.io/pratik2002/LOGICOLAND-CONTAINER-2-IMAGE.png?updatedAt=1757035431654"
+                      src={selectedBook.imageUrl}
                       alt={selectedBook.title}
                       fill
                       className="block w-full h-auto"

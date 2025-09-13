@@ -11,10 +11,10 @@ export default function ImportanceBubbles() {
     "https://ik.imagekit.io/pratik2002/BUBBLE%204.png?updatedAt=1757035883179",
   ];
   const kidImgs = [
-    "https://ik.imagekit.io/pratik2002/KID%201.png?updatedAt=1757035882681",
-    "https://ik.imagekit.io/pratik2002/KID%202.png?updatedAt=1757035882826",
-    "https://ik.imagekit.io/pratik2002/KID%203.png?updatedAt=1757035882763",
-    "https://ik.imagekit.io/pratik2002/KID%204.png?updatedAt=1757035886499",
+    "https://ik.imagekit.io/pratik2002/green.png?updatedAt=1757744211414",
+    "https://ik.imagekit.io/pratik2002/yellow.png?updatedAt=1757744211774",
+    "https://ik.imagekit.io/pratik2002/red.png?updatedAt=1757744211792",
+    "https://ik.imagekit.io/pratik2002/black.png?updatedAt=1757744338918",
   ];
 
   const baseItems = [

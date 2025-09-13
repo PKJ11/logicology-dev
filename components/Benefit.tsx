@@ -47,9 +47,9 @@ export default function Benefit() {
             </div>
 
             {/* MediaLayout on right for larger screens, bottom for mobile */}
-            <div className="w-full md:w-1/2 order-1 md:order-2 flex justify-center items-center py-6 md:py-0">
+            <div className="w-full md:w-1/2 order-1 md:order-2 flex justify-center items-center  md:py-0">
               <MediaLayout
-                image="https://ik.imagekit.io/pratik2002/benifit-img.png?updatedAt=1757216326535"
+                image="https://ik.imagekit.io/pratik11/FOLD-2.1-IMAGE.png?updatedAt=1757748753983"
                 videoSrc=""
               />
             </div>

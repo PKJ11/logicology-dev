@@ -36,7 +36,7 @@ export default function MediaLayout({
   return (
     <div className="relative max-w-[500px] max-h-[500px] w-[95%] my-2 mx-2 aspect-square">
       {/* Main content container */}
-      <div className="rounded-[28px] bg-white p-5 shadow-lg h-full">
+      <div className="rounded-[28px] bg-white p-4 sm:p-5 md:p-6 shadow-lg h-full">
         <div className="relative rounded-[22px] overflow-hidden h-full">
           <div className="relative w-full h-full">
             <Image

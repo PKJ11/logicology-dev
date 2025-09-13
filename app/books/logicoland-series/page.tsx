@@ -12,8 +12,6 @@ import BuySection from "@/components/BuySection";
    PAGE
 ============================================================ */
 export default function Logicoland1Page() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   function HeroVideo() {
     const videoRef = useRef<HTMLVideoElement | null>(null);

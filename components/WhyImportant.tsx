@@ -12,7 +12,7 @@ export default function WhyImportant() {
             {/* MediaLayout on left for larger screens, top for mobile */}
             <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
               <MediaLayout
-                image="https://ik.imagekit.io/pratik2002/why-imp-image.png?updatedAt=1757216326584"
+                image="https://ik.imagekit.io/pratik11/FOLD-1.1-IMAGE.png?updatedAt=1757749236600"
                 videoSrc=""
               />
             </div>
