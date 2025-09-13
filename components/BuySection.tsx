@@ -371,7 +371,7 @@ export default function BuySection() {
 
               {/* IMAGE (center on desktop, top on mobile) */}
               <div className="flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0">
-                <div className="relative w-full max-w-full sm:max-w-[240px] md:max-w-[500px] aspect-[4/3] sm:aspect-[3/4">
+                <div className="relative w-full max-w-full sm:max-w-[240px] md:max-w-[500px] aspect-[4/3] sm:aspect-[3/4]">
                   <Image
                     src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
                     alt="Logicoland Book"
