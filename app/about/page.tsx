@@ -14,7 +14,7 @@ export default function AboutUs() {
       <OurStory />
       <OurTeam />
       <OurVision />
-      <Tribe/>
+      <Tribe />
       <Footer />
     </main>
   );
@@ -160,7 +160,9 @@ function HeroVideo() {
               <button
                 onClick={toggleFullscreen}
                 className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                aria-label={
+                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                }
               >
                 {!isFullscreen ? (
                   <svg
@@ -221,9 +223,9 @@ function OurStory() {
             </h2>
 
             <p className="mt-3 textstyles text-[#3F2F14] max-w-xl font-sans">
-              We believe that children learn the most when they are engaged.
-              At Logicology we strive to create innovative gamified content to
-              help children develop 21st&nbsp;century&nbsp;skills.
+              We believe that children learn the most when they are engaged. At
+              Logicology we strive to create innovative gamified content to help
+              children develop 21st&nbsp;century&nbsp;skills.
             </p>
 
             <div className="mt-6">
@@ -262,13 +264,37 @@ function OurStory() {
 /* --------------------- Our Team (Coral) --------------------- */
 function OurTeam() {
   const teamMembers = [
-  { name: "Kartik Vyas",        role: "Co-Founder",          image: "https://ik.imagekit.io/pratik2002/team-kartik.jpg" },
-  { name: "Gayatri Phadnis",    role: "Co-Founder",          image: "https://ik.imagekit.io/pratik2002/team-gayatri.jpg" },
-  { name: "Jasneet Singh",      role: "Head of Design",      image: "https://ik.imagekit.io/pratik2002/team-jasneet.jpg" },
-  { name: "Pratik Kumar Jha",   role: "Head of Technology",  image: "https://ik.imagekit.io/pratik2002/team-pratik.jpg" },
-  { name: "Simran Kaur",        role: "Designer",            image: "https://ik.imagekit.io/pratik2002/team-simran.jpg" },
-  { name: "Gauri Bhopale",      role: "Designer",            image: "https://ik.imagekit.io/pratik2002/team-gauri.jpg" },
-];
+    {
+      name: "Kartik Vyas",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik2002/team-kartik.jpg",
+    },
+    {
+      name: "Gayatri Phadnis",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik2002/team-gayatri.jpg",
+    },
+    {
+      name: "Jasneet Singh",
+      role: "Head of Design",
+      image: "https://ik.imagekit.io/pratik2002/team-jasneet.jpg",
+    },
+    {
+      name: "Pratik Kumar Jha",
+      role: "Head of Technology",
+      image: "https://ik.imagekit.io/pratik2002/team-pratik.jpg",
+    },
+    {
+      name: "Simran Kaur",
+      role: "Designer",
+      image: "https://ik.imagekit.io/pratik2002/team-simran.jpg",
+    },
+    {
+      name: "Gauri Bhopale",
+      role: "Designer",
+      image: "https://ik.imagekit.io/pratik2002/team-gauri.jpg",
+    },
+  ];
 
   const [active, setActive] = useState<number | null>(null);
 
@@ -294,9 +320,10 @@ function OurTeam() {
             </h2>
 
             <p className="mt-3 textstyles text-white/90 max-w-prose">
-              Our team is an eclectic mix of personnel whose passion is their profession.
-              In addition to these full-time members we engage with multiple contract associates
-              to deliver world-class content for our&nbsp;stakeholders.
+              Our team is an eclectic mix of personnel whose passion is their
+              profession. In addition to these full-time members we engage with
+              multiple contract associates to deliver world-class content for
+              our&nbsp;stakeholders.
             </p>
 
             <div className="mt-6">
@@ -318,28 +345,42 @@ function OurTeam() {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 }
               />
             </div>
           </div>
 
-          <div className="bg-white rounded-4xl p-4 sm:p-0 md:p-5 shadow-soft">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-soft">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
               {teamMembers.map((m, i) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className="relative aspect-square min-h-[120px] sm:min-h-[140px] md:min-h-[160px]
-                             rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200 group"
+                  className="relative aspect-square w-full
+                   rounded-lg sm:rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200 group
+                   transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
                   aria-label={`Open profile: ${m.name}`}
                 >
-                  <img src={m.image} alt={m.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all flex items-end">
-                    <div className="p-2 w-full bg-gradient-to-t from-black/80 to-transparent">
-                      <p className="text-white text-xs font-semibold truncate">{m.name}</p>
-                      <p className="text-white/80 text-xs truncate">{m.role}</p>
+                  <img
+                    src={m.image}
+                    alt={m.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-end">
+                    <div className="p-2 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                      <p className="text-white text-xs sm:text-sm font-semibold truncate">
+                        {m.name}
+                      </p>
+                      <p className="text-white/80 text-[11px] sm:text-xs truncate">
+                        {m.role}
+                      </p>
                     </div>
                   </div>
                 </button>
@@ -357,8 +398,18 @@ function OurTeam() {
               className="absolute -top-12 right-0 bg-white/20 rounded-full p-2 hover:bg-white/30 transition-colors z-10"
               aria-label="Close profile"
             >
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
             <div className="bg-white rounded-2xl p-6">
@@ -374,7 +425,8 @@ function OurTeam() {
                 {teamMembers[active].role}
               </p>
               <p className="text-gray-700 text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore.
               </p>
             </div>
           </div>
@@ -398,22 +450,26 @@ function OurVision() {
               Learn to Play — Play to Learn
             </p>
             <p className="textstyles text-brand-tealDark/80 max-w-3xl mx-auto mt-4">
-              At Logicology, our vision is to create engaging gamified content that teaches children concepts.
-              We believe if the children have fun while learning, they learn in a much better way.
-              Each of our books and games aims at helping children learn real-life concepts/skills
-              through a gamified, fun-learning way.
+              At Logicology, our vision is to create engaging gamified content
+              that teaches children concepts. We believe if the children have
+              fun while learning, they learn in a much better way. Each of our
+              books and games aims at helping children learn real-life
+              concepts/skills through a gamified, fun-learning way.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Mission (left) */}
             <div className="bg-white rounded-4xl p-6 shadow-soft">
-              <h3 className="text-xl font-bold text-brand-teal mb-3">Mission</h3>
+              <h3 className="text-xl font-bold text-brand-teal mb-3">
+                Mission
+              </h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
-                  To create world class educational content that is engaging, gamified and concept based.
-                  As a proud Indian company, our mission is to make top class educational content that is
-                  made in India, made&nbsp;for&nbsp;the&nbsp;world.
+                  To create world class educational content that is engaging,
+                  gamified and concept based. Our mission is to make top class
+                  educational content that is made in India,
+                  made&nbsp;for&nbsp;the&nbsp;world.
                 </p>
               </div>
             </div>
@@ -423,8 +479,10 @@ function OurVision() {
               <h3 className="text-xl font-bold text-brand-teal mb-3">Goal</h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
-                  Our goal is to create a world class brand of educational products that focuses on fun learning.
-                  We want to develop best in class educational content for children that is fun and&nbsp;easy&nbsp;to&nbsp;learn.
+                  Our goal is to create a world class brand of educational
+                  products that focuses on fun learning. We want to develop best
+                  in class educational content for children that is fun
+                  and&nbsp;easy&nbsp;to&nbsp;learn.
                 </p>
               </div>
             </div>
@@ -434,4 +492,3 @@ function OurVision() {
     </section>
   );
 }
-

@@ -15,6 +15,9 @@ interface Book {
   rating: number;
 }
 
+const toSlug = (title: string) =>
+  title.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+
 export default function BooksPage() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +44,19 @@ export default function BooksPage() {
       author: "Logicology",
       rating: 4.7,
     },
+    {
+      id: 3,
+      title: "Hidden in the Jungle",
+      imageUrl:
+        "https://ik.imagekit.io/pratik11/HIDDEN%20IN%20THE%20JUNGLE%20MOCKUP.png?updatedAt=1757748179906",
+      description:
+        "A fast-paced observation and deduction card game where players race to spot hidden animals camouflaged in the jungle. Quick eyes and sharp focus are the key to winning in this exciting family-friendly adventure.",
+      author: "Logicology",
+      rating: 4.7,
+    },
   ];
+
+  const isLogicoland = (b: Book) => b.title.toLowerCase().startsWith("logicoland");
 
   const openModal = (book: Book) => {
     setSelectedBook(book);
@@ -56,13 +71,12 @@ export default function BooksPage() {
   const handleGetStarted = () => {
     if (!selectedBook) return;
 
-    if (selectedBook.title === "Logicoland") {
+    if (isLogicoland(selectedBook)) {
+      // direct route for Logicoland
       router.push("/books/logicoland1");
     } else {
-      // fallback: you could route to a generic /books/[slug]
-      router.push(
-        `/books/${selectedBook.title.toLowerCase().replace(/\s+/g, "-")}`
-      );
+      // Others are Coming Soon — do nothing (or keep generic route if you want later)
+      // router.push(`/books/${toSlug(selectedBook.title)}`);
     }
   };
 
@@ -98,10 +112,19 @@ export default function BooksPage() {
             >
               <div
                 className="
-                relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
-                p-4 hover:shadow-brand transition-shadow
-              "
+                  relative overflow-hidden rounded-4xl bg-white shadow-soft ring-1 ring-black/5
+                  p-4 hover:shadow-brand transition-shadow
+                "
               >
+                {/* Coming Soon badge for all EXCEPT Logicoland */}
+                {!isLogicoland(book) && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-brand-coral text-white">
+                      Coming Soon
+                    </span>
+                  </div>
+                )}
+
                 {/* Larger cover area with fixed aspect ratio */}
                 <div className="relative w-full max-h-[48vh] aspect-[3/4] rounded-3xl overflow-hidden">
                   <Image
@@ -175,8 +198,21 @@ export default function BooksPage() {
                       src={selectedBook.imageUrl}
                       alt={selectedBook.title}
                       fill
-                      className="block w-full h-auto"
+                      className="block w-full h-auto object-cover rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none"
                     />
+                    {/* Coming Soon overlay for NON-Logicoland */}
+                    {!isLogicoland(selectedBook) && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none">
+                        <div className="text-center p-6">
+                          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-brand-coral text-white mb-4">
+                            Coming Soon
+                          </span>
+                          <p className="text-white text-sm">
+                            This title will be available shortly
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-6 sm:p-8">
@@ -218,30 +254,41 @@ export default function BooksPage() {
                       {selectedBook.description}
                     </p>
 
-                    <button
-                      onClick={handleGetStarted}
-                      className="group inline-flex w-full items-center justify-center gap-2
-             rounded-full border-2 border-brand-coral bg-transparent
-             px-6 py-3 font-semibold text-brand-coral
-             transition-colors hover:bg-brand-coral hover:text-white
-             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
-             active:scale-[.99]"
-                    >
-                      Know More about {selectedBook.title}
-                      <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    {isLogicoland(selectedBook) ? (
+                      <button
+                        onClick={handleGetStarted}
+                        className="group inline-flex w-full items-center justify-center gap-2
+                          rounded-full border-2 border-brand-coral bg-transparent
+                          px-6 py-3 font-semibold text-brand-coral
+                          transition-colors hover:bg-brand-coral hover:text-white
+                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
+                          active:scale-[.99]"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+                        Know More about {selectedBook.title}
+                        <svg
+                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <div className="text-center p-4 bg-brand-teal/5 rounded-2xl">
+                        <p className="text-brand-coral font-semibold mb-2">
+                          Coming Soon
+                        </p>
+                        <p className="text-sm text-brand-tealDark/70">
+                          This title will be available shortly. Stay tuned!
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

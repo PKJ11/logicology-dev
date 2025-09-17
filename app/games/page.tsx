@@ -18,53 +18,44 @@ interface Game {
   duration?: string;
 }
 
+const toSlug = (title: string) =>
+  title.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+
 export default function GamesPage() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const games: Game[] = [
-  {
-    id: 1,
-    title: "PrimeTime",
-    imageUrl:
-      "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
-    description:
-      "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
-    author: "Logicology",
-    rating: 4.9,
-    category: "Math Strategy",
-    players: "2-6",
-    duration: "15-30 min",
-  },
-  {
-    id: 2,
-    title: "Turn the Tables",
-    imageUrl:
-      "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
-    description:
-      "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
-    author: "Logicology",
-    rating: 4.8,
-    category: "Math Strategy",
-    players: "2-6",
-    duration: "20-40 min",
-  },
-  {
-    id: 3,
-    title: "Hidden in the Jungle",
-    imageUrl:
-      "https://ik.imagekit.io/pratik11/HIDDEN%20IN%20THE%20JUNGLE%20MOCKUP.png?updatedAt=1757748179906",
-    description:
-      "A fast-paced observation and deduction card game where players race to spot hidden animals camouflaged in the jungle. Quick eyes and sharp focus are the key to winning in this exciting family-friendly adventure.",
-    author: "Logicology",
-    rating: 4.7,
-    category: "Observation & Strategy",
-    players: "2-6",
-    duration: "15-25 min",
-  },
-];
+    {
+      id: 1,
+      title: "PrimeTime",
+      imageUrl:
+        "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+      description:
+        "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
+      author: "Logicology",
+      rating: 4.9,
+      category: "Math Strategy",
+      players: "2-6",
+      duration: "15-30 min",
+    },
+    {
+      id: 2,
+      title: "Turn the Tables",
+      imageUrl:
+        "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
+      description:
+        "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
+      author: "Logicology",
+      rating: 4.8,
+      category: "Math Strategy",
+      players: "2-6",
+      duration: "20-40 min",
+    },
+  ];
 
+  const isPrimeTime = (g: Game) => g.title === "PrimeTime";
 
   const openModal = (game: Game) => {
     setSelectedGame(game);
@@ -78,23 +69,15 @@ export default function GamesPage() {
 
   const handleGetStarted = () => {
     if (!selectedGame) return;
-
-    if (selectedGame.title === "Logicoland") {
-      router.push("/games/logicoland1");
-    } else if (selectedGame.title === "PrimeTime") {
-      router.push("/games/primetime");
-    } else {
-      router.push(
-        `/games/${selectedGame.title.toLowerCase().replace(/\s+/g, "-")}`
-      );
+    if (isPrimeTime(selectedGame)) {
+      router.push(`/games/${toSlug(selectedGame.title)}`);
     }
   };
 
   return (
     <>
       <NavBar />
-      {/* Page shell */}
-      <div className="min-h-screen  text-brand-tealDark bg-brand-hero p-6 sm:p-8 md:p-10">
+      <div className="min-h-screen text-brand-tealDark bg-brand-hero p-6 sm:p-8 md:p-10">
         <Head>
           <title>Games Collection</title>
         </Head>
@@ -108,7 +91,6 @@ export default function GamesPage() {
           </p>
         </header>
 
-        {/* Bigger cards: fewer cols + larger min width */}
         <div
           className="
             grid gap-6 md:gap-7
@@ -123,11 +105,19 @@ export default function GamesPage() {
             >
               <div
                 className="
-                relative overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5
-                p-3 hover:shadow-brand transition-shadow h-full flex flex-col
-              "
+                  relative overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5
+                  p-3 hover:shadow-brand transition-shadow h-full flex flex-col
+                "
               >
-                {/* Smaller cover area with more square aspect ratio */}
+                {/* Coming Soon badge for all EXCEPT PrimeTime */}
+                {!isPrimeTime(game) && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-brand-coral text-white">
+                      Coming Soon
+                    </span>
+                  </div>
+                )}
+
                 <div className="relative w-full max-h-[48vh] aspect-[3/4] rounded-2xl overflow-hidden mb-3">
                   <Image
                     src={game.imageUrl}
@@ -168,14 +158,13 @@ export default function GamesPage() {
                   </div>
                 </div>
 
-                {/* subtle brand ring on hover */}
                 <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Modal */}
+        {/* Modal for all games */}
         {isModalOpen && selectedGame && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-white text-brand-tealDark rounded-4xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-brand">
@@ -208,6 +197,19 @@ export default function GamesPage() {
                       fill
                       className="object-cover rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none"
                     />
+                    {/* Coming Soon overlay only for non-PrimeTime */}
+                    {!isPrimeTime(selectedGame) && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none">
+                        <div className="text-center p-6">
+                          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-brand-coral text-white mb-4">
+                            Coming Soon
+                          </span>
+                          <p className="text-white text-sm">
+                            This game will be available shortly
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-6 sm:p-8">
@@ -251,12 +253,9 @@ export default function GamesPage() {
                       </span>
                     </div>
 
-                    {/* Game-specific details */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div className="bg-brand-teal/5 rounded-2xl p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">
-                          Players
-                        </p>
+                        <p className="text-sm text-brand-tealDark/70">Players</p>
                         <p className="font-semibold text-brand-teal">
                           {selectedGame.players}
                         </p>
@@ -275,17 +274,28 @@ export default function GamesPage() {
                       {selectedGame.description}
                     </p>
 
-                    <button
-                      className="group inline-flex w-full items-center justify-center gap-2
-             rounded-full border-2 border-brand-coral bg-transparent
-             px-6 py-3 font-semibold text-brand-coral
-             transition-colors hover:bg-brand-coral hover:text-white
-             focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
-             active:scale-[.99]"
-                      onClick={handleGetStarted}
-                    >
-                      Know More about {selectedGame.title}
-                    </button>
+                    {isPrimeTime(selectedGame) ? (
+                      <button
+                        className="group inline-flex w-full items-center justify-center gap-2
+                          rounded-full border-2 border-brand-coral bg-transparent
+                          px-6 py-3 font-semibold text-brand-coral
+                          transition-colors hover:bg-brand-coral hover:text-white
+                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
+                          active:scale-[.99]"
+                        onClick={handleGetStarted}
+                      >
+                        Know More about {selectedGame.title}
+                      </button>
+                    ) : (
+                      <div className="text-center p-4 bg-brand-teal/5 rounded-2xl">
+                        <p className="text-brand-coral font-semibold mb-2">
+                          Coming Soon
+                        </p>
+                        <p className="text-sm text-brand-tealDark/70">
+                          This game will be available shortly. Stay tuned!
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
