@@ -13,10 +13,7 @@ export default function Benefit() {
             <div className="flex flex-col w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-1 justify-end ">
               <p className=" font-heading headingstyle">How we Help?</p>
               <p className="textstyles mt-4 max-w-xl text-white/90 font-sans">
-                At Logicology we have a bouquet of products and subscriptions
-                that help your child develop Logical Reasoning and Critical
-                Thinking Skills. Choose from books, board games, online puzzles,
-                worksheets or subscriptions.
+                At Logicology we have a bouquet of products and subscriptions that help your child develop Logical Reasoning and Critical Thinking Skills. You can choose from our offerings (see below) to choose the one that suits you the best.
               </p>
               <div className="mt-6">
                 <CTAButton

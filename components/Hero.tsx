@@ -11,19 +11,44 @@ import CTAButton from "./CTAButton";
 export default function Hero() {
   const router = useRouter();
   const slides = [
-    {
-      id: 1,
-      pretitle: "Welcome to Logicology",
-      title: "Through STEM Play and",
-      subtitle: "Logic-Based Learning",
-      description:
-        "At Logicology we endeavour to make learning fun so that children learn while they play.",
-      image:
-        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
-      cta: "Learn more",
-      ctaLink: "/philosophy",
-    },
-  ];
+  {
+    id: 1,
+    pretitle: "Welcome to Logicology",
+    title: "Learn to Play",
+    subtitle: "Play to Learn",
+    description:
+      "At Logicology we endeavour to make learning fun so that children learn while they play.",
+    image:
+      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+    cta: "Learn more",
+    ctaLink: "/philosophy",
+  },
+  {
+    id: 2,
+    pretitle: "Slider #2",
+    title: "Conceptual Understanding",
+    subtitle: "Through Engaging Content",
+    description:
+      "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
+    image:
+      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+    cta: "Explore",
+    ctaLink: "/concepts",
+  },
+  {
+    id: 3,
+    pretitle: "Slider #3",
+    title: "AI Proof Your Children",
+    subtitle: "With 21st Century Skills",
+    description:
+      "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
+    image:
+      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+    cta: "Get Started",
+    ctaLink: "/skills",
+  },
+];
+
 
   return (
     <section className="section mt-10">

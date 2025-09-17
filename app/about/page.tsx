@@ -267,7 +267,7 @@ function OurTeam() {
     {
       name: "Kartik Vyas",
       role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik2002/team-kartik.jpg",
+      image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
     },
     {
       name: "Gayatri Phadnis",
@@ -329,7 +329,7 @@ function OurTeam() {
             <div className="mt-6">
               <CTAButton
                 text="View all team members"
-                href="#team"
+                href="/about/teamMembers"
                 bg="#FFFFFF"
                 color="#AB4637"
                 hoverBg="rgba(0,0,0,0.25)"

@@ -20,15 +20,11 @@ export default function WhyImportant() {
             {/* Content on right for larger screens, bottom for mobile */}
             <div className="w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-2">
               <p className="headingstyle text-[#3F2F14] font-heading">
-                Why is it Important?
+                Why Logicology?
               </p>
               {/* <h2 className="heading-lg text-[#3F2F14]"></h2> */}
               <p className="textstyles mt-4 max-w-xl font-sans">
-                Logical reasoning turns children from passive learners into
-                active thinkers. In today's world where information is cheap,
-                thinking is priceless! Logical skills are like the brain's
-                muscles. Once strengthened, they support every other learning
-                journey.
+                Children learn the best when they are engaged. Our thoroughly researched and tested content is crafted to engage children.  Gamification helps children learn in a fun way. At Logicology we want to make learning fun and engaging - that's why we exist.
               </p>
               <div className="mt-6">
                 <CTAButton
