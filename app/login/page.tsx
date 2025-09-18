@@ -1,5 +1,5 @@
-import UnderConstruction from '@/components/UnderConstruction'
+import UnderConstruction from "@/components/UnderConstruction";
 
 export default function LoginPage() {
-	return <UnderConstruction title="Login" />
+  return <UnderConstruction title="Login" />;
 }

@@ -1,12 +1,12 @@
-import React from 'react'
-import Logicoland1Page from '../books/logicoland-series/page'
+import React from "react";
+import Logicoland1Page from "../books/logicoland-series/page";
 
 const Logicoland = () => {
   return (
     <div>
-      <Logicoland1Page/>
+      <Logicoland1Page />
     </div>
-  )
-}
+  );
+};
 
-export default Logicoland
+export default Logicoland;

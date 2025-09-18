@@ -46,16 +46,16 @@ function HeroVideo() {
 
   return (
     <section className="w-full bg-white">
-      <div className="px-3 sm:px-5 pt-4">
+      <div className="px-3 pt-4 sm:px-5">
         <div className="relative rounded-[28px] bg-white p-2">
-          <div className="relative rounded-[22px] overflow-hidden">
+          <div className="relative overflow-hidden rounded-[22px]">
             <video
               ref={videoRef}
               autoPlay
               loop
               playsInline
               muted={isMuted}
-              className="w-full h-[90vh] sm:h-[62vh] sm:min-h-[420px] sm:max-h-[780px] object-cover"
+              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
             >
               <source
                 src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
@@ -68,15 +68,15 @@ function HeroVideo() {
 
             {/* centered overlay content */}
             <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
                 <p className="textstyles mb-3">Empowering Minds</p>
                 <h1 className="headingstyle font-extrabold leading-tight">
                   Through STEM Play
                   <br /> and Logic-Based Learning
                 </h1>
                 <p className="textstyles mt-4 max-w-md text-white/90">
-                  At Logicology we endeavour to make learning fun so that
-                  children learn while they play.
+                  At Logicology we endeavour to make learning fun so that children learn while they
+                  play.
                 </p>
                 <div className="mt-6">
                   <CTAButton
@@ -89,7 +89,7 @@ function HeroVideo() {
                     size="md"
                     rightIcon={
                       <svg
-                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -112,7 +112,7 @@ function HeroVideo() {
               {/* Mute/Unmute */}
               <button
                 onClick={toggleMute}
-                className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
                 aria-label={isMuted ? "Unmute video" : "Mute video"}
               >
                 {isMuted ? (
@@ -159,10 +159,8 @@ function HeroVideo() {
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                aria-label={
-                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                }
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
               >
                 {!isFullscreen ? (
                   <svg
@@ -208,24 +206,24 @@ function HeroVideo() {
 function OurStory() {
   return (
     <section className="w-full bg-brand-gold">
-      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="flex flex-col items-center md:flex-row">
+          <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
             <MediaLayout
               image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
               videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
             />
           </div>
 
-          <div className="w-full md:w-1/2 py-8 px-4 sm:p-12 order-2 md:order-2">
-            <h2 className="headingstyle leading-tight text-[#3F2F14] font-extrabold font-heading">
+          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
+            <h2 className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]">
               Our Story
             </h2>
 
-            <p className="mt-3 textstyles text-[#3F2F14] max-w-xl font-sans">
-              We believe that children learn the most when they are engaged. At
-              Logicology we strive to create innovative gamified content to help
-              children develop 21st&nbsp;century&nbsp;skills.
+            <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
+              We believe that children learn the most when they are engaged. At Logicology we strive
+              to create innovative gamified content to help children develop
+              21st&nbsp;century&nbsp;skills.
             </p>
 
             <div className="mt-6">
@@ -239,7 +237,7 @@ function OurStory() {
                 size="md"
                 rightIcon={
                   <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -311,19 +309,18 @@ function OurTeam() {
   }, [active]);
 
   return (
-    <section className="w-full bg-brand-coral relative">
-      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
+    <section className="relative w-full bg-brand-coral">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
           <div className="px-0 sm:px-8">
-            <h2 className="headingstyle text-white/90 font-extrabold font-heading">
+            <h2 className="headingstyle font-heading font-extrabold text-white/90">
               Meet Our Team
             </h2>
 
-            <p className="mt-3 textstyles text-white/90 max-w-prose">
-              Our team is an eclectic mix of personnel whose passion is their
-              profession. In addition to these full-time members we engage with
-              multiple contract associates to deliver world-class content for
-              our&nbsp;stakeholders.
+            <p className="textstyles mt-3 max-w-prose text-white/90">
+              Our team is an eclectic mix of personnel whose passion is their profession. In
+              addition to these full-time members we engage with multiple contract associates to
+              deliver world-class content for our&nbsp;stakeholders.
             </p>
 
             <div className="mt-6">
@@ -340,7 +337,7 @@ function OurTeam() {
                 ariaLabel="View team members"
                 rightIcon={
                   <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -357,30 +354,26 @@ function OurTeam() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-soft">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
+          <div className="rounded-2xl bg-white p-4 shadow-soft sm:rounded-3xl sm:p-6">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
               {teamMembers.map((m, i) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className="relative aspect-square w-full
-                   rounded-lg sm:rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200 group
-                   transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  className="group relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] sm:rounded-xl"
                   aria-label={`Open profile: ${m.name}`}
                 >
                   <img
                     src={m.image}
                     alt={m.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-end">
-                    <div className="p-2 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                      <p className="text-white text-xs sm:text-sm font-semibold truncate">
+                  <div className="absolute inset-0 flex items-end bg-black/0 transition-all duration-300 group-hover:bg-black/10">
+                    <div className="w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
+                      <p className="truncate text-xs font-semibold text-white sm:text-sm">
                         {m.name}
                       </p>
-                      <p className="text-white/80 text-[11px] sm:text-xs truncate">
-                        {m.role}
-                      </p>
+                      <p className="truncate text-[11px] text-white/80 sm:text-xs">{m.role}</p>
                     </div>
                   </div>
                 </button>
@@ -391,15 +384,15 @@ function OurTeam() {
       </div>
 
       {active !== null && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="relative max-w-2xl w-full mx-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+          <div className="relative mx-4 w-full max-w-2xl">
             <button
               onClick={() => setActive(null)}
-              className="absolute -top-12 right-0 bg-white/20 rounded-full p-2 hover:bg-white/30 transition-colors z-10"
+              className="absolute -top-12 right-0 z-10 rounded-full bg-white/20 p-2 transition-colors hover:bg-white/30"
               aria-label="Close profile"
             >
               <svg
-                className="w-6 h-6 text-white"
+                className="h-6 w-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -412,21 +405,19 @@ function OurTeam() {
                 />
               </svg>
             </button>
-            <div className="bg-white rounded-2xl p-6">
+            <div className="rounded-2xl bg-white p-6">
               <img
                 src={teamMembers[active].image}
                 alt={teamMembers[active].name}
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
+                className="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
               />
-              <h3 className="text-2xl font-bold text-center text-gray-900">
+              <h3 className="text-center text-2xl font-bold text-gray-900">
                 {teamMembers[active].name}
               </h3>
-              <p className="text-gray-600 text-center mb-4">
-                {teamMembers[active].role}
-              </p>
-              <p className="text-gray-700 text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore.
+              <p className="mb-4 text-center text-gray-600">{teamMembers[active].role}</p>
+              <p className="text-center text-gray-700">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                incididunt ut labore.
               </p>
             </div>
           </div>
@@ -440,49 +431,42 @@ function OurTeam() {
 function OurVision() {
   return (
     <section id="vision" className="w-full bg-brand-grayBg">
-      <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
-        <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-          <div className="text-center mb-12">
-            <h2 className="headingstyle font-extrabold text-brand-teal mb-2">
-              Our Vision
-            </h2>
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+        <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
+          <div className="mb-12 text-center">
+            <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
             <p className="textstyles font-semibold text-brand-tealDark/90">
               Learn to Play — Play to Learn
             </p>
-            <p className="textstyles text-brand-tealDark/80 max-w-3xl mx-auto mt-4">
-              At Logicology, our vision is to create engaging gamified content
-              that teaches children concepts. We believe if the children have
-              fun while learning, they learn in a much better way. Each of our
-              books and games aims at helping children learn real-life
+            <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
+              At Logicology, our vision is to create engaging gamified content that teaches children
+              concepts. We believe if the children have fun while learning, they learn in a much
+              better way. Each of our books and games aims at helping children learn real-life
               concepts/skills through a gamified, fun-learning way.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid gap-8 md:grid-cols-2">
             {/* Mission (left) */}
-            <div className="bg-white rounded-4xl p-6 shadow-soft">
-              <h3 className="text-xl font-bold text-brand-teal mb-3">
-                Mission
-              </h3>
+            <div className="rounded-4xl bg-white p-6 shadow-soft">
+              <h3 className="mb-3 text-xl font-bold text-brand-teal">Mission</h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
-                  To create world class educational content that is engaging,
-                  gamified and concept based. Our mission is to make top class
-                  educational content that is made in India,
+                  To create world class educational content that is engaging, gamified and concept
+                  based. Our mission is to make top class educational content that is made in India,
                   made&nbsp;for&nbsp;the&nbsp;world.
                 </p>
               </div>
             </div>
 
             {/* Goal (right) */}
-            <div className="bg-white rounded-4xl p-6 shadow-soft">
-              <h3 className="text-xl font-bold text-brand-teal mb-3">Goal</h3>
+            <div className="rounded-4xl bg-white p-6 shadow-soft">
+              <h3 className="mb-3 text-xl font-bold text-brand-teal">Goal</h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
-                  Our goal is to create a world class brand of educational
-                  products that focuses on fun learning. We want to develop best
-                  in class educational content for children that is fun
-                  and&nbsp;easy&nbsp;to&nbsp;learn.
+                  Our goal is to create a world class brand of educational products that focuses on
+                  fun learning. We want to develop best in class educational content for children
+                  that is fun and&nbsp;easy&nbsp;to&nbsp;learn.
                 </p>
               </div>
             </div>

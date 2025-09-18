@@ -5,15 +5,17 @@ import CTAButton from "./CTAButton";
 export default function Benefit() {
   return (
     <section id="benefit" className="w-full bg-brand-coral">
-      <div className="lg:max-w-[80vw] mx-auto">
-        <div className="text-white overflow-hidden py-12">
+      <div className="mx-auto lg:max-w-[80vw]">
+        <div className="overflow-hidden py-12 text-white">
           {/* Flex container */}
-          <div className="flex flex-col md:flex-row items-center">
+          <div className="flex flex-col items-center md:flex-row">
             {/* Content on left for larger screens, top for mobile */}
-            <div className="flex flex-col w-full md:w-1/2 p-8 sm:p-12 order-2 md:order-1 justify-end ">
-              <p className=" font-heading headingstyle">How we Help?</p>
-              <p className="textstyles mt-4 max-w-xl text-white/90 font-sans">
-                At Logicology we have a bouquet of products and subscriptions that help your child develop Logical Reasoning and Critical Thinking Skills. You can choose from our offerings (see below) to choose the one that suits you the best.
+            <div className="order-2 flex w-full flex-col justify-end p-8 sm:p-12 md:order-1 md:w-1/2">
+              <p className="headingstyle font-heading">How we Help?</p>
+              <p className="textstyles mt-4 max-w-xl font-sans text-white/90">
+                At Logicology we have a bouquet of products and subscriptions that help your child
+                develop Logical Reasoning and Critical Thinking Skills. You can choose from our
+                offerings (see below) to choose the one that suits you the best.
               </p>
               <div className="mt-6">
                 <CTAButton
@@ -26,7 +28,7 @@ export default function Benefit() {
                   size="md"
                   rightIcon={
                     <svg
-                      className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -44,7 +46,7 @@ export default function Benefit() {
             </div>
 
             {/* MediaLayout on right for larger screens, bottom for mobile */}
-            <div className="w-full md:w-1/2 order-1 md:order-2 flex justify-center items-center  md:py-0">
+            <div className="order-1 flex w-full items-center justify-center md:order-2 md:w-1/2 md:py-0">
               <MediaLayout
                 image="https://ik.imagekit.io/pratik11/FOLD-2.1-IMAGE.png?updatedAt=1757748753983"
                 videoSrc=""

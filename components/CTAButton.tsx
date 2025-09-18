@@ -7,10 +7,10 @@ type CTAButtonProps = {
   text: string;
   href?: string;
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
-  bg?: string;          // default: white
-  color?: string;       // default: brand teal (example)
-  hoverBg?: string;     // default: brand teal
-  hoverColor?: string;  // default: white
+  bg?: string; // default: white
+  color?: string; // default: brand teal (example)
+  hoverBg?: string; // default: brand teal
+  hoverColor?: string; // default: white
   size?: "sm" | "md" | "lg";
   roundedClass?: string; // e.g., "rounded-full" | "rounded-xl"
   leftIcon?: ReactNode;
@@ -38,8 +38,8 @@ export default function CTAButton({
     size === "sm"
       ? "px-4 py-2 text-sm"
       : size === "lg"
-      ? "px-7 py-3.5 text-base"
-      : "px-6 py-3 text-base";
+        ? "px-7 py-3.5 text-base"
+        : "px-6 py-3 text-base";
 
   const baseClasses = `
     inline-flex items-center justify-center gap-2

@@ -1,12 +1,12 @@
-import React from 'react'
-import PrimeTimeLanding from '../games/primetime/page'
+import React from "react";
+import PrimeTimeLanding from "../games/primetime/page";
 
 const page = () => {
   return (
     <div>
-      <PrimeTimeLanding/>
+      <PrimeTimeLanding />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

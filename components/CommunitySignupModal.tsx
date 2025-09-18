@@ -94,8 +94,7 @@ export default function CommunitySignupModal({
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [hasExistingSession, setHasExistingSession] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult | null>(null);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
 
@@ -120,18 +119,14 @@ export default function CommunitySignupModal({
         recaptchaVerifier.current.clear();
       }
 
-      recaptchaVerifier.current = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => console.log("reCAPTCHA solved"),
-          "expired-callback": () => {
-            console.log("reCAPTCHA expired");
-            resetRecaptcha();
-          },
-        }
-      );
+      recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        callback: () => console.log("reCAPTCHA solved"),
+        "expired-callback": () => {
+          console.log("reCAPTCHA expired");
+          resetRecaptcha();
+        },
+      });
 
       return () => {
         if (recaptchaVerifier.current) {
@@ -144,9 +139,7 @@ export default function CommunitySignupModal({
       };
     } catch (error) {
       console.error("Error initializing reCAPTCHA:", error);
-      setErrorMessage(
-        "Failed to initialize security verification. Please refresh the page."
-      );
+      setErrorMessage("Failed to initialize security verification. Please refresh the page.");
     }
   }, [open]);
 
@@ -156,20 +149,14 @@ export default function CommunitySignupModal({
         recaptchaVerifier.current.clear();
       }
 
-      recaptchaVerifier.current = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => console.log("reCAPTCHA solved"),
-          "expired-callback": resetRecaptcha,
-        }
-      );
+      recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        callback: () => console.log("reCAPTCHA solved"),
+        "expired-callback": resetRecaptcha,
+      });
     } catch (error) {
       console.error("Error resetting reCAPTCHA:", error);
-      setErrorMessage(
-        "Failed to reset security verification. Please refresh the page."
-      );
+      setErrorMessage("Failed to reset security verification. Please refresh the page.");
     }
   };
 
@@ -188,19 +175,13 @@ export default function CommunitySignupModal({
         throw new Error("reCAPTCHA not initialized");
       }
 
-      const result = await signInWithPhoneNumber(
-        auth,
-        formattedPhone,
-        recaptchaVerifier.current
-      );
+      const result = await signInWithPhoneNumber(auth, formattedPhone, recaptchaVerifier.current);
 
       setConfirmationResult(result);
       setOtpSent(true);
     } catch (error: any) {
       console.error("Error sending OTP:", error);
-      setErrorMessage(
-        `Failed to send OTP: ${error.message || "Unknown error"}`
-      );
+      setErrorMessage(`Failed to send OTP: ${error.message || "Unknown error"}`);
       resetRecaptcha();
     } finally {
       setLoading(false);
@@ -214,9 +195,7 @@ export default function CommunitySignupModal({
     }
 
     if (!confirmationResult) {
-      setErrorMessage(
-        "OTP verification not initialized. Please try sending the OTP again."
-      );
+      setErrorMessage("OTP verification not initialized. Please try sending the OTP again.");
       return;
     }
 
@@ -227,9 +206,7 @@ export default function CommunitySignupModal({
       setOtpVerified(true);
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
-      setErrorMessage(
-        `Invalid OTP: ${error.message || "Please check the code and try again"}`
-      );
+      setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
     } finally {
       setLoading(false);
     }
@@ -265,9 +242,7 @@ export default function CommunitySignupModal({
 
       if (!response.ok) {
         if (data.errors && Array.isArray(data.errors)) {
-          const errorMessage = data.errors
-            .map((err: ApiError) => err.msg)
-            .join(", ");
+          const errorMessage = data.errors.map((err: ApiError) => err.msg).join(", ");
           throw new Error(errorMessage);
         }
         throw new Error(data.message || "Registration failed");
@@ -293,9 +268,7 @@ export default function CommunitySignupModal({
       setHasExistingSession(true);
     } catch (error: any) {
       console.error("Error submitting form:", error);
-      setErrorMessage(
-        `Registration failed: ${error.message || "Unknown error"}`
-      );
+      setErrorMessage(`Registration failed: ${error.message || "Unknown error"}`);
     } finally {
       setLoading(false);
     }
@@ -332,37 +305,33 @@ export default function CommunitySignupModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-brand max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-8 shadow-brand">
         <button
           onClick={() => {
             resetForm();
             onClose();
           }}
-          className="absolute top-6 right-6 text-brand-tealDark hover:text-brand-coral text-2xl transition-colors"
+          className="absolute right-6 top-6 text-2xl text-brand-tealDark transition-colors hover:text-brand-coral"
         >
           &times;
         </button>
 
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-brand-tealDark">
             {hasExistingSession
               ? "Welcome Back!"
               : registrationSuccess
-              ? "Welcome to Our Community!"
-              : "Join Our Community"}
+                ? "Welcome to Our Community!"
+                : "Join Our Community"}
           </h2>
-          <div className="w-20 h-1 bg-brand-gold mx-auto mt-3 rounded-full"></div>
+          <div className="mx-auto mt-3 h-1 w-20 rounded-full bg-brand-gold"></div>
         </div>
 
         {errorMessage && (
-          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-100 p-4 text-red-700">
             <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+              <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -375,38 +344,38 @@ export default function CommunitySignupModal({
         )}
 
         {hasExistingSession ? (
-          <div className="text-center py-4">
-            <div className="w-24 h-24 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl text-brand-teal font-semibold">
+          <div className="py-4 text-center">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-brand-teal/10">
+              <span className="text-3xl font-semibold text-brand-teal">
                 {userData?.name?.charAt(0)?.toUpperCase() || "U"}
               </span>
             </div>
-            <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
+            <h3 className="mb-3 text-xl font-semibold text-brand-tealDark">
               {userData?.name || "User"}
             </h3>
-            <p className="text-brand-tealDark/80 mb-3">{userData?.email}</p>
-            <p className="text-brand-tealDark/80 mb-8">{userData?.phone}</p>
+            <p className="mb-3 text-brand-tealDark/80">{userData?.email}</p>
+            <p className="mb-8 text-brand-tealDark/80">{userData?.phone}</p>
 
             <div className="flex flex-col gap-4">
               <button
                 onClick={handleGoToCommunity}
-                className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+                className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark"
               >
                 Go to Community
               </button>
               <button
                 onClick={handleLogout}
-                className="w-full py-2.5 px-6 border border-brand-teal/30 text-brand-teal font-medium rounded-xl hover:bg-brand-teal/5 transition-colors"
+                className="w-full rounded-xl border border-brand-teal/30 px-6 py-2.5 font-medium text-brand-teal transition-colors hover:bg-brand-teal/5"
               >
                 Logout
               </button>
             </div>
           </div>
         ) : registrationSuccess ? (
-          <div className="text-center py-6">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="py-6 text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
               <svg
-                className="w-10 h-10 text-green-600"
+                className="h-10 w-10 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -419,16 +388,13 @@ export default function CommunitySignupModal({
                 ></path>
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-brand-tealDark mb-3">
-              Success!
-            </h3>
-            <p className="text-brand-tealDark/80 mb-8">
-              Your account has been created successfully. You're now part of our
-              community.
+            <h3 className="mb-3 text-xl font-semibold text-brand-tealDark">Success!</h3>
+            <p className="mb-8 text-brand-tealDark/80">
+              Your account has been created successfully. You're now part of our community.
             </p>
             <button
               onClick={handleGoToCommunity}
-              className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark transition-colors shadow-md"
+              className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark"
             >
               Go to Community
             </button>
@@ -436,7 +402,7 @@ export default function CommunitySignupModal({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
                 Full Name *
               </label>
               <input
@@ -444,14 +410,14 @@ export default function CommunitySignupModal({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
                 placeholder="Enter your full name"
                 disabled={loading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
                 Email Address *
               </label>
               <input
@@ -459,31 +425,29 @@ export default function CommunitySignupModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
                 placeholder="Enter your email"
                 disabled={loading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-brand-tealDark mb-2">
+              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
                 Mobile Number *
               </label>
               <div className="flex gap-3">
-                <div className="flex-1 relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                     <span className="text-brand-tealDark/60">+91</span>
                   </div>
                   <input
                     type="tel"
                     value={phone}
-                    onChange={(e) =>
-                      setPhone(e.target.value.replace(/\D/g, ""))
-                    }
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                     required
                     disabled={otpSent || loading}
                     maxLength={10}
-                    className="w-full pl-12 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all disabled:bg-brand-grayBg"
+                    className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 pl-12 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50 disabled:bg-brand-grayBg"
                     placeholder="10-digit number"
                   />
                 </div>
@@ -491,7 +455,7 @@ export default function CommunitySignupModal({
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent || !phone || phone.length < 10 || loading}
-                  className="px-5 py-3 bg-brand-teal text-white rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors whitespace-nowrap shadow-md"
+                  className="whitespace-nowrap rounded-xl bg-brand-teal px-5 py-3 text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
                 >
                   {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
                 </button>
@@ -500,7 +464,7 @@ export default function CommunitySignupModal({
 
             {otpSent && (
               <div>
-                <label className="block text-sm font-medium text-brand-tealDark mb-2">
+                <label className="mb-2 block text-sm font-medium text-brand-tealDark">
                   Enter OTP *
                 </label>
                 <div className="flex gap-3">
@@ -510,26 +474,20 @@ export default function CommunitySignupModal({
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                     placeholder="6-digit OTP"
                     maxLength={6}
-                    className="flex-1 px-4 py-3 border border-brand-teal/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-teal/50 focus:border-brand-teal transition-all"
+                    className="flex-1 rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
                     disabled={loading || otpVerified}
                   />
                   <button
                     type="button"
                     onClick={handleVerifyOtp}
-                    disabled={
-                      otpVerified || !otp || otp.length !== 6 || loading
-                    }
-                    className={`px-5 py-3 rounded-xl transition-colors shadow-md ${
+                    disabled={otpVerified || !otp || otp.length !== 6 || loading}
+                    className={`rounded-xl px-5 py-3 shadow-md transition-colors ${
                       otpVerified
                         ? "bg-green-600 text-white hover:bg-green-700"
                         : "bg-brand-teal text-white hover:bg-brand-tealDark"
-                    } disabled:bg-brand-teal/40 disabled:cursor-not-allowed whitespace-nowrap`}
+                    } whitespace-nowrap disabled:cursor-not-allowed disabled:bg-brand-teal/40`}
                   >
-                    {loading
-                      ? "Verifying..."
-                      : otpVerified
-                      ? "Verified"
-                      : "Verify"}
+                    {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
                   </button>
                 </div>
               </div>
@@ -540,12 +498,12 @@ export default function CommunitySignupModal({
             <button
               type="submit"
               disabled={!otpVerified || loading}
-              className="w-full py-3 px-6 bg-brand-teal text-white font-medium rounded-xl hover:bg-brand-tealDark disabled:bg-brand-teal/40 disabled:cursor-not-allowed transition-colors shadow-md"
+              className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
             >
               {loading ? "Processing..." : "Join Community"}
             </button>
 
-            <p className="text-xs text-brand-tealDark/60 text-center mt-6">
+            <p className="mt-6 text-center text-xs text-brand-tealDark/60">
               By joining, you agree to our Terms of Service and Privacy Policy
             </p>
           </form>

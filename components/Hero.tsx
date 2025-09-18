@@ -11,49 +11,48 @@ import CTAButton from "./CTAButton";
 export default function Hero() {
   const router = useRouter();
   const slides = [
-  {
-    id: 1,
-    pretitle: "Welcome to Logicology",
-    title: "Learn to Play",
-    subtitle: "Play to Learn",
-    description:
-      "At Logicology we endeavour to make learning fun so that children learn while they play.",
-    image:
-      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
-    cta: "Learn more",
-    ctaLink: "/philosophy",
-  },
-  {
-    id: 2,
-    pretitle: "Slider #2",
-    title: "Conceptual Understanding",
-    subtitle: "Through Engaging Content",
-    description:
-      "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
-    image:
-      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
-    cta: "Explore",
-    ctaLink: "/concepts",
-  },
-  {
-    id: 3,
-    pretitle: "Slider #3",
-    title: "AI Proof Your Children",
-    subtitle: "With 21st Century Skills",
-    description:
-      "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
-    image:
-      "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
-    cta: "Get Started",
-    ctaLink: "/skills",
-  },
-];
-
+    {
+      id: 1,
+      pretitle: "Welcome to Logicology",
+      title: "Learn to Play",
+      subtitle: "Play to Learn",
+      description:
+        "At Logicology we endeavour to make learning fun so that children learn while they play.",
+      image:
+        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+      cta: "Learn more",
+      ctaLink: "/philosophy",
+    },
+    {
+      id: 2,
+      pretitle: "Slider #2",
+      title: "Conceptual Understanding",
+      subtitle: "Through Engaging Content",
+      description:
+        "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
+      image:
+        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+      cta: "Explore",
+      ctaLink: "/concepts",
+    },
+    {
+      id: 3,
+      pretitle: "Slider #3",
+      title: "AI Proof Your Children",
+      subtitle: "With 21st Century Skills",
+      description:
+        "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
+      image:
+        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+      cta: "Get Started",
+      ctaLink: "/skills",
+    },
+  ];
 
   return (
     <section className="section mt-10">
       <div className="container-padding">
-        <div className="section-rounded overflow-hidden relative">
+        <div className="section-rounded relative overflow-hidden">
           <Swiper
             spaceBetween={0}
             slidesPerView={1}
@@ -63,8 +62,7 @@ export default function Hero() {
               clickable: true,
               bulletClass: "custom-bullet",
               bulletActiveClass: "custom-bullet-active",
-              renderBullet: (index, className) =>
-                `<span class="${className}"><i></i></span>`,
+              renderBullet: (index, className) => `<span class="${className}"><i></i></span>`,
             }}
             navigation={{
               nextEl: ".swiper-button-next",
@@ -88,21 +86,21 @@ export default function Hero() {
                 />
 
                 {/* Content: centered, max 80vw */}
-                <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[75vw] md:max-w-[75vw] ">
+                <div className="relative z-10 flex min-h-[700px] items-center">
+                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <h1 className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[24px] font-bold text-white font-heading">
+                        <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.pretitle}
                         </h1>
-                        <h1 className="text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px] font-bold text-white font-heading leading-tight mt-2">
+                        <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
                           {slide.title}
 
-                          <span className="block text-white font-heading text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px] leading-tight">
+                          <span className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
                             {slide.subtitle}
                           </span>
                         </h1>
-                        <p className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[24px] text-white mt-6 max-w-md font-heading">
+                        <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.description}
                         </p>
                         <div className="mt-6">
@@ -116,7 +114,7 @@ export default function Hero() {
                             size="md"
                             rightIcon={
                               <svg
-                                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

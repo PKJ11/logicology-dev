@@ -37,8 +37,7 @@ function Hero() {
       subtitle: "and adults get hooked.",
       description:
         "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
-      image:
-        "https://ik.imagekit.io/pratik2002/thumbnail2.png?updatedAt=1756264541926",
+      image: "https://ik.imagekit.io/pratik2002/thumbnail2.png?updatedAt=1756264541926",
       cta: "Learn more",
       ctaLink: "/philosophy",
     },
@@ -49,8 +48,7 @@ function Hero() {
       subtitle: "fun for everyone.",
       description:
         "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
-      image:
-        "https://ik.imagekit.io/pratik2002/thumbnail3.png?updatedAt=1756264542776",
+      image: "https://ik.imagekit.io/pratik2002/thumbnail3.png?updatedAt=1756264542776",
       cta: "Discover how",
       ctaLink: "/how-it-works",
     },
@@ -61,8 +59,7 @@ function Hero() {
       subtitle: "all come together!",
       description:
         "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
-      image:
-        "https://ik.imagekit.io/pratik2002/logicology-img1.png?updatedAt=1757034142387",
+      image: "https://ik.imagekit.io/pratik2002/logicology-img1.png?updatedAt=1757034142387",
       cta: "Get started",
       ctaLink: "/get-started",
     },
@@ -71,7 +68,7 @@ function Hero() {
   return (
     <section className="section my-10">
       <div className="container-padding">
-        <div className="section-rounded overflow-hidden relative">
+        <div className="section-rounded relative overflow-hidden">
           <Swiper
             spaceBetween={0}
             slidesPerView={1}
@@ -104,22 +101,18 @@ function Hero() {
                 />
 
                 {/* Centered content, max 80vw */}
-                <div className="relative z-10 min-h-[700px] flex items-center">
-                  <div className="lg:mx-auto lg:w-[75vw] lg:max-w-[75vw] md:mx-auto md:w-[75vw] md:max-w-[75vw]">
+                <div className="relative z-10 flex min-h-[700px] items-center">
+                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <p className="text-white font-semibold textstyles tracking-wide">
+                        <p className="textstyles font-semibold tracking-wide text-white">
                           {slide.pretitle}
                         </p>
-                        <h1 className="headingstyle font-bold mt-2 text-white leading-tight">
+                        <h1 className="headingstyle mt-2 font-bold leading-tight text-white">
                           {slide.title}
-                          <span className="block text-white">
-                            {slide.subtitle}
-                          </span>
+                          <span className="block text-white">{slide.subtitle}</span>
                         </h1>
-                        <p className="text-white mt-4 textstyles max-w-md">
-                          {slide.description}
-                        </p>
+                        <p className="textstyles mt-4 max-w-md text-white">{slide.description}</p>
                         <div className="mt-6">
                           <CTAButton
                             text={slide.cta}
@@ -131,7 +124,7 @@ function Hero() {
                             size="md"
                             rightIcon={
                               <svg
-                                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -249,11 +242,11 @@ function Hero() {
 function GameDetails() {
   return (
     <section className="w-full bg-brand-gold">
-      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         {/* Flex container replacing grid */}
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-col items-center md:flex-row">
           {/* MediaLayout on left for larger screens, top for mobile */}
-          <div className="w-full md:w-1/2 order-1 md:order-1 flex justify-center items-center py-6 md:py-0">
+          <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
             <MediaLayout
               image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
               videoSrc=""
@@ -261,14 +254,14 @@ function GameDetails() {
           </div>
 
           {/* Content on right for larger screens, bottom for mobile */}
-          <div className="w-full md:w-1/2 py-8 px-4 sm:p-12 order-2 md:order-2">
-            <h2 className="headingstyle leading-tight text-[#3F2F14] font-extrabold font-heading">
+          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
+            <h2 className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]">
               Details About The Game
             </h2>
 
-            <p className="mt-3 textstyles text-[#3F2F14] max-w-xl font-sans">
-              A lightning‑quick numbers game that rewards smart matching and
-              prime‑factor insights. Perfect for 2–6 players, ages 8+.
+            <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
+              A lightning‑quick numbers game that rewards smart matching and prime‑factor insights.
+              Perfect for 2–6 players, ages 8+.
             </p>
             <div className="mt-6">
               <CTAButton
@@ -281,7 +274,7 @@ function GameDetails() {
                 size="md"
                 rightIcon={
                   <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -346,15 +339,15 @@ function InstructionVideos() {
   }, [active]);
 
   return (
-    <section className="w-full bg-brand-coral relative">
-      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid md:grid-cols-[1.1fr,1fr] gap-10 items-center">
+    <section className="relative w-full bg-brand-coral">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
           <div className="px-0 sm:px-8">
-            <h2 className="headingstyle text-white/90 font-extrabold font-heading">
+            <h2 className="headingstyle font-heading font-extrabold text-white/90">
               How to play Instruction Videos
             </h2>
 
-            <p className="mt-3 textstyles text-white/90 max-w-prose">
+            <p className="textstyles mt-3 max-w-prose text-white/90">
               Short, punchy walkthroughs so you can learn while you play.
             </p>
 
@@ -372,7 +365,7 @@ function InstructionVideos() {
                 ariaLabel="Jump to videos section"
                 rightIcon={
                   <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -390,16 +383,14 @@ function InstructionVideos() {
           </div>
 
           {/* White background container only for videos */}
-          <div className="bg-white rounded-4xl p-4 sm:p-0 md:p-5 shadow-soft">
+          <div className="rounded-4xl bg-white p-4 shadow-soft sm:p-0 md:p-5">
             {/* 2 cols on phones, 3 cols from sm/md up */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-2 md:gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-2 md:gap-4">
               {videos.map((src, i) => (
                 <div
                   key={i}
                   onClick={() => handleVideoClick(i)}
-                  className="relative aspect-[9/16] min-h-[200px] sm:min-h-[220px] md:min-h-[260px]
-                   rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200
-                   cursor-pointer group"
+                  className="group relative aspect-[9/16] min-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200 sm:min-h-[220px] md:min-h-[260px]"
                 >
                   <video
                     src={src}
@@ -410,13 +401,13 @@ function InstructionVideos() {
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   {/* Play overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-all">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 ml-0.5"
+                        className="ml-0.5 h-5 w-5 text-gray-900 sm:h-6 sm:w-6"
                       >
                         <path
                           fillRule="evenodd"
@@ -435,23 +426,20 @@ function InstructionVideos() {
 
       {active !== null && (
         <div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={handleCloseModal}
         >
-          <div
-            className="relative max-w-4xl w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative mx-4 w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={handleCloseModal}
-              className="absolute -top-12 right-0 bg-white/20 rounded-full p-2 hover:bg-white/30 transition-colors z-10"
+              className="absolute -top-12 right-0 z-10 rounded-full bg-white/20 p-2 transition-colors hover:bg-white/30"
               aria-label="Close video"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-6 h-6 text-white"
+                className="h-6 w-6 text-white"
               >
                 <path
                   fillRule="evenodd"
@@ -461,14 +449,14 @@ function InstructionVideos() {
               </svg>
             </button>
             <div
-              className="rounded-2xl overflow-hidden shadow-2xl bg-black flex items-center justify-center"
+              className="flex items-center justify-center overflow-hidden rounded-2xl bg-black shadow-2xl"
               style={{ maxHeight: "80vh" }}
             >
               <video
                 src={videos[active]}
                 autoPlay={isPlaying}
                 controls
-                className="w-full h-full object-contain"
+                className="h-full w-full object-contain"
                 style={{ maxHeight: "80vh" }}
               />
             </div>
@@ -483,25 +471,25 @@ function InteractiveGames() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <section className="w-full bg-brand-grayBg">
-      <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
-        <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-          <div className="text-center mb-12">
-            <h2 className="headingstyle font-extrabold text-brand-teal mb-4">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+        <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
+          <div className="mb-12 text-center">
+            <h2 className="headingstyle mb-4 font-extrabold text-brand-teal">
               Interactive Learning Games
             </h2>
-            <p className="textstyles text-brand-tealDark/80 max-w-3xl mx-auto">
-              Try these fun games that complement the Logicoland experience and
-              help develop logical thinking skills.
+            <p className="textstyles mx-auto max-w-3xl text-brand-tealDark/80">
+              Try these fun games that complement the Logicoland experience and help develop logical
+              thinking skills.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid gap-8 md:grid-cols-2">
             {/* Game 1 */}
-            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+            <div className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft">
+              <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Prime Number Explorer
               </h3>
-              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+              <div className="aspect-video overflow-hidden rounded-3xl bg-brand-grayBg">
                 <iframe
                   style={{ maxWidth: "100%" }}
                   src="https://wordwall.net/embed/play/96298/037/880"
@@ -509,20 +497,18 @@ function InteractiveGames() {
                   height="100%"
                   frameBorder="0"
                   allowFullScreen
-                  className="w-full h-full"
+                  className="h-full w-full"
                 ></iframe>
               </div>
-              <p className="mt-4 text-center text-brand-tealDark/80">
-                Identify Prime Number......
-              </p>
+              <p className="mt-4 text-center text-brand-tealDark/80">Identify Prime Number......</p>
             </div>
 
             {/* Game 2 */}
-            <div className="bg-white rounded-4xl p-6 shadow-soft overflow-hidden">
-              <h3 className="text-xl font-bold text-brand-teal mb-4 text-center">
+            <div className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft">
+              <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Composite Number Challenge
               </h3>
-              <div className="aspect-video bg-brand-grayBg rounded-3xl overflow-hidden">
+              <div className="aspect-video overflow-hidden rounded-3xl bg-brand-grayBg">
                 <iframe
                   style={{ maxWidth: "100%" }}
                   src="https://wordwall.net/embed/play/96298/689/270"
@@ -530,12 +516,10 @@ function InteractiveGames() {
                   height="100%"
                   frameBorder="0"
                   allowFullScreen
-                  className="w-full h-full"
+                  className="h-full w-full"
                 ></iframe>
               </div>
-              <p className="mt-4 text-center text-brand-tealDark/80">
-                Find Composite Number....
-              </p>
+              <p className="mt-4 text-center text-brand-tealDark/80">Find Composite Number....</p>
             </div>
           </div>
         </div>
@@ -548,10 +532,8 @@ function LostCardHelper() {
   const trayImages = [
     "https://res.cloudinary.com/deunonql5/image/upload/v1757381453/TRAY_1_hsi9wt.png",
   ];
-  const randomTray = () =>
-    trayImages[Math.floor(Math.random() * trayImages.length)];
-  const buildCardUrl = (n: number) =>
-    `/Images/primetimecardImages/PRIME TIME CARD ${n}.png`;
+  const randomTray = () => trayImages[Math.floor(Math.random() * trayImages.length)];
+  const buildCardUrl = (n: number) => `/Images/primetimecardImages/PRIME TIME CARD ${n}.png`;
 
   const [cardNo, setCardNo] = React.useState("");
   const [imgSrc, setImgSrc] = React.useState<string>(randomTray());
@@ -576,15 +558,13 @@ function LostCardHelper() {
       return;
     }
 
-    if (!/^\d+$/.test(cardNo.trim()))
-      return setError("Card number should be numeric.");
+    if (!/^\d+$/.test(cardNo.trim())) return setError("Card number should be numeric.");
     const num = Number(cardNo);
-    if (num < 1 || num > 60)
-      return setError("Enter a number between 1 and 60.");
+    if (num < 1 || num > 60) return setError("Enter a number between 1 and 60.");
 
     setLoading(true);
     const nextUrl = buildCardUrl(num);
-    
+
     const probe = new window.Image();
     probe.onload = () => {
       setImgSrc(nextUrl);
@@ -593,9 +573,7 @@ function LostCardHelper() {
     };
     probe.onerror = () => {
       setLoading(false);
-      setError(
-        "That card image is not available. Check the number or filename."
-      );
+      setError("That card image is not available. Check the number or filename.");
     };
     probe.src = nextUrl;
   };
@@ -606,20 +584,14 @@ function LostCardHelper() {
 
   return (
     <section className="w-full bg-[#84C341]">
-      <div className="lg:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="rounded-[22px] p-6 sm:p-6">
           {/* Flex container replacing grid */}
-          <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-16">
+          <div className="flex flex-col items-center gap-8 md:flex-row lg:gap-16">
             {/* Left: Image container */}
-            <div className="w-full md:w-1/2 order-2 md:order-1 flex justify-start items-center py-6 md:py-0">
-              <div
-                className="
-              relative w-[95%] max-w-[700px] aspect-square
-              rounded-[28px] bg-white border-[12px] md:border-[14px]
-              border-white shadow-soft p-2
-            "
-              >
-                <div className="relative w-full h-full rounded-[22px] overflow-hidden flex items-center justify-center">
+            <div className="order-2 flex w-full items-center justify-start py-6 md:order-1 md:w-1/2 md:py-0">
+              <div className="relative aspect-square w-[95%] max-w-[700px] rounded-[28px] border-[12px] border-white bg-white p-2 shadow-soft md:border-[14px]">
+                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[22px]">
                   {isTray ? (
                     <Image
                       src={imgSrc}
@@ -637,7 +609,7 @@ function LostCardHelper() {
                       alt="Card"
                       width={180}
                       height={240}
-                      className={`object-contain rounded-xl shadow-2xl transition-opacity ${
+                      className={`rounded-xl object-contain shadow-2xl transition-opacity ${
                         loading ? "opacity-60" : "opacity-100"
                       }`}
                       priority={false}
@@ -646,19 +618,15 @@ function LostCardHelper() {
                 </div>
               </div>
 
-              {loading && (
-                <p className="mt-3 text-sm text-gray-200 text-center">
-                  Loading image…
-                </p>
-              )}
+              {loading && <p className="mt-3 text-center text-sm text-gray-200">Loading image…</p>}
             </div>
 
             {/* Right: Controls & Text */}
-            <div className="w-full md:w-1/2 order-1 md:order-2 text-white">
+            <div className="order-1 w-full text-white md:order-2 md:w-1/2">
               {/* <h2 className="textstyles text-white/90 font-extrabold font-heading">
                 Card replacement helper
               </h2> */}
-              <h2 className="headingstyle text-white/90 font-extrabold font-heading">
+              <h2 className="headingstyle font-heading font-extrabold text-white/90">
                 Lost a card?
               </h2>
               <p className="textstyles mt-3 max-w-prose font-sans">
@@ -669,7 +637,7 @@ function LostCardHelper() {
                 Enter the card number below.
               </p>
 
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <label className="sr-only" htmlFor="card-number">
                   Card number
                 </label>
@@ -685,26 +653,18 @@ function LostCardHelper() {
                     if (error) setError(null);
                   }}
                   onKeyDown={onKeyDown}
-                  className="w-full sm:max-w-xs rounded-full border border-gray-300 
-                         px-5 py-3 text-sm outline-none text-gray-900
-                         focus:ring-2 focus:ring-brand-teal/40"
+                  className="w-full rounded-full border border-gray-300 px-5 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
                 />
                 <button
                   onClick={showCard}
-                  className="group rounded-full px-2 py-3 font-sans font-medium text-[14px]
-                          bg-white text-[#557f28]
-                         transition-colors hover:bg-[#557f28] hover:text-white
-                         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+                  className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Show card
                 </button>
                 <button
                   onClick={resetToTray}
                   type="button"
-                  className="group rounded-full px-6 py-3 font-medium text-[14px]
-                       bg-white text-[#557f28]
-                         transition-colors hover:bg-[#557f28] hover:text-white
-                         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+                  className="group rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Reset
                 </button>

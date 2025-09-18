@@ -19,7 +19,11 @@ interface Game {
 }
 
 const toSlug = (title: string) =>
-  title.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+  title
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
 
 export default function GamesPage() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
@@ -30,8 +34,7 @@ export default function GamesPage() {
     {
       id: 1,
       title: "PrimeTime",
-      imageUrl:
-        "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+      imageUrl: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
       description:
         "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
       author: "Logicology",
@@ -77,48 +80,38 @@ export default function GamesPage() {
   return (
     <>
       <NavBar />
-      <div className="min-h-screen text-brand-tealDark bg-brand-hero p-6 sm:p-8 md:p-10">
+      <div className="min-h-screen bg-brand-hero p-6 text-brand-tealDark sm:p-8 md:p-10">
         <Head>
           <title>Games Collection</title>
         </Head>
 
         <header className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-teal text-center">
+          <h1 className="text-center text-3xl font-extrabold tracking-tight text-brand-teal sm:text-4xl md:text-5xl">
             Games Collection
           </h1>
-          <p className="mt-2 text-brand-tealDark/75 text-center">
+          <p className="mt-2 text-center text-brand-tealDark/75">
             Handpicked games to spark curiosity, learning, and fun.
           </p>
         </header>
 
-        <div
-          className="
-            grid gap-6 md:gap-7
-            grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
-          "
-        >
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-7 lg:grid-cols-3 xl:grid-cols-4">
           {games.map((game) => (
             <div
               key={game.id}
-              className="relative group cursor-pointer transition-all duration-300 hover:z-10"
+              className="group relative cursor-pointer transition-all duration-300 hover:z-10"
               onClick={() => openModal(game)}
             >
-              <div
-                className="
-                  relative overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5
-                  p-3 hover:shadow-brand transition-shadow h-full flex flex-col
-                "
-              >
+              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
                 {/* Coming Soon badge for all EXCEPT PrimeTime */}
                 {!isPrimeTime(game) && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-brand-coral text-white">
+                  <div className="absolute right-3 top-3 z-10">
+                    <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-medium text-white">
                       Coming Soon
                     </span>
                   </div>
                 )}
 
-                <div className="relative w-full max-h-[48vh] aspect-[3/4] rounded-2xl overflow-hidden mb-3">
+                <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
                   <Image
                     src={game.imageUrl}
                     alt={game.title}
@@ -128,26 +121,22 @@ export default function GamesPage() {
                   />
                 </div>
 
-                <div className="flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold text-brand-tealDark mb-1">
-                    {game.title}
-                  </h3>
-                  <p className="text-xs text-brand-tealDark/70 mb-2">
-                    by {game.author}
-                  </p>
+                <div className="flex flex-1 flex-col">
+                  <h3 className="mb-1 text-xl font-bold text-brand-tealDark">{game.title}</h3>
+                  <p className="mb-2 text-xs text-brand-tealDark/70">by {game.author}</p>
 
                   <div className="mb-3">
-                    <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal text-xs font-medium rounded-full">
+                    <span className="inline-block rounded-full bg-brand-teal/10 px-2 py-1 text-xs font-medium text-brand-teal">
                       {game.category}
                     </span>
                   </div>
 
                   <div className="mt-auto flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-brand-coral text-white text-xs font-semibold px-2.5 py-1">
+                    <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-semibold text-white">
                       ★ {game.rating}
                     </span>
                     <button
-                      className="text-xs font-semibold text-brand-teal hover:text-brand-coral transition-colors"
+                      className="text-xs font-semibold text-brand-teal transition-colors hover:text-brand-coral"
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal(game);
@@ -158,7 +147,7 @@ export default function GamesPage() {
                   </div>
                 </div>
 
-                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 group-hover:ring-2 group-hover:ring-brand-teal/35 transition-all" />
+                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 transition-all group-hover:ring-2 group-hover:ring-brand-teal/35" />
               </div>
             </div>
           ))}
@@ -166,12 +155,12 @@ export default function GamesPage() {
 
         {/* Modal for all games */}
         {isModalOpen && selectedGame && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white text-brand-tealDark rounded-4xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-brand">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+            <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-4xl bg-white text-brand-tealDark shadow-brand">
               <div className="relative">
                 <button
                   onClick={closeModal}
-                  className="absolute top-4 right-4 bg-brand-teal text-white rounded-full p-2 z-10 hover:bg-brand-coral transition-colors"
+                  className="absolute right-4 top-4 z-10 rounded-full bg-brand-teal p-2 text-white transition-colors hover:bg-brand-coral"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -195,38 +184,34 @@ export default function GamesPage() {
                       src={selectedGame.imageUrl}
                       alt={selectedGame.title}
                       fill
-                      className="object-cover rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none"
+                      className="rounded-t-4xl object-cover md:rounded-l-4xl md:rounded-tr-none"
                     />
                     {/* Coming Soon overlay only for non-PrimeTime */}
                     {!isPrimeTime(selectedGame) && (
-                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-t-4xl md:rounded-l-4xl md:rounded-tr-none">
-                        <div className="text-center p-6">
-                          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-brand-coral text-white mb-4">
+                      <div className="absolute inset-0 flex items-center justify-center rounded-t-4xl bg-black/70 md:rounded-l-4xl md:rounded-tr-none">
+                        <div className="p-6 text-center">
+                          <span className="mb-4 inline-flex items-center rounded-full bg-brand-coral px-4 py-2 text-lg font-bold text-white">
                             Coming Soon
                           </span>
-                          <p className="text-white text-sm">
-                            This game will be available shortly
-                          </p>
+                          <p className="text-sm text-white">This game will be available shortly</p>
                         </div>
                       </div>
                     )}
                   </div>
 
                   <div className="p-6 sm:p-8">
-                    <h2 className="text-3xl font-extrabold text-brand-teal mb-1">
+                    <h2 className="mb-1 text-3xl font-extrabold text-brand-teal">
                       {selectedGame.title}
                     </h2>
-                    <p className="text-brand-tealDark/75 mb-2">
-                      by {selectedGame.author}
-                    </p>
+                    <p className="mb-2 text-brand-tealDark/75">by {selectedGame.author}</p>
 
-                    <div className="flex items-center mb-4">
-                      <span className="inline-block px-3 py-1 bg-brand-teal/15 text-brand-teal text-sm font-medium rounded-full">
+                    <div className="mb-4 flex items-center">
+                      <span className="inline-block rounded-full bg-brand-teal/15 px-3 py-1 text-sm font-medium text-brand-teal">
                         {selectedGame.category}
                       </span>
                     </div>
 
-                    <div className="flex items-center mb-6">
+                    <div className="mb-6 flex items-center">
                       <div className="flex text-brand-gold">
                         {[...Array(5)].map((_, i) => (
                           <svg
@@ -235,7 +220,7 @@ export default function GamesPage() {
                             className={`h-5 w-5 ${
                               i < Math.floor(selectedGame.rating)
                                 ? "fill-current"
-                                : "stroke-current fill-none"
+                                : "fill-none stroke-current"
                             }`}
                             viewBox="0 0 24 24"
                           >
@@ -248,49 +233,32 @@ export default function GamesPage() {
                           </svg>
                         ))}
                       </div>
-                      <span className="ml-2 text-brand-tealDark/70">
-                        {selectedGame.rating}/5
-                      </span>
+                      <span className="ml-2 text-brand-tealDark/70">{selectedGame.rating}/5</span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div className="bg-brand-teal/5 rounded-2xl p-3 text-center">
+                    <div className="mb-6 grid grid-cols-2 gap-4">
+                      <div className="rounded-2xl bg-brand-teal/5 p-3 text-center">
                         <p className="text-sm text-brand-tealDark/70">Players</p>
-                        <p className="font-semibold text-brand-teal">
-                          {selectedGame.players}
-                        </p>
+                        <p className="font-semibold text-brand-teal">{selectedGame.players}</p>
                       </div>
-                      <div className="bg-brand-teal/5 rounded-2xl p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">
-                          Duration
-                        </p>
-                        <p className="font-semibold text-brand-teal">
-                          {selectedGame.duration}
-                        </p>
+                      <div className="rounded-2xl bg-brand-teal/5 p-3 text-center">
+                        <p className="text-sm text-brand-tealDark/70">Duration</p>
+                        <p className="font-semibold text-brand-teal">{selectedGame.duration}</p>
                       </div>
                     </div>
 
-                    <p className="text-brand-tealDark/85 mb-8">
-                      {selectedGame.description}
-                    </p>
+                    <p className="mb-8 text-brand-tealDark/85">{selectedGame.description}</p>
 
                     {isPrimeTime(selectedGame) ? (
                       <button
-                        className="group inline-flex w-full items-center justify-center gap-2
-                          rounded-full border-2 border-brand-coral bg-transparent
-                          px-6 py-3 font-semibold text-brand-coral
-                          transition-colors hover:bg-brand-coral hover:text-white
-                          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40
-                          active:scale-[.99]"
+                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-coral bg-transparent px-6 py-3 font-semibold text-brand-coral transition-colors hover:bg-brand-coral hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
                         onClick={handleGetStarted}
                       >
                         Know More about {selectedGame.title}
                       </button>
                     ) : (
-                      <div className="text-center p-4 bg-brand-teal/5 rounded-2xl">
-                        <p className="text-brand-coral font-semibold mb-2">
-                          Coming Soon
-                        </p>
+                      <div className="rounded-2xl bg-brand-teal/5 p-4 text-center">
+                        <p className="mb-2 font-semibold text-brand-coral">Coming Soon</p>
                         <p className="text-sm text-brand-tealDark/70">
                           This game will be available shortly. Stay tuned!
                         </p>

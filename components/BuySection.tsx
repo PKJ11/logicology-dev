@@ -2,14 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-  createContext,
-  useContext,
-} from "react";
+import { useEffect, useMemo, useState, useRef, createContext, useContext } from "react";
 import { motion, Variants, useReducedMotion } from "framer-motion";
 
 /* ------------------------- Scroll Direction Context ------------------------ */
@@ -75,8 +68,7 @@ function useViewportAnimation<T extends HTMLElement>() {
 
 type Bullet = { title: string; desc: string; icon: string };
 
-const BULLET_ICON =
-  "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
+const BULLET_ICON = "https://ik.imagekit.io/pratik2002/bullter.JPG?updatedAt=1756384008169";
 
 const BASE_BULLETS: Bullet[] = [
   {
@@ -113,8 +105,7 @@ function shuffle<T>(arr: T[]) {
 }
 
 const isDesktop = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(min-width: 768px)").matches;
+  typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches;
 
 /* -------------------------------- Variants -------------------------------- */
 
@@ -193,17 +184,15 @@ function BulletWithLine({
     >
       {/* dashed connector line (desktop only) - SHORTER LINES */}
       <motion.div
-        className={`relative hidden md:block h-0 border-t-2 border-dashed border-brand-teal/40 ${
-          side === "left" ? "ml-2 mr-3 w-24 lg:w-32" : "mr-2 ml-3 w-24 lg:w-32"
+        className={`relative hidden h-0 border-t-2 border-dashed border-brand-teal/40 md:block ${
+          side === "left" ? "ml-2 mr-3 w-24 lg:w-32" : "ml-3 mr-2 w-24 lg:w-32"
         } translate-y-6`}
         style={{
           transformOrigin: side === "left" ? "left center" : "right center",
         }}
         initial={{ opacity: 0, scaleX: 0 }}
         animate={
-          isInView && !prefersReduced
-            ? { opacity: 1, scaleX: 1 }
-            : { opacity: 0, scaleX: 0 }
+          isInView && !prefersReduced ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }
         }
         transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
       >
@@ -216,31 +205,25 @@ function BulletWithLine({
 
       {/* icon */}
       <motion.div
-        whileHover={
-          prefersReduced ? undefined : { scale: isDesktop() ? 1.06 : 1 }
-        }
+        whileHover={prefersReduced ? undefined : { scale: isDesktop() ? 1.06 : 1 }}
         transition={{ type: "spring", stiffness: 400, damping: 24 }}
         className="shrink-0"
       >
-        <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1EB6E9] shadow">
           <Image
             src={icon || BULLET_ICON}
             alt=""
             width={32}
             height={32}
-            className="h-8 w-8 object-contain bg-[#1EB6E9]"
+            className="h-8 w-8 bg-[#1EB6E9] object-contain"
           />
         </div>
       </motion.div>
 
       {/* text */}
       <div className="ml-4 max-w-[280px]">
-        <div className="textstyles font-semibold text-brand-tealDark leading-tight">
-          {title}
-        </div>
-        <p className="mt-2 text-base leading-relaxed text-brand-tealDark/80">
-          {desc}
-        </p>
+        <div className="textstyles font-semibold leading-tight text-brand-tealDark">{title}</div>
+        <p className="mt-2 text-base leading-relaxed text-brand-tealDark/80">{desc}</p>
       </div>
     </motion.div>
   );
@@ -248,15 +231,7 @@ function BulletWithLine({
 
 /* ----------------------------- Mobile Bullet Component ---------------------------- */
 
-function MobileBulletItem({
-  title,
-  desc,
-  icon,
-}: {
-  title: string;
-  desc: string;
-  icon: string;
-}) {
+function MobileBulletItem({ title, desc, icon }: { title: string; desc: string; icon: string }) {
   const prefersReduced = useReducedMotion();
   const [ref, isInView] = useViewportAnimation<HTMLDivElement>();
 
@@ -266,29 +241,27 @@ function MobileBulletItem({
       variants={bulletMobile}
       initial="hidden"
       animate={isInView ? "show" : "hidden"}
-      className="flex flex-col items-center text-center p-4"
+      className="flex flex-col items-center p-4 text-center"
     >
       {/* icon on top */}
       <motion.div
         whileHover={prefersReduced ? undefined : { scale: 1.05 }}
         transition={{ type: "spring", stiffness: 400, damping: 24 }}
-        className="shrink-0 mb-4"
+        className="mb-4 shrink-0"
       >
-        <div className="h-12 w-12 rounded-full bg-[#1EB6E9] flex items-center justify-center shadow mx-auto">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1EB6E9] shadow">
           <Image
             src={icon || BULLET_ICON}
             alt=""
             width={32}
             height={32}
-            className="h-8 w-8 object-contain bg-[#1EB6E9]"
+            className="h-8 w-8 bg-[#1EB6E9] object-contain"
           />
         </div>
       </motion.div>
 
       {/* title below icon */}
-      <div className="textstyles font-semibold text-brand-tealDark leading-tight mb-2">
-        {title}
-      </div>
+      <div className="textstyles mb-2 font-semibold leading-tight text-brand-tealDark">{title}</div>
 
       {/* description below title */}
       <p className="text-base leading-relaxed text-brand-tealDark/80">{desc}</p>
@@ -318,15 +291,14 @@ export default function BuySection() {
   }, [bullets]);
 
   const desktop = isDesktop();
-  const [containerRef, isContainerInView] =
-    useViewportAnimation<HTMLDivElement>();
+  const [containerRef, isContainerInView] = useViewportAnimation<HTMLDivElement>();
 
   // Skeleton during SSR to avoid hydration mismatch
   if (!isMounted) {
     return (
       <section id="buy" className="w-full bg-brand-gold">
-        <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-          <div className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft animate-pulse h-96" />
+        <div className="mx-auto px-3 py-6 sm:px-5 sm:py-8 md:py-10 lg:max-w-[80vw]">
+          <div className="h-96 animate-pulse rounded-[22px] bg-white p-5 shadow-soft sm:p-8" />
         </div>
       </section>
     );
@@ -335,28 +307,25 @@ export default function BuySection() {
   return (
     <ScrollAnimationContext.Provider value={scrollDirection}>
       <section id="buy" className="w-full bg-brand-gold">
-        <div className="lg:max-w-[80vw] mx-auto py-6 sm:py-8 md:py-10 px-3 sm:px-5">
-          <div
-            ref={containerRef}
-            className="rounded-[22px] bg-white p-5 sm:p-8 shadow-soft"
-          >
-            <div className="text-center mb-8">
-              <h2 className="headingstyle font-extrabold text-brand-teal font-heading">
+        <div className="mx-auto px-3 py-6 sm:px-5 sm:py-8 md:py-10 lg:max-w-[80vw]">
+          <div ref={containerRef} className="rounded-[22px] bg-white p-5 shadow-soft sm:p-8">
+            <div className="mb-8 text-center">
+              <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
                 Logicoland Volume 1
               </h2>
-              <p className="textstyles text-brand-tealDark/80 mt-2 font-sans">
+              <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
                 Logic through coloring!
               </p>
             </div>
 
             {/* Desktop: 3 cols; Mobile: image on top, 2x2 grid below */}
-            <div className="md:grid md:grid-cols-3 items-center gap-y-10">
+            <div className="items-center gap-y-10 md:grid md:grid-cols-3">
               {/* LEFT (desktop only) */}
               <motion.div
                 variants={containerStagger}
                 initial="hidden"
                 animate={isContainerInView ? "show" : "hidden"}
-                className="hidden md:block space-y-[150px] order-1"
+                className="order-1 hidden space-y-[150px] md:block"
               >
                 {leftBullets.map((b, i) => (
                   <BulletWithLine
@@ -370,14 +339,14 @@ export default function BuySection() {
               </motion.div>
 
               {/* IMAGE (center on desktop, top on mobile) */}
-              <div className="flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0">
-                <div className="relative w-full max-w-full sm:max-w-[240px] md:max-w-[500px] aspect-[4/3] sm:aspect-[3/4]">
+              <div className="order-1 mb-8 flex items-center justify-center md:order-2 md:mb-0">
+                <div className="relative aspect-[4/3] w-full max-w-full sm:aspect-[3/4] sm:max-w-[240px] md:max-w-[500px]">
                   <Image
                     src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
                     alt="Logicoland Book"
                     width={500}
                     height={667}
-                    className="object-contain w-full h-full"
+                    className="h-full w-full object-contain"
                     priority
                   />
                 </div>
@@ -388,7 +357,7 @@ export default function BuySection() {
                 variants={containerStagger}
                 initial="hidden"
                 animate={isContainerInView ? "show" : "hidden"}
-                className="hidden md:block space-y-[150px] order-3"
+                className="order-3 hidden space-y-[150px] md:block"
               >
                 {rightBullets.map((b, i) => (
                   <BulletWithLine
@@ -406,7 +375,7 @@ export default function BuySection() {
                 variants={containerStagger}
                 initial="hidden"
                 animate={isContainerInView ? "show" : "hidden"}
-                className="md:hidden order-2 grid grid-cols-2 gap-4 mt-6"
+                className="order-2 mt-6 grid grid-cols-2 gap-4 md:hidden"
               >
                 {bullets.map((b, i) => (
                   <MobileBulletItem
@@ -420,12 +389,9 @@ export default function BuySection() {
             </div>
 
             {/* CTA */}
-            <div className="text-center mt-10">
+            <div className="mt-10 text-center">
               <div className="mt-6">
-                <span
-                  className="inline-flex items-center rounded-full
-        bg-brand-teal px-6 py-3 font-semibold text-white"
-                >
+                <span className="inline-flex items-center rounded-full bg-brand-teal px-6 py-3 font-semibold text-white">
                   Volumes 2 to 5 coming soon…
                 </span>
               </div>

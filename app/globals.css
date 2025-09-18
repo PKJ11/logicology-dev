@@ -3,61 +3,77 @@
 @tailwind utilities;
 
 :root {
-	--background: #ffffff;
-	--foreground: #0b3f44;
+  --background: #ffffff;
+  --foreground: #0b3f44;
 }
 
-html, body {
-	height: 100%;
+html,
+body {
+  height: 100%;
 }
 @layer base {
-  body { @apply bg-white text-slate-800 antialiased font-sans; } /* Roboto */
-  h1, h2, h3, .heading-xl, .heading-lg, .heading-md { @apply font-heading; }   /* Outfit */
+  body {
+    @apply bg-white font-sans text-slate-800 antialiased;
+  } /* Roboto */
+  h1,
+  h2,
+  h3,
+  .heading-xl,
+  .heading-lg,
+  .heading-md {
+    @apply font-heading;
+  } /* Outfit */
 }
 @layer components {
   .headingstyle {
-    @apply font-heading font-bold leading-tight
-           text-[41px] sm:text-[44px] md:text-[50px] lg:text-[50px];
+    @apply font-heading text-[41px] font-bold leading-tight sm:text-[44px] md:text-[50px] lg:text-[50px];
   }
 }
 @layer components {
   .textstyles {
-    @apply font-heading leading-snug
-           text-[20px] sm:text-[22px] md:text-[22px] lg:text-[22px];
+    @apply font-heading text-[20px] leading-snug sm:text-[22px] md:text-[22px] lg:text-[22px];
   }
 }
 
 body {
-	@apply bg-white text-slate-800 antialiased;
+  @apply bg-white text-slate-800 antialiased;
 }
 
 .container-padding {
-	@apply px-4 sm:px-6 lg:px-8;
+  @apply px-4 sm:px-6 lg:px-8;
 }
 
 .btn {
-	@apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-colors shadow-soft;
+  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-soft transition-colors;
 }
 .btn-primary {
-	@apply bg-brand-teal text-white hover:bg-brand-teal/90;
+  @apply bg-brand-teal text-white hover:bg-brand-teal/90;
 }
 .btn-dark {
-	@apply bg-brand-tealDark text-white hover:bg-brand-tealDark/90;
+  @apply bg-brand-tealDark text-white hover:bg-brand-tealDark/90;
 }
 .btn-light {
-	@apply bg-white text-brand-tealDark hover:bg-slate-50;
+  @apply bg-white text-brand-tealDark hover:bg-slate-50;
 }
 
 .section {
-	@apply w-full;
+  @apply w-full;
 }
 
 .section-rounded {
-	@apply rounded-3xl md:rounded-4xl;
+  @apply rounded-3xl md:rounded-4xl;
 }
 
-.heading-xl { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight; }
-.heading-lg { @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight; }
-.heading-md { @apply text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight; }
+.heading-xl {
+  @apply text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl;
+}
+.heading-lg {
+  @apply text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl;
+}
+.heading-md {
+  @apply text-xl font-extrabold tracking-tight sm:text-2xl md:text-3xl;
+}
 
-.lead { @apply text-base sm:text-lg text-slate-600; }
+.lead {
+  @apply text-base text-slate-600 sm:text-lg;
+}

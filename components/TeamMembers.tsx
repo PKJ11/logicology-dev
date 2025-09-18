@@ -12,8 +12,7 @@ const teamMembers = [
   {
     name: "Kartik Vyas",
     role: "Co-Founder",
-    image:
-      "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
+    image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
     bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
   },
   {
@@ -73,10 +72,10 @@ export default function TeamPage() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Ambient orbs */}
-        <div className="pointer-events-none absolute -top-24 -left-24 h-[28rem] w-[28rem] rounded-full bg-brand-teal/10 blur-3xl" />
+        <div className="pointer-events-none absolute -left-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-brand-teal/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-[26rem] w-[26rem] rounded-full bg-brand-coral/10 blur-3xl" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="show"
@@ -86,22 +85,20 @@ export default function TeamPage() {
           >
             <motion.div
               variants={fadeUp}
-              className="mb-4 inline-flex items-center gap-2 rounded-full bg-white shadow-soft px-4 py-2"
+              className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-soft"
             >
               <Users className="h-4 w-4 text-brand-teal" />
-              <span className="text-sm font-medium text-brand-teal">
-                Meet the Team
-              </span>
+              <span className="text-sm font-medium text-brand-teal">Meet the Team</span>
             </motion.div>
             <motion.h1
               variants={fadeUp}
-              className="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight text-brand-tealDark"
+              className="font-heading text-4xl tracking-tight text-brand-tealDark sm:text-5xl md:text-6xl"
             >
               The People Behind Logicology
             </motion.h1>
-            <motion.p className="mt-4 max-w-2xl text-base sm:text-lg text-neutral-600">
-              Builders, educators, and designers united by a simple belief:
-              learning should feel like play.
+            <motion.p className="mt-4 max-w-2xl text-base text-neutral-600 sm:text-lg">
+              Builders, educators, and designers united by a simple belief: learning should feel
+              like play.
             </motion.p>
           </motion.div>
         </div>
@@ -109,7 +106,7 @@ export default function TeamPage() {
 
       {/* Team listing – left image / right text */}
       <section className="relative">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
           <div className="space-y-14 md:space-y-20">
             {teamMembers.map((m, idx) => (
               <motion.article
@@ -118,9 +115,9 @@ export default function TeamPage() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.3 }}
                 variants={fadeUp}
-                className="rounded-4xl bg-white/70 backdrop-blur-sm shadow-soft ring-1 ring-black/5"
+                className="rounded-4xl bg-white/70 shadow-soft ring-1 ring-black/5 backdrop-blur-sm"
               >
-                <div className="grid md:grid-cols-2 gap-0 md:gap-6 lg:gap-10">
+                <div className="grid gap-0 md:grid-cols-2 md:gap-6 lg:gap-10">
                   {/* Image left */}
                   <div className="relative order-1 md:order-1">
                     <div className="group relative h-80 sm:h-96 md:h-full">
@@ -142,19 +139,19 @@ export default function TeamPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                       </motion.div>
                       {/* Glow */}
-                      <div className="pointer-events-none absolute -inset-1 rounded-4xl bg-gradient-to-br from-brand-teal/0 via-brand-teal/10 to-brand-coral/10 blur-xl opacity-60" />
+                      <div className="pointer-events-none absolute -inset-1 rounded-4xl bg-gradient-to-br from-brand-teal/0 via-brand-teal/10 to-brand-coral/10 opacity-60 blur-xl" />
                     </div>
                   </div>
 
                   {/* Text right */}
-                  <div className="relative order-2 px-6 sm:px-8 md:px-6 lg:px-10 py-8 md:py-10 flex items-center">
+                  <div className="relative order-2 flex items-center px-6 py-8 sm:px-8 md:px-6 md:py-10 lg:px-10">
                     <div className="w-full">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.05 }}
-                        className="inline-flex items-center gap-2 rounded-full bg-brand-teal/10 text-brand-teal px-3 py-1 text-xs font-medium"
+                        className="inline-flex items-center gap-2 rounded-full bg-brand-teal/10 px-3 py-1 text-xs font-medium text-brand-teal"
                       >
                         <Sparkles className="h-3.5 w-3.5" /> Spotlight
                       </motion.div>
@@ -164,7 +161,7 @@ export default function TeamPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="mt-4 font-heading text-2xl sm:text-3xl text-brand-tealDark"
+                        className="mt-4 font-heading text-2xl text-brand-tealDark sm:text-3xl"
                       >
                         {m.name}
                       </motion.h3>
@@ -174,7 +171,7 @@ export default function TeamPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.15 }}
-                        className="mt-1 text-brand-coral font-medium"
+                        className="mt-1 font-medium text-brand-coral"
                       >
                         {m.role}
                       </motion.p>
@@ -184,7 +181,7 @@ export default function TeamPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="mt-4 text-neutral-700 leading-relaxed"
+                        className="mt-4 leading-relaxed text-neutral-700"
                       >
                         {m.bio}
                       </motion.p>
@@ -221,7 +218,7 @@ export default function TeamPage() {
                         </a>
                         <a
                           href="#"
-                          className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-2.5 text-brand-teal ring-1 ring-brand-teal/20 shadow-soft hover:bg-brand-grayBg"
+                          className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-2.5 text-brand-teal shadow-soft ring-1 ring-brand-teal/20 hover:bg-brand-grayBg"
                         >
                           Portfolio
                         </a>
@@ -242,16 +239,15 @@ export default function TeamPage() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-heading text-2xl sm:text-3xl text-brand-tealDark"
+            className="font-heading text-2xl text-brand-tealDark sm:text-3xl"
           >
             We build with heart and craft
           </motion.h2>
-          <p className="mt-2 text-neutral-600 max-w-2xl">
-            A quick peek at our people—curious minds, playful thinkers, and
-            meticulous makers.
+          <p className="mt-2 max-w-2xl text-neutral-600">
+            A quick peek at our people—curious minds, playful thinkers, and meticulous makers.
           </p>
 
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
             {teamMembers.map((m, i) => (
               <div
                 key={m.name}

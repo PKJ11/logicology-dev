@@ -21,10 +21,7 @@ export default function CartPage() {
 
   const fetchCart = async () => {
     try {
-      const cartId =
-        typeof window !== "undefined"
-          ? localStorage.getItem("shopify_cart_id")
-          : null;
+      const cartId = typeof window !== "undefined" ? localStorage.getItem("shopify_cart_id") : null;
       if (cartId) {
         const cartData = await getCart(cartId);
         setCart(cartData);
@@ -66,7 +63,7 @@ export default function CartPage() {
 
       const updatedCart = await removeFromCart(cartId, lineId);
       setCart(updatedCart);
-      
+
       // If cart is empty after removal, clear local storage
       if (!updatedCart.lines.edges.length) {
         localStorage.removeItem("shopify_cart_id");
@@ -99,7 +96,9 @@ export default function CartPage() {
       setDiscountCode("");
     } catch (err: any) {
       console.error("Error applying discount:", err);
-      setDiscountError(err.message || "Failed to apply discount code. Please check the code and try again.");
+      setDiscountError(
+        err.message || "Failed to apply discount code. Please check the code and try again."
+      );
     } finally {
       setApplyingDiscount(false);
     }
@@ -113,8 +112,7 @@ export default function CartPage() {
   const orderSummary = useMemo(() => {
     if (!cart || !cart.lines?.edges?.length) return null;
 
-    const currency =
-      cart.lines.edges[0]?.node?.merchandise?.price?.currencyCode || "USD";
+    const currency = cart.lines.edges[0]?.node?.merchandise?.price?.currencyCode || "USD";
 
     const subtotal = cart.lines.edges.reduce((total: number, edge: any) => {
       const item = edge.node;
@@ -132,14 +130,14 @@ export default function CartPage() {
     const tax = (subtotal - totalDiscount) * 0.08; // Tax on discounted amount
     const total = subtotal - totalDiscount + shipping + tax;
 
-    return { 
-      subtotal, 
-      shipping, 
-      tax, 
-      total, 
+    return {
+      subtotal,
+      shipping,
+      tax,
+      total,
       totalDiscount,
       currency,
-      hasDiscount: totalDiscount > 0
+      hasDiscount: totalDiscount > 0,
     };
   }, [cart]);
 
@@ -150,33 +148,33 @@ export default function CartPage() {
       <>
         <NavBar />
         <main className="min-h-screen w-full bg-brand-hero">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <Header />
             <div className="grid gap-6 md:grid-cols-3">
-              <div className="md:col-span-2 space-y-6">
+              <div className="space-y-6 md:col-span-2">
                 {skeletons.map((_, i) => (
                   <div
                     key={i}
                     className="rounded-4xl border border-black/5 bg-white p-6 shadow-soft"
                   >
-                    <div className="animate-pulse flex items-center gap-4">
+                    <div className="flex animate-pulse items-center gap-4">
                       <div className="h-24 w-24 rounded-2xl bg-gray-200" />
                       <div className="flex-1">
-                        <div className="h-5 w-1/2 bg-gray-200 rounded" />
-                        <div className="mt-2 h-4 w-3/4 bg-gray-200 rounded" />
-                        <div className="mt-4 h-4 w-24 bg-gray-200 rounded" />
+                        <div className="h-5 w-1/2 rounded bg-gray-200" />
+                        <div className="mt-2 h-4 w-3/4 rounded bg-gray-200" />
+                        <div className="mt-4 h-4 w-24 rounded bg-gray-200" />
                       </div>
-                      <div className="h-6 w-20 bg-gray-200 rounded" />
+                      <div className="h-6 w-20 rounded bg-gray-200" />
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="rounded-4xl border border-black/5 bg-white p-6 shadow-soft h-fit sticky top-8">
+              <div className="sticky top-8 h-fit rounded-4xl border border-black/5 bg-white p-6 shadow-soft">
                 <div className="animate-pulse space-y-4">
-                  <div className="h-5 w-1/3 bg-gray-200 rounded" />
-                  <div className="h-4 w-full bg-gray-200 rounded" />
-                  <div className="h-4 w-5/6 bg-gray-200 rounded" />
-                  <div className="h-10 w-full bg-gray-200 rounded-2xl" />
+                  <div className="h-5 w-1/3 rounded bg-gray-200" />
+                  <div className="h-4 w-full rounded bg-gray-200" />
+                  <div className="h-4 w-5/6 rounded bg-gray-200" />
+                  <div className="h-10 w-full rounded-2xl bg-gray-200" />
                 </div>
               </div>
             </div>
@@ -192,9 +190,9 @@ export default function CartPage() {
       <>
         <NavBar />
         <main className="min-h-screen w-full bg-brand-hero">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:px-8">
             <Header />
-            <p className="mt-6 text-red-600 font-medium">{error}</p>
+            <p className="mt-6 font-medium text-red-600">{error}</p>
           </div>
         </main>
         <SiteFooter />
@@ -207,12 +205,10 @@ export default function CartPage() {
       <>
         <NavBar />
         <main className="min-h-screen w-full bg-brand-hero">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:px-8">
             <Header />
             <div className="mt-8 rounded-4xl border border-dashed border-brand-teal/30 bg-white p-12 shadow-soft">
-              <h3 className="font-heading text-2xl text-brand-tealDark">
-                Your cart is empty
-              </h3>
+              <h3 className="font-heading text-2xl text-brand-tealDark">Your cart is empty</h3>
               <p className="mt-2 text-gray-600">
                 Explore our products and add your favorites to the cart.
               </p>
@@ -234,12 +230,12 @@ export default function CartPage() {
     <>
       <NavBar />
       <main className="min-h-screen w-full bg-brand-hero">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <Header count={cart.lines.edges.length} />
 
           <div className="grid gap-8 md:grid-cols-3">
             {/* Cart Items */}
-            <section className="md:col-span-2 space-y-6">
+            <section className="space-y-6 md:col-span-2">
               {cart.lines.edges.map((edge: any) => {
                 const item = edge.node;
                 const merch = item.merchandise;
@@ -252,19 +248,16 @@ export default function CartPage() {
                 return (
                   <article
                     key={item.id}
-                    className="
-                    relative overflow-hidden rounded-4xl bg-white border border-black/5
-                    shadow-soft transition-shadow hover:shadow-brand
-                  "
+                    className="relative overflow-hidden rounded-4xl border border-black/5 bg-white shadow-soft transition-shadow hover:shadow-brand"
                   >
                     {/* Accent bar */}
                     <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-teal via-brand-coral to-brand-gold opacity-90" />
                     <div className="p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                      <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
                         {/* Image */}
                         <div className="shrink-0">
                           {merch.image ? (
-                            <div className="h-24 w-24 rounded-2xl bg-brand-grayBg overflow-hidden grid place-items-center">
+                            <div className="grid h-24 w-24 place-items-center overflow-hidden rounded-2xl bg-brand-grayBg">
                               <img
                                 src={merch.image.url}
                                 alt={merch.image.altText || merch.product.title}
@@ -273,47 +266,35 @@ export default function CartPage() {
                               />
                             </div>
                           ) : (
-                            <div className="h-24 w-24 rounded-2xl bg-brand-grayBg grid place-items-center text-xs text-gray-400">
+                            <div className="grid h-24 w-24 place-items-center rounded-2xl bg-brand-grayBg text-xs text-gray-400">
                               No image
                             </div>
                           )}
                         </div>
 
                         {/* Details */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-heading text-lg font-semibold text-gray-900 line-clamp-2">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="line-clamp-2 font-heading text-lg font-semibold text-gray-900">
                             {merch.product.title}
                           </h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            {merch.title}
-                          </p>
+                          <p className="mt-1 text-sm text-gray-600">{merch.title}</p>
                           <div className="mt-3 flex flex-wrap items-center gap-4">
                             {/* Quantity Controls */}
-                            <div className="flex items-center border border-gray-300 rounded-xl">
+                            <div className="flex items-center rounded-xl border border-gray-300">
                               <button
-                                onClick={() =>
-                                  handleUpdateQuantity(
-                                    item.id,
-                                    item.quantity - 1
-                                  )
-                                }
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                                 disabled={isUpdating || item.quantity <= 1}
-                                className="px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-l-xl"
+                                className="rounded-l-xl px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                               >
                                 −
                               </button>
-                              <span className="px-3 py-1 font-medium min-w-[2rem] text-center">
+                              <span className="min-w-[2rem] px-3 py-1 text-center font-medium">
                                 {isUpdating ? "..." : item.quantity}
                               </span>
                               <button
-                                onClick={() =>
-                                  handleUpdateQuantity(
-                                    item.id,
-                                    item.quantity + 1
-                                  )
-                                }
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                                 disabled={isUpdating}
-                                className="px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-r-xl"
+                                className="rounded-r-xl px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                               >
                                 +
                               </button>
@@ -321,14 +302,12 @@ export default function CartPage() {
 
                             <span className="text-gray-500">·</span>
 
-                            <span className="text-gray-700">
-                              {money(unit, currency)} each
-                            </span>
+                            <span className="text-gray-700">{money(unit, currency)} each</span>
                           </div>
                         </div>
 
                         {/* Price and Remove Button */}
-                        <div className="text-right sm:pl-4 space-y-2">
+                        <div className="space-y-2 text-right sm:pl-4">
                           <p className="text-sm text-gray-500">Line total</p>
                           <p className="font-heading text-xl font-bold text-brand-tealDark">
                             {money(line, currency)}
@@ -336,7 +315,7 @@ export default function CartPage() {
                           <button
                             onClick={() => handleRemoveItem(item.id)}
                             disabled={isRemoving}
-                            className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-sm text-red-600 hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             {isRemoving ? "Removing..." : "Remove"}
                           </button>
@@ -351,19 +330,14 @@ export default function CartPage() {
             {/* Order Summary */}
             <aside className="md:col-span-1">
               <div className="sticky top-8 rounded-4xl border border-black/5 bg-white p-6 shadow-soft">
-                <h2 className="font-heading text-xl font-semibold mb-6">
-                  Order Summary
-                </h2>
+                <h2 className="mb-6 font-heading text-xl font-semibold">Order Summary</h2>
 
-                <div className="space-y-4 mb-6">
+                <div className="mb-6 space-y-4">
                   <Row
                     label="Subtotal"
-                    value={money(
-                      orderSummary?.subtotal,
-                      orderSummary?.currency
-                    )}
+                    value={money(orderSummary?.subtotal, orderSummary?.currency)}
                   />
-                  
+
                   {/* Discount Display */}
                   {orderSummary?.hasDiscount && (
                     <Row
@@ -375,7 +349,7 @@ export default function CartPage() {
                       }
                     />
                   )}
-                  
+
                   <Row
                     label="Shipping"
                     value={
@@ -384,10 +358,7 @@ export default function CartPage() {
                         : money(orderSummary?.shipping, orderSummary?.currency)
                     }
                   />
-                  <Row
-                    label="Tax"
-                    value={money(orderSummary?.tax, orderSummary?.currency)}
-                  />
+                  <Row label="Tax" value={money(orderSummary?.tax, orderSummary?.currency)} />
                   <hr className="my-2" />
                   <Row
                     label={<span className="font-bold">Total</span>}
@@ -403,7 +374,7 @@ export default function CartPage() {
                 <div className="mb-6">
                   <label
                     htmlFor="promo-code"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="mb-2 block text-sm font-medium text-gray-700"
                   >
                     Discount Code
                   </label>
@@ -420,16 +391,14 @@ export default function CartPage() {
                       type="button"
                       onClick={handleApplyDiscount}
                       disabled={applyingDiscount || !discountCode.trim()}
-                      className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {applyingDiscount ? "Applying..." : "Apply"}
                     </button>
                   </div>
-                  
+
                   {/* Discount Messages */}
-                  {discountError && (
-                    <p className="mt-2 text-sm text-red-600">{discountError}</p>
-                  )}
+                  {discountError && <p className="mt-2 text-sm text-red-600">{discountError}</p>}
                   {discountSuccess && (
                     <p className="mt-2 text-sm text-green-600">{discountSuccess}</p>
                   )}
@@ -440,11 +409,7 @@ export default function CartPage() {
                   href={cart.checkoutUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="
-                  block w-full rounded-2xl bg-brand-gold px-6 py-3 text-center font-semibold text-white
-                  shadow-[0_10px_24px_rgba(216,174,79,0.35)]
-                  transition hover:-translate-y-0.5 hover:bg-brand-gold/90
-                "
+                  className="block w-full rounded-2xl bg-brand-gold px-6 py-3 text-center font-semibold text-white shadow-[0_10px_24px_rgba(216,174,79,0.35)] transition hover:-translate-y-0.5 hover:bg-brand-gold/90"
                 >
                   Proceed to Checkout
                 </a>
@@ -458,11 +423,7 @@ export default function CartPage() {
                 {/* Trust */}
                 <div className="mt-6 text-center">
                   <div className="mx-auto mb-1 flex items-center justify-center gap-2 text-green-600">
-                    <svg
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path
                         fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -471,9 +432,7 @@ export default function CartPage() {
                     </svg>
                     <span className="text-sm font-medium">Secure Checkout</span>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    Your payment information is encrypted.
-                  </p>
+                  <p className="text-xs text-gray-500">Your payment information is encrypted.</p>
                 </div>
               </div>
             </aside>
@@ -493,24 +452,17 @@ function Header({ count }: { count?: number }) {
       <p className="text-xs uppercase tracking-wider text-brand-teal/70">
         {count ? `Cart · ${count} item${count > 1 ? "s" : ""}` : "Cart"}
       </p>
-      <h1 className="font-heading text-3xl sm:text-4xl font-bold text-brand-tealDark">
+      <h1 className="font-heading text-3xl font-bold text-brand-tealDark sm:text-4xl">
         Your Shopping Cart
       </h1>
-      <p className="mt-2 max-w-2xl text-sm sm:text-base text-gray-600">
-        Review your items, then proceed to checkout. You can return to shopping
-        anytime.
+      <p className="mt-2 max-w-2xl text-sm text-gray-600 sm:text-base">
+        Review your items, then proceed to checkout. You can return to shopping anytime.
       </p>
     </div>
   );
 }
 
-function Row({
-  label,
-  value,
-}: {
-  label: React.ReactNode;
-  value: React.ReactNode;
-}) {
+function Row({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-gray-600">{label}</span>

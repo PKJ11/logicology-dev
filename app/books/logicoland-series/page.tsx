@@ -13,7 +13,7 @@ import BuySection from "@/components/BuySection";
 ============================================================ */
 export default function Logicoland1Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  function  HeroVideo() {
+  function HeroVideo() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -38,16 +38,16 @@ export default function Logicoland1Page() {
 
     return (
       <section className="w-full bg-white">
-        <div className="px-3 sm:px-5 pt-4">
+        <div className="px-3 pt-4 sm:px-5">
           <div className="relative rounded-[28px] bg-white p-2">
-            <div className="relative rounded-[22px] overflow-hidden">
+            <div className="relative overflow-hidden rounded-[22px]">
               <video
                 ref={videoRef}
                 autoPlay
                 loop
                 playsInline
                 muted={isMuted}
-                className="w-full h-[90vh] sm:h-[62vh] sm:min-h-[420px] sm:max-h-[780px] object-cover"
+                className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
               >
                 <source
                   src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
@@ -60,15 +60,15 @@ export default function Logicoland1Page() {
 
               {/* centered overlay content */}
               <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-                <div className="mx-auto w-[75vw] max-w-[75vw] px-6 sm:px-10 py-8 sm:py-14 text-white">
+                <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
                   <p className="textstyles mb-3">Empowering Minds</p>
                   <h1 className="headingstyle font-extrabold leading-tight">
                     Through STEM Play
                     <br /> and Logic-Based Learning
                   </h1>
                   <p className="textstyles mt-4 max-w-md text-white/90">
-                    At Logicology we endeavour to make learning fun so that
-                    children learn while they play.
+                    At Logicology we endeavour to make learning fun so that children learn while
+                    they play.
                   </p>
                   <div className="mt-6">
                     <CTAButton
@@ -81,7 +81,7 @@ export default function Logicoland1Page() {
                       size="md"
                       rightIcon={
                         <svg
-                          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -104,7 +104,7 @@ export default function Logicoland1Page() {
                 {/* Mute/Unmute */}
                 <button
                   onClick={toggleMute}
-                  className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+                  className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
                   aria-label={isMuted ? "Unmute video" : "Mute video"}
                 >
                   {isMuted ? (
@@ -151,10 +151,8 @@ export default function Logicoland1Page() {
                 {/* Fullscreen */}
                 <button
                   onClick={toggleFullscreen}
-                  className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-                  aria-label={
-                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                  }
+                  className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                  aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
                 >
                   {!isFullscreen ? (
                     <svg
@@ -207,31 +205,19 @@ export default function Logicoland1Page() {
         <BuySection />
         {/* ================= INTERACTIVE PUZZLES ================= */}
         <section className="w-full bg-brand-coral text-white">
-          <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+            <div className="grid items-center gap-12 md:grid-cols-2">
               <div className="sm:px-4">
                 {/* <p className="text-lg">Interactive</p> */}
-                <h3 className="headingstyle font-extrabold font-heading">
-                  Interactive Puzzles
-                </h3>
+                <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
 
-                <p className="textstyles mt-4 text-white/90 font-sans">
-                  Solve the 4×4 Sudoku puzzles given here. The rules that you
-                  need to follow are:
+                <p className="textstyles mt-4 font-sans text-white/90">
+                  Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
                 </p>
                 <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
-                  <li>
-                    Each standing line should have all 4 colours appearing
-                    exactly once.
-                  </li>
-                  <li>
-                    Each sleeping line should have all 4 colours appearing
-                    exactly once.
-                  </li>
-                  <li>
-                    Each 2×2 grid should have all 4 colours appearing exactly
-                    once.
-                  </li>
+                  <li>Each standing line should have all 4 colours appearing exactly once.</li>
+                  <li>Each sleeping line should have all 4 colours appearing exactly once.</li>
+                  <li>Each 2×2 grid should have all 4 colours appearing exactly once.</li>
                 </ol>
 
                 <div className="mt-6">
@@ -245,7 +231,7 @@ export default function Logicoland1Page() {
                     size="md"
                     rightIcon={
                       <svg
-                        className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -264,7 +250,7 @@ export default function Logicoland1Page() {
 
               <div id="puzzle" className="relative">
                 <div className="rounded-[26px] bg-white p-3">
-                  <div className="relative rounded-[20px] bg-brand-grayBg p-4 overflow-hidden">
+                  <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
                     {/* ▶▶ SLIDER WITH MULTIPLE SUDOKU GAMES ◀◀ */}
                     <SudokuSlider />
                   </div>
@@ -276,30 +262,21 @@ export default function Logicoland1Page() {
 
         {/* ================= PRINTABLES ================= */}
         <section className="w-full bg-brand-grayBg">
-          <div className="lg:max-w-[80vw] mx-auto px-3 sm:px-5 py-12 sm:py-16 md:py-20">
-            <div className="rounded-[22px] bg-white p-6 sm:p-10 shadow-soft">
-              <h3 className="text-center headingstyle font-extrabold text-brand-teal">
+          <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+            <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
+              <h3 className="headingstyle text-center font-extrabold text-brand-teal">
                 Printables
               </h3>
-              <p className="text-center textstyles text-brand-teal mt-2">
-                Done with Logicoland 1 already? Here are a few more 4×4 Sudoku
-                puzzles to color.
+              <p className="textstyles mt-2 text-center text-brand-teal">
+                Done with Logicoland 1 already? Here are a few more 4×4 Sudoku puzzles to color.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-8 mt-10">
-                <PrintableCard
-                  colorClass="bg-[#DDB24D]"
-                  buttonColor="#7E5C2E"
-                />
-                <PrintableCard
-                  colorClass="bg-[#E45C48]"
-                  buttonColor="#AB4637"
-                />
+              <div className="mt-10 grid gap-8 md:grid-cols-2">
+                <PrintableCard colorClass="bg-[#DDB24D]" buttonColor="#7E5C2E" />
+                <PrintableCard colorClass="bg-[#E45C48]" buttonColor="#AB4637" />
               </div>
 
-              <p className="text-center mt-8 text-brand-tealDark/70">
-                For more join our community
-              </p>
+              <p className="mt-8 text-center text-brand-tealDark/70">For more join our community</p>
             </div>
           </div>
         </section>
@@ -310,10 +287,7 @@ export default function Logicoland1Page() {
         <SiteFooter />
       </main>
 
-      <CommunitySignupModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <CommunitySignupModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 }
@@ -324,10 +298,7 @@ export default function Logicoland1Page() {
 type ColorKey = "R" | "G" | "B" | "Y";
 type Cell = { value: ColorKey | null; locked?: boolean };
 
-const COLOR_META: Record<
-  ColorKey,
-  { label: string; class: string; hex: string }
-> = {
+const COLOR_META: Record<ColorKey, { label: string; class: string; hex: string }> = {
   R: { label: "Red", class: "bg-[#E45C48]", hex: "#E45C48" },
   G: { label: "Green", class: "bg-[#4CAF50]", hex: "#4CAF50" },
   B: { label: "Blue", class: "bg-[#4C8BD9]", hex: "#4C8BD9" },
@@ -412,30 +383,24 @@ function SudokuSlider() {
   return (
     <div className="w-full">
       <div className="mb-3 flex items-center justify-between">
-        <div className="font-semibold text-brand-tealDark">
-          {PUZZLES[idx].name}
-        </div>
+        <div className="font-semibold text-brand-tealDark">{PUZZLES[idx].name}</div>
         <div className="flex items-center gap-2">
           <button
             onClick={prev}
-            className="px-3 py-1.5 rounded-full bg-white text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
+            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
           >
             ◀
           </button>
           <button
             onClick={next}
-            className="px-3 py-1.5 rounded-full bg-white text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
+            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90"
           >
             ▶
           </button>
         </div>
       </div>
 
-      <ColorSudoku
-        key={idx}
-        start={PUZZLES[idx].start}
-        solution={PUZZLES[idx].solution}
-      />
+      <ColorSudoku key={idx} start={PUZZLES[idx].start} solution={PUZZLES[idx].solution} />
 
       <div className="mt-3 flex justify-center gap-2">
         {PUZZLES.map((_, i) => (
@@ -509,8 +474,9 @@ function ColorSudoku({
 
   function handleCellDrop(e: React.DragEvent, r: number, c: number) {
     e.preventDefault();
-    const data = (e.dataTransfer.getData("text/color") ||
-      e.dataTransfer.getData("text/plain")) as ColorKey | "";
+    const data = (e.dataTransfer.getData("text/color") || e.dataTransfer.getData("text/plain")) as
+      | ColorKey
+      | "";
     if (!data) return;
     if (!["R", "G", "B", "Y"].includes(data)) return;
     onDropCell(r, c, data as ColorKey);
@@ -530,9 +496,7 @@ function ColorSudoku({
   }
 
   function reset() {
-    setGrid(
-      start.map((row) => row.map((v) => ({ value: v, locked: v !== null })))
-    );
+    setGrid(start.map((row) => row.map((v) => ({ value: v, locked: v !== null }))));
     setSelectedColor(null);
     setShowMistakes(true);
     setWon(false);
@@ -550,7 +514,7 @@ function ColorSudoku({
   }
 
   return (
-    <div className="w-full max-w-[min(92vw,520px)] mx-auto">
+    <div className="mx-auto w-full max-w-[min(92vw,520px)]">
       {/* palette */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {(["R", "G", "B", "Y"] as ColorKey[]).map((k) => {
@@ -560,12 +524,10 @@ function ColorSudoku({
               key={k}
               draggable
               onDragStart={(e) => handleDragStart(e, k)}
-              onClick={() =>
-                setSelectedColor((prev) => (prev === k ? null : k))
-              }
-              className={`h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white shadow ${
+              onClick={() => setSelectedColor((prev) => (prev === k ? null : k))}
+              className={`h-8 w-8 rounded-full shadow ring-2 ring-white sm:h-10 sm:w-10 ${
                 COLOR_META[k].class
-              } cursor-grab active:cursor-grabbing outline-offset-2 ${
+              } cursor-grab outline-offset-2 active:cursor-grabbing ${
                 active ? "outline outline-2 outline-black/70" : ""
               }`}
               title={`Drag or tap ${COLOR_META[k].label}`}
@@ -578,27 +540,24 @@ function ColorSudoku({
         <div className="ml-auto flex gap-2">
           <button
             onClick={() => setShowMistakes((s) => !s)}
-            className="text-xs rounded-full px-3 py-1 bg-black/70 text-white"
+            className="rounded-full bg-black/70 px-3 py-1 text-xs text-white"
           >
             {showMistakes ? "Hide Mistakes" : "Show Mistakes"}
           </button>
           <button
             onClick={fillComplete}
-            className="text-xs rounded-full px-3 py-1 bg-white text-brand-tealDark"
+            className="rounded-full bg-white px-3 py-1 text-xs text-brand-tealDark"
           >
             Fill Complete
           </button>
-          <button
-            onClick={reset}
-            className="text-xs rounded-full px-3 py-1 bg-black/70 text-white"
-          >
+          <button onClick={reset} className="rounded-full bg-black/70 px-3 py-1 text-xs text-white">
             Reset
           </button>
         </div>
       </div>
 
       {/* board */}
-      <div className="grid grid-cols-4 gap-0 rounded-[20px] overflow-hidden bg-white ring-1 ring-black/10 select-none w-full touch-manipulation">
+      <div className="grid w-full touch-manipulation select-none grid-cols-4 gap-0 overflow-hidden rounded-[20px] bg-white ring-1 ring-black/10">
         {grid.map((row, r) =>
           row.map((cell, c) => {
             const key = `${r}-${c}`;
@@ -610,42 +569,36 @@ function ColorSudoku({
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleCellDrop(e, r, c)}
                 onClick={() => handleCellClick(r, c)}
-                className={`relative w-full aspect-square ${cellBorders(
+                className={`relative aspect-square w-full ${cellBorders(
                   r,
                   c
                 )} flex items-center justify-center transition-colors ${
                   cell.value
                     ? COLOR_META[cell.value].class
                     : cell.locked
-                    ? "bg-brand-grayBg/50"
-                    : "bg-white"
+                      ? "bg-brand-grayBg/50"
+                      : "bg-white"
                 }`}
                 role="button"
                 aria-label={`Row ${r + 1} column ${c + 1}${
                   cell.value ? ` ${COLOR_META[cell.value].label}` : " empty"
                 }`}
-                title={
-                  cell.locked
-                    ? "Locked cell"
-                    : "Click to place/clear or drop a color"
-                }
+                title={cell.locked ? "Locked cell" : "Click to place/clear or drop a color"}
               >
                 {cell.value && (
                   <span
-                    className={`w-3/5 h-3/5 rounded-xl shadow-inner ${
+                    className={`h-3/5 w-3/5 rounded-xl shadow-inner ${
                       COLOR_META[cell.value].class
                     }`}
                   />
                 )}
 
                 {!cell.value && !cell.locked && (
-                  <span className="text-[10px] sm:text-xs text-black/40">
-                    Drop / Tap
-                  </span>
+                  <span className="text-[10px] text-black/40 sm:text-xs">Drop / Tap</span>
                 )}
 
                 {cell.locked && (
-                  <span className="absolute top-1 right-1 text-[10px] px-1.5 py-0.5 rounded bg-black/10 text-black/60">
+                  <span className="absolute right-1 top-1 rounded bg-black/10 px-1.5 py-0.5 text-[10px] text-black/60">
                     •
                   </span>
                 )}
@@ -661,17 +614,15 @@ function ColorSudoku({
       </div>
 
       {won && (
-        <div className="mt-4 rounded-xl bg-[#DDB24D] text-white px-4 py-3 text-center font-semibold">
+        <div className="mt-4 rounded-xl bg-[#DDB24D] px-4 py-3 text-center font-semibold text-white">
           🎉 Great job! You solved it.
         </div>
       )}
 
       <p className="mt-3 text-xs text-black/50">
-        Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains
-        all four colors exactly once. Drag a color from the palette or tap a
-        color, then tap a cell to place it.{" "}
-        {showMistakes &&
-          "Conflicts are highlighted with a black ring and dark overlay."}
+        Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains all four colors
+        exactly once. Drag a color from the palette or tap a color, then tap a cell to place it.{" "}
+        {showMistakes && "Conflicts are highlighted with a black ring and dark overlay."}
       </p>
     </div>
   );
@@ -703,8 +654,7 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
       }
     }
     seen.forEach((cols) => {
-      if (cols.length > 1)
-        cols.forEach((cc) => (conflicts[`${r}-${cc}`] = true));
+      if (cols.length > 1) cols.forEach((cc) => (conflicts[`${r}-${cc}`] = true));
     });
   }
 
@@ -720,8 +670,7 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
       }
     }
     seen.forEach((rows) => {
-      if (rows.length > 1)
-        rows.forEach((rr) => (conflicts[`${rr}-${c}`] = true));
+      if (rows.length > 1) rows.forEach((rr) => (conflicts[`${rr}-${c}`] = true));
     });
   }
 
@@ -740,8 +689,7 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
         }
       }
       seen.forEach((coords) => {
-        if (coords.length > 1)
-          coords.forEach(([r, c]) => (conflicts[`${r}-${c}`] = true));
+        if (coords.length > 1) coords.forEach(([r, c]) => (conflicts[`${r}-${c}`] = true));
       });
     }
   }
@@ -760,7 +708,7 @@ interface PrintableCardProps {
 function PrintableCard({ colorClass, buttonColor }: PrintableCardProps) {
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
-      <div className={`rounded-[14px] h-64 ${colorClass} relative`}>
+      <div className={`h-64 rounded-[14px] ${colorClass} relative`}>
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
           <div className="mt-6">
             <CTAButton
@@ -773,7 +721,7 @@ function PrintableCard({ colorClass, buttonColor }: PrintableCardProps) {
               size="md"
               rightIcon={
                 <svg
-                  className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

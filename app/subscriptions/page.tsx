@@ -1,5 +1,5 @@
-import UnderConstruction from '@/components/UnderConstruction'
+import UnderConstruction from "@/components/UnderConstruction";
 
 export default function SubscriptionsPage() {
-	return <UnderConstruction title="Subscriptions" />
+  return <UnderConstruction title="Subscriptions" />;
 }

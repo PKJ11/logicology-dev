@@ -59,37 +59,29 @@ export default function ImportanceBubbles() {
   return (
     // gradient background like the other section
     <section className="section w-full bg-white sm:px-3" id="offerings">
-      <div className="mx-auto section-rounded px-3 sm:px-5 py-14 ">
+      <div className="section-rounded mx-auto px-3 py-14 sm:px-5">
         {/* white container */}
-        <div className="rounded-[22px] bg- p-6 sm:p-10 bg-[#EDEDED]">
-          <div className="text-center mb-4">
-            <h2 className="headingstyle font-extrabold text-brand-teal mb-3 font-heading">
+        <div className="bg- rounded-[22px] bg-[#EDEDED] p-6 sm:p-10">
+          <div className="mb-4 text-center">
+            <h2 className="headingstyle mb-3 font-heading font-extrabold text-brand-teal">
               Our Offerings for you
             </h2>
-            <p className="text-lg sm:text-xl text-brand-tealDark/80 max-w-3xl mx-auto font-sans">
-              You can choose from a wide variety of formats and engagement
-              types.
+            <p className="mx-auto max-w-3xl font-sans text-lg text-brand-tealDark/80 sm:text-xl">
+              You can choose from a wide variety of formats and engagement types.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 mt-10 max-w-[80vw] mx-auto justify-items-center">
+          <div className="mx-auto mt-10 grid max-w-[80vw] grid-cols-1 justify-items-center gap-8 md:grid-cols-4 md:gap-10">
             {items.map((it, idx) => (
               <div key={idx} className="flex flex-col items-center gap-5">
                 {/* Animated bubble image */}
-                <motion.div
-                  className="relative"
-                  variants={floatingVariants}
-                  animate="float"
-                >
+                <motion.div className="relative" variants={floatingVariants} animate="float">
                   <div className="relative" style={{ width: 300, height: 300 }}>
                     <Image
                       src={it.bubble}
                       alt={`bubble for ${it.title}`}
                       fill
-                      className="object-contain w-[200px] h-[200px]
-                            md:w-[250px] md:h-[250px]
-                            lg:w-[320px] lg:h-[320px]
-                            xl:w-[340px] xl:h-[340px]"
+                      className="h-[200px] w-[200px] object-contain md:h-[250px] md:w-[250px] lg:h-[320px] lg:w-[320px] xl:h-[340px] xl:w-[340px]"
                     />
                   </div>
                 </motion.div>
@@ -104,7 +96,7 @@ export default function ImportanceBubbles() {
                     alt={`illustration for ${it.title}`}
                     width={90}
                     height={90}
-                    className="w-[80px] h-[80px] md:w-[90px] md:h-[90px] object-contain"
+                    className="h-[80px] w-[80px] object-contain md:h-[90px] md:w-[90px]"
                   />
                 </motion.div>
               </div>

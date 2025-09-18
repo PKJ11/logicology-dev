@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  FiMenu,
-  FiX,
-  FiShoppingCart,
-  FiSearch,
-  FiLogIn,
-  FiChevronDown,
-} from "react-icons/fi";
+import { FiMenu, FiX, FiShoppingCart, FiSearch, FiLogIn, FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
 
 /* ================= Types ================= */
@@ -42,8 +35,7 @@ const games: Game[] = [
   {
     id: 1,
     title: "PrimeTime",
-    imageUrl:
-      "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+    imageUrl: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
     description:
       "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
     author: "Logicology",
@@ -195,12 +187,12 @@ export default function NavBar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="lg:max-w-[75vw] lg:mx-auto md:max-w-[75vw] md:mx-auto px-4 lg:px-8 ">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="flex justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-[150px] h-auto relative">
+            <div className="relative h-auto w-[150px]">
               <Image
                 src="https://ik.imagekit.io/pratik2002/logicology-logo_74-P-ICfG?updatedAt=1756257433107"
                 alt="Logicology Logo"
@@ -212,7 +204,7 @@ export default function NavBar() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-700 font-heading">
+          <nav className="hidden items-center gap-6 font-heading text-sm text-slate-700 md:flex">
             {navItems.map((item) => (
               <div
                 key={item.name}
@@ -221,26 +213,20 @@ export default function NavBar() {
                   item.type === "games"
                     ? gamesTriggerRef
                     : item.type === "books"
-                    ? booksTriggerRef
-                    : null
+                      ? booksTriggerRef
+                      : null
                 }
                 onMouseEnter={() =>
-                  item.hasDropdown &&
-                  handleDropdownHover(item.type as "games" | "books", true)
+                  item.hasDropdown && handleDropdownHover(item.type as "games" | "books", true)
                 }
                 onMouseLeave={() =>
-                  item.hasDropdown &&
-                  handleDropdownHover(item.type as "games" | "books", false)
+                  item.hasDropdown && handleDropdownHover(item.type as "games" | "books", false)
                 }
               >
                 <Link
                   href={item.href}
                   onClick={closeAll}
-                  className="py-1 text-[16px] text-[#0B3F44] relative transition-colors duration-200 hover:text-brand-teal
-                    after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
-                    after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
-                    after:origin-center after:scale-x-0 after:transition-transform after:duration-300
-                    hover:after:scale-x-100 flex items-center gap-1"
+                  className="relative flex items-center gap-1 py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
                 >
                   {item.name}
                   {item.hasDropdown && (
@@ -259,40 +245,36 @@ export default function NavBar() {
                 {item.type === "games" && gamesDropdownOpen && (
                   <div
                     ref={gamesDropdownRef}
-                    className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden z-50"
+                    className="absolute left-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
                   >
                     <div className="p-4">
-                      <h3 className="font-semibold text-slate-800 mb-2">
-                        Our Games
-                      </h3>
+                      <h3 className="mb-2 font-semibold text-slate-800">Our Games</h3>
                       <div className="space-y-3">
                         {games.map((game) => (
                           <Link
                             key={game.id}
                             href={`/games/${generateSlug(game.title)}`}
-                            className="flex gap-3 p-2 rounded-md hover:bg-slate-50 transition-colors"
+                            className="flex gap-3 rounded-md p-2 transition-colors hover:bg-slate-50"
                             onClick={closeAll}
                           >
-                            <div className="w-16 h-16 relative flex-shrink-0">
+                            <div className="relative h-16 w-16 flex-shrink-0">
                               <Image
                                 src={game.imageUrl}
                                 alt={game.title}
                                 fill
-                                className="object-cover rounded-md"
+                                className="rounded-md object-cover"
                               />
                             </div>
                             <div>
-                              <h4 className="font-medium text-slate-800">
-                                {game.title}
-                              </h4>
-                              <p className="text-sm text-slate-500 line-clamp-1">
+                              <h4 className="font-medium text-slate-800">{game.title}</h4>
+                              <p className="line-clamp-1 text-sm text-slate-500">
                                 {game.description}
                               </p>
-                              <div className="flex items-center mt-1">
-                                <span className="text-xs bg-brand-teal/10 text-brand-teal px-2 py-0.5 rounded-full">
+                              <div className="mt-1 flex items-center">
+                                <span className="rounded-full bg-brand-teal/10 px-2 py-0.5 text-xs text-brand-teal">
                                   {game.rating} ★
                                 </span>
-                                <span className="text-xs text-slate-500 ml-2">
+                                <span className="ml-2 text-xs text-slate-500">
                                   {game.players} players
                                 </span>
                               </div>
@@ -302,7 +284,7 @@ export default function NavBar() {
                       </div>
                       <Link
                         href="/games"
-                        className="block mt-3 text-center text-brand-teal hover:text-brand-tealDark font-medium py-2 border-t border-slate-100"
+                        className="mt-3 block border-t border-slate-100 py-2 text-center font-medium text-brand-teal hover:text-brand-tealDark"
                         onClick={closeAll}
                       >
                         View All Games
@@ -314,40 +296,36 @@ export default function NavBar() {
                 {item.type === "books" && booksDropdownOpen && (
                   <div
                     ref={booksDropdownRef}
-                    className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden z-50"
+                    className="absolute left-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
                   >
                     <div className="p-4">
-                      <h3 className="font-semibold text-slate-800 mb-2">
-                        Our Books
-                      </h3>
+                      <h3 className="mb-2 font-semibold text-slate-800">Our Books</h3>
                       <div className="space-y-3">
                         {books.map((book) => (
                           <Link
                             key={book.id}
                             href={`/books/${generateSlug(book.title)}`}
-                            className="flex gap-3 p-2 rounded-md hover:bg-slate-50 transition-colors"
+                            className="flex gap-3 rounded-md p-2 transition-colors hover:bg-slate-50"
                             onClick={closeAll}
                           >
-                            <div className="w-16 h-16 relative flex-shrink-0">
+                            <div className="relative h-16 w-16 flex-shrink-0">
                               <Image
                                 src={book.imageUrl}
                                 alt={book.title}
                                 fill
-                                className="object-cover rounded-md"
+                                className="rounded-md object-cover"
                               />
                             </div>
                             <div>
-                              <h4 className="font-medium text-slate-800">
-                                {book.title}
-                              </h4>
-                              <p className="text-sm text-slate-500 line-clamp-1">
+                              <h4 className="font-medium text-slate-800">{book.title}</h4>
+                              <p className="line-clamp-1 text-sm text-slate-500">
                                 {book.description}
                               </p>
-                              <div className="flex items-center mt-1">
-                                <span className="text-xs bg-brand-teal/10 text-brand-teal px-2 py-0.5 rounded-full">
+                              <div className="mt-1 flex items-center">
+                                <span className="rounded-full bg-brand-teal/10 px-2 py-0.5 text-xs text-brand-teal">
                                   {book.rating} ★
                                 </span>
-                                <span className="text-xs text-slate-500 ml-2">
+                                <span className="ml-2 text-xs text-slate-500">
                                   by {book.author}
                                 </span>
                               </div>
@@ -357,7 +335,7 @@ export default function NavBar() {
                       </div>
                       <Link
                         href="/books"
-                        className="block mt-3 text-center text-brand-teal hover:text-brand-tealDark font-medium py-2 border-t border-slate-100"
+                        className="mt-3 block border-t border-slate-100 py-2 text-center font-medium text-brand-teal hover:text-brand-tealDark"
                         onClick={closeAll}
                       >
                         View All Books
@@ -370,21 +348,25 @@ export default function NavBar() {
           </nav>
 
           {/* Right actions (desktop) */}
-          <div className="hidden md:flex items-center gap-5 text-slate-700">
+          <div className="hidden items-center gap-5 text-slate-700 md:flex">
             <Link
               href="/login"
-              className="text-[16px] text-[#0B3F44] py-1 relative transition-colors duration-200 hover:text-brand-teal
-              after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px]
-              after:h-[2px] after:w-full after:bg-brand-teal after:rounded-full
-              after:origin-center after:scale-x-0 after:transition-transform after:duration-300
-              hover:after:scale-x-100"
+              className="relative py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
             >
               <span>Login</span>
             </Link>
-            <Link href="/search" aria-label="Search" className="text-brand-teal hover:text-brand-tealDark">
+            <Link
+              href="/search"
+              aria-label="Search"
+              className="text-brand-teal hover:text-brand-tealDark"
+            >
               <FiSearch />
             </Link>
-            <Link href="/cart" aria-label="Cart" className="text-brand-teal hover:text-brand-tealDark">
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className="text-brand-teal hover:text-brand-tealDark"
+            >
               <FiShoppingCart />
             </Link>
           </div>
@@ -392,7 +374,7 @@ export default function NavBar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setOpen((s) => !s)}
-            className="md:hidden text-2xl p-2 ml-2"
+            className="ml-2 p-2 text-2xl md:hidden"
             aria-label="Toggle menu"
           >
             {open ? <FiX /> : <FiMenu />}
@@ -402,16 +384,13 @@ export default function NavBar() {
 
       {/* ================= Mobile Nav ================= */}
       {open && (
-        <div className="md:hidden border-t border-slate-200 bg-white">
-          <div className="px-4 py-4 flex flex-col gap-4">
+        <div className="border-t border-slate-200 bg-white md:hidden">
+          <div className="flex flex-col gap-4 px-4 py-4">
             {/* Simple links */}
             <Link
               href="/"
               onClick={closeAll}
-              className="py-1 relative hover:text-brand-tealDark block
-                after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-                after:h-[2px] after:w-0 after:bg-brand-tealDark
-                after:transition-all after:duration-300 hover:after:w-full"
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
               Home
             </Link>
@@ -420,7 +399,7 @@ export default function NavBar() {
             <div className="flex flex-col">
               <button
                 onClick={() => setGamesDropdownOpen((v) => !v)}
-                className="py-1 flex items-center justify-between text-left w-full hover:text-brand-tealDark"
+                className="flex w-full items-center justify-between py-1 text-left hover:text-brand-tealDark"
                 aria-expanded={gamesDropdownOpen}
                 aria-controls="mobile-games-panel"
               >
@@ -433,7 +412,7 @@ export default function NavBar() {
               {gamesDropdownOpen && (
                 <div
                   id="mobile-games-panel"
-                  className="pl-4 mt-2 space-y-3 border-l border-slate-200 ml-2"
+                  className="ml-2 mt-2 space-y-3 border-l border-slate-200 pl-4"
                 >
                   {games.map((g) => {
                     const href = `/games/${generateSlug(g.title)}`;
@@ -460,7 +439,7 @@ export default function NavBar() {
                       e.stopPropagation();
                       goto("/games");
                     }}
-                    className="block py-2 text-brand-teal hover:text-brand-tealDark font-medium"
+                    className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Games
                   </Link>
@@ -472,7 +451,7 @@ export default function NavBar() {
             <div className="flex flex-col">
               <button
                 onClick={() => setBooksDropdownOpen((v) => !v)}
-                className="py-1 flex items-center justify-between text-left w-full hover:text-brand-tealDark"
+                className="flex w-full items-center justify-between py-1 text-left hover:text-brand-tealDark"
                 aria-expanded={booksDropdownOpen}
                 aria-controls="mobile-books-panel"
               >
@@ -485,7 +464,7 @@ export default function NavBar() {
               {booksDropdownOpen && (
                 <div
                   id="mobile-books-panel"
-                  className="pl-4 mt-2 space-y-3 border-l border-slate-200 ml-2"
+                  className="ml-2 mt-2 space-y-3 border-l border-slate-200 pl-4"
                 >
                   {books.map((b) => {
                     const href = `/books/${generateSlug(b.title)}`;
@@ -511,7 +490,7 @@ export default function NavBar() {
                       e.stopPropagation();
                       goto("/books");
                     }}
-                    className="block py-2 text-brand-teal hover:text-brand-tealDark font-medium"
+                    className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Books
                   </Link>
@@ -523,33 +502,41 @@ export default function NavBar() {
             <Link
               href="/products"
               onClick={closeAll}
-              className="py-1 relative hover:text-brand-tealDark block
-                after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-                after:h-[2px] after:w-0 after:bg-brand-tealDark
-                after:transition-all after:duration-300 hover:after:w-full"
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
               Products
             </Link>
             <Link
               href="/about"
               onClick={closeAll}
-              className="py-1 relative hover:text-brand-tealDark block
-                after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
-                after:h-[2px] after:w-0 after:bg-brand-tealDark
-                after:transition-all after:duration-300 hover:after:w-full"
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
               About Us
             </Link>
 
             {/* Actions */}
             <div className="flex items-center gap-5 pt-2 text-slate-700">
-              <Link href="/login" className="hover:text-brand-tealDark flex items-center gap-2" onClick={closeAll}>
+              <Link
+                href="/login"
+                className="flex items-center gap-2 hover:text-brand-tealDark"
+                onClick={closeAll}
+              >
                 <FiLogIn /> <span>Login</span>
               </Link>
-              <Link href="/search" aria-label="Search" className="hover:text-brand-tealDark" onClick={closeAll}>
+              <Link
+                href="/search"
+                aria-label="Search"
+                className="hover:text-brand-tealDark"
+                onClick={closeAll}
+              >
                 <FiSearch />
               </Link>
-              <Link href="/cart" aria-label="Cart" className="hover:text-brand-tealDark" onClick={closeAll}>
+              <Link
+                href="/cart"
+                aria-label="Cart"
+                className="hover:text-brand-tealDark"
+                onClick={closeAll}
+              >
                 <FiShoppingCart />
               </Link>
             </div>

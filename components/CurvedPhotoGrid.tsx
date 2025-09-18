@@ -1,21 +1,19 @@
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function CurvedPhotoGrid({
   images,
   reverse = false,
 }: {
-  images: string[]
-  reverse?: boolean
+  images: string[];
+  reverse?: boolean;
 }) {
   return (
-    <div
-      className={`grid grid-cols-2 gap-4 p-6 sm:p-8 md:p-10 ${
-        reverse ? 'order-2' : ''
-      }`}
-    >
+    <div className={`grid grid-cols-2 gap-4 p-6 sm:p-8 md:p-10 ${reverse ? "order-2" : ""}`}>
       <div className="col-span-2 flex justify-center">
-        <div className="relative w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px] h-auto rounded-3xl overflow-hidden bg-gray-100 flex items-center justify-center">
-          <div className="relative w-full h-0 pb-[100%]"> {/* Square aspect ratio container */}
+        <div className="relative flex h-auto w-full max-w-[300px] items-center justify-center overflow-hidden rounded-3xl bg-gray-100 sm:max-w-[400px] lg:max-w-[500px]">
+          <div className="relative h-0 w-full pb-[100%]">
+            {" "}
+            {/* Square aspect ratio container */}
             <Image
               src={images[0]}
               alt="photo"
@@ -27,5 +25,5 @@ export default function CurvedPhotoGrid({
         </div>
       </div>
     </div>
-  )
+  );
 }

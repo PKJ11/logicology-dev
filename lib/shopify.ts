@@ -1,16 +1,17 @@
 // Shopify Storefront API utility for Next.js
 
-const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'book-store-logicology.myshopify.com';
+const domain =
+  process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || "book-store-logicology.myshopify.com";
 
-const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
+const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || "";
 const SHOPIFY_GRAPHQL_URL = `https://${domain}/api/2023-07/graphql.json`;
 
 export async function shopifyFetch({ query, variables = {} }: { query: string; variables?: any }) {
   const res = await fetch(SHOPIFY_GRAPHQL_URL, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': storefrontAccessToken || '',
+      "Content-Type": "application/json",
+      "X-Shopify-Storefront-Access-Token": storefrontAccessToken || "",
     },
     body: JSON.stringify({ query, variables }),
     next: { revalidate: 60 },
@@ -163,9 +164,9 @@ export async function updateCartItem(cartId: string, lineId: string, quantity: n
       }
     }
   `;
-  const variables = { 
-    cartId, 
-    lines: [{ id: lineId, quantity }] 
+  const variables = {
+    cartId,
+    lines: [{ id: lineId, quantity }],
   };
   const data = await shopifyFetch({ query, variables });
   return data.cartLinesUpdate.cart;
@@ -207,9 +208,9 @@ export async function removeFromCart(cartId: string, lineId: string) {
       }
     }
   `;
-  const variables = { 
-    cartId, 
-    lineIds: [lineId] 
+  const variables = {
+    cartId,
+    lineIds: [lineId],
   };
   const data = await shopifyFetch({ query, variables });
   return data.cartLinesRemove.cart;
@@ -306,18 +307,21 @@ export async function applyDiscountCode(cartId: string, discountCode: string) {
       }
     }
   `;
-  
-  const variables = { 
-    cartId, 
-    discountCodes: [discountCode] 
+
+  const variables = {
+    cartId,
+    discountCodes: [discountCode],
   };
-  
+
   const data = await shopifyFetch({ query, variables });
-  
+
   // Check for user errors (invalid discount codes)
-  if (data.cartDiscountCodesUpdate.userErrors && data.cartDiscountCodesUpdate.userErrors.length > 0) {
+  if (
+    data.cartDiscountCodesUpdate.userErrors &&
+    data.cartDiscountCodesUpdate.userErrors.length > 0
+  ) {
     throw new Error(data.cartDiscountCodesUpdate.userErrors[0].message);
   }
-  
+
   return data.cartDiscountCodesUpdate.cart;
 }
