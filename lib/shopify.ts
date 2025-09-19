@@ -3,7 +3,7 @@
 const domain =
   process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || "book-store-logicology.myshopify.com";
 
-const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || "";
+const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || "88fea8397a31ec6c42e40e2f15f514f6";
 const SHOPIFY_GRAPHQL_URL = `https://${domain}/api/2023-07/graphql.json`;
 
 export async function shopifyFetch({ query, variables = {} }: { query: string; variables?: any }) {
