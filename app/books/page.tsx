@@ -77,7 +77,7 @@ export default function BooksPage() {
 
     if (isLogicoland(selectedBook)) {
       // direct route for Logicoland
-      router.push("/books/logicoland1");
+      router.push("/books/logicoland-series");
     } else {
       // Others are Coming Soon — do nothing (or keep generic route if you want later)
       // router.push(`/books/${toSlug(selectedBook.title)}`);
