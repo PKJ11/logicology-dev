@@ -7,9 +7,28 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CTAButton from "./CTAButton";
+import { useState, useEffect } from "react";
 
 export default function Hero() {
   const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Effect to check screen size and set mobile state
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
   const slides = [
     {
       id: 1,
@@ -18,8 +37,10 @@ export default function Hero() {
       subtitle: "Play to Learn",
       description:
         "At Logicology we endeavour to make learning fun so that children learn while they play.",
-      image:
-        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+      image: {
+        desktop: "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+      },
       cta: "Learn more",
       ctaLink: "/philosophy",
     },
@@ -30,8 +51,10 @@ export default function Hero() {
       subtitle: "Through Engaging Content",
       description:
         "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
-      image:
-        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+      image: {
+        desktop: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758289595445",
+        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+      },
       cta: "Explore",
       ctaLink: "/concepts",
     },
@@ -42,8 +65,10 @@ export default function Hero() {
       subtitle: "With 21st Century Skills",
       description:
         "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
-      image:
-        "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250", // replace with your actual image
+      image: {
+        desktop: "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+      },
       cta: "Get Started",
       ctaLink: "/skills",
     },
@@ -77,7 +102,7 @@ export default function Hero() {
                 <div
                   className="absolute inset-0 z-0"
                   style={{
-                    backgroundImage: `url('${slide.image}')`,
+                    backgroundImage: `url('${isMobile ? slide.image.mobile : slide.image.desktop}')`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
