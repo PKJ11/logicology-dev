@@ -182,10 +182,11 @@ function BulletWithLine({
         side === "left" ? "md:flex-row" : "md:flex-row-reverse"
       }`}
     >
-      {/* dashed connector line (desktop only) - SHORTER LINES */}
+
+      {/* dashed connector line (desktop only) - EVEN SHORTER LINES */}
       <motion.div
         className={`relative hidden h-0 border-t-2 border-dashed border-brand-teal/40 md:block ${
-          side === "left" ? "ml-2 mr-3 w-24 lg:w-32" : "ml-3 mr-2 w-24 lg:w-32"
+          side === "left" ? "ml-2 mr-2 w-12 lg:w-16" : "ml-2 mr-2 w-12 lg:w-16"
         } translate-y-6`}
         style={{
           transformOrigin: side === "left" ? "left center" : "right center",
@@ -203,25 +204,28 @@ function BulletWithLine({
         />
       </motion.div>
 
-      {/* icon */}
+
+      {/* icon - BIGGER */}
       <motion.div
         whileHover={prefersReduced ? undefined : { scale: isDesktop() ? 1.06 : 1 }}
         transition={{ type: "spring", stiffness: 400, damping: 24 }}
         className="shrink-0"
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1EB6E9] shadow">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#1EB6E9] shadow">
           <Image
             src={icon || BULLET_ICON}
             alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8 bg-[#1EB6E9] object-contain"
+            width={64}
+            height={64}
+            className="h-14 w-14 bg-[#1EB6E9] object-contain"
           />
         </div>
       </motion.div>
 
-      {/* text */}
-      <div className="ml-4 max-w-[280px]">
+      {/* text - right align for left bullets on desktop */}
+      <div
+        className={`ml-4 max-w-[280px] ${side === "right" ? "md:text-right md:ml-0 md:mr-4" : ""}`}
+      >
         <div className="textstyles font-semibold leading-tight text-brand-tealDark">{title}</div>
         <p className="mt-2 text-base leading-relaxed text-brand-tealDark/80">{desc}</p>
       </div>
