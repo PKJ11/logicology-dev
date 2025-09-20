@@ -41,7 +41,7 @@ export default function Hero() {
         desktop:
           "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-DESKTOP.png?updatedAt=1758349826819",
         mobile:
-          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-MOBILE.png?updatedAt=1758349852483",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-MOBILE.png?updatedAt=1758359577839",
       },
       cta: "Learn more",
       ctaLink: "/philosophy",
@@ -55,9 +55,9 @@ export default function Hero() {
         "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
       image: {
         desktop:
-          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758289595445",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758359619262",
         mobile:
-          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758359625401",
       },
       cta: "Explore",
       ctaLink: "/concepts",
@@ -71,9 +71,9 @@ export default function Hero() {
         "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
       image: {
         desktop:
-          "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-3-FOR-DESKTOP.png?updatedAt=1758359629205",
         mobile:
-          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-3-FOR-MOBILE.png?updatedAt=1758359622801",
       },
       cta: "Get Started",
       ctaLink: "/skills",
@@ -116,14 +116,14 @@ export default function Hero() {
                   }}
                 />
 
-                {/* Content: centered, max 80vw */}
-                <div className="relative z-10 flex min-h-[700px] items-center">
+                {/* Content: centered on desktop, top-aligned on mobile */}
+                <div className="relative z-10 flex min-h-[700px] items-start md:items-center">
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
-                      <div className="p-8 sm:p-12">
-                        <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                      <div className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12">
+                        {slide.pretitle.length >0 && (<h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.pretitle}
-                        </h1>
+                        </h1>)}
                         <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
                           {slide.title}
 
