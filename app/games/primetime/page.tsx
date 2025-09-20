@@ -298,16 +298,35 @@ function GameDetails() {
 
 function InstructionVideos() {
   const videos = [
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+    },
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+    },
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+    },
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+    },
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+    },
+    {
+      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+    },
   ];
 
   const [active, setActive] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
 
   const handleVideoClick = (index: number) => {
     setActive(index);
@@ -386,20 +405,33 @@ function InstructionVideos() {
           <div className="rounded-4xl bg-white p-4 shadow-soft sm:p-0 md:p-5">
             {/* 2 cols on phones, 3 cols from sm/md up */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-2 md:gap-4">
-              {videos.map((src, i) => (
+              {videos.map((item, i) => (
                 <div
                   key={i}
                   onClick={() => handleVideoClick(i)}
+                  onMouseEnter={() => setHoveredVideo(i)}
+                  onMouseLeave={() => setHoveredVideo(null)}
                   className="group relative aspect-[9/16] min-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200 sm:min-h-[220px] md:min-h-[260px]"
                 >
-                  <video
-                    src={src}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {/* Show video on hover, thumbnail by default */}
+                  {hoveredVideo === i ? (
+                    <video
+                      src={item.video}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <img
+                      src={item.thumbnail}
+                      alt={`Video thumbnail ${i + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
+                  
                   {/* Play overlay */}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
@@ -453,7 +485,7 @@ function InstructionVideos() {
               style={{ maxHeight: "80vh" }}
             >
               <video
-                src={videos[active]}
+                src={videos[active].video}
                 autoPlay={isPlaying}
                 controls
                 className="h-full w-full object-contain"
