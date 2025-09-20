@@ -39,9 +39,9 @@ export default function Hero() {
         "At Logicology we endeavour to make learning fun so that children learn while they play.",
       image: {
         desktop:
-          "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-DESKTOP.png?updatedAt=1758349826819",
         mobile:
-          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-MOBILE.png?updatedAt=1758349852483",
       },
       cta: "Learn more",
       ctaLink: "/philosophy",
