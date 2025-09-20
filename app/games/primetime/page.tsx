@@ -336,32 +336,32 @@ function InstructionVideos() {
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.1.jpg?updatedAt=1758361316632",
     },
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.2.jpg?updatedAt=1758361316632",
     },
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.3.jpg?updatedAt=1758361316632",
     },
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.1.jpg?updatedAt=1758361316632",
     },
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.2.jpg?updatedAt=1758361316632",
     },
     {
       video:
         "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.3.jpg?updatedAt=1758361316632",
     },
   ];
 
