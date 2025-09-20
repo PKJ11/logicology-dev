@@ -29,7 +29,6 @@ export default function PrimeTimeLanding() {
 
 // --------------------- Hero ---------------------
 function Hero() {
-
   const [isMobile, setIsMobile] = useState(false);
 
   // Effect to check screen size and set mobile state
@@ -61,7 +60,7 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-MOBILE-VIEW.png?updatedAt=1758359620797",
       },
-       cta: "Learn more",
+      cta: "Learn more",
       ctaLink: "/philosophy",
     },
     {
@@ -71,7 +70,7 @@ function Hero() {
       subtitle: "fun for everyone.",
       description:
         "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
-        image: {
+      image: {
         desktop:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-2-DESKTOPVIEW-.png?updatedAt=1758359620883",
         mobile:
@@ -87,7 +86,7 @@ function Hero() {
       subtitle: "all come together!",
       description:
         "You don't need to know anything about primes, composites, or factorization to start playing — the game's clever design teaches it naturally as you go.",
-        image: {
+      image: {
         desktop:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-3-DESKTOPVIEW-.png?updatedAt=1758359630962",
         mobile:
@@ -100,176 +99,176 @@ function Hero() {
 
   return (
     <section className="section my-10">
-          <div className="container-padding">
-            <div className="section-rounded relative overflow-hidden">
-              <Swiper
-                spaceBetween={0}
-                slidesPerView={1}
-                loop
-                autoplay={{ delay: 5000, disableOnInteraction: false }}
-                pagination={{
-                  clickable: true,
-                  bulletClass: "custom-bullet",
-                  bulletActiveClass: "custom-bullet-active",
-                  renderBullet: (index, className) => `<span class="${className}"><i></i></span>`,
-                }}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
-                modules={[Autoplay, Pagination, Navigation]}
-                className="hero-swiper"
-              >
-                {slides.map((slide) => (
-                  <SwiperSlide key={slide.id}>
-                    {/* Full-bleed background */}
-                    <div
-                      className="absolute inset-0 z-0"
-                      style={{
-                        backgroundImage: `url('${isMobile ? slide.image.mobile : slide.image.desktop}')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                        transform: "scale(1)",
-                      }}
-                    />
-    
-                    {/* Content: centered, max 80vw */}
-                    <div className="relative z-10 flex min-h-[700px] items-center">
-                      <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
-                        <div className="flex">
-                          <div className="p-8 sm:p-12">
-                            <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
-                              {slide.pretitle}
-                            </h1>
-                            <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
-                              {slide.title}
-    
-                              <span className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
-                                {slide.subtitle}
-                              </span>
-                            </h1>
-                            <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
-                              {slide.description}
-                            </p>
-                            <div className="mt-6">
-                              <CTAButton
-                                text={slide.cta}
-                                href={slide.ctaLink}
-                                bg="#FFFFFF"
-                                color="#0A8A80" // brand teal text
-                                hoverBg="#0A8A80" // brand teal bg on hover
-                                hoverColor="#FFFFFF" // white text on hover
-                                size="md"
-                                rightIcon={
-                                  <svg
-                                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M9 5l7 7-7 7"
-                                    />
-                                  </svg>
-                                }
-                              />
-                            </div>
-                          </div>
+      <div className="container-padding">
+        <div className="section-rounded relative overflow-hidden">
+          <Swiper
+            spaceBetween={0}
+            slidesPerView={1}
+            loop
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            pagination={{
+              clickable: true,
+              bulletClass: "custom-bullet",
+              bulletActiveClass: "custom-bullet-active",
+              renderBullet: (index, className) => `<span class="${className}"><i></i></span>`,
+            }}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
+            modules={[Autoplay, Pagination, Navigation]}
+            className="hero-swiper"
+          >
+            {slides.map((slide) => (
+              <SwiperSlide key={slide.id}>
+                {/* Full-bleed background */}
+                <div
+                  className="absolute inset-0 z-0"
+                  style={{
+                    backgroundImage: `url('${isMobile ? slide.image.mobile : slide.image.desktop}')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    transform: "scale(1)",
+                  }}
+                />
+
+                {/* Content: centered, max 80vw */}
+                <div className="relative z-10 flex min-h-[700px] items-center">
+                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
+                    <div className="flex">
+                      <div className="p-8 sm:p-12">
+                        <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                          {slide.pretitle}
+                        </h1>
+                        <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                          {slide.title}
+
+                          <span className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                            {slide.subtitle}
+                          </span>
+                        </h1>
+                        <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                          {slide.description}
+                        </p>
+                        <div className="mt-6">
+                          <CTAButton
+                            text={slide.cta}
+                            href={slide.ctaLink}
+                            bg="#FFFFFF"
+                            color="#0A8A80" // brand teal text
+                            hoverBg="#0A8A80" // brand teal bg on hover
+                            hoverColor="#FFFFFF" // white text on hover
+                            size="md"
+                            rightIcon={
+                              <svg
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            }
+                          />
                         </div>
                       </div>
                     </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
-    
-          <style jsx global>{`
-            .hero-swiper {
-              width: 100%;
-              height: 100%;
-            }
-            .hero-swiper .swiper-slide {
-              height: auto;
-              min-height: 700px;
-              overflow: hidden;
-            }
-            .swiper-pagination {
-              bottom: 20px !important;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              gap: 8px;
-              z-index: 20;
-            }
-            .custom-bullet {
-              width: 12px;
-              height: 12px;
-              display: inline-block;
-              border-radius: 50%;
-              background: rgba(255, 255, 255, 0.6);
-              cursor: pointer;
-              transition: all 0.3s ease;
-              position: relative;
-            }
-            .custom-bullet i {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 6px;
-              height: 6px;
-              border-radius: 50%;
-              background: white;
-              opacity: 0;
-              transition: opacity 0.3s ease;
-            }
-            .custom-bullet-active {
-              background: transparent;
-              border: 2px solid white;
-              width: 16px;
-              height: 16px;
-            }
-            .custom-bullet-active i {
-              opacity: 1;
-            }
-            .swiper-button-next,
-            .swiper-button-prev {
-              color: #3f2f14;
-              background: rgba(255, 255, 255, 0.8);
-              width: 48px;
-              height: 48px;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-              transition: all 0.3s ease;
-              z-index: 20;
-            }
-            .swiper-button-next:after,
-            .swiper-button-prev:after {
-              content: none;
-            }
-            .swiper-button-next:hover,
-            .swiper-button-prev:hover {
-              background: white;
-              transform: scale(1.05);
-            }
-            @media (max-width: 767px) {
-              .swiper-pagination {
-                bottom: 10px !important;
-              }
-              .hero-swiper .swiper-slide {
-                min-height: 600px;
-              }
-            }
-          `}</style>
-        </section>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        .hero-swiper {
+          width: 100%;
+          height: 100%;
+        }
+        .hero-swiper .swiper-slide {
+          height: auto;
+          min-height: 700px;
+          overflow: hidden;
+        }
+        .swiper-pagination {
+          bottom: 20px !important;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          z-index: 20;
+        }
+        .custom-bullet {
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.6);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+        .custom-bullet i {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: white;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .custom-bullet-active {
+          background: transparent;
+          border: 2px solid white;
+          width: 16px;
+          height: 16px;
+        }
+        .custom-bullet-active i {
+          opacity: 1;
+        }
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #3f2f14;
+          background: rgba(255, 255, 255, 0.8);
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          z-index: 20;
+        }
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+          content: none;
+        }
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+          background: white;
+          transform: scale(1.05);
+        }
+        @media (max-width: 767px) {
+          .swiper-pagination {
+            bottom: 10px !important;
+          }
+          .hero-swiper .swiper-slide {
+            min-height: 600px;
+          }
+        }
+      `}</style>
+    </section>
   );
 }
 
@@ -335,28 +334,34 @@ function GameDetails() {
 function InstructionVideos() {
   const videos = [
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
     },
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
     },
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
     },
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
     },
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.jpg?updatedAt=1758357418282",
     },
     {
-      video: "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
-      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802"
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.jpg?updatedAt=1758357418802",
     },
   ];
 
@@ -467,7 +472,7 @@ function InstructionVideos() {
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
-                  
+
                   {/* Play overlay */}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">

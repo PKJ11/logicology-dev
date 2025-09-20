@@ -121,9 +121,11 @@ export default function Hero() {
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
                       <div className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12">
-                        {slide.pretitle.length >0 && (<h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
-                          {slide.pretitle}
-                        </h1>)}
+                        {slide.pretitle.length > 0 && (
+                          <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                            {slide.pretitle}
+                          </h1>
+                        )}
                         <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
                           {slide.title}
 
