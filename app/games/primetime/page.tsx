@@ -248,7 +248,7 @@ function GameDetails() {
           {/* MediaLayout on left for larger screens, top for mobile */}
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
             <MediaLayout
-              image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
+              image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
               videoSrc=""
             />
           </div>
