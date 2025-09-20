@@ -273,16 +273,19 @@ export default function Logicoland1Page() {
 
               <div className="mt-10 grid gap-8 md:grid-cols-2">
                 <PrintableCard
-                  colorClass="bg-[#DDB24D]"
+                  bgImage="https://ik.imagekit.io/pratik11/logicaoldandpdf1.JPG?updatedAt=1758342080344"
                   buttonColor="#7E5C2E"
                   filePath="/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
                   downloadName="Logicoland-Volume1-Worksheet1.pdf"
+                  overlayClass="bg-black/15" // optional: improves button contrast
                 />
+
                 <PrintableCard
-                  colorClass="bg-[#E45C48]"
+                  bgImage="https://ik.imagekit.io/pratik11/logicolandpdf2.JPG?updatedAt=1758342079963"
                   buttonColor="#AB4637"
                   filePath="/pdfs/downloadable/LogicolandVolume1Worksheet2.pdf"
                   downloadName="Logicoland-Volume1-Worksheet2.pdf"
+                  overlayClass="bg-black/15" // optional
                 />
               </div>
 
@@ -713,23 +716,43 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
 ============================================================ */
 
 type PrintableCardProps = {
-  colorClass: string;
+  colorClass?: string; // optional fallback if no image
   buttonColor: string;
   filePath: string; // e.g. "/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
-  downloadName?: string; // optional: suggested filename
+  downloadName?: string;
+  bgImage?: string; // NEW: e.g. "/Images/printable1.jpg" (from /public)
+  overlayClass?: string; // optional: e.g. "bg-black/10" to improve contrast
 };
 
-function PrintableCard({ colorClass, buttonColor, filePath, downloadName }: PrintableCardProps) {
+function PrintableCard({
+  colorClass,
+  buttonColor,
+  filePath,
+  downloadName,
+  bgImage,
+  overlayClass = "bg-black/10", // light overlay by default for readability
+}: PrintableCardProps) {
+  const useImage = !!bgImage;
+
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
-      <div className={`h-64 rounded-[14px] ${colorClass} relative`}>
+      <div
+        className={[
+          "relative h-64 overflow-hidden rounded-[14px]",
+          useImage ? "bg-contain bg-top" : (colorClass ?? ""),
+        ].join(" ")}
+        style={useImage ? { backgroundImage: `url(${bgImage})` } : undefined}
+      >
+        {/* Optional contrast overlay for text/button legibility */}
+        {useImage && <div className={`absolute inset-0 ${overlayClass}`} />}
+
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
           <div className="mt-6">
-            {/* Use a normal anchor so the browser honors the download attribute */}
+            {/* anchor to force download */}
             <a href={filePath} download={downloadName || ""}>
               <CTAButton
                 text="Download PDF"
-                href={filePath} // harmless; CTAButton can still style as link
+                href={filePath}
                 bg="#FFFFFF"
                 color={buttonColor}
                 hoverBg={buttonColor}

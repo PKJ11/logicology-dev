@@ -182,7 +182,6 @@ function BulletWithLine({
         side === "left" ? "md:flex-row" : "md:flex-row-reverse"
       }`}
     >
-
       {/* dashed connector line (desktop only) - EVEN SHORTER LINES */}
       <motion.div
         className={`relative hidden h-0 border-t-2 border-dashed border-brand-teal/40 md:block ${
@@ -204,7 +203,6 @@ function BulletWithLine({
         />
       </motion.div>
 
-
       {/* icon - BIGGER */}
       <motion.div
         whileHover={prefersReduced ? undefined : { scale: isDesktop() ? 1.06 : 1 }}
@@ -224,7 +222,7 @@ function BulletWithLine({
 
       {/* text - right align for left bullets on desktop */}
       <div
-        className={`ml-4 max-w-[280px] ${side === "right" ? "md:text-right md:ml-0 md:mr-4" : ""}`}
+        className={`ml-4 max-w-[280px] ${side === "right" ? "md:ml-0 md:mr-4 md:text-right" : ""}`}
       >
         <div className="textstyles font-semibold leading-tight text-brand-tealDark">{title}</div>
         <p className="mt-2 text-base leading-relaxed text-brand-tealDark/80">{desc}</p>
