@@ -121,7 +121,11 @@ export default function NavBar() {
   const [gamesDropdownOpen, setGamesDropdownOpen] = useState(false);
   const [booksDropdownOpen, setBooksDropdownOpen] = useState(false);
 
-  // Refs only for desktop hover dropdowns
+  // Timeout references for hover delays
+  const gamesHoverTimeout = useRef<NodeJS.Timeout | null>(null);
+  const booksHoverTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  // Refs for desktop hover dropdowns
   const gamesDropdownRef = useRef<HTMLDivElement>(null);
   const booksDropdownRef = useRef<HTMLDivElement>(null);
   const gamesTriggerRef = useRef<HTMLDivElement>(null);
@@ -136,40 +140,103 @@ export default function NavBar() {
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  // Only attach outside-click handler on DESKTOP
+  // Clear timeouts on unmount
   useEffect(() => {
-    if (!isDesktop) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        gamesDropdownRef.current &&
-        !gamesDropdownRef.current.contains(event.target as Node) &&
-        gamesTriggerRef.current &&
-        !gamesTriggerRef.current.contains(event.target as Node)
-      ) {
-        setGamesDropdownOpen(false);
-      }
-      if (
-        booksDropdownRef.current &&
-        !booksDropdownRef.current.contains(event.target as Node) &&
-        booksTriggerRef.current &&
-        !booksTriggerRef.current.contains(event.target as Node)
-      ) {
-        setBooksDropdownOpen(false);
-      }
+    return () => {
+      if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
+      if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isDesktop]);
+  }, []);
 
-  // Desktop hover open/close (no effect on mobile)
-  const handleDropdownHover = (type: "games" | "books", open: boolean) => {
+  // Desktop hover open with delay
+  const handleDropdownHoverEnter = (type: "games" | "books") => {
     if (!isDesktop) return;
+
+    // Clear any existing timeouts
+    if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
+    if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
+
     if (type === "games") {
-      setGamesDropdownOpen(open);
-      if (open) setBooksDropdownOpen(false);
+      gamesHoverTimeout.current = setTimeout(() => {
+        setGamesDropdownOpen(true);
+        setBooksDropdownOpen(false);
+      }, 150); // Small delay to prevent accidental opening
     } else {
-      setBooksDropdownOpen(open);
-      if (open) setGamesDropdownOpen(false);
+      booksHoverTimeout.current = setTimeout(() => {
+        setBooksDropdownOpen(true);
+        setGamesDropdownOpen(false);
+      }, 150);
+    }
+  };
+
+  // Desktop hover leave with delay (to allow moving to dropdown)
+  const handleDropdownHoverLeave = (type: "games" | "books") => {
+    if (!isDesktop) return;
+
+    if (type === "games") {
+      if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
+      gamesHoverTimeout.current = setTimeout(() => {
+        // Check if mouse is actually over the dropdown before closing
+        if (!isMouseOverDropdown("games")) {
+          setGamesDropdownOpen(false);
+        }
+      }, 200); // Give user time to move to dropdown
+    } else {
+      if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
+      booksHoverTimeout.current = setTimeout(() => {
+        if (!isMouseOverDropdown("books")) {
+          setBooksDropdownOpen(false);
+        }
+      }, 200);
+    }
+  };
+
+  // Check if mouse is over dropdown (to prevent premature closing)
+  const isMouseOverDropdown = (type: "games" | "books") => {
+    const dropdown = type === "games" ? gamesDropdownRef.current : booksDropdownRef.current;
+
+    if (!dropdown) return false;
+
+    const rect = dropdown.getBoundingClientRect();
+    const isInDropdown =
+      mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+
+    return isInDropdown;
+  };
+
+  // Track mouse position for dropdown checks
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouseX(e.clientX);
+      setMouseY(e.clientY);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Keep dropdown open when hovering over it
+  const handleDropdownHover = () => {
+    // Clear any pending close timeouts
+    if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
+    if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
+  };
+
+  // Close dropdown when leaving it
+  const handleDropdownLeave = (type: "games" | "books") => {
+    if (!isDesktop) return;
+
+    if (type === "games") {
+      gamesHoverTimeout.current = setTimeout(() => {
+        setGamesDropdownOpen(false);
+      }, 150);
+    } else {
+      booksHoverTimeout.current = setTimeout(() => {
+        setBooksDropdownOpen(false);
+      }, 150);
     }
   };
 
@@ -217,10 +284,10 @@ export default function NavBar() {
                       : null
                 }
                 onMouseEnter={() =>
-                  item.hasDropdown && handleDropdownHover(item.type as "games" | "books", true)
+                  item.hasDropdown && handleDropdownHoverEnter(item.type as "games" | "books")
                 }
                 onMouseLeave={() =>
-                  item.hasDropdown && handleDropdownHover(item.type as "games" | "books", false)
+                  item.hasDropdown && handleDropdownHoverLeave(item.type as "games" | "books")
                 }
               >
                 <Link
@@ -246,6 +313,8 @@ export default function NavBar() {
                   <div
                     ref={gamesDropdownRef}
                     className="absolute left-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
+                    onMouseEnter={handleDropdownHover}
+                    onMouseLeave={() => handleDropdownLeave("games")}
                   >
                     <div className="p-4">
                       <h3 className="mb-2 font-semibold text-slate-800">Our Games</h3>
@@ -297,6 +366,8 @@ export default function NavBar() {
                   <div
                     ref={booksDropdownRef}
                     className="absolute left-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl"
+                    onMouseEnter={handleDropdownHover}
+                    onMouseLeave={() => handleDropdownLeave("books")}
                   >
                     <div className="p-4">
                       <h3 className="mb-2 font-semibold text-slate-800">Our Books</h3>

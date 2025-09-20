@@ -12,21 +12,21 @@ import { useState, useEffect } from "react";
 export default function Hero() {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
-  
+
   // Effect to check screen size and set mobile state
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     // Initial check
     checkScreenSize();
-    
+
     // Add event listener for window resize
-    window.addEventListener('resize', checkScreenSize);
-    
+    window.addEventListener("resize", checkScreenSize);
+
     // Cleanup
-    return () => window.removeEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   const slides = [
@@ -38,36 +38,42 @@ export default function Hero() {
       description:
         "At Logicology we endeavour to make learning fun so that children learn while they play.",
       image: {
-        desktop: "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
-        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+        desktop:
+          "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+        mobile:
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
       },
       cta: "Learn more",
       ctaLink: "/philosophy",
     },
     {
       id: 2,
-      pretitle: "Slider #2",
+      pretitle: "",
       title: "Conceptual Understanding",
       subtitle: "Through Engaging Content",
       description:
         "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
       image: {
-        desktop: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758289595445",
-        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+        desktop:
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758289595445",
+        mobile:
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
       },
       cta: "Explore",
       ctaLink: "/concepts",
     },
     {
       id: 3,
-      pretitle: "Slider #3",
+      pretitle: "",
       title: "AI Proof Your Children",
       subtitle: "With 21st Century Skills",
       description:
         "Our content focuses on 21st century skills like Logical Reasoning, Problem Solving, Lateral Thinking etc.",
       image: {
-        desktop: "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
-        mobile: "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077"
+        desktop:
+          "https://ik.imagekit.io/pratik2002/LOGICOLOGY-WEBSITE-DESIGN-SLIDER-1.png?updatedAt=1756275673250",
+        mobile:
+          "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-MOBILE.png?updatedAt=1758289596077",
       },
       cta: "Get Started",
       ctaLink: "/skills",

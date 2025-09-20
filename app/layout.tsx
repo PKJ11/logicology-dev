@@ -20,10 +20,15 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
+import FeedbackButton from "@/components/FeedbackButton";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <FeedbackButton />
+      </body>
     </html>
   );
 }

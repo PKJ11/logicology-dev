@@ -268,15 +268,27 @@ export default function Logicoland1Page() {
                 Printables
               </h3>
               <p className="textstyles mt-2 text-center text-brand-teal">
-                Done with Logicoland 1 already? Here are a few more 4×4 Sudoku puzzles to color.
+                Done with Logicoland 1 already? Here are a few more worksheets for your practice.
               </p>
 
               <div className="mt-10 grid gap-8 md:grid-cols-2">
-                <PrintableCard colorClass="bg-[#DDB24D]" buttonColor="#7E5C2E" />
-                <PrintableCard colorClass="bg-[#E45C48]" buttonColor="#AB4637" />
+                <PrintableCard
+                  colorClass="bg-[#DDB24D]"
+                  buttonColor="#7E5C2E"
+                  filePath="/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
+                  downloadName="Logicoland-Volume1-Worksheet1.pdf"
+                />
+                <PrintableCard
+                  colorClass="bg-[#E45C48]"
+                  buttonColor="#AB4637"
+                  filePath="/pdfs/downloadable/LogicolandVolume1Worksheet2.pdf"
+                  downloadName="Logicoland-Volume1-Worksheet2.pdf"
+                />
               </div>
 
-              <p className="mt-8 text-center text-brand-tealDark/70">For more join our community</p>
+              <p className="mt-8 text-center text-brand-tealDark/70">
+                For more such printables, join our community.
+              </p>
             </div>
           </div>
         </section>
@@ -700,41 +712,46 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
    Little helpers
 ============================================================ */
 
-interface PrintableCardProps {
+type PrintableCardProps = {
   colorClass: string;
-  buttonColor: string; // single color prop
-}
+  buttonColor: string;
+  filePath: string; // e.g. "/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
+  downloadName?: string; // optional: suggested filename
+};
 
-function PrintableCard({ colorClass, buttonColor }: PrintableCardProps) {
+function PrintableCard({ colorClass, buttonColor, filePath, downloadName }: PrintableCardProps) {
   return (
     <div className="rounded-[18px] bg-white p-3 shadow-soft">
       <div className={`h-64 rounded-[14px] ${colorClass} relative`}>
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
           <div className="mt-6">
-            <CTAButton
-              text="Download Pdf"
-              href=""
-              bg="#FFFFFF"
-              color={buttonColor} // text color = buttonColor
-              hoverBg={buttonColor} // hover bg = buttonColor
-              hoverColor="#FFFFFF" // hover text = white
-              size="md"
-              rightIcon={
-                <svg
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              }
-            />
+            {/* Use a normal anchor so the browser honors the download attribute */}
+            <a href={filePath} download={downloadName || ""}>
+              <CTAButton
+                text="Download PDF"
+                href={filePath} // harmless; CTAButton can still style as link
+                bg="#FFFFFF"
+                color={buttonColor}
+                hoverBg={buttonColor}
+                hoverColor="#FFFFFF"
+                size="md"
+                rightIcon={
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
+            </a>
           </div>
         </div>
       </div>

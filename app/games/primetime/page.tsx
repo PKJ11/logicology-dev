@@ -301,9 +301,9 @@ function InstructionVideos() {
     "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
     "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
     "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
-    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
     "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
+    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
+    "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
   ];
 
   const [active, setActive] = useState<number | null>(null);
@@ -344,11 +344,11 @@ function InstructionVideos() {
         <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
           <div className="px-0 sm:px-8">
             <h2 className="headingstyle font-heading font-extrabold text-white/90">
-              How to play Instruction Videos
+              Frequently Asked Question about Prime Time
             </h2>
 
             <p className="textstyles mt-3 max-w-prose text-white/90">
-              Short, punchy walkthroughs so you can learn while you play.
+              Watch these to get answers to all your questions about Prime Time™
             </p>
 
             <div className="mt-6">
@@ -489,15 +489,12 @@ function InteractiveGames() {
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Prime Number Explorer
               </h3>
-              <div className="aspect-video overflow-hidden rounded-3xl bg-brand-grayBg">
+              <div className="aspect-video h-[300px] overflow-hidden rounded-3xl bg-brand-grayBg">
                 <iframe
-                  style={{ maxWidth: "100%" }}
+                  className="h-full w-full max-w-[300px] md:max-w-full lg:max-w-full"
                   src="https://wordwall.net/embed/play/96298/037/880"
-                  width="100%"
-                  height="100%"
                   frameBorder="0"
                   allowFullScreen
-                  className="h-full w-full"
                 ></iframe>
               </div>
               <p className="mt-4 text-center text-brand-tealDark/80">Identify Prime Number......</p>
@@ -508,15 +505,12 @@ function InteractiveGames() {
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Composite Number Challenge
               </h3>
-              <div className="aspect-video overflow-hidden rounded-3xl bg-brand-grayBg">
+              <div className="aspect-video h-[300px] overflow-hidden rounded-3xl bg-brand-grayBg">
                 <iframe
-                  style={{ maxWidth: "100%" }}
                   src="https://wordwall.net/embed/play/96298/689/270"
-                  width="100%"
-                  height="100%"
                   frameBorder="0"
                   allowFullScreen
-                  className="h-full w-full"
+                  className="h-full w-full max-w-[300px] md:max-w-full lg:max-w-full"
                 ></iframe>
               </div>
               <p className="mt-4 text-center text-brand-tealDark/80">Find Composite Number....</p>
@@ -630,12 +624,10 @@ function LostCardHelper() {
                 Lost a card?
               </h2>
               <p className="textstyles mt-3 max-w-prose font-sans">
-                Worry not! We've got you covered.
-                <br />
-                The game box comes with four blank cards just for this purpose.
-                <br />
-                Enter the card number below.
+                Worry not! We've got you covered - The game box comes with four blank cards just for
+                this purpose.
               </p>
+              <p className="textstyles mt-3 max-w-prose font-sans">Enter the card number below.</p>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <label className="sr-only" htmlFor="card-number">
@@ -653,8 +645,9 @@ function LostCardHelper() {
                     if (error) setError(null);
                   }}
                   onKeyDown={onKeyDown}
-                  className="w-full rounded-full border border-gray-300 px-5 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
+                  className="/* keep same bg */ w-full rounded-full border border-gray-300 bg-gray-50 px-5 py-3 text-sm text-gray-900 outline-none ring-0 focus:bg-gray-50 focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
                 />
+
                 <button
                   onClick={showCard}
                   className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
