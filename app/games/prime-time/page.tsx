@@ -56,9 +56,9 @@ function Hero() {
         "Prime Time™ is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
       image: {
         desktop:
-          "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-DESKTOPVIEW-.png?updatedAt=1758359616937",
+          "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png?updatedAt=1758442535210",
         mobile:
-          "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-MOBILE-VIEW.png?updatedAt=1758359620797",
+          "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-MOBILE-VIEW.png?updatedAt=1758442535388",
       },
       cta: "Learn more",
       ctaLink: "/philosophy",
@@ -105,7 +105,7 @@ function Hero() {
             spaceBetween={0}
             slidesPerView={1}
             loop
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            autoplay={{ delay: 15000, disableOnInteraction: false }}
             pagination={{
               clickable: true,
               bulletClass: "custom-bullet",

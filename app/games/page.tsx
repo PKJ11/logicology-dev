@@ -58,7 +58,7 @@ export default function GamesPage() {
     },
   ];
 
-  const isPrimeTime = (g: Game) => g.title === "PrimeTime";
+  const isPrimeTime = (g: Game) => g.title === "Prime Time™";
 
   const openModal = (game: Game) => {
     setSelectedGame(game);
