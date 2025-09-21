@@ -12,8 +12,8 @@ export default function WhyImportant() {
             {/* MediaLayout on left for larger screens, top for mobile */}
             <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
               <MediaLayout
-                image="https://ik.imagekit.io/pratik11/FOLD-1.1-IMAGE.png?updatedAt=1757749236600"
-                videoSrc=""
+                image="https://ik.imagekit.io/pratik11/WHY-LOGICOLOGY.png?updatedAt=1758439747708"
+                videoSrc="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
               />
             </div>
 

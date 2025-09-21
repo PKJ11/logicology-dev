@@ -52,7 +52,7 @@ export default function BooksPage() {
       id: 3,
       title: "Hidden in the Jungle",
       imageUrl:
-        "https://ik.imagekit.io/pratik11/HIDDEN%20IN%20THE%20JUNGLE%20MOCKUP.png?updatedAt=1757748179906",
+        "https://ik.imagekit.io/pratik11/HIDDEN-IN-THE-JUNGLE-MOCKUP-NEW2.png?updatedAt=1758439662245",
       description:
         "A fast-paced observation and deduction card game where players race to spot hidden animals camouflaged in the jungle. Quick eyes and sharp focus are the key to winning in this exciting family-friendly adventure.",
       author: "Logicology",

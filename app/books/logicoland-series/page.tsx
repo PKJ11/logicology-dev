@@ -9,190 +9,11 @@ import Community from "@/components/Community";
 import BuySection from "@/components/BuySection";
 
 /* ============================================================
-   PAGE
+   MAIN PAGE COMPONENT
 ============================================================ */
 export default function Logicoland1Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  function HeroVideo() {
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [isMuted, setIsMuted] = useState(true);
-    const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const toggleMute = () => {
-      if (videoRef.current) {
-        videoRef.current.muted = !isMuted;
-        setIsMuted(!isMuted);
-      }
-    };
-
-    const toggleFullscreen = () => {
-      if (!videoRef.current) return;
-      if (!document.fullscreenElement) {
-        videoRef.current.requestFullscreen?.();
-        setIsFullscreen(true);
-      } else {
-        document.exitFullscreen?.();
-        setIsFullscreen(false);
-      }
-    };
-
-    return (
-      <section className="w-full bg-white">
-        <div className="px-3 pt-4 sm:px-5">
-          <div className="relative rounded-[28px] bg-white p-2">
-            <div className="relative overflow-hidden rounded-[22px]">
-              <video
-                ref={videoRef}
-                autoPlay
-                loop
-                playsInline
-                muted={isMuted}
-                className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
-              >
-                <source
-                  src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-                  type="video/mp4"
-                />
-              </video>
-
-              {/* gradient under text */}
-              <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
-
-              {/* centered overlay content */}
-              <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-                <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
-                  <p className="textstyles mb-3">Empowering Minds</p>
-                  <h1 className="headingstyle font-extrabold leading-tight">
-                    Through STEM Play
-                    <br /> and Logic-Based Learning
-                  </h1>
-                  <p className="textstyles mt-4 max-w-md text-white/90">
-                    At Logicology we endeavour to make learning fun so that children learn while
-                    they play.
-                  </p>
-                  <div className="mt-6">
-                    <CTAButton
-                      text="Learn More"
-                      href="#buy"
-                      bg="#FFFFFF"
-                      color="#0A8A80"
-                      hoverBg="#0A8A80"
-                      hoverColor="#FFFFFF"
-                      size="md"
-                      rightIcon={
-                        <svg
-                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Controls group (bottom-right) */}
-              <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
-                {/* Mute/Unmute */}
-                <button
-                  onClick={toggleMute}
-                  className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
-                  aria-label={isMuted ? "Unmute video" : "Mute video"}
-                >
-                  {isMuted ? (
-                    // Muted icon
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
-                      />
-                    </svg>
-                  ) : (
-                    // Unmuted icon
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M11 5L6 9H3v6h3l5 4V5z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
-                      />
-                    </svg>
-                  )}
-                </button>
-
-                {/* Fullscreen */}
-                <button
-                  onClick={toggleFullscreen}
-                  className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
-                  aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-                >
-                  {!isFullscreen ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
   return (
     <>
       <NavBar />
@@ -203,31 +24,92 @@ export default function Logicoland1Page() {
 
         {/* ================= LOGICOLAND V1 ================= */}
         <BuySection />
+
         {/* ================= INTERACTIVE PUZZLES ================= */}
-        <section className="w-full bg-brand-coral text-white">
-          <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-            <div className="grid items-center gap-12 md:grid-cols-2">
-              <div className="sm:px-4">
-                {/* <p className="text-lg">Interactive</p> */}
-                <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
+        <InteractivePuzzlesSection />
 
-                <p className="textstyles mt-4 font-sans text-white/90">
-                  Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
+        {/* ================= PRINTABLES ================= */}
+        <PrintablesSection />
+
+        {/* ================= COMMUNITY ================= */}
+        <Community />
+
+        <SiteFooter />
+      </main>
+
+      <CommunitySignupModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
+  );
+}
+
+/* ============================================================
+   HERO VIDEO SECTION
+============================================================ */
+function HeroVideo() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!videoRef.current) return;
+    if (!document.fullscreenElement) {
+      videoRef.current.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
+    }
+  };
+
+  return (
+    <section className="w-full bg-white">
+      <div className="px-3 pt-4 sm:px-5">
+        <div className="relative rounded-[28px] bg-white p-2">
+          <div className="relative overflow-hidden rounded-[22px]">
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              playsInline
+              muted={isMuted}
+              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
+            >
+              <source
+                src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                type="video/mp4"
+              />
+            </video>
+
+            {/* gradient under text */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+
+            {/* centered overlay content */}
+            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
+                <p className="textstyles mb-3">Empowering Minds</p>
+                <h1 className="headingstyle font-extrabold leading-tight">
+                  Through STEM Play
+                  <br /> and Logic-Based Learning
+                </h1>
+                <p className="textstyles mt-4 max-w-md text-white/90">
+                  At Logicology we endeavour to make learning fun so that children learn while they
+                  play.
                 </p>
-                <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
-                  <li>Each standing line should have all 4 colours appearing exactly once.</li>
-                  <li>Each sleeping line should have all 4 colours appearing exactly once.</li>
-                  <li>Each 2×2 grid should have all 4 colours appearing exactly once.</li>
-                </ol>
-
                 <div className="mt-6">
                   <CTAButton
-                    text="Solve Now"
+                    text="Learn More"
                     href="#buy"
                     bg="#FFFFFF"
-                    color="#AB4637" // brand teal text
-                    hoverBg="#AB4637" // brand teal bg on hover
-                    hoverColor="#FFFFFF" // white text on hover
+                    color="#0A8A80"
+                    hoverBg="#0A8A80"
+                    hoverColor="#FFFFFF"
                     size="md"
                     rightIcon={
                       <svg
@@ -247,63 +129,202 @@ export default function Logicoland1Page() {
                   />
                 </div>
               </div>
+            </div>
 
-              <div id="puzzle" className="relative">
-                <div className="rounded-[26px] bg-white p-3">
-                  <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
-                    {/* ▶▶ SLIDER WITH MULTIPLE SUDOKU GAMES ◀◀ */}
-                    <SudokuSlider />
-                  </div>
-                </div>
+            {/* Controls group (bottom-right) */}
+            <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
+              {/* Mute/Unmute */}
+              <button
+                onClick={toggleMute}
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  // Muted icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
+                    />
+                  </svg>
+                ) : (
+                  // Unmuted icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11 5L6 9H3v6h3l5 4V5z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* Fullscreen */}
+              <button
+                onClick={toggleFullscreen}
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              >
+                {!isFullscreen ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   INTERACTIVE PUZZLES SECTION
+============================================================ */
+function InteractivePuzzlesSection() {
+  return (
+    <section className="w-full bg-brand-coral text-white">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+        <div className="grid items-center gap-12 md:grid-cols-2">
+          <div className="sm:px-4">
+            <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
+
+            <p className="textstyles mt-4 font-sans text-white/90">
+              Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
+            </p>
+            <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
+              <li>Each standing line should have all 4 colours appearing exactly once.</li>
+              <li>Each sleeping line should have all 4 colours appearing exactly once.</li>
+              <li>Each 2×2 grid should have all 4 colours appearing exactly once.</li>
+            </ol>
+
+            <div className="mt-6">
+              <CTAButton
+                text="Solve Now"
+                href="#buy"
+                bg="#FFFFFF"
+                color="#AB4637" // brand teal text
+                hoverBg="#AB4637" // brand teal bg on hover
+                hoverColor="#FFFFFF" // white text on hover
+                size="md"
+                rightIcon={
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+
+          <div id="puzzle" className="relative">
+            <div className="rounded-[26px] bg-white p-3">
+              <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
+                {/* ▶▶ SLIDER WITH MULTIPLE SUDOKU GAMES ◀◀ */}
+                <SudokuSlider />
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-        {/* ================= PRINTABLES ================= */}
-        <section className="w-full bg-brand-grayBg">
-          <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-            <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
-              <h3 className="headingstyle text-center font-extrabold text-brand-teal">
-                Printables
-              </h3>
-              <p className="textstyles mt-2 text-center text-brand-teal">
-                Done with Logicoland 1 already? Here are a few more worksheets for your practice.
-              </p>
+/* ============================================================
+   PRINTABLES SECTION
+============================================================ */
+function PrintablesSection() {
+  return (
+    <section className="w-full bg-brand-grayBg">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+        <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
+          <h3 className="headingstyle text-center font-extrabold text-brand-teal">Printables</h3>
+          <p className="textstyles mt-2 text-center text-brand-teal">
+            Done with Logicoland 1 already? Here are a few more worksheets for your practice.
+          </p>
 
-              <div className="mt-10 grid gap-8 md:grid-cols-2">
-                <PrintableCard
-                  bgImage="https://ik.imagekit.io/pratik11/logicaoldandpdf1.JPG?updatedAt=1758342080344"
-                  buttonColor="#7E5C2E"
-                  filePath="/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
-                  downloadName="Logicoland-Volume1-Worksheet1.pdf"
-                  overlayClass="bg-black/15" // optional: improves button contrast
-                />
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            <PrintableCard
+              bgImage="https://ik.imagekit.io/pratik11/logicaoldandpdf1.JPG?updatedAt=1758342080344"
+              buttonColor="#7E5C2E"
+              filePath="/pdfs/downloadable/LogicolandVolume1Worksheet1.pdf"
+              downloadName="Logicoland-Volume1-Worksheet1.pdf"
+              overlayClass="bg-black/15" // optional: improves button contrast
+            />
 
-                <PrintableCard
-                  bgImage="https://ik.imagekit.io/pratik11/logicolandpdf2.JPG?updatedAt=1758342079963"
-                  buttonColor="#AB4637"
-                  filePath="/pdfs/downloadable/LogicolandVolume1Worksheet2.pdf"
-                  downloadName="Logicoland-Volume1-Worksheet2.pdf"
-                  overlayClass="bg-black/15" // optional
-                />
-              </div>
-
-              <p className="mt-8 text-center text-brand-tealDark/70">
-                For more such printables, join our community.
-              </p>
-            </div>
+            <PrintableCard
+              bgImage="https://ik.imagekit.io/pratik11/logicolandpdf2.JPG?updatedAt=1758342079963"
+              buttonColor="#AB4637"
+              filePath="/pdfs/downloadable/LogicolandVolume1Worksheet2.pdf"
+              downloadName="Logicoland-Volume1-Worksheet2.pdf"
+              overlayClass="bg-black/15" // optional
+            />
           </div>
-        </section>
 
-        {/* ================= COMMUNITY ================= */}
-        <Community />
-
-        <SiteFooter />
-      </main>
-
-      <CommunitySignupModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </>
+          <p className="mt-8 text-center text-brand-tealDark/70">
+            For more such printables, join our community.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -712,9 +733,8 @@ function computeConflicts(grid: Cell[][]): Record<string, boolean> {
 }
 
 /* ============================================================
-   Little helpers
+   PRINTABLE CARD COMPONENT
 ============================================================ */
-
 type PrintableCardProps = {
   colorClass?: string; // optional fallback if no image
   buttonColor: string;
