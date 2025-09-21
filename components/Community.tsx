@@ -26,8 +26,8 @@ export default function Community() {
             <div className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2">
               <h2 className="headingstyle font-extrabold">Join the Community</h2>
               <p className="textstyles mt-3 max-w-prose text-white/90">
-                A makers' community for smart learning fun. Share house rules, new modes, and
-                tournament ideas.
+                A community of parents and learners who believe in developing conceptual thinking
+                using gamified content that is engaging and fun&nbsp;to&nbsp;learn.
               </p>
               <div className="mt-6">
                 <button

@@ -49,11 +49,11 @@ function Hero() {
   const slides = [
     {
       id: 1,
-      pretitle: "Introducing Prime Time",
+      pretitle: "Introducing Prime Time™",
       title: "Where kids learn effortlessly",
       subtitle: "and adults get hooked.",
       description:
-        "Prime Time is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
+        "Prime Time™ is a fun, fast-paced board game that makes numbers exciting for kids. (and is surprisingly addictive for adults too!)",
       image: {
         desktop:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-DESKTOPVIEW-.png?updatedAt=1758359616937",
@@ -66,7 +66,7 @@ function Hero() {
     {
       id: 2,
       pretitle: "From classrooms to living rooms",
-      title: "Prime Time makes numbers",
+      title: "Prime Time™ makes numbers",
       subtitle: "fun for everyone.",
       description:
         "Reinforces concept of Prime and Composite numbers, factorization through gameplay",
@@ -81,7 +81,7 @@ function Hero() {
     },
     {
       id: 3,
-      pretitle: "Say hello to Prime Time",
+      pretitle: "Say hello to Prime Time™",
       title: "Where numbers, luck & strategy",
       subtitle: "all come together!",
       description:
@@ -404,7 +404,7 @@ function InstructionVideos() {
         <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
           <div className="px-0 sm:px-8">
             <h2 className="headingstyle font-heading font-extrabold text-white/90">
-              Frequently Asked Question about Prime Time
+              Frequently Asked Question about Prime Time™
             </h2>
 
             <p className="textstyles mt-3 max-w-prose text-white/90">
@@ -570,7 +570,7 @@ function InteractiveGames() {
                   allowFullScreen
                 ></iframe>
               </div>
-              <p className="mt-4 text-center text-brand-tealDark/80">Identify Prime Number......</p>
+              <p className="mt-4 text-center text-brand-tealDark/80">Identify Prime Number...</p>
             </div>
 
             {/* Game 2 */}
@@ -586,7 +586,7 @@ function InteractiveGames() {
                   className="h-full w-full max-w-[300px] md:max-w-full lg:max-w-full"
                 ></iframe>
               </div>
-              <p className="mt-4 text-center text-brand-tealDark/80">Find Composite Number....</p>
+              <p className="mt-4 text-center text-brand-tealDark/80">Find Composite Number...</p>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import PrimeTimeLanding from "../games/primetime/page";
+import PrimeTimeLanding from "../games/prime-time/page";
 
 const page = () => {
   return (

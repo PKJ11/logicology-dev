@@ -88,7 +88,7 @@ export default function Hero() {
             spaceBetween={0}
             slidesPerView={1}
             loop
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            autoplay={{ delay: 15000, disableOnInteraction: false }}
             pagination={{
               clickable: true,
               bulletClass: "custom-bullet",

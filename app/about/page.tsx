@@ -288,7 +288,7 @@ function OurTeam() {
       image: "https://ik.imagekit.io/pratik2002/team-simran.jpg",
     },
     {
-      name: "Gauri Bhopale",
+      name: "Gauri Bhople",
       role: "Designer",
       image: "https://ik.imagekit.io/pratik2002/team-gauri.jpg",
     },

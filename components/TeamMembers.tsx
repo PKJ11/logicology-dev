@@ -40,7 +40,7 @@ const teamMembers = [
     bio: "Designs delightful interfaces and playful illustrations that make learning feel effortless.",
   },
   {
-    name: "Gauri Bhopale",
+    name: "Gauri Bhople",
     role: "Designer",
     image: "https://ik.imagekit.io/pratik2002/team-gauri.jpg",
     bio: "Explores color, form, and motion to communicate complex ideas simply and beautifully.",

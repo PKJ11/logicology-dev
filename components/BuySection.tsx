@@ -313,13 +313,16 @@ export default function BuySection() {
           <div ref={containerRef} className="rounded-[22px] bg-white p-5 shadow-soft sm:p-8">
             <div className="mb-8 text-center">
               <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
-                Logicoland Volume 1
+                Logicoland 
               </h2>
+               <h2 className="text-[36px] font-heading font-bold text-brand-teal">
+                Volume 1 
+              </h2>
+                
               <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
                 Logic through coloring!
               </p>
             </div>
-
             {/* Desktop: 3 cols; Mobile: image on top, 2x2 grid below */}
             <div className="items-center gap-y-10 md:grid md:grid-cols-3">
               {/* LEFT (desktop only) */}

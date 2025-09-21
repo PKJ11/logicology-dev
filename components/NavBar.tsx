@@ -34,7 +34,7 @@ type Book = {
 const games: Game[] = [
   {
     id: 1,
-    title: "PrimeTime",
+    title: "Prime Time™",
     imageUrl: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
     description:
       "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
