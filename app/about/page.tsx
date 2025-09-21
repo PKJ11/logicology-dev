@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import CTAButton from "@/components/CTAButton";
 import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
+import VideoLayout from "@/components/VideoLayout";
 
 export default function AboutUs() {
   return (
@@ -58,7 +59,7 @@ function HeroVideo() {
               className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
             >
               <source
-                src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                src="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
                 type="video/mp4"
               />
             </video>
@@ -209,10 +210,7 @@ function OurStory() {
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
-            <MediaLayout
-              image="https://ik.imagekit.io/pratik2002/ChatGPT%20Image%20Aug%2018,%202025,%2005_37_03%20AM.png?updatedAt=1755475680524"
-              videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445"
-            />
+            <VideoLayout videoSrc="https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445" />
           </div>
 
           <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
@@ -228,7 +226,7 @@ function OurStory() {
 
             <div className="mt-6">
               <CTAButton
-                text="Read our journey"
+                text="View our journey"
                 href="#story"
                 bg="#FFFFFF"
                 color="#7E5C2E"
@@ -449,7 +447,7 @@ function OurVision() {
           <div className="grid gap-8 md:grid-cols-2">
             {/* Mission (left) */}
             <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 text-xl font-bold text-brand-teal">Mission</h3>
+              <h3 className="mb-3 text-center text-xl font-bold text-brand-teal">Mission</h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
                   To create world class educational content that is engaging, gamified and concept
@@ -461,7 +459,7 @@ function OurVision() {
 
             {/* Goal (right) */}
             <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 text-xl font-bold text-brand-teal">Goal</h3>
+              <h3 className="mb-3 text-center text-xl font-bold text-brand-teal">Goal</h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
                   Our goal is to create a world class brand of educational products that focuses on

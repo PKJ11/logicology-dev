@@ -33,8 +33,8 @@ export default function Hero() {
     {
       id: 1,
       pretitle: "Welcome to Logicology",
-      title: "Learn to Play",
-      subtitle: "Play to Learn",
+      title: "Learn to Play.",
+      subtitle: "Play to Learn.",
       description:
         "At Logicology we endeavour to make learning fun so that children learn while they play.",
       image: {

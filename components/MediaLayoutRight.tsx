@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
-export default function MediaLayout({ videoSrc, image }: { videoSrc: string; image: string }) {
+export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string; image: string }) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -30,19 +31,27 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
   }, [isVideoExpanded]);
 
   const handleVideoToggle = () => {
+    if (isAnimating) return;
+
     if (!isVideoExpanded) {
       // Expanding - play the video
+      setIsAnimating(true);
       setIsVideoExpanded(true);
       if (videoRef.current) {
         videoRef.current.play().catch(console.error);
       }
+      // Reset animation state after transition completes
+      setTimeout(() => setIsAnimating(false), 500);
     } else {
       // Collapsing - pause the video
+      setIsAnimating(true);
       if (videoRef.current) {
         videoRef.current.pause();
-        videoRef.current.currentTime = 0; // Reset to beginning
+        videoRef.current.currentTime = 0;
       }
       setIsVideoExpanded(false);
+      // Reset animation state after transition completes
+      setTimeout(() => setIsAnimating(false), 500);
     }
   };
 
@@ -85,19 +94,19 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
       {/* Video container - only show if videoSrc exists */}
       {hasVideo && (
         <div
-          className={`absolute left-0 top-0 z-20 transition-all duration-500 ease-in-out ${
+          className={`absolute right-0 top-0 z-20 cursor-pointer overflow-hidden bg-white p-5 ${
             isVideoExpanded
-              ? "h-full w-full !rounded-[22px]"
-              : "rounded-br-[22px] rounded-tl-[22px]"
-          } aspect-square cursor-pointer overflow-hidden bg-white p-5`}
+              ? "h-full w-full rounded-[22px]"
+              : "h-1/2 w-1/2 rounded-bl-[22px] rounded-tr-[22px]"
+          } transition-all duration-500 ease-in-out`}
           onClick={handleVideoToggle}
           onMouseEnter={handleVideoHover}
           onMouseLeave={handleVideoLeave}
         >
           <div
-            className={`overflow-hidden rounded-[18px] transition-all duration-500 ease-in-out ${
-              isVideoExpanded ? "h-full w-full" : "w-40 sm:w-56"
-            } aspect-square bg-white`}
+            className={`relative h-full w-full overflow-hidden rounded-[18px] transition-all duration-500 ease-in-out ${
+              isVideoExpanded ? "scale-100" : "scale-100"
+            }`}
           >
             <video
               ref={videoRef}
@@ -106,11 +115,10 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
               loop
               playsInline
               className="h-full w-full object-cover"
-              // Initially paused (no autoPlay attribute)
             />
 
-            {/* Play/Close button overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300">
+            {/* Play/Close button overlay - disappears after delay */}
+            <div className="absolute inset-0 flex items-center justify-center">
               <div
                 className={`flex items-center justify-center rounded-full bg-white bg-opacity-90 transition-all duration-300 ${
                   isVideoExpanded && showCenterClose

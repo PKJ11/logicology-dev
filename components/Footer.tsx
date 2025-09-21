@@ -21,18 +21,18 @@ const SiteFooter = () => {
               <div>
                 <ul className="space-y-3 text-sm">
                   <li>
-                    <Link href="/" className="hover:underline">
+                    <Link href="/about" className="hover:underline">
                       About Us
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="hover:underline">
+                    <Link href="/privacy-policy" className="hover:underline">
                       Privacy Policy
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="hover:underline">
-                      Shop
+                    <Link href="/cancellation-refund-policy" className="hover:underline">
+                      Refund Policy
                     </Link>
                   </li>
                   <li>

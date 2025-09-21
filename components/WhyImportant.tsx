@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MediaLayout from "./MediaLayout";
 import CTAButton from "./CTAButton";
+import MediaLayoutRight from "./MediaLayoutRight";
 
 export default function WhyImportant() {
   return (
@@ -11,7 +12,7 @@ export default function WhyImportant() {
           <div className="flex flex-col items-center md:flex-row">
             {/* MediaLayout on left for larger screens, top for mobile */}
             <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
-              <MediaLayout
+              <MediaLayoutRight
                 image="https://ik.imagekit.io/pratik11/WHY-LOGICOLOGY.png?updatedAt=1758439747708"
                 videoSrc="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
               />
