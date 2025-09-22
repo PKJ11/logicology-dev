@@ -15,7 +15,7 @@ export default function AboutUs() {
       <OurStory />
       <OurTeam />
       <OurVision />
-      <ContactUs/>
+      <ContactUs />
       <Tribe />
       <Footer />
     </main>
@@ -261,7 +261,6 @@ function OurStory() {
 /* --------------------- Our Team (Coral) --------------------- */
 function OurTeam() {
   const teamMembers = [
-    
     {
       name: "Gayatri Phadnis",
       role: "Co-Founder",
@@ -449,7 +448,9 @@ function OurVision() {
           <div className="grid gap-8 md:grid-cols-2">
             {/* Mission (left) */}
             <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 text-center text-xl font-bold text-brand-teal bg-brand-grayBg">Mission</h3>
+              <h3 className="mb-3 bg-brand-grayBg text-center text-xl font-bold text-brand-teal">
+                Mission
+              </h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
                   To create world class educational content that is engaging, gamified and concept
@@ -461,7 +462,9 @@ function OurVision() {
 
             {/* Goal (right) */}
             <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 text-center text-xl font-bold text-brand-teal bg-brand-grayBg ">Goal</h3>
+              <h3 className="mb-3 bg-brand-grayBg text-center text-xl font-bold text-brand-teal">
+                Goal
+              </h3>
               <div className="rounded-3xl bg-brand-grayBg p-5">
                 <p className="text-lg text-gray-700">
                   Our goal is to create a world class brand of educational products that focuses on
@@ -480,7 +483,9 @@ function OurVision() {
 /* --------------------- Contact Us (Maroon) --------------------- */
 function ContactUs() {
   return (
-    <section className="w-full bg-[#642B3B]"> {/* deep maroon background */}
+    <section className="w-full bg-[#642B3B]">
+      {" "}
+      {/* deep maroon background */}
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="grid items-center gap-10 md:grid-cols-2">
           {/* Left: text & contact details */}
@@ -552,8 +557,10 @@ function ContactUs() {
                   </svg>
                 </span>
                 <p className="text-xl font-semibold leading-snug">
-                  Regd Office: Ameya Towers, 25,<br />
-                  Humpyard Road, Dhantoli,<br />
+                  Regd Office: Ameya Towers, 25,
+                  <br />
+                  Humpyard Road, Dhantoli,
+                  <br />
                   Nagpur, India - 440012
                 </p>
               </li>
@@ -567,18 +574,13 @@ function ContactUs() {
 
           {/* Right: framed collage */}
           <div className="flex items-center justify-center">
-  <div className="rounded-[28px] bg-white p-5 shadow-soft">
-    <img
-      src="https://ik.imagekit.io/pratik11/CONTACT-US-IMAGE.png?updatedAt=1758544204579"
-      alt="Contact collage"
-      className="h-72 w-full rounded-2xl object-cover sm:h-96"
-    />
-  </div>
-</div>
-
+            <MediaLayout
+              image="https://ik.imagekit.io/pratik11/CONTACT-US-IMAGE.png?updatedAt=1758544204579"
+              videoSrc=""
+            />
+          </div>
         </div>
-      </div>  
+      </div>
     </section>
   );
 }
-
