@@ -152,30 +152,7 @@ function Hero() {
                           {slide.description}
                         </p>
                         <div className="mt-6">
-                          <CTAButton
-                            text={slide.cta}
-                            href={slide.ctaLink}
-                            bg="#FFFFFF"
-                            color="#0A8A80" // brand teal text
-                            hoverBg="#0A8A80" // brand teal bg on hover
-                            hoverColor="#FFFFFF" // white text on hover
-                            size="md"
-                            rightIcon={
-                              <svg
-                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 5l7 7-7 7"
-                                />
-                              </svg>
-                            }
-                          />
+                          
                         </div>
                       </div>
                     </div>
@@ -374,6 +351,11 @@ function InstructionVideos() {
     setIsPlaying(true);
   };
 
+  const handleStartWatching = () => {
+    setActive(0); // Set to first video
+    setIsPlaying(true);
+  };
+
   const handleCloseModal = () => {
     setActive(null);
     setIsPlaying(false);
@@ -414,7 +396,7 @@ function InstructionVideos() {
             <div className="mt-6">
               <CTAButton
                 text="Start watching"
-                href="#videos"
+                onClick={handleStartWatching} // Added onClick handler
                 bg="#FFFFFF" // matches bg-black/20
                 color="#AB4637"
                 hoverBg="rgba(0,0,0,0.25)" // matches hover:bg-black/25
@@ -422,7 +404,7 @@ function InstructionVideos() {
                 roundedClass="rounded-full"
                 size="md"
                 className="font-medium transition-colors"
-                ariaLabel="Jump to videos section"
+                ariaLabel="Start watching the first video"
                 rightIcon={
                   <svg
                     className="h-4 w-4 transition-transform group-hover:translate-x-1"

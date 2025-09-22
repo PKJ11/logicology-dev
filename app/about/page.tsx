@@ -260,15 +260,16 @@ function OurStory() {
 /* --------------------- Our Team (Coral) --------------------- */
 function OurTeam() {
   const teamMembers = [
-    {
-      name: "Kartik Vyas",
-      role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
-    },
+    
     {
       name: "Gayatri Phadnis",
       role: "Co-Founder",
       image: "https://ik.imagekit.io/pratik2002/team-gayatri.jpg",
+    },
+    {
+      name: "Kartik Vyas",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
     },
     {
       name: "Jasneet Singh",

@@ -136,7 +136,7 @@ export default function Hero() {
                         <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.description}
                         </p>
-                        <div className="mt-6">
+                        {/* <div className="mt-6">
                           <CTAButton
                             text={slide.cta}
                             href={slide.ctaLink}
@@ -161,7 +161,7 @@ export default function Hero() {
                               </svg>
                             }
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

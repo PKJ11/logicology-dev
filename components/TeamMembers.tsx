@@ -4,22 +4,23 @@ import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { Users, Sparkles, Quote } from "lucide-react";
 import React from "react";
+import SiteFooter from "./Footer";
 
 // ------------------------------------------------------
 // Data (paste/replace with your actual data source if needed)
 // ------------------------------------------------------
 const teamMembers = [
   {
-    name: "Kartik Vyas",
-    role: "Co-Founder",
-    image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
-    bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
-  },
-  {
     name: "Gayatri Phadnis",
     role: "Co-Founder",
     image: "https://ik.imagekit.io/pratik2002/team-gayatri.jpg",
     bio: "Leads curriculum and pedagogy. Ensures our content nurtures conceptual understanding and curiosity.",
+  },
+  {
+    name: "Kartik Vyas",
+    role: "Co-Founder",
+    image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
+    bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
   },
   {
     name: "Jasneet Singh",
@@ -146,7 +147,7 @@ export default function TeamPage() {
                   {/* Text right */}
                   <div className="relative order-2 flex items-center px-6 py-8 sm:px-8 md:px-6 md:py-10 lg:px-10">
                     <div className="w-full">
-                      <motion.div
+                      {/* <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -154,7 +155,7 @@ export default function TeamPage() {
                         className="inline-flex items-center gap-2 rounded-full bg-brand-teal/10 px-3 py-1 text-xs font-medium text-brand-teal"
                       >
                         <Sparkles className="h-3.5 w-3.5" /> Spotlight
-                      </motion.div>
+                      </motion.div> */}
 
                       <motion.h3
                         initial={{ opacity: 0, y: 10 }}
@@ -187,7 +188,7 @@ export default function TeamPage() {
                       </motion.p>
 
                       {/* Quote stripe */}
-                      <motion.div
+                      {/* <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -200,7 +201,7 @@ export default function TeamPage() {
                         <p className="text-sm text-neutral-700">
                           "Great design is where curiosity meets clarity."
                         </p>
-                      </motion.div>
+                      </motion.div> */}
 
                       {/* CTA row */}
                       <motion.div
@@ -216,12 +217,7 @@ export default function TeamPage() {
                         >
                           Connect
                         </a>
-                        <a
-                          href="#"
-                          className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-2.5 text-brand-teal shadow-soft ring-1 ring-brand-teal/20 hover:bg-brand-grayBg"
-                        >
-                          Portfolio
-                        </a>
+                        
                       </motion.div>
                     </div>
                   </div>
@@ -233,44 +229,7 @@ export default function TeamPage() {
       </section>
 
       {/* Bottom mosaic (subtle motion on hover) */}
-      <section className="pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-heading text-2xl text-brand-tealDark sm:text-3xl"
-          >
-            We build with heart and craft
-          </motion.h2>
-          <p className="mt-2 max-w-2xl text-neutral-600">
-            A quick peek at our people—curious minds, playful thinkers, and meticulous makers.
-          </p>
-
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-            {teamMembers.map((m, i) => (
-              <div
-                key={m.name}
-                className="group relative aspect-square overflow-hidden rounded-3xl ring-1 ring-black/5"
-              >
-                <Image
-                  src={m.image}
-                  alt={m.name}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 20vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="pointer-events-none absolute bottom-2 left-2 right-2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="rounded-xl bg-white/95 px-3 py-1.5 text-xs font-medium text-brand-teal shadow-soft">
-                    {m.name}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SiteFooter/>
     </main>
   );
 }

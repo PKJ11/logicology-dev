@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import FeedbackForm from "@/components/FeedbackForm";
 
 export default function FeedbackButton() {
   const [open, setOpen] = useState(false);
@@ -27,40 +28,8 @@ export default function FeedbackButton() {
               &times;
             </button>
             <h2 className="mb-4 text-xl font-bold">Feedback</h2>
-            <form
-              action="https://formspree.io/f/mzbqzqgk" // Replace with your Formspree or backend endpoint
-              method="POST"
-              className="space-y-4"
-              onSubmit={() => setOpen(false)}
-            >
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                className="w-full rounded border px-3 py-2"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                className="w-full rounded border px-3 py-2"
-                required
-              />
-              <textarea
-                name="message"
-                placeholder="Your Feedback"
-                className="w-full rounded border px-3 py-2"
-                rows={4}
-                required
-              />
-              <button
-                type="submit"
-                className="w-full rounded bg-brand-gold px-4 py-2 text-white hover:bg-brand-gold/90"
-              >
-                Submit
-              </button>
-            </form>
+
+            <FeedbackForm onClose={() => setOpen(false)} />
           </div>
         </div>
       )}

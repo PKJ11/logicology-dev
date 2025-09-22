@@ -96,7 +96,7 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Games", href: "/games", hasDropdown: true, type: "games" },
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
-  { name: "Products", href: "/products" },
+  // { name: "Products", href: "/products" },
   { name: "About Us", href: "/about" },
 ];
 
@@ -420,12 +420,12 @@ export default function NavBar() {
 
           {/* Right actions (desktop) */}
           <div className="hidden items-center gap-5 text-slate-700 md:flex">
-            <Link
+            {/* <Link
               href="/login"
               className="relative py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
             >
               <span>Login</span>
-            </Link>
+            </Link> */}
             <Link
               href="/search"
               aria-label="Search"
