@@ -264,32 +264,32 @@ function OurTeam() {
     {
       name: "Gayatri Phadnis",
       role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
     },
     {
       name: "Kartik Vyas",
       role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758535847637",
+      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
     },
     {
       name: "Jasneet Singh",
       role: "Head of Design",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847532",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
     },
     {
       name: "Pratik Kumar Jha",
       role: "Head of Technology",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847532",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
     },
     {
       name: "Simran Kaur",
       role: "Designer",
-      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847760",
+      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
     },
     {
-      name: "Gauri Bhople",
+      name: "This could be you",
       role: "Designer",
-      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
     },
   ];
 

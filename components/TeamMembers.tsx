@@ -13,38 +13,32 @@ const teamMembers = [
   {
     name: "Gayatri Phadnis",
     role: "Co-Founder",
-    image: "https://ik.imagekit.io/pratik2002/team-gayatri.jpg",
+    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
     bio: "Leads curriculum and pedagogy. Ensures our content nurtures conceptual understanding and curiosity.",
   },
   {
     name: "Kartik Vyas",
     role: "Co-Founder",
-    image: "https://ik.imagekit.io/pratik2002/kartik.jpg?updatedAt=1758090824010",
+    image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758535847610",
     bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
   },
   {
     name: "Jasneet Singh",
     role: "Head of Design",
-    image: "https://ik.imagekit.io/pratik2002/team-jasneet.jpg",
+    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
     bio: "Crafts the visual language of Logicology across games, books, and digital experiences.",
   },
   {
     name: "Pratik Kumar Jha",
     role: "Head of Technology",
-    image: "https://ik.imagekit.io/pratik2002/team-pratik.jpg",
+    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
     bio: "Builds robust platforms and tools that power our learning ecosystem end‑to‑end.",
   },
   {
     name: "Simran Kaur",
     role: "Designer",
-    image: "https://ik.imagekit.io/pratik2002/team-simran.jpg",
+    image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
     bio: "Designs delightful interfaces and playful illustrations that make learning feel effortless.",
-  },
-  {
-    name: "Gauri Bhople",
-    role: "Designer",
-    image: "https://ik.imagekit.io/pratik2002/team-gauri.jpg",
-    bio: "Explores color, form, and motion to communicate complex ideas simply and beautifully.",
   },
 ];
 
@@ -133,7 +127,7 @@ export default function TeamPage() {
                           alt={m.name}
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover object-center"
+                          className="object-contain object-center"
                           priority={idx < 2}
                         />
                         {/* Subtle overlay for readability */}
@@ -217,7 +211,6 @@ export default function TeamPage() {
                         >
                           Connect
                         </a>
-                        
                       </motion.div>
                     </div>
                   </div>
@@ -229,7 +222,7 @@ export default function TeamPage() {
       </section>
 
       {/* Bottom mosaic (subtle motion on hover) */}
-      <SiteFooter/>
+      <SiteFooter />
     </main>
   );
 }
