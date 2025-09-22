@@ -426,7 +426,7 @@ export default function NavBar() {
             >
               <span>Login</span>
             </Link> */}
-            <Link
+            {/* <Link
               href="/search"
               aria-label="Search"
               className="text-brand-teal hover:text-brand-tealDark"
@@ -439,7 +439,7 @@ export default function NavBar() {
               className="text-brand-teal hover:text-brand-tealDark"
             >
               <FiShoppingCart />
-            </Link>
+            </Link> */}
           </div>
 
           {/* Mobile toggle */}
