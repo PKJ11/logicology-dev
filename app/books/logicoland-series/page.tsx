@@ -79,7 +79,7 @@ function HeroVideo() {
               loop
               playsInline
               muted={isMuted}
-              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
+              className="h-[90vh] w-full object-cover sm:h-[62vh] md:h-[75vh] lg:h-[85vh] sm:max-h-[780px] sm:min-h-[420px]"
             >
               <source
                 src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"

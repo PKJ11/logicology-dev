@@ -570,13 +570,13 @@ export default function NavBar() {
             </div>
 
             {/* Rest simple links */}
-            <Link
+            {/* <Link
               href="/products"
               onClick={closeAll}
               className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
               Products
-            </Link>
+            </Link> */}
             <Link
               href="/about"
               onClick={closeAll}
@@ -586,7 +586,7 @@ export default function NavBar() {
             </Link>
 
             {/* Actions */}
-            <div className="flex items-center gap-5 pt-2 text-slate-700">
+            {/* <div className="flex items-center gap-5 pt-2 text-slate-700">
               <Link
                 href="/login"
                 className="flex items-center gap-2 hover:text-brand-tealDark"
@@ -610,7 +610,7 @@ export default function NavBar() {
               >
                 <FiShoppingCart />
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

@@ -22,6 +22,7 @@ export default function AboutUs() {
   );
 }
 
+
 /* --------------------- Hero (Video instead of Swiper) --------------------- */
 function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -57,7 +58,7 @@ function HeroVideo() {
               loop
               playsInline
               muted={isMuted}
-              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px]"
+              className="h-[90vh] w-full object-cover sm:h-[62vh] md:h-[75vh] lg:h-[85vh] sm:max-h-[780px] sm:min-h-[420px]"
             >
               <source
                 src="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
@@ -69,7 +70,7 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+            {/* <div className="absolute inset-0 z-20 flex items-start sm:items-center">
               <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
                 <p className="textstyles mb-3">Empowering Minds</p>
                 <h1 className="headingstyle font-extrabold leading-tight">
@@ -83,7 +84,7 @@ function HeroVideo() {
                 <div className="mt-6">
                   <CTAButton
                     text="Learn More"
-                    href="#vision"
+                    href="#buy"
                     bg="#FFFFFF"
                     color="#0A8A80"
                     hoverBg="#0A8A80"
@@ -107,9 +108,9 @@ function HeroVideo() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Controls (bottom-right) */}
+            {/* Controls group (bottom-right) */}
             <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
               {/* Mute/Unmute */}
               <button
