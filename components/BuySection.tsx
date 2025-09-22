@@ -184,7 +184,7 @@ function BulletWithLine({
     >
       {/* dashed connector line (desktop only) - EVEN SHORTER LINES */}
       <motion.div
-        className={`relative hidden h-0 border-t-2 border-dashed border-brand-teal/40 md:block ${
+        className={`relative hidden h-0 border-t-2 border-dashed border-[#1EB6E9] md:block ${
           side === "left" ? "ml-2 mr-2 w-12 lg:w-16" : "ml-2 mr-2 w-12 lg:w-16"
         } translate-y-6`}
         style={{
@@ -197,7 +197,7 @@ function BulletWithLine({
         transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
       >
         <span
-          className={`absolute -top-[5px] h-2 w-2 rounded-full bg-brand-teal/60 ${
+          className={`absolute -top-[5px] h-2 w-2 rounded-full bg-[#1EB6E9] ${
             side === "left" ? "right-0" : "left-0"
           }`}
         />
