@@ -3,13 +3,7 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
-export default function MediaLayoutRight({
-  videoSrc,
-  image,
-}: {
-  videoSrc: string;
-  image: string;
-}) {
+export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string; image: string }) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
@@ -78,12 +72,11 @@ export default function MediaLayoutRight({
       {/* Video overlay */}
       {hasVideo && (
         <div
-          className={`absolute right-0 top-0 z-20 cursor-pointer overflow-hidden bg-white p-5 transition-all duration-500 ease-in-out
-            ${
-              isVideoExpanded
-                ? "h-full w-full rounded-[22px]"
-                : "h-1/2 w-1/2 rounded-bl-[22px] rounded-tr-[22px]"
-            }`}
+          className={`absolute right-0 top-0 z-20 cursor-pointer overflow-hidden bg-white p-5 transition-all duration-500 ease-in-out ${
+            isVideoExpanded
+              ? "h-full w-full rounded-[22px]"
+              : "h-1/2 w-1/2 rounded-bl-[22px] rounded-tr-[22px]"
+          }`}
           onClick={handleVideoToggle}
           onMouseEnter={handleVideoHover}
           onMouseLeave={handleVideoLeave}
@@ -119,8 +112,7 @@ export default function MediaLayoutRight({
             {isVideoExpanded && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                  className={`flex items-center justify-center rounded-full bg-white/90 transition-all duration-300
-                    ${showCenterClose ? "h-16 w-16 opacity-100" : "h-12 w-12 opacity-0"}`}
+                  className={`flex items-center justify-center rounded-full bg-white/90 transition-all duration-300 ${showCenterClose ? "h-16 w-16 opacity-100" : "h-12 w-12 opacity-0"}`}
                 >
                   <svg className="h-8 w-8 text-gray-800" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />

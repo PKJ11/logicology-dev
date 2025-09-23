@@ -80,7 +80,6 @@ function HeroVideo() {
                   At Logicology we endeavour to make learning fun so that children learn while they
                   play.
                 </p> */}
-                
               </div>
             </div>
 
@@ -407,18 +406,15 @@ function OurVision() {
     <section id="vision" className="w-full bg-brand-grayBg py-16">
       <div className="mx-auto px-3 sm:px-5 lg:max-w-[80vw]">
         <div className="mb-12 text-center">
-          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">
-            Our Vision
-          </h2>
+          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
           <p className="textstyles font-semibold text-brand-tealDark/90">
             Learn to Play — Play to Learn
           </p>
           <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
-            At Logicology, our vision is to create engaging gamified content
-            that teaches children concepts. We believe if the children have fun
-            while learning, they learn in a much better way. Each of our books
-            and games aims at helping children learn real-life concepts/skills
-            through a gamified, fun-learning way.
+            At Logicology, our vision is to create engaging gamified content that teaches children
+            concepts. We believe if the children have fun while learning, they learn in a much
+            better way. Each of our books and games aims at helping children learn real-life
+            concepts/skills through a gamified, fun-learning way.
           </p>
         </div>
 
@@ -428,16 +424,15 @@ function OurVision() {
           <div className="relative rounded-3xl bg-white p-6 shadow-soft">
             {/* Label */}
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span className="rounded-full bg-yellow-500 px-4 py-1 text-md font-bold text-white shadow">
+              <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
                 Mission
               </span>
             </div>
 
             <div className="rounded-2xl bg-brand-grayBg p-5">
               <p className="text-center text-lg text-gray-800">
-                To create world class educational content that is engaging,
-                gamified and concept based. Our mission is to make top class
-                educational content that is made in India,
+                To create world class educational content that is engaging, gamified and concept
+                based. Our mission is to make top class educational content that is made in India,
                 made&nbsp;for&nbsp;the&nbsp;world.
               </p>
             </div>
@@ -447,17 +442,16 @@ function OurVision() {
           <div className="relative rounded-3xl bg-white p-6 shadow-soft">
             {/* Label */}
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span className="rounded-full bg-red-500 px-4 py-1 text-md font-bold text-white shadow">
+              <span className="text-md rounded-full bg-red-500 px-4 py-1 font-bold text-white shadow">
                 Goal
               </span>
             </div>
 
             <div className="rounded-2xl bg-brand-grayBg p-5">
               <p className="text-center text-lg text-gray-800">
-                Our goal is to create a world class brand of educational
-                products that focuses on fun learning. We want to develop best
-                in class educational content for children that is fun and
-                easy&nbsp;to&nbsp;learn.
+                Our goal is to create a world class brand of educational products that focuses on
+                fun learning. We want to develop best in class educational content for children that
+                is fun and easy&nbsp;to&nbsp;learn.
               </p>
             </div>
           </div>
@@ -466,8 +460,6 @@ function OurVision() {
     </section>
   );
 }
-
-
 
 /* --------------------- Contact Us (Maroon) --------------------- */
 function ContactUs() {

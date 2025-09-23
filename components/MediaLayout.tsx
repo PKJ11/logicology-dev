@@ -3,13 +3,7 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
-export default function MediaLayout({
-  videoSrc,
-  image,
-}: {
-  videoSrc: string;
-  image: string;
-}) {
+export default function MediaLayout({ videoSrc, image }: { videoSrc: string; image: string }) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -72,19 +66,17 @@ export default function MediaLayout({
       {/* Video overlay (only if a video exists) */}
       {hasVideo && (
         <div
-          className={`absolute left-0 top-0 z-20 aspect-square cursor-pointer overflow-hidden bg-white p-5 transition-all duration-500 ease-in-out
-            ${
-              isVideoExpanded
-                ? "h-full w-full !rounded-[22px]"
-                : "rounded-br-[22px] rounded-tl-[22px]"
-            }`}
+          className={`absolute left-0 top-0 z-20 aspect-square cursor-pointer overflow-hidden bg-white p-5 transition-all duration-500 ease-in-out ${
+            isVideoExpanded
+              ? "h-full w-full !rounded-[22px]"
+              : "rounded-br-[22px] rounded-tl-[22px]"
+          }`}
           onClick={handleVideoToggle}
           onMouseEnter={handleVideoHover}
           onMouseLeave={handleVideoLeave}
         >
           <div
-            className={`relative overflow-hidden rounded-[18px] bg-white transition-all duration-500 ease-in-out
-              ${isVideoExpanded ? "h-full w-full" : "w-40 sm:w-56"} aspect-square`}
+            className={`relative overflow-hidden rounded-[18px] bg-white transition-all duration-500 ease-in-out ${isVideoExpanded ? "h-full w-full" : "w-40 sm:w-56"} aspect-square`}
           >
             <video
               ref={videoRef}
@@ -114,8 +106,7 @@ export default function MediaLayout({
             {isVideoExpanded && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                  className={`flex items-center justify-center rounded-full bg-white/90 transition-all duration-300
-                    ${showCenterClose ? "h-16 w-16 opacity-100" : "h-12 w-12 opacity-0"}`}
+                  className={`flex items-center justify-center rounded-full bg-white/90 transition-all duration-300 ${showCenterClose ? "h-16 w-16 opacity-100" : "h-12 w-12 opacity-0"}`}
                 >
                   <svg className="h-8 w-8 text-gray-800" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
