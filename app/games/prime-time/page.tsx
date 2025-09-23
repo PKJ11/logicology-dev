@@ -424,56 +424,56 @@ function InstructionVideos() {
 
           {/* White background container only for videos */}
           <div className="rounded-4xl bg-white p-4 shadow-soft sm:p-0 md:p-5">
-            {/* 2 cols on phones, 3 cols from sm/md up */}
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-2 md:gap-4">
-              {videos.map((item, i) => (
-                <div
-                  key={i}
-                  onClick={() => handleVideoClick(i)}
-                  onMouseEnter={() => setHoveredVideo(i)}
-                  onMouseLeave={() => setHoveredVideo(null)}
-                  className="group relative aspect-[9/16] min-h-[200px] cursor-pointer overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200 sm:min-h-[220px] md:min-h-[260px]"
-                >
-                  {/* Show video on hover, thumbnail by default */}
-                  {hoveredVideo === i ? (
-                    <video
-                      src={item.video}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay
-                      preload="metadata"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <img
-                      src={item.thumbnail}
-                      alt={`Video thumbnail ${i + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  )}
+  {/* Responsive grid with better gap management */}
+  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
+    {videos.map((item, i) => (
+      <div
+        key={i}
+        onClick={() => handleVideoClick(i)}
+        onMouseEnter={() => setHoveredVideo(i)}
+        onMouseLeave={() => setHoveredVideo(null)}
+        className="group relative aspect-[9/16] cursor-pointer overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200"
+      >
+        {/* Show video on hover, thumbnail by default */}
+        {hoveredVideo === i ? (
+          <video
+            src={item.video}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="metadata"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <img
+            src={item.thumbnail}
+            alt={`Video thumbnail ${i + 1}`}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        )}
 
-                  {/* Play overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="ml-0.5 h-5 w-5 text-gray-900 sm:h-6 sm:w-6"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Play overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="ml-0.5 h-5 w-5 text-gray-900 sm:h-6 sm:w-6"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
         </div>
       </div>
 
