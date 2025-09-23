@@ -542,7 +542,7 @@ function InteractiveGames() {
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Prime Number Explorer
               </h3>
-              <div className="aspect-video h-[300px] sm:h-auto overflow-hidden rounded-3xl bg-brand-grayBg">
+              <div className="aspect-video h-[300px] overflow-hidden rounded-3xl bg-brand-grayBg sm:h-auto">
                 <iframe
                   className="h-full w-full max-w-[300px] md:max-w-full lg:max-w-full"
                   src="https://wordwall.net/embed/play/96298/037/880"
@@ -558,7 +558,7 @@ function InteractiveGames() {
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Composite Number Challenge
               </h3>
-              <div className="aspect-video h-[300px] sm:h-auto overflow-hidden rounded-3xl bg-brand-grayBg">
+              <div className="aspect-video h-[300px] overflow-hidden rounded-3xl bg-brand-grayBg sm:h-auto">
                 <iframe
                   src="https://wordwall.net/embed/play/96298/689/270"
                   frameBorder="0"
