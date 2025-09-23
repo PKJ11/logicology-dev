@@ -22,7 +22,6 @@ export default function AboutUs() {
   );
 }
 
-
 /* --------------------- Hero (Video instead of Swiper) --------------------- */
 function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -58,7 +57,7 @@ function HeroVideo() {
               loop
               playsInline
               muted={isMuted}
-              className="h-[90vh] w-full object-cover sm:h-[62vh] md:h-[75vh] lg:h-[85vh] sm:max-h-[780px] sm:min-h-[420px]"
+              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
             >
               <source
                 src="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"

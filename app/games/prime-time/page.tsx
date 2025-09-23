@@ -151,9 +151,7 @@ function Hero() {
                         <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.description}
                         </p>
-                        <div className="mt-6">
-                          
-                        </div>
+                        <div className="mt-6"></div>
                       </div>
                     </div>
                   </div>

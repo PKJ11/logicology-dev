@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   const { name, email, message } = await req.json();
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASSWORD,
+      user: process.env.GMAIL_USER || "logicologymeta@gmail.com",
+      pass: process.env.GMAIL_PASSWORD || "fdqz xqjx neoz nzan",
     },
   });
 
   const mailOptions = {
-    from: process.env.GMAIL_USER,
-    to: process.env.GMAIL_USER,
+    from: process.env.GMAIL_USER || "logicologymeta@gmail.com",
+    to: process.env.GMAIL_USER || "logicologymeta@gmail.com",
     subject: `New Feedback from ${name}`,
     text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
   };

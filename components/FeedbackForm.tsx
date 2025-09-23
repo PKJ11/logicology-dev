@@ -46,38 +46,38 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
         type="text"
         name="name"
         placeholder="Your Name"
-        className="w-full border rounded px-3 py-2"
+        className="w-full rounded border px-3 py-2"
         value={name}
-        onChange={e => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
         required
       />
       <input
         type="email"
         name="email"
         placeholder="Your Email"
-        className="w-full border rounded px-3 py-2"
+        className="w-full rounded border px-3 py-2"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         required
       />
       <textarea
         name="message"
         placeholder="Your Feedback"
-        className="w-full border rounded px-3 py-2"
+        className="w-full rounded border px-3 py-2"
         rows={4}
         value={message}
-        onChange={e => setMessage(e.target.value)}
+        onChange={(e) => setMessage(e.target.value)}
         required
       />
       <button
         type="submit"
-        className="bg-brand-gold text-white px-4 py-2 rounded hover:bg-brand-gold/90 w-full"
+        className="w-full rounded bg-brand-gold px-4 py-2 text-white hover:bg-brand-gold/90"
         disabled={loading}
       >
         {loading ? "Sending..." : "Submit"}
       </button>
-      {success && <div className="text-green-600 text-center mt-2">{success}</div>}
-      {error && <div className="text-red-600 text-center mt-2">{error}</div>}
+      {success && <div className="mt-2 text-center text-green-600">{success}</div>}
+      {error && <div className="mt-2 text-center text-red-600">{error}</div>}
     </form>
   );
 }
