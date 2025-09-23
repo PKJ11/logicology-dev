@@ -69,45 +69,20 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            {/* <div className="absolute inset-0 z-20 flex items-start sm:items-center">
+            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
               <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
-                <p className="textstyles mb-3">Empowering Minds</p>
+                {/* <p className="textstyles mb-3">Empowering Minds</p> */}
                 <h1 className="headingstyle font-extrabold leading-tight">
-                  Through STEM Play
-                  <br /> and Logic-Based Learning
+                  Our Philosophy
+                  {/* <br /> and Logic-Based Learning */}
                 </h1>
-                <p className="textstyles mt-4 max-w-md text-white/90">
+                {/* <p className="textstyles mt-4 max-w-md text-white/90">
                   At Logicology we endeavour to make learning fun so that children learn while they
                   play.
-                </p>
-                <div className="mt-6">
-                  <CTAButton
-                    text="Learn More"
-                    href="#buy"
-                    bg="#FFFFFF"
-                    color="#0A8A80"
-                    hoverBg="#0A8A80"
-                    hoverColor="#FFFFFF"
-                    size="md"
-                    rightIcon={
-                      <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    }
-                  />
-                </div>
+                </p> */}
+                
               </div>
-            </div> */}
+            </div>
 
             {/* Controls group (bottom-right) */}
             <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
@@ -267,7 +242,7 @@ function OurTeam() {
       image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
     },
     {
-      name: "Kartik Vyas",
+      name: "Kartik Girish Vyas",
       role: "Co-Founder",
       image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
     },
@@ -429,49 +404,61 @@ function OurTeam() {
 /* --------------------- Our Vision (Gray) --------------------- */
 function OurVision() {
   return (
-    <section id="vision" className="w-full bg-brand-grayBg">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-        <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
-          <div className="mb-12 text-center">
-            <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
-            <p className="textstyles font-semibold text-brand-tealDark/90">
-              Learn to Play — Play to Learn
-            </p>
-            <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
-              At Logicology, our vision is to create engaging gamified content that teaches children
-              concepts. We believe if the children have fun while learning, they learn in a much
-              better way. Each of our books and games aims at helping children learn real-life
-              concepts/skills through a gamified, fun-learning way.
-            </p>
-          </div>
+    <section id="vision" className="w-full bg-brand-grayBg py-16">
+      <div className="mx-auto px-3 sm:px-5 lg:max-w-[80vw]">
+        <div className="mb-12 text-center">
+          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">
+            Our Vision
+          </h2>
+          <p className="textstyles font-semibold text-brand-tealDark/90">
+            Learn to Play — Play to Learn
+          </p>
+          <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
+            At Logicology, our vision is to create engaging gamified content
+            that teaches children concepts. We believe if the children have fun
+            while learning, they learn in a much better way. Each of our books
+            and games aims at helping children learn real-life concepts/skills
+            through a gamified, fun-learning way.
+          </p>
+        </div>
 
-          <div className="grid gap-8 md:grid-cols-2">
-            {/* Mission (left) */}
-            <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 bg-brand-grayBg text-center text-xl font-bold text-brand-teal">
+        {/* Mission + Goal Section with Gray Background */}
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Mission */}
+          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
+            {/* Label */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span className="rounded-full bg-yellow-500 px-4 py-1 text-md font-bold text-white shadow">
                 Mission
-              </h3>
-              <div className="rounded-3xl bg-brand-grayBg p-5">
-                <p className="text-lg text-gray-700">
-                  To create world class educational content that is engaging, gamified and concept
-                  based. Our mission is to make top class educational content that is made in India,
-                  made&nbsp;for&nbsp;the&nbsp;world.
-                </p>
-              </div>
+              </span>
             </div>
 
-            {/* Goal (right) */}
-            <div className="rounded-4xl bg-white p-6 shadow-soft">
-              <h3 className="mb-3 bg-brand-grayBg text-center text-xl font-bold text-brand-teal">
+            <div className="rounded-2xl bg-brand-grayBg p-5">
+              <p className="text-center text-lg text-gray-800">
+                To create world class educational content that is engaging,
+                gamified and concept based. Our mission is to make top class
+                educational content that is made in India,
+                made&nbsp;for&nbsp;the&nbsp;world.
+              </p>
+            </div>
+          </div>
+
+          {/* Goal */}
+          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
+            {/* Label */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span className="rounded-full bg-red-500 px-4 py-1 text-md font-bold text-white shadow">
                 Goal
-              </h3>
-              <div className="rounded-3xl bg-brand-grayBg p-5">
-                <p className="text-lg text-gray-700">
-                  Our goal is to create a world class brand of educational products that focuses on
-                  fun learning. We want to develop best in class educational content for children
-                  that is fun and&nbsp;easy&nbsp;to&nbsp;learn.
-                </p>
-              </div>
+              </span>
+            </div>
+
+            <div className="rounded-2xl bg-brand-grayBg p-5">
+              <p className="text-center text-lg text-gray-800">
+                Our goal is to create a world class brand of educational
+                products that focuses on fun learning. We want to develop best
+                in class educational content for children that is fun and
+                easy&nbsp;to&nbsp;learn.
+              </p>
             </div>
           </div>
         </div>
@@ -479,6 +466,8 @@ function OurVision() {
     </section>
   );
 }
+
+
 
 /* --------------------- Contact Us (Maroon) --------------------- */
 function ContactUs() {
@@ -512,7 +501,7 @@ function ContactUs() {
                     />
                   </svg>
                 </span>
-                <p className="text-xl font-semibold leading-tight">+91 844698074</p>
+                <p className="text-xl font-semibold leading-tight">+91 8446980747</p>
               </li>
 
               {/* Email */}

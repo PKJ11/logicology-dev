@@ -14,11 +14,11 @@ const teamMembers = [
     name: "Gayatri Phadnis",
     role: "Co-Founder",
     image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
-    bio: "Leads curriculum and pedagogy. Ensures our content nurtures conceptual understanding and curiosity.",
+    bio: "She is the brain behind Logicology Content. She heads innovation, content strategy and content development at Logicology. Gayatri, mother of young child, is a quintessential logical mind that develops most of the content at Logicology.",
     linkedin: "https://www.linkedin.com/in/gayatri-phadnis-vyas/",
   },
   {
-    name: "Kartik Vyas",
+    name: "Kartik Girish Vyas",
     role: "Co-Founder",
     image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758535847610",
     bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
