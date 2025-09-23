@@ -70,8 +70,8 @@ function HeroVideo() {
 
   return (
     <section className="w-full bg-white">
-      <div className="px-3 pt-4 sm:px-5">
-        <div className="relative rounded-[28px] bg-white p-2">
+      <div className="px-3 py-10 sm:px-5">
+        <div className="relative rounded-[28px] bg-white px-2">
           <div className="relative overflow-hidden rounded-[22px]">
             <video
               ref={videoRef}
@@ -230,46 +230,53 @@ function HeroVideo() {
    INTERACTIVE PUZZLES SECTION
 ============================================================ */
 function InteractivePuzzlesSection() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <section className="w-full bg-brand-coral text-white">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
         <div className="grid items-center gap-12 md:grid-cols-2">
           <div className="sm:px-4">
-            <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
+            <h3 className="headingstyle font-heading font-extrabold">
+              Interactive Puzzles
+            </h3>
 
             <p className="textstyles mt-4 font-sans text-white/90">
-              Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
+              Solve the 4×4 Sudoku puzzles given here. The rules that you need
+              to follow are:
             </p>
             <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
-              <li>Each standing line should have all 4 colours appearing exactly once.</li>
-              <li>Each sleeping line should have all 4 colours appearing exactly once.</li>
-              <li>Each 2×2 grid should have all 4 colours appearing exactly once.</li>
+              <li>
+                Each standing line should have all 4 colours appearing exactly
+                once.
+              </li>
+              <li>
+                Each sleeping line should have all 4 colours appearing exactly
+                once.
+              </li>
+              <li>
+                Each 2×2 grid should have all 4 colours appearing exactly once.
+              </li>
             </ol>
 
-            <div className="mt-6">
+            <div className="mt-6 flex gap-4">
               <CTAButton
                 text="Solve Now"
                 href="#buy"
                 bg="#FFFFFF"
-                color="#AB4637" // brand teal text
-                hoverBg="#AB4637" // brand teal bg on hover
-                hoverColor="#FFFFFF" // white text on hover
+                color="#AB4637"
+                hoverBg="#AB4637"
+                hoverColor="#FFFFFF"
                 size="md"
-                rightIcon={
-                  <svg
-                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                }
+              />
+              <CTAButton
+                text="Watch Demo"
+                onClick={() => setIsOpen(true)}
+                bg="#FFFFFF"
+                color="#AB4637"
+                hoverBg="#AB4637"
+                hoverColor="#FFFFFF"
+                size="md"
               />
             </div>
           </div>
@@ -284,9 +291,29 @@ function InteractivePuzzlesSection() {
           </div>
         </div>
       </div>
+
+      {/* ---- Modal ---- */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="relative max-w-lg w-full rounded-lg bg-white p-4">
+            <button
+              className="absolute right-3 top-3 text-gray-600 hover:text-black"
+              onClick={() => setIsOpen(false)}
+            >
+              ✕
+            </button>
+            <img
+              src="https://res.cloudinary.com/deunonql5/image/upload/v1758625737/Untitled_design_2_hldysm.gif"
+              alt="Puzzle Demo"
+              className="w-full rounded-lg"
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+
 
 /* ============================================================
    PRINTABLES SECTION

@@ -1,16 +1,20 @@
-import Link from "next/link";
-import MediaLayout from "./MediaLayout";
+"use client";
+import { useState } from "react";
 import CTAButton from "./CTAButton";
 import MediaLayoutRight from "./MediaLayoutRight";
+import VideoModal from "./VideoModal";
 
 export default function WhyImportant() {
+  const [open, setOpen] = useState(false);
+
+  const YT = "https://youtu.be/oLktBpxN6qw?si=AVuR7nCiCqaA4HHG";
+
   return (
     <section id="why" className="mt-10 w-full bg-[#D8AE4F]">
       <div className="mx-auto lg:max-w-[80vw]">
         <div className="overflow-hidden py-12 text-[#3F2F14]">
-          {/* Flex container replacing grid */}
           <div className="flex flex-col items-center md:flex-row">
-            {/* MediaLayout on left for larger screens, top for mobile */}
+            {/* Media (left) */}
             <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
               <MediaLayoutRight
                 image="https://ik.imagekit.io/pratik11/WHY-LOGICOLOGY.png?updatedAt=1758439747708"
@@ -18,24 +22,26 @@ export default function WhyImportant() {
               />
             </div>
 
-            {/* Content on right for larger screens, bottom for mobile */}
+            {/* Content (right) */}
             <div className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2">
               <p className="headingstyle font-heading text-[#3F2F14]">Why Logicology?</p>
-              {/* <h2 className="heading-lg text-[#3F2F14]"></h2> */}
               <p className="textstyles mt-4 max-w-xl font-sans">
                 Children learn the best when they are engaged. Our thoroughly researched and tested
                 content is crafted to engage children. Gamification helps children learn in a fun
-                way. At Logicology we want to make learning fun and engaging - that's why we exist.
+                way. At Logicology we want to make learning fun and engaging—that&apos;s why we exist.
               </p>
+
               <div className="mt-6">
+                {/* If CTAButton supports onClick, use it and omit href */}
                 <CTAButton
                   text="Learn more"
-                  href="#offerings"
+                  onClick={() => setOpen(true)}
                   bg="#FFFFFF"
                   color="#7E5C2E"
                   hoverBg="#7E5C2E"
-                  hoverColor="#FFFFFF" // white text on hover
+                  hoverColor="#FFFFFF"
                   size="md"
+                  ariaLabel="Open Why Logicology video"
                   rightIcon={
                     <svg
                       className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -57,6 +63,14 @@ export default function WhyImportant() {
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      <VideoModal
+        open={open}
+        onClose={() => setOpen(false)}
+        youtubeUrl={YT}
+        title="Why Logicology?"
+      />
     </section>
   );
 }

@@ -48,8 +48,8 @@ function HeroVideo() {
 
   return (
     <section className="w-full bg-white">
-      <div className="px-3 pt-4 sm:px-5">
-        <div className="relative rounded-[28px] bg-white p-2">
+      <div className="px-3 py-10 sm:px-5">
+        <div className="relative rounded-[28px] bg-white px-2">
           <div className="relative overflow-hidden rounded-[22px]">
             <video
               ref={videoRef}
@@ -69,17 +69,16 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14">
+            <div className="absolute top-0 inset-0 z-20 flex items-start sm:items-center">
+              <div className="mx-auto w-[75vw] max-w-[75vw] px-6  text-white sm:px-10">
                 {/* <p className="textstyles mb-3">Empowering Minds</p> */}
                 <h1 className="headingstyle font-extrabold leading-tight">
                   Our Philosophy
                   {/* <br /> and Logic-Based Learning */}
                 </h1>
-                {/* <p className="textstyles mt-4 max-w-md text-white/90">
-                  At Logicology we endeavour to make learning fun so that children learn while they
-                  play.
-                </p> */}
+                <p className="textstyles mt-4 max-w-md text-white/90">
+                  That guides all our actions.
+                </p>
               </div>
             </div>
 
@@ -235,37 +234,45 @@ function OurStory() {
 /* --------------------- Our Team (Coral) --------------------- */
 function OurTeam() {
   const teamMembers = [
-    {
-      name: "Gayatri Phadnis",
-      role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
-    },
-    {
-      name: "Kartik Girish Vyas",
-      role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
-    },
-    {
-      name: "Jasneet Singh",
-      role: "Head of Design",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
-    },
-    {
-      name: "Pratik Kumar Jha",
-      role: "Head of Technology",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
-    },
-    {
-      name: "Simran Kaur",
-      role: "Designer",
-      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
-    },
-    {
-      name: "This could be you",
-      role: "Designer",
-      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
-    },
-  ];
+  {
+    name: "Gayatri Phadnis",
+    role: "Co-Founder",
+    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+    bio: "Creative force behind Logicology’s content. Leads innovation, strategy, and development with a parent’s perspective.",
+  },
+  {
+    name: "Kartik Girish Vyas",
+    role: "Co-Founder",
+    image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
+    bio: "Marketing and partnerships lead. A teacher at heart who refines ideas and drives community growth.",
+  },
+  {
+    name: "Jasneet Singh Babra",
+    role: "Head of Design",
+    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+    bio: "Owns all design projects at Logicology. Brings sleek, modern visuals across books, games, and digital media.",
+  },
+  {
+    name: "Pratik Kumar Jha",
+    role: "Head of Technology",
+    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+    bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
+  },
+  {
+    name: "Simran Kaur",
+    role: "Designer",
+    image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
+    bio: "Graphic designer focused on books and worksheets. Balances design creativity with insights as a young mother.",
+  },
+  {
+    name: "This could be you",
+    role: "Designer",
+    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+    bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
+  },
+];
+
+
 
   const [active, setActive] = useState<number | null>(null);
 
@@ -389,8 +396,7 @@ function OurTeam() {
               </h3>
               <p className="mb-4 text-center text-gray-600">{teamMembers[active].role}</p>
               <p className="text-center text-gray-700">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                incididunt ut labore.
+                {teamMembers[active].bio}
               </p>
             </div>
           </div>
@@ -423,7 +429,7 @@ function OurVision() {
           {/* Mission */}
           <div className="relative rounded-3xl bg-white p-6 shadow-soft">
             {/* Label */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
               <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
                 Mission
               </span>
@@ -441,7 +447,7 @@ function OurVision() {
           {/* Goal */}
           <div className="relative rounded-3xl bg-white p-6 shadow-soft">
             {/* Label */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
               <span className="text-md rounded-full bg-red-500 px-4 py-1 font-bold text-white shadow">
                 Goal
               </span>
