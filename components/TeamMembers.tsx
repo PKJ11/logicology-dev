@@ -15,30 +15,35 @@ const teamMembers = [
     role: "Co-Founder",
     image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
     bio: "Leads curriculum and pedagogy. Ensures our content nurtures conceptual understanding and curiosity.",
+    linkedin: "https://www.linkedin.com/in/gayatri-phadnis-vyas/",
   },
   {
     name: "Kartik Vyas",
     role: "Co-Founder",
     image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758535847610",
     bio: "Driving product strategy at Logicology with a focus on playful learning and measurable outcomes.",
+    linkedin: "https://www.linkedin.com/in/kartik-girish-vyas-b567496/",
   },
   {
     name: "Jasneet Singh",
     role: "Head of Design",
     image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
     bio: "Crafts the visual language of Logicology across games, books, and digital experiences.",
+    linkedin: "https://www.linkedin.com/in/jasneet-singh-babra-1a979a1b7/",
   },
   {
     name: "Pratik Kumar Jha",
     role: "Head of Technology",
     image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
     bio: "Builds robust platforms and tools that power our learning ecosystem end‑to‑end.",
+    linkedin: "https://www.linkedin.com/in/pratik-kumar-jha-b95473259/",
   },
   {
     name: "Simran Kaur",
     role: "Designer",
     image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
     bio: "Designs delightful interfaces and playful illustrations that make learning feel effortless.",
+    linkedin: "",
   },
 ];
 
@@ -206,7 +211,9 @@ export default function TeamPage() {
                         className="mt-6 flex flex-wrap items-center gap-3"
                       >
                         <a
-                          href="#"
+                          href={m.linkedin || "#"}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="inline-flex items-center justify-center rounded-2xl bg-brand-teal px-5 py-2.5 text-white shadow-brand transition-transform hover:-translate-y-0.5 active:translate-y-0"
                         >
                           Connect
