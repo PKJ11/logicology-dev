@@ -409,13 +409,13 @@ function OurTeam() {
 
 function GallerySection() {
   const raw = [
-    "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
+    "https://ik.imagekit.io/pratik11/WhatsApp%20Image%202025-09-24%20at%2010.01.02_76a91c95.jpg?updatedAt=1758690489687",
     "https://ik.imagekit.io/pratik11/IMG_3932.HEIC?updatedAt=1758632392086",
     "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
     "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
     "https://ik.imagekit.io/pratik11/g4.jpg?updatedAt=1758632390353",
     "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
-    "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
+    "https://ik.imagekit.io/pratik11/WhatsApp%20Image%202025-09-24%20at%2010.04.31_a1802bf2.jpg?updatedAt=1758690948555",
     "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
   ];
   const images = raw.map((u) => (u.includes("?") ? `${u}&tr=f-auto,q-70` : `${u}?tr=f-auto,q-70`));
