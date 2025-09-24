@@ -6,7 +6,7 @@ const SiteFooter = () => {
   return (
     <footer id="footer" className="">
       <div className="bg-brand-tealDark text-white">
-        <div className="container-padding py-12">
+        <div className="max-w-[75vw] mx-auto px-4 sm:px-6 py-12">
           <div className="grid items-start gap-10 md:grid-cols-4">
             <div className="relative h-auto w-[200px]">
               <Image
@@ -35,22 +35,17 @@ const SiteFooter = () => {
                       Refund Policy
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/" className="hover:underline">
-                      Collections
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div>
                 <ul className="space-y-3 text-sm">
                   <li>
-                    <Link href="/" className="hover:underline">
+                    <Link href="/contact" className="hover:underline">
                       Contact Us
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="hover:underline">
+                    <Link href="/philosophy" className="hover:underline">
                       Our Philosophy
                     </Link>
                   </li>
@@ -61,32 +56,38 @@ const SiteFooter = () => {
                 <div className="mt-3 flex items-center gap-3 text-lg">
                   <Link
                     aria-label="Instagram"
-                    href="#"
+                    href="https://www.instagram.com/logicology_/?hl=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                   >
                     <FiInstagram />
                   </Link>
                   <Link
                     aria-label="Facebook"
-                    href="#"
+                    href="https://www.facebook.com/Logicology"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                   >
                     <FiFacebook />
                   </Link>
                   <Link
-                    aria-label="Twitter"
-                    href="#"
+                    aria-label="LinkedIn"
+                    href="https://www.linkedin.com/company/11215891/admin/dashboard/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                   >
                     <FiTwitter />
                   </Link>
-                  <Link
+                  <a
                     aria-label="Phone"
-                    href="#"
+                    href="tel:8446980747"
                     className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                   >
                     <FiPhone />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
