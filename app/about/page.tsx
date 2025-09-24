@@ -7,11 +7,7 @@ import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+
 export default function AboutUs() {
   return (
     <main className="min-h-screen bg-brand-hero">
@@ -20,7 +16,6 @@ export default function AboutUs() {
       <OurStory />
       <OurTeam />
       <OurVision />
-      <GallerySection />
       <ContactUs />
       <Tribe />
       <Footer />
@@ -407,126 +402,7 @@ function OurTeam() {
 
 /* --------------------- Gallery (Masonry-ish) --------------------- */
 
-function GallerySection() {
-  const raw = [
-    "https://ik.imagekit.io/pratik11/WhatsApp%20Image%202025-09-24%20at%2010.01.02_76a91c95.jpg?updatedAt=1758690489687",
-    "https://ik.imagekit.io/pratik11/IMG_3932.HEIC?updatedAt=1758632392086",
-    "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
-    "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
-    "https://ik.imagekit.io/pratik11/g4.jpg?updatedAt=1758632390353",
-    "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
-    "https://ik.imagekit.io/pratik11/WhatsApp%20Image%202025-09-24%20at%2010.04.31_a1802bf2.jpg?updatedAt=1758690948555",
-    "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
-  ];
-  const images = raw.map((u) => (u.includes("?") ? `${u}&tr=f-auto,q-70` : `${u}?tr=f-auto,q-70`));
 
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-  const closeModal = () => setSelectedIndex(null);
-  const showPrev = () => setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
-  const showNext = () => setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
-
-  return (
-    <section className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(10,138,128,0.08),transparent_60%)]" />
-      <div className="mx-auto px-4 sm:px-6 lg:max-w-[80vw] lg:px-8">
-        <div className="mb-8 flex items-center justify-between">
-          <h2 className="headingstyle font-extrabold text-brand-teal">Gallery</h2>
-        </div>
-
-        <Swiper
-          modules={[Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow]}
-          navigation
-          keyboard={{ enabled: true }}
-          freeMode={{ enabled: true, momentum: true }}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
-          loop
-          centeredSlides={false}
-          spaceBetween={18}
-          slidesPerView={1.2}
-          breakpoints={{
-            480: { slidesPerView: 2.2, spaceBetween: 18 },
-            768: { slidesPerView: 3.2, spaceBetween: 20 },
-            1024: { slidesPerView: 4.2, spaceBetween: 22 },
-            1280: { slidesPerView: 5.2, spaceBetween: 24 },
-          }}
-          className="w-full"
-        >
-          {images.map((src, i) => (
-            <SwiperSlide key={`${src}-${i}`} className="!h-auto select-none">
-              <div
-                className="group relative h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
-                onClick={() => setSelectedIndex(i)}
-              >
-                <div className="relative aspect-[4/3] w-full">
-                  <img
-                    src={src}
-                    alt={`Gallery ${i + 1}`}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      {/* Modal with navigation */}
-      {selectedIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          onClick={closeModal}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              showPrev();
-            }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white shadow-lg transition-all duration-200 hover:bg-white/40"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          <img
-            src={images[selectedIndex].replace("&tr=f-auto,q-70", "&tr=f-auto,q-90")}
-            alt="Full View"
-            className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
-            onClick={(e) => e.stopPropagation()}
-          />
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              showNext();
-            }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white shadow-lg transition-all duration-200 hover:bg-white/40"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      )}
-    </section>
-  );
-}
 
 /* --------------------- Our Vision (Gray) --------------------- */
 function OurVision() {
