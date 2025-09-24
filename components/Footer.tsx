@@ -12,7 +12,7 @@ const SiteFooter = () => {
     <>
       <footer id="footer" className="">
         <div className="bg-brand-tealDark text-white">
-          <div className="max-w-[75vw] mx-auto px-4 sm:px-6 py-12">
+          <div className="max-w-[74vw] mx-auto px-4 sm:px-6 py-12">
             <div className="grid items-start gap-10 md:grid-cols-4">
               <div className="relative h-auto w-[200px]">
                 <Image
