@@ -7,6 +7,11 @@ import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 export default function AboutUs() {
   return (
     <main className="min-h-screen bg-brand-hero">
@@ -15,6 +20,7 @@ export default function AboutUs() {
       <OurStory />
       <OurTeam />
       <OurVision />
+      <GallerySection />
       <ContactUs />
       <Tribe />
       <Footer />
@@ -69,8 +75,8 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            <div className="absolute top-0 inset-0 z-20 flex items-start sm:items-center">
-              <div className="mx-auto w-[75vw] max-w-[75vw] px-6  text-white sm:px-10">
+            <div className="absolute inset-0 top-0 z-20 flex items-start sm:items-center">
+              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 text-white sm:px-10">
                 {/* <p className="textstyles mb-3">Empowering Minds</p> */}
                 <h1 className="headingstyle font-extrabold leading-tight">
                   Our Philosophy
@@ -234,45 +240,43 @@ function OurStory() {
 /* --------------------- Our Team (Coral) --------------------- */
 function OurTeam() {
   const teamMembers = [
-  {
-    name: "Gayatri Phadnis",
-    role: "Co-Founder",
-    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
-    bio: "Creative force behind Logicology’s content. Leads innovation, strategy, and development with a parent’s perspective.",
-  },
-  {
-    name: "Kartik Girish Vyas",
-    role: "Co-Founder",
-    image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
-    bio: "Marketing and partnerships lead. A teacher at heart who refines ideas and drives community growth.",
-  },
-  {
-    name: "Jasneet Singh Babra",
-    role: "Head of Design",
-    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
-    bio: "Owns all design projects at Logicology. Brings sleek, modern visuals across books, games, and digital media.",
-  },
-  {
-    name: "Pratik Kumar Jha",
-    role: "Head of Technology",
-    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
-    bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
-  },
-  {
-    name: "Simran Kaur",
-    role: "Designer",
-    image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
-    bio: "Graphic designer focused on books and worksheets. Balances design creativity with insights as a young mother.",
-  },
-  {
-    name: "This could be you",
-    role: "Designer",
-    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
-    bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
-  },
-];
-
-
+    {
+      name: "Gayatri Phadnis",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+      bio: "Creative force behind Logicology’s content. Leads innovation, strategy, and development with a parent’s perspective.",
+    },
+    {
+      name: "Kartik Girish Vyas",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
+      bio: "Marketing and partnerships lead. A teacher at heart who refines ideas and drives community growth.",
+    },
+    {
+      name: "Jasneet Singh Babra",
+      role: "Head of Design",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      bio: "Owns all design projects at Logicology. Brings sleek, modern visuals across books, games, and digital media.",
+    },
+    {
+      name: "Pratik Kumar Jha",
+      role: "Head of Technology",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
+    },
+    {
+      name: "Simran Kaur",
+      role: "Designer",
+      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
+      bio: "Graphic designer focused on books and worksheets. Balances design creativity with insights as a young mother.",
+    },
+    {
+      name: "This could be you",
+      role: "Designer",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+      bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
+    },
+  ];
 
   const [active, setActive] = useState<number | null>(null);
 
@@ -395,13 +399,85 @@ function OurTeam() {
                 {teamMembers[active].name}
               </h3>
               <p className="mb-4 text-center text-gray-600">{teamMembers[active].role}</p>
-              <p className="text-center text-gray-700">
-                {teamMembers[active].bio}
-              </p>
+              <p className="text-center text-gray-700">{teamMembers[active].bio}</p>
             </div>
           </div>
         </div>
       )}
+    </section>
+  );
+}
+
+/* --------------------- Gallery (Masonry-ish) --------------------- */
+
+function GallerySection() {
+  const raw = [
+    "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
+    "https://ik.imagekit.io/pratik11/IMG_3932.HEIC?updatedAt=1758632392086",
+    "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
+    "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
+    "https://ik.imagekit.io/pratik11/g4.jpg?updatedAt=1758632390353",
+    // (Optional) duplicate to make the reel feel richer
+    "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
+    "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
+    "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
+  ];
+
+  // Force browser-friendly formats (handles HEIC) + light compression
+  const images = raw.map((u) => (u.includes("?") ? `${u}&tr=f-auto,q-70` : `${u}?tr=f-auto,q-70`));
+
+  return (
+    <section className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(10,138,128,0.08),transparent_60%)]" />
+      <div className="mx-auto px-4 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="headingstyle font-extrabold text-brand-teal">Gallery</h2>
+          {/* arrows are rendered by Swiper; this keeps the header clean */}
+        </div>
+
+        <Swiper
+          modules={[Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow]}
+          navigation
+          keyboard={{ enabled: true }}
+          freeMode={{ enabled: true, momentum: true }}
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          loop
+          centeredSlides={false}
+          spaceBetween={18}
+          slidesPerView={1.2}
+          breakpoints={{
+            480: { slidesPerView: 2.2, spaceBetween: 18 },
+            768: { slidesPerView: 3.2, spaceBetween: 20 },
+            1024: { slidesPerView: 4.2, spaceBetween: 22 },
+            1280: { slidesPerView: 5.2, spaceBetween: 24 },
+          }}
+          className="w-full"
+        >
+          {images.map((src, i) => (
+            <SwiperSlide key={`${src}-${i}`} className="!h-auto select-none">
+              <div className="group relative h-full w-full overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]">
+                {/* Uniform size via aspect ratio (change to 1/1 or 16/9 if you prefer) */}
+                <div className="relative aspect-[4/3] w-full">
+                  <img
+                    src={src}
+                    alt={`Gallery ${i + 1}`}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  {/* subtle gradient + glossy overlay */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/0 via-black/0 to-black/0" />
+                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <div className="absolute -inset-10 bg-[radial-gradient(200px_120px_at_var(--x,50%)_var(--y,50%),rgba(255,255,255,0.25),transparent_40%)]" />
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Tiny note to avoid CLS jumps on very small screens */}
+        <div className="mt-3 text-center text-xs text-black/40">Swipe • Drag • Arrow keys</div>
+      </div>
     </section>
   );
 }

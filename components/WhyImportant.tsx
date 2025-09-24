@@ -28,7 +28,8 @@ export default function WhyImportant() {
               <p className="textstyles mt-4 max-w-xl font-sans">
                 Children learn the best when they are engaged. Our thoroughly researched and tested
                 content is crafted to engage children. Gamification helps children learn in a fun
-                way. At Logicology we want to make learning fun and engaging—that&apos;s why we exist.
+                way. At Logicology we want to make learning fun and engaging—that&apos;s why we
+                exist.
               </p>
 
               <div className="mt-6">
