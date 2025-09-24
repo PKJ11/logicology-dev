@@ -56,7 +56,7 @@ function HeroVideo() {
     <section className="w-full bg-white">
       <div className="px-3 py-10 sm:px-5">
         <div className="relative rounded-[28px] bg-white px-2">
-          <div className="relative overflow-hidden rounded-[22px]">
+          <div className="relative flex items-center justify-center overflow-hidden rounded-[22px]">
             <video
               ref={videoRef}
               autoPlay
@@ -75,15 +75,12 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            <div className="absolute inset-0 top-0 z-20 flex items-start sm:items-center">
-              <div className="mx-auto w-[75vw] max-w-[75vw] px-6 text-white sm:px-10">
-                {/* <p className="textstyles mb-3">Empowering Minds</p> */}
-                <h1 className="headingstyle font-extrabold leading-tight">
-                  Our Philosophy
-                  {/* <br /> and Logic-Based Learning */}
-                </h1>
+            {/* overlay content pinned to top-left */}
+            <div className="absolute left-10 top-10 z-20 flex items-start">
+              <div className="px-6 py-8 text-white sm:px-10 sm:py-12">
+                <h1 className="headingstyle font-extrabold leading-tight">Our Philosophy</h1>
                 <p className="textstyles mt-4 max-w-md text-white/90">
-                  That guides all our actions.
+                  That guides all our actions.
                 </p>
               </div>
             </div>
@@ -417,14 +414,17 @@ function GallerySection() {
     "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
     "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
     "https://ik.imagekit.io/pratik11/g4.jpg?updatedAt=1758632390353",
-    // (Optional) duplicate to make the reel feel richer
     "https://ik.imagekit.io/pratik11/g2.jpg?updatedAt=1758632414740",
     "https://ik.imagekit.io/pratik11/g1.jpg?updatedAt=1758632390713",
     "https://ik.imagekit.io/pratik11/g3.jpg?updatedAt=1758632390325",
   ];
-
-  // Force browser-friendly formats (handles HEIC) + light compression
   const images = raw.map((u) => (u.includes("?") ? `${u}&tr=f-auto,q-70` : `${u}?tr=f-auto,q-70`));
+
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const closeModal = () => setSelectedIndex(null);
+  const showPrev = () => setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
+  const showNext = () => setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
 
   return (
     <section className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
@@ -432,7 +432,6 @@ function GallerySection() {
       <div className="mx-auto px-4 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="headingstyle font-extrabold text-brand-teal">Gallery</h2>
-          {/* arrows are rendered by Swiper; this keeps the header clean */}
         </div>
 
         <Swiper
@@ -455,8 +454,10 @@ function GallerySection() {
         >
           {images.map((src, i) => (
             <SwiperSlide key={`${src}-${i}`} className="!h-auto select-none">
-              <div className="group relative h-full w-full overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]">
-                {/* Uniform size via aspect ratio (change to 1/1 or 16/9 if you prefer) */}
+              <div
+                className="group relative h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
+                onClick={() => setSelectedIndex(i)}
+              >
                 <div className="relative aspect-[4/3] w-full">
                   <img
                     src={src}
@@ -464,20 +465,65 @@ function GallerySection() {
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  {/* subtle gradient + glossy overlay */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/0 via-black/0 to-black/0" />
-                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <div className="absolute -inset-10 bg-[radial-gradient(200px_120px_at_var(--x,50%)_var(--y,50%),rgba(255,255,255,0.25),transparent_40%)]" />
-                  </div>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
-
-        {/* Tiny note to avoid CLS jumps on very small screens */}
-        <div className="mt-3 text-center text-xs text-black/40">Swipe • Drag • Arrow keys</div>
       </div>
+
+      {/* Modal with navigation */}
+      {selectedIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={closeModal}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              showPrev();
+            }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white shadow-lg transition-all duration-200 hover:bg-white/40"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <img
+            src={images[selectedIndex].replace("&tr=f-auto,q-70", "&tr=f-auto,q-90")}
+            alt="Full View"
+            className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              showNext();
+            }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white shadow-lg transition-all duration-200 hover:bg-white/40"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      )}
     </section>
   );
 }
