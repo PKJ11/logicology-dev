@@ -400,10 +400,6 @@ function OurTeam() {
   );
 }
 
-/* --------------------- Gallery (Masonry-ish) --------------------- */
-
-
-
 /* --------------------- Our Vision (Gray) --------------------- */
 function OurVision() {
   return (
