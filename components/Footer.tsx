@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +7,11 @@ import ContactUs from "./ContactUs";
 
 const SiteFooter = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
   return (
     <>
-      <footer id="footer" className="">
+      <footer id="footer">
         <div className="bg-brand-tealDark text-white">
           <div className="max-w-[74vw] mx-auto px-4 sm:px-6 py-12">
             <div className="grid items-start gap-10 md:grid-cols-4">
@@ -90,29 +91,29 @@ const SiteFooter = () => {
                     >
                       <FiTwitter />
                     </Link>
-                    <a
-                      aria-label="Phone"
-                      href="tel:8446980747"
-                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                    <span
+                      onClick={() => setIsPhoneModalOpen(true)}
+                      className="cursor-pointer rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                     >
                       <FiPhone />
-                    </a>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <div className="bg-slate-100 py-4 text-center text-sm text-slate-600">
           Copyright © by Logicology.com 2025. All rights reserved.
         </div>
       </footer>
 
+      {/* Contact Us Modal */}
       {isContactModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div 
-            className="bg-white rounded-xl relative w-[60vw] h-[75vh] overflow-hidden"
-            style={{ maxWidth: '60vw', maxHeight: '80vh' }}
+          <div
+            className="bg-white rounded-xl relative w-[60vw] h-[75vh] max-w-[60vw] max-h-[80vh] overflow-hidden"
           >
             <button
               onClick={() => setIsContactModalOpen(false)}
@@ -123,6 +124,29 @@ const SiteFooter = () => {
             <div className="h-full overflow-y-auto">
               <ContactUs />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Phone Only Modal */}
+      {isPhoneModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div
+            className="bg-white rounded-xl relative w-[60vw] h-[40vh] max-w-[60vw] overflow-hidden flex flex-col items-center justify-center text-center text-black px-6"
+          >
+            <button
+              onClick={() => setIsPhoneModalOpen(false)}
+              className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-2">Call Us</h2>
+            <p className="text-xl font-semibold">
+              <a href="tel:+918446980747" className="text-brand-teal hover:underline">
+                +91 8446980747
+              </a>
+            </p>
+            <p className="mt-4 text-sm text-gray-600">We’re happy to assist you.</p>
           </div>
         </div>
       )}
