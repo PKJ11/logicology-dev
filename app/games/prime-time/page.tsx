@@ -10,7 +10,14 @@ import Image from "next/image";
 import Community from "@/components/Community";
 import MediaLayout from "@/components/MediaLayout";
 import CTAButton from "@/components/CTAButton";
-import { Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow,Pagination } from "swiper/modules";
+import {
+  Navigation,
+  Autoplay,
+  Keyboard,
+  FreeMode,
+  EffectCoverflow,
+  Pagination,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -64,8 +71,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-MOBILE-VIEW.png?updatedAt=1758442535388",
       },
-      cta: "Learn more",
-      ctaLink: "/philosophy",
+      cta: "Buy Now",
+      ctaLink: "https://amzn.in/d/h4WRyPf",
     },
     {
       id: 2,
@@ -80,8 +87,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-2-MOBILE-VIEW.png?updatedAt=1758359620876",
       },
-      cta: "Discover how",
-      ctaLink: "/how-it-works",
+      cta: "Buy Now",
+      ctaLink: "https://amzn.in/d/h4WRyPf",
     },
     {
       id: 3,
@@ -96,8 +103,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-3-MOBILE-VIEW.png?updatedAt=1758359662353",
       },
-      cta: "Get started",
-      ctaLink: "/get-started",
+      cta: "Buy Now",
+      ctaLink: "https://amzn.in/d/h4WRyPf",
     },
   ];
 
@@ -155,7 +162,32 @@ function Hero() {
                         <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
                           {slide.description}
                         </p>
-                        <div className="mt-6"></div>
+                        <div className="mt-6">
+                          <CTAButton
+                            text={slide.cta}
+                            href={slide.ctaLink}
+                            bg="#FFFFFF"
+                            color="#0A8A80" // brand teal text
+                            hoverBg="#0A8A80" // brand teal bg on hover
+                            hoverColor="#FFFFFF" // white text on hover
+                            size="md"
+                            rightIcon={
+                              <svg
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            }
+                          />
+                        </div> 
                       </div>
                     </div>
                   </div>

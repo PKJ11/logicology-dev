@@ -249,15 +249,7 @@ function InteractivePuzzlesSection() {
             </ol>
 
             <div className="mt-6 flex gap-4">
-              <CTAButton
-                text="Solve Now"
-                href="#buy"
-                bg="#FFFFFF"
-                color="#AB4637"
-                hoverBg="#AB4637"
-                hoverColor="#FFFFFF"
-                size="md"
-              />
+              
               <CTAButton
                 text="Watch Demo"
                 onClick={() => setIsOpen(true)}
