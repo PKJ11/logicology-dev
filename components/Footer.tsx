@@ -105,7 +105,7 @@ const SiteFooter = () => {
         </div>
 
         <div className="bg-slate-100 py-4 text-center text-sm text-slate-600">
-          Copyright © by Logicology.com 2025. All rights reserved.
+          Copyright © by Logicology 2025. All rights reserved.
         </div>
       </footer>
 
