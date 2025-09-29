@@ -11,7 +11,7 @@ import Script from "next/script";
 import { useCart } from "@/components/CartContext";
 import toast from "react-hot-toast";
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_337J5wlmmPKxAl";
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
 
 // Sample product data
 const products = [
@@ -23,7 +23,7 @@ const products = [
   },
   {
     name: "Logicoland",
-    price: "₹249",
+    price: "₹1",
     image:
       "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
     rating: 5,

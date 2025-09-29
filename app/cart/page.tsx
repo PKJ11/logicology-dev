@@ -54,7 +54,7 @@ const CartPage = () => {
   }, 0);
 
   // Razorpay key
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
 
   // Save address to localStorage
   const saveAddressToLocalStorage = () => {
