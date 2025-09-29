@@ -1,10 +1,9 @@
-// TypeScript declaration for Razorpay on window
+"use client";
 declare global {
   interface Window {
     Razorpay?: any;
   }
 }
-("use client");
 
 import Image from "next/image";
 import React from "react";
