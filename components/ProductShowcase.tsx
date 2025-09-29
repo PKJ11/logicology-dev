@@ -17,7 +17,7 @@ const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk"
 const products = [
   {
     name: "Prime Time",
-    price: "₹1,424",
+    price: "₹1,499",
     image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
     rating: 5,
   },
