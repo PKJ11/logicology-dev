@@ -13,7 +13,7 @@ const SiteFooter = () => {
     <>
       <footer id="footer">
         <div className="bg-brand-tealDark text-white">
-          <div className="max-w-[74vw] mx-auto px-4 sm:px-6 py-12">
+          <div className="mx-auto max-w-[74vw] px-4 py-12 sm:px-6">
             <div className="grid items-start gap-10 md:grid-cols-4">
               <div className="relative h-auto w-[200px]">
                 <Image
@@ -49,7 +49,7 @@ const SiteFooter = () => {
                     <li>
                       <button
                         onClick={() => setIsContactModalOpen(true)}
-                        className="hover:underline cursor-pointer bg-transparent text-white"
+                        className="cursor-pointer bg-transparent text-white hover:underline"
                       >
                         Contact Us
                       </button>
@@ -112,12 +112,10 @@ const SiteFooter = () => {
       {/* Contact Us Modal */}
       {isContactModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div
-            className="bg-white rounded-xl relative w-[60vw] h-[75vh] max-w-[60vw] max-h-[80vh] overflow-hidden"
-          >
+          <div className="relative h-[75vh] max-h-[80vh] w-[60vw] max-w-[60vw] overflow-hidden rounded-xl bg-white">
             <button
               onClick={() => setIsContactModalOpen(false)}
-              className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-500 shadow-md hover:text-gray-700"
             >
               &times;
             </button>
@@ -131,16 +129,14 @@ const SiteFooter = () => {
       {/* Phone Only Modal */}
       {isPhoneModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div
-            className="bg-white rounded-xl relative w-[60vw] h-[40vh] max-w-[60vw] overflow-hidden flex flex-col items-center justify-center text-center text-black px-6"
-          >
+          <div className="relative flex h-[40vh] w-[60vw] max-w-[60vw] flex-col items-center justify-center overflow-hidden rounded-xl bg-white px-6 text-center text-black">
             <button
               onClick={() => setIsPhoneModalOpen(false)}
-              className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-700 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-500 shadow-md hover:text-gray-700"
             >
               &times;
             </button>
-            <h2 className="text-2xl font-bold mb-2">Call Us</h2>
+            <h2 className="mb-2 text-2xl font-bold">Call Us</h2>
             <p className="text-xl font-semibold">
               <a href="tel:+918446980747" className="text-brand-teal hover:underline">
                 +91 8446980747
