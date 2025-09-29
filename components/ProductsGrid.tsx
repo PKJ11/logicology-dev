@@ -67,7 +67,7 @@ export default function ProductsGrid({ products, adding, handleAddToCart }: Prop
                     </div>
 
                     <button
-                      className="inline-flex items-center justify-center rounded-2xl bg-brand-gold px-4 py-2 font-medium text-white shadow-[0_8px_20px_rgba(216,174,79,0.35)] transition-all hover:-translate-y-0.5 hover:bg-brand-gold/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 disabled:opacity-50 disabled:hover:translate-y-0"
+                      className="inline-flex items-center justify-center rounded-xl bg-brand-gold px-4 py-3 font-medium text-white shadow-[0_8px_20px_rgba(216,174,79,0.35)] transition-all hover:-translate-y-0.5 hover:bg-brand-gold/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 disabled:opacity-50 disabled:hover:translate-y-0"
                       onClick={() => handleAddToCart(variant?.id)}
                       disabled={!variant?.id || adding === variant?.id}
                       aria-busy={adding === variant?.id}

@@ -47,6 +47,11 @@ const SiteFooter = () => {
                 <div>
                   <ul className="space-y-3 text-sm">
                     <li>
+                      <Link href="/shipping" className="hover:underline">
+                        Shipping Policy
+                      </Link>
+                    </li>
+                    <li>
                       <button
                         onClick={() => setIsContactModalOpen(true)}
                         className="hover:underline cursor-pointer bg-transparent text-white"
