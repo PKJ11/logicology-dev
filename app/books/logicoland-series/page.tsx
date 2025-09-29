@@ -249,7 +249,6 @@ function InteractivePuzzlesSection() {
             </ol>
 
             <div className="mt-6 flex gap-4">
-              
               <CTAButton
                 text="Watch Demo"
                 onClick={() => setIsOpen(true)}

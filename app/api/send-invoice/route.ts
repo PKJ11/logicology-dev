@@ -21,7 +21,10 @@ export async function POST(req: NextRequest) {
       html,
     });
     return NextResponse.json({ success: true });
-  } catch (err:any) {
-    return NextResponse.json({ success: false, error: err?.message || "Unknown error" }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json(
+      { success: false, error: err?.message || "Unknown error" },
+      { status: 500 }
+    );
   }
 }

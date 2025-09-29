@@ -7,7 +7,6 @@ import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
 
-
 export default function AboutUs() {
   return (
     <main className="min-h-screen bg-brand-hero">

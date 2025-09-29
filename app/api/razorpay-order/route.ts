@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
+import { NextRequest, NextResponse } from "next/server";
+import Razorpay from "razorpay";
 
 export async function POST(req: NextRequest) {
   const { amount, currency, receipt } = await req.json();
@@ -11,8 +11,8 @@ export async function POST(req: NextRequest) {
 
   const options = {
     amount: Math.round(amount * 100), // amount in paise
-    currency: currency || 'INR',
-    receipt: receipt || 'receipt#1',
+    currency: currency || "INR",
+    receipt: receipt || "receipt#1",
   };
 
   try {
