@@ -21,13 +21,18 @@ const roboto = Roboto({
 });
 
 import FeedbackButton from "@/components/FeedbackButton";
+import { CartProvider } from "@/components/CartContext";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
       <body>
-        {children}
-        <FeedbackButton />
+        <CartProvider>
+          {children}
+          <FeedbackButton />
+          <Toaster position="top-right" />
+        </CartProvider>
       </body>
     </html>
   );

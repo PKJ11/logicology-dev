@@ -5,6 +5,7 @@ import Benefit from "@/components/Benefit";
 import ImportanceBubbles from "@/components/ImportanceBubbles";
 import Community from "@/components/Community";
 import Footer from "@/components/Footer";
+import ProductShowcase from "@/components/ProductShowcase";
 
 export default function Page() {
   return (
@@ -14,6 +15,7 @@ export default function Page() {
       <WhyImportant />
       <Benefit />
       <ImportanceBubbles />
+      <ProductShowcase />
       <Community />
       <Footer />
     </main>
