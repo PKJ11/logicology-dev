@@ -433,13 +433,13 @@ export default function NavBar() {
             >
               <FiSearch />
             </Link> */}
-            <Link
+            {/* <Link
               href="/cart"
               aria-label="Cart"
               className="text-brand-teal hover:text-brand-tealDark"
             >
               <FiShoppingCart />
-            </Link>
+            </Link> */}
           </div>
 
           {/* Mobile toggle */}
