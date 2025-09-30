@@ -18,8 +18,10 @@ export async function POST(req: NextRequest) {
     });
     const fbJson = await fbRes.json();
     return NextResponse.json(fbJson);
-  } catch (err:any) {
-    return NextResponse.json({ success: false, error: err?.message || "Unknown error" }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json(
+      { success: false, error: err?.message || "Unknown error" },
+      { status: 500 }
+    );
   }
 }
-
