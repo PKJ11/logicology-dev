@@ -128,7 +128,6 @@ const CartPage = () => {
       description: cart.map((i) => `${i.name} x${i.quantity}`).join(", "),
       order_id: order.id,
       handler: async function (response: any) {
-        alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
         // Save info to backend
         await fetch("/api/save-order-info", {
           method: "POST",
@@ -169,10 +168,16 @@ const CartPage = () => {
           }),
         });
 
-        // Close modal and reset
+        // Clear cart and show success message
+        clearCart();
         setIsCheckoutModalOpen(false);
         setStep(1);
         setSelectedAddress("");
+        setTimeout(() => {
+          alert(
+            `Payment successful!\n\nYour Payment ID: ${response.razorpay_payment_id}\n\nIf you have any questions, send us a WhatsApp on 8446980747 mentioning your payment ID and date of purchase.`
+          );
+        }, 300);
       },
       prefill: {
         name: userInfo.name,
