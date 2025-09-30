@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const PIXEL_ID = process.env.META_PIXEL_ID || "1374809147978540";
-const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
+const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "EAAJRXssyU4EBPqlK8EtzUL40TfOpm8ZCwYipqbopcq1ZCZAZBumfb69KneYA18AloSabS5ZCiHP1bbNgDprjo5kHZACwSoanjbZBs4I46pasackLpf0YSLWEQvG1Ciz1t2ZAGnAvsZAGFNm3pequZCBRo8zUCQcReBZC7LfcxQ9xRO4EZBnYVsZAbzCrvxV296fJRCYGZAjQZDZD";
 
 export async function POST(req: NextRequest) {
   try {

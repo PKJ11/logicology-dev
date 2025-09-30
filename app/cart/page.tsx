@@ -249,14 +249,14 @@ const CartPage = () => {
                       onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
-                    <input
+                    {/* <input
                       required
                       type="tel"
                       placeholder="Phone Number"
                       value={userInfo.phone}
                       onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
+                    /> */}
                   </div>
 
                   <button
@@ -399,7 +399,7 @@ const CartPage = () => {
                     <input
                       required
                       type="tel"
-                      placeholder="Phone Number"
+                      placeholder="Shipping Phone Number"
                       value={shipping.phone}
                       onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"

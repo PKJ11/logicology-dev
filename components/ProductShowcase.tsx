@@ -24,7 +24,7 @@ const products = [
   },
   {
     name: "Logicoland",
-    price: "₹1",
+    price: "₹249",
     image:
       "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
     rating: 5,
