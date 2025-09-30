@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
       <body>
         <CartProvider>
-          {/* Meta Pixel Script */}
+          {/* Meta Pixel Script - fbq is globally available for standard events */}
           <Script id="meta-pixel" strategy="afterInteractive">
             {`
               !function(f,b,e,v,n,t,s)
@@ -43,8 +43,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               'https://connect.facebook.net/en_US/fbevents.js');
               fbq('init', '1374809147978540');
               fbq('track', 'PageView');
+              window.fbq = window.fbq || fbq;
             `}
           </Script>
+          {/*
+            To track standard events anywhere in your app, use:
+            if (typeof window !== "undefined" && window.fbq) {
+              window.fbq('track', 'AddToCart', {content_name: 'Product', value: 123, currency: 'INR'});
+            }
+          */}
 
           {/* NoScript fallback */}
           <noscript>
