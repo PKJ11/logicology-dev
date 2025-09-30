@@ -2,6 +2,7 @@
 declare global {
   interface Window {
     Razorpay?: any;
+    fbq?: (...args: any[]) => void;
   }
 }
 
@@ -71,6 +72,13 @@ const ProductShowcase = () => {
                   onClick={() => {
                     addToCart(product);
                     toast.success(`${product.name} added to cart!`);
+                      if (typeof window !== "undefined" && window.fbq) {
+                        window.fbq('track', 'AddToCart', {
+                          content_name: product.name,
+                          value: parseFloat(product.price.replace(/[^\d.]/g, "")),
+                          currency: 'INR'
+                        });
+                      }
                   }}
                 >
                   Add to Cart
