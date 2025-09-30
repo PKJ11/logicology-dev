@@ -11,7 +11,7 @@ export default function MetaCapiPageView() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        event_name: "PageView",
+        event_name: "Subscribe",
         event_time: Math.floor(Date.now() / 1000),
         event_id: "pageview_" + Date.now(),
         event_source_url: window.location.href,

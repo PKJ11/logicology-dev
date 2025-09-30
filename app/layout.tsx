@@ -5,9 +5,8 @@ import { Outfit, Roboto } from "next/font/google";
 import FeedbackButton from "@/components/FeedbackButton";
 import { CartProvider } from "@/components/CartContext";
 import { Toaster } from "react-hot-toast";
-import Script from "next/script"; 
+import Script from "next/script";
 import MetaCapiPageView from "@/components/MetaCapiPageView";
-
 
 export const metadata: Metadata = {
   title: "Logicology",

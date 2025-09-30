@@ -68,8 +68,12 @@ const ProductShowcase = () => {
                 <h3 className="mb-1 text-lg font-bold text-brand-teal">{product.name}</h3>
                 <div className="mb-0.5 text-yellow-400">{"★".repeat(product.rating)}</div>
                 <div className="flex">
-                <div className="mb-2 text-base font-semibold text-brand-teal">{product.price}</div>
-                <div className="mb-2 text-base line-through text-gray-500 pl-2">{product.initialprice}</div>
+                  <div className="mb-2 text-base font-semibold text-brand-teal">
+                    {product.price}
+                  </div>
+                  <div className="mb-2 pl-2 text-base text-gray-500 line-through">
+                    {product.initialprice}
+                  </div>
                 </div>
 
                 <button
@@ -77,13 +81,13 @@ const ProductShowcase = () => {
                   onClick={() => {
                     addToCart(product);
                     toast.success(`${product.name} added to cart!`);
-                      if (typeof window !== "undefined" && window.fbq) {
-                        window.fbq('track', 'AddToCart', {
-                          content_name: product.name,
-                          value: parseFloat(product.price.replace(/[^\d.]/g, "")),
-                          currency: 'INR'
-                        });
-                      }
+                    if (typeof window !== "undefined" && window.fbq) {
+                      window.fbq("track", "AddToCart", {
+                        content_name: product.name,
+                        value: parseFloat(product.price.replace(/[^\d.]/g, "")),
+                        currency: "INR",
+                      });
+                    }
                   }}
                 >
                   Add to Cart

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const GMAIL_USER = process.env.GMAIL_USER ||"logicologymeta@gmail.com";
+const GMAIL_USER = process.env.GMAIL_USER || "logicologymeta@gmail.com";
 const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD || "fdqz xqjx neoz nzan";
 
 export async function POST(req: NextRequest) {

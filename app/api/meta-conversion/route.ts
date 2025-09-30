@@ -3,9 +3,10 @@
 import { createHash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-
 const PIXEL_ID = process.env.META_PIXEL_ID || "1374809147978540";
-const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "EAAJRXssyU4EBPqlK8EtzUL40TfOpm8ZCwYipqbopcq1ZCZAZBumfb69KneYA18AloSabS5ZCiHP1bbNgDprjo5kHZACwSoanjbZBs4I46pasackLpf0YSLWEQvG1Ciz1t2ZAGnAvsZAGFNm3pequZCBRo8zUCQcReBZC7LfcxQ9xRO4EZBnYVsZAbzCrvxV296fJRCYGZAjQZDZD";
+const ACCESS_TOKEN =
+  process.env.META_ACCESS_TOKEN ||
+  "EAAJRXssyU4EBPqlK8EtzUL40TfOpm8ZCwYipqbopcq1ZCZAZBumfb69KneYA18AloSabS5ZCiHP1bbNgDprjo5kHZACwSoanjbZBs4I46pasackLpf0YSLWEQvG1Ciz1t2ZAGnAvsZAGFNm3pequZCBRo8zUCQcReBZC7LfcxQ9xRO4EZBnYVsZAbzCrvxV296fJRCYGZAjQZDZD";
 
 // Hashing utility for email/phone (SHA256)
 function hash(str: string) {
@@ -38,7 +39,9 @@ export async function POST(req: NextRequest) {
       event_name: event.event_name,
       event_time: event.event_time || now,
       event_id: event.event_id || `${event.event_name}_${now}`,
-      event_source_url: event.event_source_url || (typeof event.custom_data?.url === "string" ? event.custom_data.url : undefined),
+      event_source_url:
+        event.event_source_url ||
+        (typeof event.custom_data?.url === "string" ? event.custom_data.url : undefined),
       action_source: event.action_source || "website",
       user_data,
       custom_data: event.custom_data || {},
