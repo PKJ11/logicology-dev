@@ -41,10 +41,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', process.env.NEXT_PUBLIC_META_PIXEL_ID || '1374809147978540');
+              fbq('init', '1374809147978540');
               fbq('track', 'PageView');
             `}
           </Script>
+
+          {/* NoScript fallback */}
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: "none" }}
+              src="https://www.facebook.com/tr?id=1374809147978540&ev=PageView&noscript=1"
+              alt="facebook pixel"
+            />
+          </noscript>
+
           {children}
           <FeedbackButton />
           <Toaster position="top-right" />
