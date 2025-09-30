@@ -2,17 +2,19 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Outfit, Roboto } from "next/font/google";
 
+import FeedbackButton from "@/components/FeedbackButton";
+import { CartProvider } from "@/components/CartContext";
+import { Toaster } from "react-hot-toast";
+import Script from "next/script"; 
+import MetaCapiPageView from "@/components/MetaCapiPageView";
+
+
 export const metadata: Metadata = {
   title: "Logicology",
   description: "Empowering Minds Through STEM Play and Logic-Based Learning",
 };
 
-// next/font loads, subsets, and self-hosts for you
-const outfit = Outfit({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-outfit",
-});
+const outfit = Outfit({ subsets: ["latin"], display: "swap", variable: "--font-outfit" });
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
@@ -20,17 +22,12 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
-import FeedbackButton from "@/components/FeedbackButton";
-import { CartProvider } from "@/components/CartContext";
-import { Toaster } from "react-hot-toast";
-import Script from "next/script";
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
       <body>
         <CartProvider>
-          {/* Meta Pixel Script - fbq is globally available for standard events */}
+          {/* Meta Pixel Script */}
           <Script id="meta-pixel" strategy="afterInteractive">
             {`
               !function(f,b,e,v,n,t,s)
@@ -46,12 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               window.fbq = window.fbq || fbq;
             `}
           </Script>
-          {/*
-            To track standard events anywhere in your app, use:
-            if (typeof window !== "undefined" && window.fbq) {
-              window.fbq('track', 'AddToCart', {content_name: 'Product', value: 123, currency: 'INR'});
-            }
-          */}
+
+          {/* Server-to-Meta: CAPI PageView ping from the browser */}
+          <MetaCapiPageView />
 
           {/* NoScript fallback */}
           <noscript>
