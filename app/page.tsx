@@ -15,7 +15,7 @@ export default function Page() {
       <WhyImportant />
       <Benefit />
       <ImportanceBubbles />
-      <ProductShowcase />
+      {/* <ProductShowcase /> */}
       <Community />
       <Footer />
     </main>
