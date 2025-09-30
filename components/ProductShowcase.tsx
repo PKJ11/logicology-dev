@@ -25,6 +25,7 @@ const products = [
   {
     name: "Logicoland",
     price: "₹249",
+    initialprice: "₹299",
     image:
       "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
     rating: 5,
@@ -66,7 +67,11 @@ const ProductShowcase = () => {
               <div className="flex flex-1 flex-col justify-center pl-4 text-left">
                 <h3 className="mb-1 text-lg font-bold text-brand-teal">{product.name}</h3>
                 <div className="mb-0.5 text-yellow-400">{"★".repeat(product.rating)}</div>
+                <div className="flex">
                 <div className="mb-2 text-base font-semibold text-brand-teal">{product.price}</div>
+                <div className="mb-2 text-base line-through text-gray-500 pl-2">{product.initialprice}</div>
+                </div>
+
                 <button
                   className="w-full max-w-[140px] rounded-full bg-[#EB6A42] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#d85b36]"
                   onClick={() => {
