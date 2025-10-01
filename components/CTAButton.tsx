@@ -69,6 +69,15 @@ export default function CTAButton({
   );
 
   if (href) {
+    // Open external links (Amazon) in a new tab
+    const isExternal = href.startsWith("http");
+    if (isExternal) {
+      return (
+        <Link href={href} aria-label={ariaLabel} target="_blank" rel="noopener noreferrer">
+          {content}
+        </Link>
+      );
+    }
     return (
       <Link href={href} aria-label={ariaLabel}>
         {content}
