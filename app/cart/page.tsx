@@ -142,7 +142,50 @@ const CartPage = () => {
           }),
         });
 
-        // Send invoice email to user
+        // Prepare invoice line items for Razorpay
+        const line_items = cart.map((item) => ({
+          name: item.name,
+          amount: Math.round(parseFloat(item.price.replace(/[^\d.]/g, "")) * 100),
+          currency: "INR",
+          quantity: item.quantity,
+        }));
+
+        // Create Razorpay invoice
+        const invoiceRes = await fetch("/api/razorpay-invoice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            description: options.description,
+            name: userInfo.name,
+            email: userInfo.email,
+            phone: userInfo.phone,
+            billing_address: shipping.address,
+            shipping_address: shipping.address,
+            line_items,
+            currency: "INR",
+            amount: Math.round(total * 100),
+            receipt: `cart_${Date.now()}`,
+            sms_notify: 1,
+            email_notify: 1,
+            notes: {},
+          }),
+        });
+        const invoiceData = await invoiceRes.json();
+        let invoiceUrl = "";
+        let invoiceId = "";
+        if (invoiceData.invoice) {
+          invoiceId = invoiceData.invoice.id;
+          // Issue the invoice
+          const issueRes = await fetch("/api/razorpay-invoice", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ invoice_id: invoiceId }),
+          });
+          const issueData = await issueRes.json();
+          invoiceUrl = invoiceData.invoice.short_url || "";
+        }
+
+        // Send invoice email to user (with Razorpay invoice link)
         const invoiceHtml = `
           <h2>Thank you for your purchase!</h2>
           <p>Payment ID: <b>${response.razorpay_payment_id}</b></p>
@@ -156,6 +199,7 @@ const CartPage = () => {
             ${cart.map((item) => `<li>${item.name} x${item.quantity} - ${item.price}</li>`).join("")}
           </ul>
           <p><b>Total Paid: ₹${total.toFixed(2)}</b></p>
+          ${invoiceUrl ? `<p><a href='${invoiceUrl}' target='_blank'>View Official Razorpay Invoice</a></p>` : ""}
         `;
 
         await fetch("/api/send-invoice", {
@@ -175,7 +219,7 @@ const CartPage = () => {
         setSelectedAddress("");
         setTimeout(() => {
           alert(
-            `Payment successful!\n\nYour Payment ID: ${response.razorpay_payment_id}\n\nIf you have any questions, send us a WhatsApp on 8446980747 mentioning your payment ID and date of purchase.`
+            `Payment successful!\n\nYour Payment ID: ${response.razorpay_payment_id}\n\nIf you have any questions, send us a WhatsApp on 8446980747 mentioning your payment ID and date of purchase.${invoiceUrl ? `\n\nView your official invoice: ${invoiceUrl}` : ""}`
           );
         }, 300);
       },

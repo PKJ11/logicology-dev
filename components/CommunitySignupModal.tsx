@@ -224,8 +224,8 @@ export default function CommunitySignupModal({
       setLoading(true);
       setErrorMessage(null);
 
-      // Real API call to register user
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      // Save user to MongoDB community collection
+      const response = await fetch("/api/save-community-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -234,35 +234,19 @@ export default function CommunitySignupModal({
           name,
           email,
           phone,
-          password: "defaultPassword", // In a real app, you might want to generate a random password
         }),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        if (data.errors && Array.isArray(data.errors)) {
-          const errorMessage = data.errors.map((err: ApiError) => err.msg).join(", ");
-          throw new Error(errorMessage);
-        }
-        throw new Error(data.message || "Registration failed");
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Registration failed");
       }
 
-      // Store the token and user data
-      if (data.token) {
-        localStorage.setItem("communityToken", data.token);
-
-        // Store user data if available in response
-        if (data.user) {
-          localStorage.setItem("userData", JSON.stringify(data.user));
-          setUserData(data.user);
-        } else {
-          // Create user data from form inputs if not provided by API
-          const userData = { id: Date.now().toString(), name, email, phone };
-          localStorage.setItem("userData", JSON.stringify(userData));
-          setUserData(userData);
-        }
-      }
+      // Store user data locally
+      const userData = { id: Date.now().toString(), name, email, phone };
+      localStorage.setItem("userData", JSON.stringify(userData));
+      setUserData(userData);
 
       setRegistrationSuccess(true);
       setHasExistingSession(true);
@@ -500,7 +484,7 @@ export default function CommunitySignupModal({
               disabled={!otpVerified || loading}
               className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
             >
-              {loading ? "Processing..." : "Join Community"}
+              {loading ? "Processing..." : "Save & Join Community"}
             </button>
 
             <p className="mt-6 text-center text-xs text-brand-tealDark/60">

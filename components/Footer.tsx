@@ -28,10 +28,11 @@ const SiteFooter = () => {
                 <div>
                   <ul className="space-y-3 text-sm">
                     <li>
-                      <Link href="/about" className="hover:underline">
-                        About Us
+                      <Link href="/shipping" className="hover:underline">
+                        Shipping Policy
                       </Link>
                     </li>
+
                     <li>
                       <Link href="/privacy-policy" className="hover:underline">
                         Privacy Policy
@@ -47,8 +48,8 @@ const SiteFooter = () => {
                 <div>
                   <ul className="space-y-3 text-sm">
                     <li>
-                      <Link href="/shipping" className="hover:underline">
-                        Shipping Policy
+                      <Link href="/about" className="hover:underline">
+                        About Us
                       </Link>
                     </li>
                     <li>
@@ -58,11 +59,6 @@ const SiteFooter = () => {
                       >
                         Contact Us
                       </button>
-                    </li>
-                    <li>
-                      <Link href="/about" className="hover:underline">
-                        Our Philosophy
-                      </Link>
                     </li>
                   </ul>
                 </div>

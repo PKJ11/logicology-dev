@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
 const MONGO_URI =
-  process.env.MONGO_URI ||
-  "mongodb+srv://pratikkumarjhavnit:Y0wxsLlcYQ0EHw0X@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const DB_NAME = process.env.MONGO_DB_NAME || "logicology";
-const COLLECTION = "orders";
+  "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const DB_NAME = "logicology";
+const COLLECTION = "community";
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    // { name, email, phone, shipping, paymentId, razorpayDesc, razorpayContact }
+    // { name, email, phone }
     const client = new MongoClient(MONGO_URI);
     await client.connect();
     const db = client.db(DB_NAME);
