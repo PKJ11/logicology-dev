@@ -8,6 +8,7 @@ export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string
   const [isAnimating, setIsAnimating] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string
       }
       setIsVideoExpanded(false);
       setIsMuted(true);
+      setIsVideoPlaying(false);
     }
 
     setTimeout(() => setIsAnimating(false), 500);
@@ -47,6 +49,14 @@ export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string
 
   const handleVideoLeave = () => {
     if (isVideoExpanded) setTimeout(() => setShowCenterClose(false), 1000);
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoPause = () => {
+    setIsVideoPlaying(false);
   };
 
   const hasVideo = videoSrc && videoSrc.trim() !== "";
@@ -89,24 +99,35 @@ export default function MediaLayoutRight({ videoSrc, image }: { videoSrc: string
               loop
               playsInline
               className="h-full w-full object-cover"
+              onPlay={handleVideoPlay}
+              onPause={handleVideoPause}
             />
 
-            {/* --- overlay buttons --- */}
-
-            {/* Always show PLAY when collapsed */}
-            {!isVideoExpanded && (
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow">
-                  <svg
-                    className="ml-0.5 h-6 w-6 text-gray-900"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+            {/* "Why Logicology" thumbnail - Full cover when video is not playing and not expanded */}
+            {!isVideoPlaying && !isVideoExpanded && (
+              <div
+                className="absolute inset-0 flex items-center justify-center rounded-[18px]"
+                style={{ backgroundColor: "#E45C48" }}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white md:text-3xl">Why Logicology</div>
+                  {/* Play icon overlay */}
+                  <div className="pointer-events-none mt-4 flex justify-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow">
+                      <svg
+                        className="ml-0.5 h-6 w-6 text-gray-900"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
+
+            {/* --- overlay buttons --- */}
 
             {/* Show CLOSE in center briefly when expanded */}
             {isVideoExpanded && (
