@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiInstagram, FiFacebook, FiTwitter, FiPhone } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiTwitter, FiPhone, FiLinkedin, FiYoutube } from "react-icons/fi";
 import ContactUs from "./ContactUs";
 
 const SiteFooter = () => {
@@ -63,7 +63,7 @@ const SiteFooter = () => {
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">Follow us or contact</p>
+                  <p className="text-sm font-semibold">Follow us</p>
                   <div className="mt-3 flex items-center gap-3 text-lg">
                     <Link
                       aria-label="Instagram"
@@ -90,14 +90,17 @@ const SiteFooter = () => {
                       rel="noopener noreferrer"
                       className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                     >
-                      <FiTwitter />
+                      <FiLinkedin />
                     </Link>
-                    <span
-                      onClick={() => setIsPhoneModalOpen(true)}
-                      className="cursor-pointer rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                    <Link
+                      aria-label="Youtube"
+                      href="https://www.youtube.com/c/logicology/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
                     >
-                      <FiPhone />
-                    </span>
+                      <FiYoutube />
+                    </Link>
                   </div>
                 </div>
               </div>
