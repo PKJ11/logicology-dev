@@ -21,6 +21,7 @@ import {
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import MediaLayoutRight from "@/components/MediaLayoutRight";
 
 export default function PrimeTimeLanding() {
   return (
@@ -293,9 +294,10 @@ function GameDetails() {
         <div className="flex flex-col items-center md:flex-row">
           {/* MediaLayout on left for larger screens, top for mobile */}
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
-            <MediaLayout
+            <MediaLayoutRight
               image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
-              videoSrc=""
+              videoSrc="https://ik.imagekit.io/pkj1111/PrimeTimeExplainerVideo_Compressed%20(2).mp4?updatedAt=1759486600324"
+              text="PrimeTime™"
             />
           </div>
 
