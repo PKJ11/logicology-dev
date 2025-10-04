@@ -262,7 +262,7 @@ function OurTeam() {
       bio: "Graphic designer focused on books and worksheets. Balances design creativity with insights as a young mother.",
     },
     {
-      name: "This could be you",
+      name: "Gauri Bhople",
       role: "Designer",
       image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
       bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
