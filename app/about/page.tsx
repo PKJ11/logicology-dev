@@ -177,7 +177,7 @@ function HeroVideo() {
 /* --------------------- Our Story (Gold) --------------------- */
 function OurStory() {
   return (
-    <section className="w-full bg-brand-gold">
+    <section id="story" className="w-full bg-brand-gold">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
