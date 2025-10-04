@@ -181,7 +181,7 @@ function OurStory() {
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
-            <VideoLayout videoSrc="https://ik.imagekit.io/pratik11/Logicology_JourneyVideo_Compressed%20(1).mp4?updatedAt=1759471087029" />
+            <VideoLayout videoSrc="https://res.cloudinary.com/deunonql5/video/upload/v1759543919/Logicology_JourneyVideo_Compressed_1_iwbg1f.mp4" />
           </div>
 
           <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
