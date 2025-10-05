@@ -46,9 +46,20 @@ export default function Logicoland1Page() {
    HERO VIDEO SECTION
 ============================================================ */
 function HeroVideo() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  // iOS fullscreen support
+  interface ExtendedHTMLVideoElement extends HTMLVideoElement {
+    webkitEnterFullscreen?: () => void;
+    webkitRequestFullscreen?: () => Promise<void>;
+  }
+  const videoRef = useRef<ExtendedHTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(isIOSDevice);
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -57,14 +68,27 @@ function HeroVideo() {
     }
   };
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = async () => {
     if (!videoRef.current) return;
-    if (!document.fullscreenElement) {
-      videoRef.current.requestFullscreen?.();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.();
-      setIsFullscreen(false);
+    try {
+      if (isIOS) {
+        videoRef.current.removeAttribute('playsInline');
+        videoRef.current.setAttribute('controls', 'true');
+        if (videoRef.current.webkitEnterFullscreen) {
+          videoRef.current.webkitEnterFullscreen();
+          setIsFullscreen(true);
+        }
+      } else {
+        if (!document.fullscreenElement) {
+          await videoRef.current.requestFullscreen?.();
+          setIsFullscreen(true);
+        } else {
+          await document.exitFullscreen?.();
+          setIsFullscreen(false);
+        }
+      }
+    } catch (error) {
+      console.error('Fullscreen error:', error);
     }
   };
 
@@ -77,8 +101,9 @@ function HeroVideo() {
               ref={videoRef}
               autoPlay
               loop
-              playsInline
               muted={isMuted}
+              playsInline={!isIOS || !isFullscreen}
+              controls={isIOS && isFullscreen}
               className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
             >
               <source
