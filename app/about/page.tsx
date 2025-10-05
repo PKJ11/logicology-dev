@@ -23,10 +23,12 @@ export default function AboutUs() {
 }
 
 /* --------------------- Hero (Video instead of Swiper) --------------------- */
+// Extend the type definitions for cross-browser support
 interface ExtendedHTMLVideoElement extends HTMLVideoElement {
   webkitEnterFullscreen?: () => void;
   webkitRequestFullscreen?: () => Promise<void>;
 }
+
 interface ExtendedDocument extends Document {
   webkitExitFullscreen?: () => Promise<void>;
   webkitFullscreenElement?: Element;
@@ -56,7 +58,10 @@ function HeroVideo() {
         }
       } else {
         // Standard fullscreen for other devices
-        if (!document.fullscreenElement) {
+        const doc = document as ExtendedDocument;
+        
+        if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+          // Enter fullscreen
           if (videoRef.current.requestFullscreen) {
             await videoRef.current.requestFullscreen();
           } else if (videoRef.current.webkitRequestFullscreen) {
@@ -64,10 +69,11 @@ function HeroVideo() {
           }
           setIsFullscreen(true);
         } else {
-          if (document.exitFullscreen) {
-            await document.exitFullscreen();
-          } else if (document.webkitExitFullscreen) {
-            await document.webkitExitFullscreen();
+          // Exit fullscreen
+          if (doc.exitFullscreen) {
+            await doc.exitFullscreen();
+          } else if (doc.webkitExitFullscreen) {
+            await doc.webkitExitFullscreen();
           }
           setIsFullscreen(false);
         }
@@ -79,11 +85,13 @@ function HeroVideo() {
 
   // Add fullscreen change listeners for all browsers
   useEffect(() => {
+    const doc = document as ExtendedDocument;
+    
     const handleFullscreenChange = () => {
       setIsFullscreen(!!(
-        document.fullscreenElement ||
-        (document as any).webkitFullscreenElement ||
-        (document as any).msFullscreenElement
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        (doc as any).msFullscreenElement
       ));
     };
 
@@ -231,7 +239,6 @@ function HeroVideo() {
     </section>
   );
 }
-
 /* --------------------- Our Story (Gold) --------------------- */
 function OurStory() {
   return (
