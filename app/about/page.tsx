@@ -51,7 +51,9 @@ function HeroVideo() {
 
     try {
       if (isIOS) {
-        // On iOS, use webkitEnterFullscreen
+        // Remove playsInline and enable controls for iOS fullscreen
+        videoRef.current.removeAttribute('playsInline');
+        videoRef.current.setAttribute('controls', 'true');
         if (videoRef.current.webkitEnterFullscreen) {
           videoRef.current.webkitEnterFullscreen();
           setIsFullscreen(true);
@@ -59,9 +61,7 @@ function HeroVideo() {
       } else {
         // Standard fullscreen for other devices
         const doc = document as ExtendedDocument;
-        
         if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
-          // Enter fullscreen
           if (videoRef.current.requestFullscreen) {
             await videoRef.current.requestFullscreen();
           } else if (videoRef.current.webkitRequestFullscreen) {
@@ -69,7 +69,6 @@ function HeroVideo() {
           }
           setIsFullscreen(true);
         } else {
-          // Exit fullscreen
           if (doc.exitFullscreen) {
             await doc.exitFullscreen();
           } else if (doc.webkitExitFullscreen) {
@@ -122,8 +121,9 @@ function HeroVideo() {
               ref={videoRef}
               autoPlay
               loop
-              playsInline
               muted={isMuted}
+              playsInline={!isIOS || !isFullscreen}
+              controls={isIOS && isFullscreen}
               className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
             >
               <source
