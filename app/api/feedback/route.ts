@@ -1,9 +1,29 @@
+
 import { NextRequest, NextResponse } from "next/server";
+import { MongoClient } from "mongodb";
 import nodemailer from "nodemailer";
 
-export async function POST(req: NextRequest) {
-  const { name, email, message } = await req.json();
+const MONGO_URI = "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const DB_NAME = "logicology";
+const COLLECTION = "feedback";
 
+
+export async function POST(req: NextRequest) {
+  const { name, email, phone, feedback } = await req.json();
+
+  // Save to MongoDB
+  try {
+    const client = new MongoClient(MONGO_URI);
+    await client.connect();
+    const db = client.db(DB_NAME);
+    const col = db.collection(COLLECTION);
+    await col.insertOne({ name, email, phone, feedback, createdAt: new Date() });
+    await client.close();
+  } catch (err: any) {
+    return NextResponse.json({ success: false, error: err?.message || "DB error" }, { status: 500 });
+  }
+
+  // Send email notification
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -16,7 +36,7 @@ export async function POST(req: NextRequest) {
     from: process.env.GMAIL_USER || "logicologymeta@gmail.com",
     to: process.env.GMAIL_USER || "logicologymeta@gmail.com",
     subject: `New Feedback from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\n${feedback}`,
   };
 
   try {
