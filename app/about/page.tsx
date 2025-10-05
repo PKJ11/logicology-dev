@@ -23,26 +23,85 @@ export default function AboutUs() {
 }
 
 /* --------------------- Hero (Video instead of Swiper) --------------------- */
+interface ExtendedHTMLVideoElement extends HTMLVideoElement {
+  webkitEnterFullscreen?: () => void;
+  webkitRequestFullscreen?: () => Promise<void>;
+}
+interface ExtendedDocument extends Document {
+  webkitExitFullscreen?: () => Promise<void>;
+  webkitFullscreenElement?: Element;
+}
+
 function HeroVideo() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<ExtendedHTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    // Detect iOS devices
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(isIOSDevice);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!videoRef.current) return;
+
+    try {
+      if (isIOS) {
+        // On iOS, use webkitEnterFullscreen
+        if (videoRef.current.webkitEnterFullscreen) {
+          videoRef.current.webkitEnterFullscreen();
+          setIsFullscreen(true);
+        }
+      } else {
+        // Standard fullscreen for other devices
+        if (!document.fullscreenElement) {
+          if (videoRef.current.requestFullscreen) {
+            await videoRef.current.requestFullscreen();
+          } else if (videoRef.current.webkitRequestFullscreen) {
+            await videoRef.current.webkitRequestFullscreen();
+          }
+          setIsFullscreen(true);
+        } else {
+          if (document.exitFullscreen) {
+            await document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            await document.webkitExitFullscreen();
+          }
+          setIsFullscreen(false);
+        }
+      }
+    } catch (error) {
+      console.error('Fullscreen error:', error);
+    }
+  };
+
+  // Add fullscreen change listeners for all browsers
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).msFullscreenElement
+      ));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
-    }
-  };
-
-  const toggleFullscreen = () => {
-    if (!videoRef.current) return;
-    if (!document.fullscreenElement) {
-      videoRef.current.requestFullscreen?.();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.();
-      setIsFullscreen(false);
     }
   };
 
@@ -69,7 +128,6 @@ function HeroVideo() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
 
             {/* centered overlay content */}
-            {/* overlay content pinned to top-left */}
             <div className="absolute left-10 top-10 z-20 flex items-start">
               <div className="px-6 py-8 text-white sm:px-10 sm:py-12">
                 <h1 className="headingstyle font-extrabold leading-tight">Our Philosophy</h1>
