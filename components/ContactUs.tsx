@@ -1,7 +1,11 @@
 import MediaLayout from "@/components/MediaLayout"; // Ensure this import path is correct
+import NavBar from "./NavBar";
+import SiteFooter from "./Footer";
 
 function ContactUs() {
   return (
+    <>
+    <NavBar/>
     <section className="w-full bg-[#642B3B]">
       {/* Deep maroon background */}
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
@@ -97,6 +101,8 @@ function ContactUs() {
         </div>
       </div>
     </section>
+    <SiteFooter/>
+    </>
   );
 }
 

@@ -53,12 +53,9 @@ const SiteFooter = () => {
                       </Link>
                     </li>
                     <li>
-                      <button
-                        onClick={() => setIsContactModalOpen(true)}
-                        className="cursor-pointer bg-transparent text-white hover:underline"
-                      >
+                      <Link href="/contact-us" className="hover:underline">
                         Contact Us
-                      </button>
+                      </Link>
                     </li>
                   </ul>
                 </div>
