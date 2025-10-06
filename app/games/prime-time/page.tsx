@@ -288,7 +288,7 @@ function Hero() {
 
 function GameDetails() {
   return (
-    <section className="w-full bg-brand-gold">
+    <section id="GameDetails" className="w-full bg-brand-gold">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         {/* Flex container replacing grid */}
         <div className="flex flex-col items-center md:flex-row">
@@ -314,7 +314,7 @@ function GameDetails() {
             <div className="mt-6">
               <CTAButton
                 text="Learn more"
-                href=""
+                href="#GameDetails"
                 bg="#FFFFFF"
                 color="#7E5C2E" // brand teal text
                 hoverBg="#7E5C2E" // brand teal bg on hover
