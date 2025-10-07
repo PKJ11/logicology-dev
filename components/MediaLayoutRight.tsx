@@ -15,6 +15,12 @@ export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: s
   const handleFullscreen = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     const el = videoContainerRef.current;
+    const video = videoRef.current;
+    // iOS Safari only supports fullscreen for <video> elements
+    if (video && typeof (video as any).webkitEnterFullscreen === "function") {
+      (video as any).webkitEnterFullscreen();
+      return;
+    }
     if (!el) return;
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -186,8 +192,11 @@ export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: s
                 className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50"
                 onClick={e => {
                   e.stopPropagation();
-                  // If in fullscreen, exit fullscreen first
-                  if (document.fullscreenElement) {
+                  const video = videoRef.current;
+                  // iOS Safari: exit fullscreen for video
+                  if (video && typeof (video as any).webkitExitFullscreen === "function") {
+                    (video as any).webkitExitFullscreen();
+                  } else if (document.fullscreenElement) {
                     document.exitFullscreen();
                   } else {
                     // Collapse video if not in fullscreen
