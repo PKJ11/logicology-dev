@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
 
   const handleVideoClick = () => {
     if (videoRef.current) {
@@ -20,6 +22,52 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
     }
   };
 
+  // Fullscreen logic
+  const handleFullscreen = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const el = videoContainerRef.current;
+    const video = videoRef.current;
+    // iOS Safari only supports fullscreen for <video> elements
+    if (video && typeof (video as any).webkitEnterFullscreen === "function") {
+      (video as any).webkitEnterFullscreen();
+      setIsFullscreen(true);
+      return;
+    }
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+        setIsFullscreen(true);
+      } else if ((el as any).webkitRequestFullscreen) {
+        (el as any).webkitRequestFullscreen();
+        setIsFullscreen(true);
+      } else if ((el as any).msRequestFullscreen) {
+        (el as any).msRequestFullscreen();
+        setIsFullscreen(true);
+      }
+    }
+  };
+
+  // Restore initial position when exiting fullscreen
+  useEffect(() => {
+    function onFullscreenChange() {
+      const video = videoRef.current;
+      if (!document.fullscreenElement && isFullscreen) {
+        setIsFullscreen(false);
+        setIsPlaying(false);
+        setIsMuted(true);
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    }
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, [isFullscreen]);
+
   // Check if videoSrc is provided and not empty
   const hasVideo = videoSrc && videoSrc.trim() !== "";
 
@@ -27,7 +75,7 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
     <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px]">
       {/* Video container - only show if videoSrc exists */}
       {hasVideo ? (
-        <div className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6">
+        <div ref={videoContainerRef} className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6">
           <div
             className="relative h-full cursor-pointer overflow-hidden rounded-[22px]"
             onClick={handleVideoClick}
@@ -79,6 +127,49 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
                   </svg>
                 )}
               </div>
+            )}
+
+            {/* Fullscreen button */}
+            {isPlaying && (
+              <button
+                className="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-black bg-opacity-50"
+                onClick={handleFullscreen}
+                aria-label="Fullscreen"
+              >
+                <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 14H5v5h5v-2H7v-3zm0-4h2V7h3V5H7v5zm10 7h-3v2h5v-5h-2v3zm0-12h-5v2h3v3h2V5z" />
+                </svg>
+              </button>
+            )}
+
+            {/* Close button in fullscreen */}
+            {isFullscreen && (
+              <button
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black bg-opacity-50"
+                onClick={e => {
+                  e.stopPropagation();
+                  const video = videoRef.current;
+                  // iOS Safari: exit fullscreen for video
+                  if (video && typeof (video as any).webkitExitFullscreen === "function") {
+                    (video as any).webkitExitFullscreen();
+                  } else if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                  } else {
+                    setIsFullscreen(false);
+                    setIsPlaying(false);
+                    setIsMuted(true);
+                    if (video) {
+                      video.pause();
+                      video.currentTime = 0;
+                    }
+                  }
+                }}
+                aria-label="Close"
+              >
+                <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+              </button>
             )}
           </div>
         </div>
