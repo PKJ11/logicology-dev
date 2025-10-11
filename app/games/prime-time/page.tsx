@@ -863,14 +863,14 @@ function LostCardHelper() {
 
                 <button
                   onClick={showCard}
-                  className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+                  className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[120px]"
                 >
                   Show card
                 </button>
                 <button
                   onClick={resetToTray}
                   type="button"
-                  className="group rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
+                  className="group rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[100px]"
                 >
                   Reset
                 </button>
