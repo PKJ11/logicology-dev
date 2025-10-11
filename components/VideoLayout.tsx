@@ -18,6 +18,25 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
         videoRef.current.play().catch(console.error);
         setIsPlaying(true);
         setIsMuted(false);
+        // Go fullscreen when starting video
+        const el = videoContainerRef.current;
+        const video = videoRef.current;
+        // iOS Safari only supports fullscreen for <video> elements
+        if (video && typeof (video as any).webkitEnterFullscreen === "function") {
+          (video as any).webkitEnterFullscreen();
+          setIsFullscreen(true);
+        } else if (el) {
+          if (el.requestFullscreen) {
+            el.requestFullscreen();
+            setIsFullscreen(true);
+          } else if ((el as any).webkitRequestFullscreen) {
+            (el as any).webkitRequestFullscreen();
+            setIsFullscreen(true);
+          } else if ((el as any).msRequestFullscreen) {
+            (el as any).msRequestFullscreen();
+            setIsFullscreen(true);
+          }
+        }
       }
     }
   };
@@ -80,6 +99,7 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
             className="relative h-full cursor-pointer overflow-hidden rounded-[22px]"
             onClick={handleVideoClick}
           >
+
             <video
               ref={videoRef}
               src={videoSrc}
@@ -88,6 +108,11 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
               playsInline
               className="h-full w-full object-cover"
             />
+
+            {/* Dull screen overlay when playing */}
+            {isPlaying && (
+              <div className="absolute inset-0 bg-black bg-opacity-40 pointer-events-none transition-opacity duration-300" />
+            )}
 
             {/* Play/Pause overlay */}
             <div
@@ -184,3 +209,4 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
     </div>
   );
 }
+

@@ -858,7 +858,7 @@ function LostCardHelper() {
                     if (error) setError(null);
                   }}
                   onKeyDown={onKeyDown}
-                  className="/* keep same bg */ w-full rounded-full border border-gray-300 bg-gray-50 px-5 py-3 text-sm text-gray-900 outline-none ring-0 focus:bg-gray-50 focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
+                  className="w-full rounded-full border border-gray-300 bg-white px-5 py-3 text-sm text-gray-900 outline-none ring-0 focus:bg-white focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
                 />
 
                 <button
