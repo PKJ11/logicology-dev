@@ -23,7 +23,10 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${roboto.variable}`}> 
+      <head>
+        <link rel="icon" href="https://ik.imagekit.io/pratik2002/favicon.JPG?updatedAt=1760162429855" />
+      </head>
       <body>
         <CartProvider>
           {/* Meta Pixel Script */}
