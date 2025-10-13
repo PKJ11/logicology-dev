@@ -22,6 +22,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import MediaLayoutRight from "@/components/MediaLayoutRight";
+import VideoModal from "@/components/VideoModal";
 
 export default function PrimeTimeLanding() {
   return (
@@ -287,6 +288,10 @@ function Hero() {
 // --------------------- Game Details (Gold) ---------------------
 
 function GameDetails() {
+  const [open, setOpen] = useState(false);
+  
+  const YT = "https://youtu.be/2qLAo-AydUc";
+
   return (
     <section id="GameDetails" className="w-full bg-brand-gold">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
@@ -314,12 +319,13 @@ function GameDetails() {
             <div className="mt-6">
               <CTAButton
                 text="Learn more"
-                href="#GameDetails"
+                onClick={() => setOpen(true)}
                 bg="#FFFFFF"
-                color="#7E5C2E" // brand teal text
-                hoverBg="#7E5C2E" // brand teal bg on hover
-                hoverColor="#FFFFFF" // white text on hover
+                color="#7E5C2E"
+                hoverBg="#7E5C2E"
+                hoverColor="#FFFFFF"
                 size="md"
+                ariaLabel="Open Game Details video"
                 rightIcon={
                   <svg
                     className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -340,9 +346,18 @@ function GameDetails() {
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      <VideoModal
+        open={open}
+        onClose={() => setOpen(false)}
+        youtubeUrl={YT}
+        title="Details About The Game"
+      />
     </section>
   );
 }
+
 
 function InstructionVideos() {
   const videos = [
