@@ -369,7 +369,7 @@ const CartPage = () => {
       }
 
       // Amount in paise
-      const amount = Math.round(total * 100);
+      const amount = Math.round(total);
       const res = await fetch("/api/razorpay-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
