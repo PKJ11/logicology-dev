@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 
 const MONGO_URI =
   process.env.MONGO_URI ||
-  "mongodb+srv://pratikkumarjhavnit:Y0wxsLlcYQ0EHw0X@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const DB_NAME = process.env.MONGO_DB_NAME || "logicology";
 const COLLECTION = "orders";
 

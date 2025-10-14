@@ -6,19 +6,135 @@ import NavBar from "@/components/NavBar";
 import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
 
+// GST Utility Functions
+const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
+
+export interface CartItem {
+  name: string;
+  price: string;
+  initialprice?: string;
+  razorpayItemId: string;
+  description?: string;
+  image?: string;
+  rating?: number;
+  quantity?: number;
+}
+
+export interface ItemDetails {
+  [itemId: string]: {
+    tax_rate?: number;
+    hsn_code?: string;
+  };
+}
+
+export function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
+  let totalAmount = 0;
+  let totalGST = 0;
+  let cgstTotal = 0;
+  let sgstTotal = 0;
+  let rows = "";
+  
+  cart.forEach((item, idx) => {
+    const details = itemDetails[item.razorpayItemId] || {};
+    const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
+    const quantity = item.quantity || 1;
+    const gstRate = details.tax_rate || 0;
+    const hsnCode = details.hsn_code || "-";
+    
+    // GST calculation: Assuming price is GST inclusive
+    const gstAmount = gstRate > 0 ? (price * gstRate) / (100 + gstRate) : 0;
+    const cgstAmount = gstAmount / 2;
+    const sgstAmount = gstAmount / 2;
+    const basePrice = price - gstAmount;
+    const totalItemAmount = price * quantity;
+    
+    totalAmount += totalItemAmount;
+    totalGST += gstAmount * quantity;
+    cgstTotal += cgstAmount * quantity;
+    sgstTotal += sgstAmount * quantity;
+    
+    rows += `
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 10px; text-align: center;">${idx + 1}</td>
+        <td style="padding: 10px;">${item.name}</td>
+        <td style="padding: 10px; text-align: center;">${hsnCode}</td>
+        <td style="padding: 10px; text-align: center;">${quantity}</td>
+        <td style="padding: 10px; text-align: right;">₹${basePrice.toFixed(2)}</td>
+        <td style="padding: 10px; text-align: center;">${gstRate}%</td>
+        <td style="padding: 10px; text-align: right;">₹${(gstAmount * quantity).toFixed(2)}</td>
+        <td style="padding: 10px; text-align: right;">₹${totalItemAmount.toFixed(2)}</td>
+      </tr>
+    `;
+  });
+
+  // Dynamic GST breakdown based on actual rates
+  const gstBreakdown = `
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <h3 style="color: #6A294D; margin-top: 0;">GST Breakdown</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ''}
+        ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ''}
+        <div style="font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px;">Total GST:</div>
+        <div style="font-weight: bold; text-align: right; border-top: 1px solid #ddd; padding-top: 5px;">₹${totalGST.toFixed(2)}</div>
+      </div>
+    </div>
+  `;
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; border: 2px solid #6A294D; padding: 20px; background: #fff;">
+      <!-- Header -->
+      <div style="text-align: center; border-bottom: 2px solid #6A294D; padding-bottom: 15px; margin-bottom: 20px;">
+        <h1 style="color: #6A294D; margin: 0; font-size: 28px;">TAX INVOICE</h1>
+        <h2 style="color: #EB6A42; margin: 5px 0; font-size: 20px;">Logicology Educational Products</h2>
+        <p style="margin: 5px 0; color: #666;">GSTIN: ${COMPANY_GST_NUMBER}</p>
+      </div>
+      
+      <!-- Invoice Table -->
+      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
+        <thead>
+          <tr style="background: #6A294D; color: white;">
+            <th style="padding: 12px; border: 1px solid #ddd;">#</th>
+            <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Item Description</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">HSN Code</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Qty</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Unit Price</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">GST Rate</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">GST Amount</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+      
+      ${gstBreakdown}
+      
+      <!-- Total Amount -->
+      <div style="text-align: right; font-size: 16px; font-weight: bold; padding: 15px; background: #6A294D; color: white; border-radius: 5px;">
+        Grand Total: ₹${totalAmount.toFixed(2)}
+      </div>
+      
+      <!-- Footer -->
+      <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px; color: #666;">
+        <p>This is a computer generated invoice. No signature required.</p>
+        <p>For queries, contact: logicologymeta@gmail.com | WhatsApp: 8446980747</p>
+      </div>
+    </div>
+  `;
+}
+
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart();
+  const [itemDetails, setItemDetails] = useState<Record<string, { tax_rate?: number; hsn_code?: string }>>({});
 
   // Modal state
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
-
-  // Step 1: User and shipping info with localStorage
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     phone: "",
   });
-
   const [shipping, setShipping] = useState({
     name: "",
     address: "",
@@ -30,12 +146,12 @@ const CartPage = () => {
     state: "",
     phone: "",
   });
-
   const [step, setStep] = useState(1);
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  // Load saved addresses from localStorage
+  // Load saved addresses and item details
   useEffect(() => {
     const saved = localStorage.getItem("savedAddresses");
     if (saved) {
@@ -46,17 +162,37 @@ const CartPage = () => {
     if (userData) {
       setUserInfo(JSON.parse(userData));
     }
+
+    // Fetch item details for GST calculation
+    fetchItemDetails();
   }, []);
+
+  const fetchItemDetails = async () => {
+    try {
+      const res = await fetch("/api/razorpay-items");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.items)) {
+        const details: Record<string, { tax_rate?: number; hsn_code?: string }> = {};
+        for (const item of data.items) {
+          details[item.id] = { 
+            tax_rate: item.tax_rate, 
+            hsn_code: item.hsn_code 
+          };
+        }
+        setItemDetails(details);
+      }
+    } catch (error) {
+      console.error("Error fetching item details:", error);
+    }
+  };
 
   const total = cart.reduce((sum, item) => {
     const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
-    return sum + price * item.quantity;
+    return sum + price * (item.quantity || 1);
   }, 0);
 
-  // Razorpay key
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
-  // Save address to localStorage
   const saveAddressToLocalStorage = () => {
     const newAddress = {
       id: Date.now().toString(),
@@ -70,7 +206,6 @@ const CartPage = () => {
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
   };
 
-  // Load selected address
   const loadSelectedAddress = (addressId: string) => {
     const address = savedAddresses.find((addr) => addr.id === addressId);
     if (address) {
@@ -93,151 +228,240 @@ const CartPage = () => {
     }
   };
 
-  // Handle checkout with Razorpay
+  const sendGSTInvoice = async (paymentId: string, orderDescription: string) => {
+    try {
+      // Generate GST receipt
+      const gstReceiptHtml = generateGSTReceipt(cart, itemDetails);
+
+      // Create email content
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #6A294D, #EB6A42); padding: 30px; text-align: center; color: white;">
+            <h1 style="margin: 0; font-size: 32px;">Payment Successful!</h1>
+            <p style="margin: 10px 0 0; font-size: 18px; opacity: 0.9;">Thank you for your purchase from Logicology</p>
+          </div>
+
+          <!-- Order Summary -->
+          <div style="padding: 25px; background: #f8f9fa; margin: 20px; border-radius: 10px;">
+            <h3 style="color: #6A294D; margin-bottom: 15px; border-bottom: 2px solid #EB6A42; padding-bottom: 10px;">Order Confirmation</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <strong style="color: #333;">Payment ID:</strong><br>
+                <span style="color: #666;">${paymentId}</span>
+              </div>
+              <div>
+                <strong style="color: #333;">Order Date:</strong><br>
+                <span style="color: #666;">${new Date().toLocaleDateString('en-IN', { 
+                  day: '2-digit', 
+                  month: 'long', 
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</span>
+              </div>
+              <div>
+                <strong style="color: #333;">Customer Name:</strong><br>
+                <span style="color: #666;">${userInfo.name}</span>
+              </div>
+              <div>
+                <strong style="color: #333;">Contact Email:</strong><br>
+                <span style="color: #666;">${userInfo.email}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GST Invoice -->
+          ${gstReceiptHtml}
+
+          <!-- Shipping Information -->
+          <div style="padding: 25px; background: #f8f9fa; margin: 20px; border-radius: 10px;">
+            <h3 style="color: #6A294D; margin-bottom: 15px; border-bottom: 2px solid #EB6A42; padding-bottom: 10px;">Shipping Details</h3>
+            <div style="line-height: 1.8; color: #333;">
+              <strong>${shipping.name}</strong><br>
+              ${shipping.address}<br>
+              ${shipping.building}, ${shipping.street}<br>
+              ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ''}
+              ${shipping.city}, ${shipping.state} - ${shipping.pin}<br>
+              📞 ${shipping.phone}
+            </div>
+          </div>
+
+          <!-- Support Section -->
+          <div style="text-align: center; padding: 25px; background: #6A294D; color: white; margin: 20px; border-radius: 10px;">
+            <h3 style="margin: 0 0 15px; color: white;">Need Assistance?</h3>
+            <p style="margin: 0; opacity: 0.9; line-height: 1.6;">
+              📧 Email: logicologymeta@gmail.com<br>
+              📱 WhatsApp: 8446980747<br>
+              <small>Please mention your Payment ID: ${paymentId}</small>
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="text-align: center; padding: 20px; color: #666; font-size: 12px; border-top: 1px solid #ddd;">
+            <p style="margin: 0;">
+              This is a system generated GST invoice. For any queries, please contact our support team.<br>
+              <strong>Logicology - Making Learning Fun Through Play!</strong>
+            </p>
+          </div>
+        </div>
+      `;
+
+      // Send email with GST invoice
+      const emailRes = await fetch("/api/send-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: userInfo.email,
+          subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
+          html: emailHtml,
+        }),
+      });
+
+      const emailResult = await emailRes.json();
+
+      // Send SMS notification
+      try {
+        await fetch("/api/send-sms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: userInfo.phone,
+            message: `Thank you for your Logicology purchase! Payment ID: ${paymentId}. Amount: ₹${total.toFixed(2)}. GST invoice sent to your email. For queries: 8446980747`,
+          }),
+        });
+      } catch (smsError) {
+        console.error("SMS sending failed:", smsError);
+      }
+
+      return { success: true, emailSent: emailResult.success };
+    } catch (error: any) {
+      console.error("Error sending GST invoice:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const handleCheckout = useCallback(async () => {
     if (cart.length === 0) return;
+    if (isProcessing) return;
 
-    // Save address if this is a new one
-    if (!selectedAddress) {
-      saveAddressToLocalStorage();
-    }
+    setIsProcessing(true);
 
-    // Amount in paise
-    const amount = Math.round(total);
-    const res = await fetch("/api/razorpay-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount,
-        currency: "INR",
-        receipt: `cart_${Date.now()}`,
-      }),
-    });
-
-    const { order } = await res.json();
-    if (!order) {
-      alert("Failed to create order. Please try again.");
-      return;
-    }
-
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: order.amount,
-      currency: order.currency,
-      name: "Logicology",
-      description: cart.map((i) => `${i.name} x${i.quantity}`).join(", "),
-      order_id: order.id,
-      handler: async function (response: any) {
-        // Save info to backend
-        await fetch("/api/save-order-info", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userInfo,
-            shipping,
-            cart,
-            paymentId: response.razorpay_payment_id,
-            razorpayDesc: options.description,
-            razorpayContact: response.razorpay_contact || userInfo.phone,
-          }),
-        });
-
-        // Prepare invoice line items for Razorpay
-        const line_items = cart.map((item) => ({
-          name: item.name,
-          amount: Math.round(parseFloat(item.price.replace(/[^\d.]/g, "")) * 100),
-          currency: "INR",
-          quantity: item.quantity,
-        }));
-
-        // Create Razorpay invoice
-        const invoiceRes = await fetch("/api/razorpay-invoice", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            description: options.description,
-            name: userInfo.name,
-            email: userInfo.email,
-            phone: userInfo.phone,
-            billing_address: shipping.address,
-            shipping_address: shipping.address,
-            line_items,
-            currency: "INR",
-            amount: Math.round(total * 100),
-            receipt: `cart_${Date.now()}`,
-            sms_notify: 1,
-            email_notify: 1,
-            notes: {},
-          }),
-        });
-        const invoiceData = await invoiceRes.json();
-        let invoiceUrl = "";
-        let invoiceId = "";
-        if (invoiceData.invoice) {
-          invoiceId = invoiceData.invoice.id;
-          // Issue the invoice
-          const issueRes = await fetch("/api/razorpay-invoice", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ invoice_id: invoiceId }),
-          });
-          const issueData = await issueRes.json();
-          invoiceUrl = invoiceData.invoice.short_url || "";
-        }
-
-        // Send invoice email to user (with Razorpay invoice link)
-        const invoiceHtml = `
-          <h2>Thank you for your purchase!</h2>
-          <p>Payment ID: <b>${response.razorpay_payment_id}</b></p>
-          <p>Description: ${options.description}</p>
-          <h3>Shipping Information</h3>
-          <p>Name: ${shipping.name}</p>
-          <p>Address: ${shipping.address}, ${shipping.building}, ${shipping.street}, ${shipping.landmark}, ${shipping.pin}, ${shipping.city}, ${shipping.state}</p>
-          <p>Phone: ${shipping.phone}</p>
-          <h3>Order Details</h3>
-          <ul>
-            ${cart.map((item) => `<li>${item.name} x${item.quantity} - ${item.price}</li>`).join("")}
-          </ul>
-          <p><b>Total Paid: ₹${total.toFixed(2)}</b></p>
-          ${invoiceUrl ? `<p><a href='${invoiceUrl}' target='_blank'>View Official Razorpay Invoice</a></p>` : ""}
-        `;
-
-        await fetch("/api/send-invoice", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: userInfo.email,
-            subject: "Your Logicology Order Invoice",
-            html: invoiceHtml,
-          }),
-        });
-
-        // Clear cart and show success message
-        clearCart();
-        setIsCheckoutModalOpen(false);
+    try {
+      // Validate required fields
+      if (!userInfo.name || !userInfo.email || !userInfo.phone) {
+        alert("Please fill in all contact information");
         setStep(1);
-        setSelectedAddress("");
-        setTimeout(() => {
-          alert(
-            `Payment successful!\n\nYour Payment ID: ${response.razorpay_payment_id}\n\nIf you have any questions, send us a WhatsApp on 8446980747 mentioning your payment ID and date of purchase.${invoiceUrl ? `\n\nView your official invoice: ${invoiceUrl}` : ""}`
-          );
-        }, 300);
-      },
-      prefill: {
-        name: userInfo.name,
-        email: userInfo.email,
-        contact: userInfo.phone,
-      },
-      theme: { color: "#EB6A42" },
-    };
+        setIsProcessing(false);
+        return;
+      }
 
-    if (typeof window !== "undefined" && window.Razorpay) {
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } else {
-      alert("Razorpay SDK not loaded");
+      if (!shipping.name || !shipping.address || !shipping.pin || !shipping.city || !shipping.state || !shipping.phone) {
+        alert("Please fill in all shipping information");
+        setStep(2);
+        setIsProcessing(false);
+        return;
+      }
+
+      // Save address if this is a new one
+      if (!selectedAddress) {
+        saveAddressToLocalStorage();
+      }
+
+      // Amount in paise
+      const amount = Math.round(total * 100);
+      const res = await fetch("/api/razorpay-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount,
+          currency: "INR",
+          receipt: `receipt_${Date.now()}`,
+        }),
+      });
+
+      const { order } = await res.json();
+      if (!order) {
+        alert("Failed to create order. Please try again.");
+        setIsProcessing(false);
+        return;
+      }
+
+      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}`;
+
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Logicology",
+        description: orderDescription,
+        order_id: order.id,
+        handler: async function (response: any) {
+          try {
+            // Save order info
+            await fetch("/api/save-order-info", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userInfo,
+                shipping,
+                cart,
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id,
+                razorpayDesc: orderDescription,
+                razorpayContact: response.razorpay_contact || userInfo.phone,
+                totalAmount: total,
+              }),
+            });
+
+            // Send GST invoice
+            const invoiceResult = await sendGSTInvoice(response.razorpay_payment_id, orderDescription);
+
+            // Clear cart and reset
+            clearCart();
+            setIsCheckoutModalOpen(false);
+            setStep(1);
+            setSelectedAddress("");
+            setIsProcessing(false);
+
+            // Show success message
+            setTimeout(() => {
+              alert(
+                `🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id}\nAmount: ₹${total.toFixed(2)}\n\nA detailed GST invoice has been sent to:\n${userInfo.email}\n\nThank you for shopping with Logicology!`
+              );
+            }, 500);
+
+          } catch (error) {
+            console.error("Error in payment handler:", error);
+            setIsProcessing(false);
+            alert("Payment was successful but there was an issue sending your GST invoice. Please contact support with your Payment ID.");
+          }
+        },
+        prefill: {
+          name: userInfo.name,
+          email: userInfo.email,
+          contact: userInfo.phone,
+        },
+        notes: {
+          address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.pin}`,
+          shipping_phone: shipping.phone,
+        },
+        theme: { color: "#EB6A42" },
+      };
+
+      if (typeof window !== "undefined" && (window as any).Razorpay) {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      } else {
+        alert("Razorpay SDK not loaded");
+        setIsProcessing(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred during checkout. Please try again.");
+      setIsProcessing(false);
     }
-  }, [cart, total, userInfo, shipping, selectedAddress]);
+  }, [cart, total, userInfo, shipping, selectedAddress, isProcessing, clearCart, itemDetails]);
 
   const openCheckoutModal = () => {
     setIsCheckoutModalOpen(true);
@@ -246,10 +470,37 @@ const CartPage = () => {
   };
 
   const closeCheckoutModal = () => {
-    setIsCheckoutModalOpen(false);
-    setStep(1);
-    setSelectedAddress("");
+    if (!isProcessing) {
+      setIsCheckoutModalOpen(false);
+      setStep(1);
+      setSelectedAddress("");
+    }
   };
+
+  // Calculate GST breakdown for display - FIXED to use actual rates from API
+  const calculateGSTBreakdown = () => {
+    let totalGST = 0;
+    let taxableValue = 0;
+
+    cart.forEach(item => {
+      const details = itemDetails[item.razorpayItemId] || {};
+      const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
+      const quantity = item.quantity || 1;
+      const gstRate = details.tax_rate || 0; // Use actual rate from API
+      
+      if (gstRate > 0) {
+        const gstAmount = (price * gstRate) / (100 + gstRate);
+        totalGST += gstAmount * quantity;
+        taxableValue += (price - gstAmount) * quantity;
+      } else {
+        taxableValue += price * quantity;
+      }
+    });
+
+    return { totalGST, taxableValue };
+  };
+
+  const { totalGST, taxableValue } = calculateGSTBreakdown();
 
   return (
     <>
@@ -271,7 +522,8 @@ const CartPage = () => {
                 </h2>
                 <button
                   onClick={closeCheckoutModal}
-                  className="text-2xl text-gray-400 hover:text-gray-600"
+                  disabled={isProcessing}
+                  className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
                 >
                   ×
                 </button>
@@ -298,19 +550,20 @@ const CartPage = () => {
                       onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
-                    {/* <input
+                    <input
                       required
                       type="tel"
                       placeholder="Phone Number"
                       value={userInfo.phone}
                       onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    /> */}
+                    />
                   </div>
 
                   <button
                     onClick={() => setStep(2)}
-                    className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600"
+                    disabled={!userInfo.name || !userInfo.email || !userInfo.phone}
+                    className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                   >
                     Continue to Address
                   </button>
@@ -412,9 +665,8 @@ const CartPage = () => {
                       />
                     </div>
                     <input
-                      required
                       type="text"
-                      placeholder="Landmark"
+                      placeholder="Landmark (Optional)"
                       value={shipping.landmark}
                       onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -458,13 +710,15 @@ const CartPage = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setStep(1)}
-                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                      disabled={isProcessing}
+                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
                     >
                       Back
                     </button>
                     <button
                       onClick={() => setStep(3)}
-                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600"
+                      disabled={!shipping.name || !shipping.address || !shipping.pin || !shipping.city || !shipping.state || !shipping.phone}
+                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                     >
                       Continue to Review
                     </button>
@@ -479,34 +733,53 @@ const CartPage = () => {
                   <div className="rounded-xl bg-gray-50 p-4">
                     <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
                     <div className="space-y-3">
-                      {cart.map((item) => (
-                        <div key={item.name} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="h-12 w-12 rounded-lg object-cover"
-                            />
-                            <div>
-                              <p className="font-medium text-gray-900">{item.name}</p>
-                              <p className="text-sm text-gray-600">
-                                {item.price} × {item.quantity}
-                              </p>
+                      {cart.map((item) => {
+                        const details = itemDetails[item.razorpayItemId] || {};
+                        const gstRate = details.tax_rate || 0;
+                        return (
+                          <div key={item.name} className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="h-12 w-12 rounded-lg object-cover"
+                              />
+                              <div>
+                                <p className="font-medium text-gray-900">{item.name}</p>
+                                <p className="text-sm text-gray-600">
+                                  {item.price} × {item.quantity}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  GST: {gstRate}% | HSN: {details.hsn_code || "-"}
+                                </p>
+                              </div>
                             </div>
+                            <p className="font-semibold text-gray-900">
+                              ₹
+                              {(
+                                parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
+                              ).toFixed(2)}
+                            </p>
                           </div>
-                          <p className="font-semibold text-gray-900">
-                            ₹
-                            {(
-                              parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
-                            ).toFixed(2)}
-                          </p>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
+                    
+                    {/* GST Breakdown - FIXED to show actual rates */}
                     <div className="mt-4 border-t pt-4">
-                      <div className="flex items-center justify-between text-lg font-bold">
-                        <span>Total</span>
-                        <span>₹{total.toFixed(2)}</span>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Taxable Value:</span>
+                          <span>₹{taxableValue.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total GST:</span>
+                          <span>₹{totalGST.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-lg font-bold border-t pt-2">
+                          <span>Total Amount:</span>
+                          <span>₹{total.toFixed(2)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -536,15 +809,17 @@ const CartPage = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setStep(2)}
-                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                      disabled={isProcessing}
+                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
                     >
                       Back
                     </button>
                     <button
                       onClick={handleCheckout}
-                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600"
+                      disabled={isProcessing}
+                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                     >
-                      Pay ₹{total.toFixed(2)}
+                      {isProcessing ? "Processing..." : `Pay ₹${total.toFixed(2)}`}
                     </button>
                   </div>
                 </div>
@@ -577,64 +852,88 @@ const CartPage = () => {
             ) : (
               <>
                 <div className="mb-8 space-y-4">
-                  {cart.map((item) => (
-                    <div
-                      key={item.name}
-                      className="flex items-center space-x-4 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-20 w-20 flex-shrink-0 rounded-lg object-cover"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <h3 className="truncate font-semibold text-gray-900">{item.name}</h3>
-                        <p className="mt-1 font-medium text-orange-600">{item.price}</p>
-                        <div className="mt-2 flex items-center space-x-3">
-                          <div className="flex items-center rounded-lg border border-gray-300">
+                  {cart.map((item) => {
+                    const details = itemDetails[item.razorpayItemId] || {};
+                    const gstRate = details.tax_rate || 0;
+                    return (
+                      <div
+                        key={item.name}
+                        className="flex items-center space-x-4 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-20 w-20 flex-shrink-0 rounded-lg object-cover"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <h3 className="truncate font-semibold text-gray-900">{item.name}</h3>
+                          <p className="mt-1 font-medium text-orange-600">{item.price}</p>
+                          <p className="text-xs text-gray-600">
+                            GST: {gstRate}% | HSN: {details.hsn_code || "-"}
+                          </p>
+                          <div className="mt-2 flex items-center space-x-3">
+                            <div className="flex items-center rounded-lg border border-gray-300">
+                              <button
+                                className="flex h-8 w-8 items-center justify-center rounded-l-lg text-gray-600 transition-colors hover:bg-gray-200"
+                                onClick={() => decreaseQuantity(item.name)}
+                                aria-label="Decrease quantity"
+                              >
+                                −
+                              </button>
+                              <span className="w-8 text-center font-medium text-gray-900">
+                                {item.quantity}
+                              </span>
+                              <button
+                                className="flex h-8 w-8 items-center justify-center rounded-r-lg text-gray-600 transition-colors hover:bg-gray-200"
+                                onClick={() => increaseQuantity(item.name)}
+                                aria-label="Increase quantity"
+                              >
+                                +
+                              </button>
+                            </div>
                             <button
-                              className="flex h-8 w-8 items-center justify-center rounded-l-lg text-gray-600 transition-colors hover:bg-gray-200"
-                              onClick={() => decreaseQuantity(item.name)}
-                              aria-label="Decrease quantity"
+                              onClick={() => removeFromCart(item.name)}
+                              className="text-sm font-medium text-red-500 transition-colors hover:text-red-700"
                             >
-                              −
-                            </button>
-                            <span className="w-8 text-center font-medium text-gray-900">
-                              {item.quantity}
-                            </span>
-                            <button
-                              className="flex h-8 w-8 items-center justify-center rounded-r-lg text-gray-600 transition-colors hover:bg-gray-200"
-                              onClick={() => increaseQuantity(item.name)}
-                              aria-label="Increase quantity"
-                            >
-                              +
+                              Remove
                             </button>
                           </div>
-                          <button
-                            onClick={() => removeFromCart(item.name)}
-                            className="text-sm font-medium text-red-500 transition-colors hover:text-red-700"
-                          >
-                            Remove
-                          </button>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold text-gray-900">
+                            ₹
+                            {(parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity).toFixed(2)}
+                          </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-gray-900">
-                          ₹
-                          {(parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity).toFixed(
-                            2
-                          )}
-                        </p>
-                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* GST Summary - FIXED to show actual GST calculation */}
+                <div className="mb-6 rounded-xl bg-blue-50 p-4">
+                  <h3 className="mb-3 font-semibold text-blue-900">GST Summary</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-blue-700">Taxable Value:</span>
+                      <span className="float-right font-medium">₹{taxableValue.toFixed(2)}</span>
                     </div>
-                  ))}
+                    <div>
+                      <span className="text-blue-700">GST Amount:</span>
+                      <span className="float-right font-medium">₹{totalGST.toFixed(2)}</span>
+                    </div>
+                    <div className="col-span-2 border-t pt-2">
+                      <span className="text-blue-900 font-semibold">Grand Total:</span>
+                      <span className="float-right font-bold text-blue-900">₹{total.toFixed(2)}</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="border-t pt-6">
                   <div className="mb-6 flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-bold text-gray-900">₹{total.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">Total amount</p>
+                      <p className="text-sm text-gray-600">Total amount (incl. GST)</p>
                     </div>
                     <button
                       onClick={clearCart}
@@ -650,6 +949,9 @@ const CartPage = () => {
                   >
                     Proceed to Checkout
                   </button>
+                  <p className="mt-2 text-center text-sm text-gray-600">
+                    You will receive a detailed GST invoice via email after payment
+                  </p>
                 </div>
               </>
             )}

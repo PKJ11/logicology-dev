@@ -7,6 +7,9 @@ export type CartProduct = {
   image: string;
   rating: number;
   quantity: number;
+  razorpayItemId: string;
+  description: string;
+  initialprice?: string;
 };
 
 export type CartContextType = {

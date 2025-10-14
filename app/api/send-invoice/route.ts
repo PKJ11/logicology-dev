@@ -6,7 +6,7 @@ const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD || "fdqz xqjx neoz nzan";
 
 export async function POST(req: NextRequest) {
   try {
-    const { to, subject, html } = await req.json();
+    const { to, subject, html, pdfUrl } = await req.json();
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -14,13 +14,30 @@ export async function POST(req: NextRequest) {
         pass: GMAIL_PASSWORD,
       },
     });
-    await transporter.sendMail({
+
+    const mailOptions: any = {
       from: GMAIL_USER,
       to,
       subject,
       html,
-    });
-    return NextResponse.json({ success: true });
+    };
+
+    // Attach PDF if available
+    if (pdfUrl) {
+      mailOptions.attachments = [
+        {
+          filename: "GST-Invoice.pdf",
+          path: pdfUrl,
+        },
+      ];
+    }
+
+    // Mark invoice as paid (simulate status update)
+    // If you have a DB or API to update, call it here
+    // Example: await updateInvoiceStatus(invoiceId, 'paid');
+
+    await transporter.sendMail(mailOptions);
+    return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err?.message || "Unknown error" },

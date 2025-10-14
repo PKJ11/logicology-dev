@@ -301,7 +301,7 @@ function GameDetails() {
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
             <MediaLayoutRight
               image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
-              videoSrc="https://res.cloudinary.com/deunonql5/video/upload/v1759543456/PrimeTimeExplainerVideo_Compressed_2_pgsb2y.mp4"
+              videoSrc=""
               text="PrimeTime™"
             />
           </div>

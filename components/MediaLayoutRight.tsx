@@ -154,7 +154,7 @@ export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: s
                 style={{ backgroundColor: "#E45C48" }}
               >
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white md:text-3xl">{text || "Why Logicology"}</div>
+                  <div className="text-2xl font-bold text-white md:text-xl lg:text-2xl">{text || "Why Logicology"}</div>
                   {/* Play icon overlay */}
                   <div className="pointer-events-none mt-4 flex justify-center">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow">
