@@ -9,7 +9,7 @@ import { useCallback, useState, useEffect } from "react";
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
 
-export interface CartItem {
+interface CartItem {
   name: string;
   price: string;
   initialprice?: string;
@@ -20,14 +20,14 @@ export interface CartItem {
   quantity?: number;
 }
 
-export interface ItemDetails {
+interface ItemDetails {
   [itemId: string]: {
     tax_rate?: number;
     hsn_code?: string;
   };
 }
 
-export function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
+function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
   let totalAmount = 0;
   let totalGST = 0;
   let cgstTotal = 0;
