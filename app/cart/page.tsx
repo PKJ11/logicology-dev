@@ -191,7 +191,7 @@ const CartPage = () => {
     return sum + price * (item.quantity || 1);
   }, 0);
 
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
 
   const saveAddressToLocalStorage = () => {
     const newAddress = {
