@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const GMAIL_USER = process.env.GMAIL_USER || "logicologymeta@gmail.com";
-const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD || "fdqz xqjx neoz nzan";
+const HOSTINGER_EMAIL = process.env.HOSTINGER_EMAIL || "orders@logicology.in";
+const HOSTINGER_PASSWORD = process.env.HOSTINGER_PASSWORD || "Raha@1ogic$$$";
 
 export async function POST(req: NextRequest) {
   try {
     const { to, subject, html, pdfUrl } = await req.json();
+    
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.hostinger.com", // Hostinger SMTP server
+      port: 465, // SSL port
+      secure: true, // Use SSL
       auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
+        user: HOSTINGER_EMAIL,
+        pass: HOSTINGER_PASSWORD,
       },
     });
 
     const mailOptions: any = {
-      from: GMAIL_USER,
+      from: HOSTINGER_EMAIL,
       to,
       subject,
       html,
@@ -32,13 +35,13 @@ export async function POST(req: NextRequest) {
       ];
     }
 
-    // Mark invoice as paid (simulate status update)
-    // If you have a DB or API to update, call it here
-    // Example: await updateInvoiceStatus(invoiceId, 'paid');
+    // Verify connection configuration
+    await transporter.verify();
 
     await transporter.sendMail(mailOptions);
     return NextResponse.json({ success: true, status: "paid" });
   } catch (err: any) {
+    console.error("Email error:", err);
     return NextResponse.json(
       { success: false, error: err?.message || "Unknown error" },
       { status: 500 }
