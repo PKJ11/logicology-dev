@@ -132,7 +132,7 @@ const ProductShowcase = () => {
                   </div>
                   
                   {/* GST Details */}
-                  <div className="mb-1 text-xs text-gray-700">
+                  {/* <div className="mb-1 text-xs text-gray-700">
                     <div className="flex justify-between">
                       <span>Base Price: ₹{priceBreakdown.basePrice}</span>
                       <span>GST: {gstRate}%</span>
@@ -141,11 +141,11 @@ const ProductShowcase = () => {
                       <span>GST Amt: ₹{priceBreakdown.gstAmount}</span>
                       <span>HSN: {details.hsn_code || "..."}</span>
                     </div>
-                  </div>
+                  </div> */}
                   
-                  <div className="mb-1 text-xs text-gray-700">
+                  {/* <div className="mb-1 text-xs text-gray-700">
                     <span>Includes GST | Razorpay ID: {product.razorpayItemId}</span>
-                  </div>
+                  </div> */}
                   
                   <button
                     className="w-full max-w-[140px] rounded-full bg-[#EB6A42] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#d85b36]"

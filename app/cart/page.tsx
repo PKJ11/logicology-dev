@@ -5,6 +5,7 @@ import SiteFooter from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -33,26 +34,26 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
   let cgstTotal = 0;
   let sgstTotal = 0;
   let rows = "";
-  
+
   cart.forEach((item, idx) => {
     const details = itemDetails[item.razorpayItemId] || {};
     const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
     const quantity = item.quantity || 1;
     const gstRate = details.tax_rate || 0;
     const hsnCode = details.hsn_code || "-";
-    
+
     // GST calculation: Assuming price is GST inclusive
     const gstAmount = gstRate > 0 ? (price * gstRate) / (100 + gstRate) : 0;
     const cgstAmount = gstAmount / 2;
     const sgstAmount = gstAmount / 2;
     const basePrice = price - gstAmount;
     const totalItemAmount = price * quantity;
-    
+
     totalAmount += totalItemAmount;
     totalGST += gstAmount * quantity;
     cgstTotal += cgstAmount * quantity;
     sgstTotal += sgstAmount * quantity;
-    
+
     rows += `
       <tr style="border-bottom: 1px solid #ddd;">
         <td style="padding: 10px; text-align: center;">${idx + 1}</td>
@@ -72,8 +73,8 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
     <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
       <h3 style="color: #6A294D; margin-top: 0;">GST Breakdown</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ''}
-        ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ''}
+        ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ""}
+        ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ""}
         <div style="font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px;">Total GST:</div>
         <div style="font-weight: bold; text-align: right; border-top: 1px solid #ddd; padding-top: 5px;">₹${totalGST.toFixed(2)}</div>
       </div>
@@ -126,7 +127,9 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
 
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart();
-  const [itemDetails, setItemDetails] = useState<Record<string, { tax_rate?: number; hsn_code?: string }>>({});
+  const [itemDetails, setItemDetails] = useState<
+    Record<string, { tax_rate?: number; hsn_code?: string }>
+  >({});
 
   // Modal state
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -150,6 +153,7 @@ const CartPage = () => {
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   // Load saved addresses and item details
   useEffect(() => {
@@ -174,9 +178,9 @@ const CartPage = () => {
       if (data.success && Array.isArray(data.items)) {
         const details: Record<string, { tax_rate?: number; hsn_code?: string }> = {};
         for (const item of data.items) {
-          details[item.id] = { 
-            tax_rate: item.tax_rate, 
-            hsn_code: item.hsn_code 
+          details[item.id] = {
+            tax_rate: item.tax_rate,
+            hsn_code: item.hsn_code,
           };
         }
         setItemDetails(details);
@@ -252,12 +256,12 @@ const CartPage = () => {
               </div>
               <div>
                 <strong style="color: #333;">Order Date:</strong><br>
-                <span style="color: #666;">${new Date().toLocaleDateString('en-IN', { 
-                  day: '2-digit', 
-                  month: 'long', 
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
+                <span style="color: #666;">${new Date().toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
                 })}</span>
               </div>
               <div>
@@ -281,7 +285,7 @@ const CartPage = () => {
               <strong>${shipping.name}</strong><br>
               ${shipping.address}<br>
               ${shipping.building}, ${shipping.street}<br>
-              ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ''}
+              ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ""}
               ${shipping.city}, ${shipping.state} - ${shipping.pin}<br>
               📞 ${shipping.phone}
             </div>
@@ -356,7 +360,14 @@ const CartPage = () => {
         return;
       }
 
-      if (!shipping.name || !shipping.address || !shipping.pin || !shipping.city || !shipping.state || !shipping.phone) {
+      if (
+        !shipping.name ||
+        !shipping.address ||
+        !shipping.pin ||
+        !shipping.city ||
+        !shipping.state ||
+        !shipping.phone
+      ) {
         alert("Please fill in all shipping information");
         setStep(2);
         setIsProcessing(false);
@@ -415,7 +426,10 @@ const CartPage = () => {
             });
 
             // Send GST invoice
-            const invoiceResult = await sendGSTInvoice(response.razorpay_payment_id, orderDescription);
+            const invoiceResult = await sendGSTInvoice(
+              response.razorpay_payment_id,
+              orderDescription
+            );
 
             // Clear cart and reset
             clearCart();
@@ -426,15 +440,14 @@ const CartPage = () => {
 
             // Show success message
             setTimeout(() => {
-              alert(
-                `🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id}\nAmount: ₹${total.toFixed(2)}\n\nA detailed GST invoice has been sent to:\n${userInfo.email}\n\nThank you for shopping with Logicology!`
-              );
+              router.push(`/my-orders?paymentId=${response.razorpay_payment_id}`);
             }, 500);
-
           } catch (error) {
             console.error("Error in payment handler:", error);
             setIsProcessing(false);
-            alert("Payment was successful but there was an issue sending your GST invoice. Please contact support with your Payment ID.");
+            alert(
+              "Payment was successful but there was an issue sending your GST invoice. Please contact support with your Payment ID."
+            );
           }
         },
         prefill: {
@@ -482,12 +495,12 @@ const CartPage = () => {
     let totalGST = 0;
     let taxableValue = 0;
 
-    cart.forEach(item => {
+    cart.forEach((item) => {
       const details = itemDetails[item.razorpayItemId] || {};
       const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
       const quantity = item.quantity || 1;
       const gstRate = details.tax_rate || 0; // Use actual rate from API
-      
+
       if (gstRate > 0) {
         const gstAmount = (price * gstRate) / (100 + gstRate);
         totalGST += gstAmount * quantity;
@@ -638,14 +651,6 @@ const CartPage = () => {
                       onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
-                    <input
-                      required
-                      type="text"
-                      placeholder="Address"
-                      value={shipping.address}
-                      onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         required
@@ -664,6 +669,15 @@ const CartPage = () => {
                         className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Address"
+                      value={shipping.address}
+                      onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    />
+                    
                     <input
                       type="text"
                       placeholder="Landmark (Optional)"
@@ -689,14 +703,55 @@ const CartPage = () => {
                         className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
-                    <input
+                    <select
                       required
-                      type="text"
-                      placeholder="State"
                       value={shipping.state}
                       onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
                       className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
+                    >
+                      <option value="">Select State</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Andaman and Nicobar Islands">
+                        Andaman and Nicobar Islands
+                      </option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Dadra and Nagar Haveli and Daman and Diu">
+                        Dadra and Nagar Haveli and Daman and Diu
+                      </option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Puducherry">Puducherry</option>
+                    </select>
+
                     <input
                       required
                       type="tel"
@@ -717,7 +772,14 @@ const CartPage = () => {
                     </button>
                     <button
                       onClick={() => setStep(3)}
-                      disabled={!shipping.name || !shipping.address || !shipping.pin || !shipping.city || !shipping.state || !shipping.phone}
+                      disabled={
+                        !shipping.name ||
+                        !shipping.address ||
+                        !shipping.pin ||
+                        !shipping.city ||
+                        !shipping.state ||
+                        !shipping.phone
+                      }
                       className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                     >
                       Continue to Review
@@ -764,7 +826,7 @@ const CartPage = () => {
                         );
                       })}
                     </div>
-                    
+
                     {/* GST Breakdown - FIXED to show actual rates */}
                     <div className="mt-4 border-t pt-4">
                       <div className="space-y-2 text-sm">
@@ -776,7 +838,7 @@ const CartPage = () => {
                           <span>Total GST:</span>
                           <span>₹{totalGST.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-lg font-bold border-t pt-2">
+                        <div className="flex justify-between border-t pt-2 text-lg font-bold">
                           <span>Total Amount:</span>
                           <span>₹{total.toFixed(2)}</span>
                         </div>
@@ -902,7 +964,9 @@ const CartPage = () => {
                         <div className="text-right">
                           <p className="text-lg font-bold text-gray-900">
                             ₹
-                            {(parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity).toFixed(2)}
+                            {(
+                              parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
+                            ).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -923,8 +987,10 @@ const CartPage = () => {
                       <span className="float-right font-medium">₹{totalGST.toFixed(2)}</span>
                     </div>
                     <div className="col-span-2 border-t pt-2">
-                      <span className="text-blue-900 font-semibold">Grand Total:</span>
-                      <span className="float-right font-bold text-blue-900">₹{total.toFixed(2)}</span>
+                      <span className="font-semibold text-blue-900">Grand Total:</span>
+                      <span className="float-right font-bold text-blue-900">
+                        ₹{total.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>
