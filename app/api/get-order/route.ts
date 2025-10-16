@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
@@ -10,8 +12,8 @@ const COLLECTION = "orders";
 
 export async function GET(req: Request) {
   try {
-    const url = new URL(req.url);
-    const paymentId = url.searchParams.get("paymentId");
+    const { searchParams } = new URL(req.url);
+    const paymentId = searchParams.get("paymentId");
 
     if (!paymentId) {
       return NextResponse.json({ success: false, message: "Missing paymentId" }, { status: 400 });
@@ -22,9 +24,7 @@ export async function GET(req: Request) {
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
 
-    // Find the order using paymentId
     const order = await col.findOne({ paymentId });
-
     await client.close();
 
     if (!order) {

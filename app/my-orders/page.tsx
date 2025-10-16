@@ -2,9 +2,9 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function MyOrdersPage() {
+function MyOrdersContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentId = searchParams.get("paymentId");
@@ -79,5 +79,17 @@ export default function MyOrdersPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MyOrdersPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col items-center justify-center text-center">
+        <p className="text-lg text-gray-600">Loading...</p>
+      </div>
+    }>
+      <MyOrdersContent />
+    </Suspense>
   );
 }
