@@ -71,7 +71,7 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
   // Dynamic GST breakdown based on actual rates
   const gstBreakdown = `
     <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-      <h3 style="color: #6A294D; margin-top: 0;">GST Breakdown</h3>
+      <h3 style="color: #0A8A80; margin-top: 0;">GST Breakdown</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ""}
         ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ""}
@@ -249,7 +249,7 @@ const CartPage = () => {
 
           <!-- Order Summary -->
           <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
-            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #E45C48; padding-bottom: 10px;">Order Confirmation</h3>
+            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Order Confirmation</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
               <div>
                 <strong style="color: #333;">Payment ID:</strong><br>
@@ -281,7 +281,7 @@ const CartPage = () => {
 
           <!-- Shipping Information -->
           <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
-            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #E45C48; padding-bottom: 10px;">Shipping Details</h3>
+            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Shipping Details</h3>
             <div style="line-height: 1.8; color: #333;">
               <strong>${shipping.name}</strong><br>
               ${shipping.address}<br>
@@ -295,18 +295,14 @@ const CartPage = () => {
           <!-- Support Section -->
           <div style="text-align: center; padding: 25px; background: #0B3F44; color: white; margin: 20px; border-radius: 10px;">
             <h3 style="margin: 0 0 15px; color: white;">Need Assistance?</h3>
-            <p style="margin: 0; opacity: 0.9; line-height: 1.6;">
-              📧 Email: logicologymeta@gmail.com<br>
-              📱 WhatsApp: 8446980747<br>
-              <small>Please mention your Payment ID: ${paymentId}</small>
-            </p>
+            <p style="margin: 0; opacity: 0.9; line-height: 1.6;"> 📧 Email: <span style="color: #0A8A80;">support@logicology.in</span> <br> 📱 WhatsApp: <span style="color: #0A8A80;">8446980747</span><br> <small>Please mention your Payment ID: ${paymentId}</small> </p>
           </div>
 
           <!-- Footer -->
           <div style="text-align: center; padding: 20px; color: #666; font-size: 12px; border-top: 1px solid #ddd;">
             <p style="margin: 0;">
               This is a system generated GST invoice. For any queries, please contact our support team.<br>
-              <strong>Logicology - Making Learning Fun Through Play!</strong>
+              <strong>Logicology - Learn To Play. Play To Learn </strong>
             </p>
           </div>
         </div>
