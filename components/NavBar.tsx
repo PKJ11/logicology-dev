@@ -98,6 +98,7 @@ const navItems = [
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
   // { name: "Products", href: "/products" },
   { name: "About Us", href: "/about" },
+  { name: "Shop Now", href: "/products" },
 ];
 
 /* ================= Utils ================= */
@@ -433,13 +434,13 @@ export default function NavBar() {
             >
               <FiSearch />
             </Link> */}
-            {/* <Link
+            <Link
               href="/cart"
               aria-label="Cart"
               className="text-brand-teal hover:text-brand-tealDark"
             >
               <FiShoppingCart />
-            </Link> */}
+            </Link>
           </div>
 
           {/* Mobile toggle */}
@@ -586,8 +587,8 @@ export default function NavBar() {
             </Link>
 
             {/* Actions */}
-            {/* <div className="flex items-center gap-5 pt-2 text-slate-700">
-              <Link
+            <div className="flex items-center gap-5 pt-2 text-slate-700">
+              {/* <Link
                 href="/login"
                 className="flex items-center gap-2 hover:text-brand-tealDark"
                 onClick={closeAll}
@@ -601,7 +602,7 @@ export default function NavBar() {
                 onClick={closeAll}
               >
                 <FiSearch />
-              </Link>
+              </Link> */}
               <Link
                 href="/cart"
                 aria-label="Cart"
@@ -610,7 +611,7 @@ export default function NavBar() {
               >
                 <FiShoppingCart />
               </Link>
-            </div> */}
+            </div>
           </div>
         </div>
       )}
