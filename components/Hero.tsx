@@ -7,11 +7,15 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CTAButton from "./CTAButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
 
 export default function Hero() {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   // Effect to check screen size and set mobile state
   useEffect(() => {
@@ -81,7 +85,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="section mt-10">
+    <section className="section mt-10" ref={ref}>
       <div className="container-padding">
         <div className="section-rounded relative overflow-hidden">
           <Swiper
@@ -120,23 +124,53 @@ export default function Hero() {
                 <div className="relative z-10 flex min-h-[700px] items-start md:items-center">
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
-                      <div className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12">
+                      <motion.div 
+                        className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12"
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={isInView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      >
                         {slide.pretitle.length > 0 && (
-                          <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                          <motion.h1 
+                            className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                            initial={{ y: 30, opacity: 0 }}
+                            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                          >
                             {slide.pretitle}
-                          </h1>
+                          </motion.h1>
                         )}
-                        <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                        <motion.h1 
+                          className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                          initial={{ y: 30, opacity: 0 }}
+                          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                          transition={{ duration: 0.6, delay: 0.3 }}
+                        >
                           {slide.title}
 
-                          <span className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                          <motion.span 
+                            className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                            initial={{ y: 30, opacity: 0 }}
+                            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                          >
                             {slide.subtitle}
-                          </span>
-                        </h1>
-                        <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                          </motion.span>
+                        </motion.h1>
+                        <motion.p 
+                          className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                          initial={{ y: 30, opacity: 0 }}
+                          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                          transition={{ duration: 0.6, delay: 0.5 }}
+                        >
                           {slide.description}
-                        </p>
-                        {/* <div className="mt-6">
+                        </motion.p>
+                        {/* <motion.div 
+                          className="mt-6"
+                          initial={{ y: 30, opacity: 0 }}
+                          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                          transition={{ duration: 0.6, delay: 0.6 }}
+                        >
                           <CTAButton
                             text={slide.cta}
                             href={slide.ctaLink}
@@ -161,8 +195,8 @@ export default function Hero() {
                               </svg>
                             }
                           />
-                        </div> */}
-                      </div>
+                        </motion.div> */}
+                      </motion.div>
                     </div>
                   </div>
                 </div>

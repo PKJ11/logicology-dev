@@ -1,7 +1,7 @@
 "use client";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -23,6 +23,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import MediaLayoutRight from "@/components/MediaLayoutRight";
 import VideoModal from "@/components/VideoModal";
+import { motion, useInView } from "framer-motion";
 
 export default function PrimeTimeLanding() {
   return (
@@ -44,21 +45,16 @@ export default function PrimeTimeLanding() {
 function Hero() {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Effect to check screen size and set mobile state
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Initial check
     checkScreenSize();
-
-    // Add event listener for window resize
     window.addEventListener("resize", checkScreenSize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
   const slides = [
     {
       id: 1,
@@ -132,9 +128,8 @@ function Hero() {
             modules={[Autoplay, Pagination, Navigation]}
             className="hero-swiper"
           >
-            {slides.map((slide) => (
+            {slides.map((slide, index) => (
               <SwiperSlide key={slide.id}>
-                {/* Full-bleed background */}
                 <div
                   className="absolute inset-0 z-0"
                   style={{
@@ -146,32 +141,54 @@ function Hero() {
                   }}
                 />
 
-                {/* Content: centered, max 80vw */}
                 <div className="relative z-10 flex min-h-[700px] items-center">
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <h1 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                        <motion.h1
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.6, delay: 0.2 }}
+                          className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                        >
                           {slide.pretitle}
-                        </h1>
-                        <h1 className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                        </motion.h1>
+                        <motion.h1
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.6, delay: 0.3 }}
+                          className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                        >
                           {slide.title}
-
                           <span className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
                             {slide.subtitle}
                           </span>
-                        </h1>
-                        <p className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                        </motion.h1>
+                        <motion.p
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.6, delay: 0.4 }}
+                          className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                        >
                           {slide.description}
-                        </p>
-                        <div className="mt-6">
+                        </motion.p>
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.6, delay: 0.5 }}
+                          className="mt-6"
+                        >
                           <CTAButton
                             text={slide.cta}
                             href={slide.ctaLink}
                             bg="#FFFFFF"
-                            color="#0A8A80" // brand teal text
-                            hoverBg="#0A8A80" // brand teal bg on hover
-                            hoverColor="#FFFFFF" // white text on hover
+                            color="#0A8A80"
+                            hoverBg="#0A8A80"
+                            hoverColor="#FFFFFF"
                             size="md"
                             rightIcon={
                               <svg
@@ -189,7 +206,7 @@ function Hero() {
                               </svg>
                             }
                           />
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
                   </div>
@@ -286,37 +303,61 @@ function Hero() {
 }
 
 // --------------------- Game Details (Gold) ---------------------
-
 function GameDetails() {
   const [open, setOpen] = useState(false);
-  
   const YT = "https://youtu.be/2qLAo-AydUc";
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section id="GameDetails" className="w-full bg-brand-gold">
+    <section ref={sectionRef} id="GameDetails" className="w-full bg-brand-gold">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
-        {/* Flex container replacing grid */}
         <div className="flex flex-col items-center md:flex-row">
-          {/* MediaLayout on left for larger screens, top for mobile */}
-          <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
+          >
             <MediaLayoutRight
               image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
               videoSrc=""
               text="PrimeTime™"
             />
-          </div>
+          </motion.div>
 
-          {/* Content on right for larger screens, bottom for mobile */}
-          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
-            <h2 className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.6 }}
+              className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]"
+            >
               Details About The Game
-            </h2>
+            </motion.h2>
 
-            <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]"
+            >
               A lightning‑quick numbers game that rewards smart matching and prime‑factor insights.
               Perfect for 2–6 players, ages 8+.
-            </p>
-            <div className="mt-6">
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-6"
+            >
               <CTAButton
                 text="Learn more"
                 onClick={() => setOpen(true)}
@@ -342,12 +383,11 @@ function GameDetails() {
                   </svg>
                 }
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Modal */}
       <VideoModal
         open={open}
         onClose={() => setOpen(false)}
@@ -358,7 +398,7 @@ function GameDetails() {
   );
 }
 
-
+// --------------------- Instruction Videos (Coral) ---------------------
 function InstructionVideos() {
   const videos = [
     {
@@ -396,6 +436,8 @@ function InstructionVideos() {
   const [active, setActive] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const handleVideoClick = (index: number) => {
     setActive(index);
@@ -403,7 +445,7 @@ function InstructionVideos() {
   };
 
   const handleStartWatching = () => {
-    setActive(0); // Set to first video
+    setActive(0);
     setIsPlaying(true);
   };
 
@@ -412,7 +454,6 @@ function InstructionVideos() {
     setIsPlaying(false);
   };
 
-  // Close modal when pressing Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -422,7 +463,7 @@ function InstructionVideos() {
 
     if (active !== null) {
       document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden"; // Prevent scrolling when modal is open
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
@@ -432,25 +473,47 @@ function InstructionVideos() {
   }, [active]);
 
   return (
-    <section className="relative w-full bg-brand-coral">
+    <section ref={sectionRef} className="relative w-full bg-brand-coral">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
-          <div className="px-0 sm:px-8">
-            <h2 className="headingstyle font-heading font-extrabold text-white/90">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="px-0 sm:px-8"
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.6 }}
+              className="headingstyle font-heading font-extrabold text-white/90"
+            >
               Frequently Asked Question about Prime Time™
-            </h2>
+            </motion.h2>
 
-            <p className="textstyles mt-3 max-w-prose text-white/90">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="textstyles mt-3 max-w-prose text-white/90"
+            >
               Watch these to get answers to all your questions about Prime Time™
-            </p>
+            </motion.p>
 
-            <div className="mt-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-6"
+            >
               <CTAButton
                 text="Start watching"
-                onClick={handleStartWatching} // Added onClick handler
-                bg="#FFFFFF" // matches bg-black/20
+                onClick={handleStartWatching}
+                bg="#FFFFFF"
                 color="#AB4637"
-                hoverBg="rgba(0,0,0,0.25)" // matches hover:bg-black/25
+                hoverBg="rgba(0,0,0,0.25)"
                 hoverColor="#FFFFFF"
                 roundedClass="rounded-full"
                 size="md"
@@ -472,22 +535,28 @@ function InstructionVideos() {
                   </svg>
                 }
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* White background container only for videos */}
-          <div className="rounded-4xl bg-white p-4 shadow-soft sm:p-0 md:p-5">
-            {/* Responsive grid with better gap management */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="rounded-4xl bg-white p-4 shadow-soft sm:p-0 md:p-5"
+          >
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
               {videos.map((item, i) => (
-                <div
+                <motion.div
                   key={i}
+                  initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                  animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }}
+                  transition={{ duration: 0.5, delay: 0.1 * i }}
+                  whileHover={{ scale: 1.05, y: -5 }}
                   onClick={() => handleVideoClick(i)}
                   onMouseEnter={() => setHoveredVideo(i)}
                   onMouseLeave={() => setHoveredVideo(null)}
                   className="group relative aspect-[9/16] cursor-pointer overflow-hidden rounded-xl bg-gray-100 ring-1 ring-gray-200"
                 >
-                  {/* Show video on hover, thumbnail by default */}
                   {hoveredVideo === i ? (
                     <video
                       src={item.video}
@@ -506,7 +575,6 @@ function InstructionVideos() {
                     />
                   )}
 
-                  {/* Play overlay */}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/10 transition-all group-hover:bg-black/20">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110 sm:h-12 sm:w-12">
                       <svg
@@ -523,19 +591,28 @@ function InstructionVideos() {
                       </svg>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {active !== null && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={handleCloseModal}
         >
-          <div className="relative mx-4 w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", damping: 25 }}
+            className="relative mx-4 w-full max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={handleCloseModal}
               className="absolute -top-12 right-0 z-10 rounded-full bg-white/20 p-2 transition-colors hover:bg-white/30"
@@ -566,20 +643,34 @@ function InstructionVideos() {
                 style={{ maxHeight: "80vh" }}
               />
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </section>
   );
 }
+
 // --------------------- Interactive Games (Gray) ---------------------
 function InteractiveGames() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
   return (
-    <section className="w-full bg-brand-grayBg">
+    <section ref={sectionRef} className="w-full bg-brand-grayBg">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-        <div className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10">
-          <div className="mb-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          transition={{ duration: 0.7 }}
+          className="rounded-[22px] bg-white p-6 shadow-soft sm:p-10"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.6 }}
+            className="mb-12 text-center"
+          >
             <h2 className="headingstyle mb-4 font-extrabold text-brand-teal">
               Interactive Learning Games
             </h2>
@@ -587,11 +678,16 @@ function InteractiveGames() {
               Try these fun games that complement the Logicoland experience and help develop logical
               thinking skills.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid gap-8 md:grid-cols-2">
-            {/* Game 1 */}
-            <div className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft transition-all duration-300"
+            >
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Prime Number Explorer
               </h3>
@@ -604,10 +700,15 @@ function InteractiveGames() {
                 ></iframe>
               </div>
               <p className="mt-4 text-center text-brand-tealDark/80">Identify Prime Number...</p>
-            </div>
+            </motion.div>
 
-            {/* Game 2 */}
-            <div className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="overflow-hidden rounded-4xl bg-white p-6 shadow-soft transition-all duration-300"
+            >
               <h3 className="mb-4 text-center text-xl font-bold text-brand-teal">
                 Composite Number Challenge
               </h3>
@@ -620,14 +721,15 @@ function InteractiveGames() {
                 ></iframe>
               </div>
               <p className="mt-4 text-center text-brand-tealDark/80">Find Composite Number...</p>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
+// --------------------- Gallery Section ---------------------
 function GallerySection() {
   const raw = [
     "https://ik.imagekit.io/pratik11/WhatsApp%20Image%202025-09-24%20at%2010.01.02_76a91c95.jpg?updatedAt=1758690489687",
@@ -643,18 +745,25 @@ function GallerySection() {
   const images = raw.map((u) => (u.includes("?") ? `${u}&tr=f-auto,q-70` : `${u}?tr=f-auto,q-70`));
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const closeModal = () => setSelectedIndex(null);
   const showPrev = () => setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
   const showNext = () => setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
 
   return (
-    <section className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
+    <section ref={sectionRef} className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(10,138,128,0.08),transparent_60%)]" />
       <div className="mx-auto px-4 sm:px-6 lg:max-w-[80vw] lg:px-8">
-        <div className="mb-8 flex items-center justify-between">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 flex items-center justify-between"
+        >
           <h2 className="headingstyle font-extrabold text-brand-teal">Gallery</h2>
-        </div>
+        </motion.div>
 
         <Swiper
           modules={[Navigation, Autoplay, Keyboard, FreeMode, EffectCoverflow]}
@@ -676,7 +785,11 @@ function GallerySection() {
         >
           {images.map((src, i) => (
             <SwiperSlide key={`${src}-${i}`} className="!h-auto select-none">
-              <div
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ scale: 1.05, y: -5 }}
                 className="group relative h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
                 onClick={() => setSelectedIndex(i)}
               >
@@ -688,19 +801,25 @@ function GallerySection() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
-              </div>
+              </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
-      {/* Modal with navigation */}
       {selectedIndex !== null && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           onClick={closeModal}
         >
-          <button
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={(e) => {
               e.stopPropagation();
               showPrev();
@@ -717,16 +836,23 @@ function GallerySection() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-          </button>
+          </motion.button>
 
-          <img
+          <motion.img
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", damping: 25 }}
             src={images[selectedIndex].replace("&tr=f-auto,q-70", "&tr=f-auto,q-90")}
             alt="Full View"
             className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
             onClick={(e) => e.stopPropagation()}
           />
 
-          <button
+          <motion.button
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={(e) => {
               e.stopPropagation();
               showNext();
@@ -743,13 +869,14 @@ function GallerySection() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       )}
     </section>
   );
 }
 
+// --------------------- Lost Card Helper ---------------------
 function LostCardHelper() {
   const trayImages = [
     "https://res.cloudinary.com/deunonql5/image/upload/v1757381453/TRAY_1_hsi9wt.png",
@@ -762,6 +889,8 @@ function LostCardHelper() {
   const [isTray, setIsTray] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const resetToTray = () => {
     const t = randomTray();
@@ -805,14 +934,21 @@ function LostCardHelper() {
   };
 
   return (
-    <section className="w-full bg-[#84C341]">
+    <section ref={sectionRef} className="w-full bg-[#84C341]">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="rounded-[22px] p-6 sm:p-6">
-          {/* Flex container replacing grid */}
           <div className="flex flex-col items-center gap-8 md:flex-row lg:gap-16">
-            {/* Left: Image container */}
-            <div className="order-2 flex w-full items-center justify-start py-6 md:order-1 md:w-1/2 md:py-0">
-              <div className="relative aspect-square w-[95%] max-w-[700px] rounded-[28px] border-[12px] border-white bg-white p-2 shadow-soft md:border-[14px]">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="order-2 flex w-full items-center justify-start py-6 md:order-1 md:w-1/2 md:py-0"
+            >
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="relative aspect-square w-[95%] max-w-[700px] rounded-[28px] border-[12px] border-white bg-white p-2 shadow-soft md:border-[14px]"
+              >
                 <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[22px]">
                   {isTray ? (
                     <Image
@@ -826,42 +962,71 @@ function LostCardHelper() {
                       priority={false}
                     />
                   ) : (
-                    <Image
-                      src={imgSrc}
-                      alt="Card"
-                      width={180}
-                      height={240}
-                      className={`rounded-xl object-contain shadow-2xl transition-opacity ${
-                        loading ? "opacity-60" : "opacity-100"
-                      }`}
-                      priority={false}
-                    />
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                    >
+                      <Image
+                        src={imgSrc}
+                        alt="Card"
+                        width={180}
+                        height={240}
+                        className={`rounded-xl object-contain shadow-2xl transition-opacity ${
+                          loading ? "opacity-60" : "opacity-100"
+                        }`}
+                        priority={false}
+                      />
+                    </motion.div>
                   )}
                 </div>
-              </div>
+              </motion.div>
 
               {loading && <p className="mt-3 text-center text-sm text-gray-200">Loading image…</p>}
-            </div>
+            </motion.div>
 
-            {/* Right: Controls & Text */}
-            <div className="order-1 w-full text-white md:order-2 md:w-1/2">
-              {/* <h2 className="textstyles text-white/90 font-extrabold font-heading">
-                Card replacement helper
-              </h2> */}
-              <h2 className="headingstyle font-heading font-extrabold text-white/90">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="order-1 w-full text-white md:order-2 md:w-1/2"
+            >
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.6 }}
+                className="headingstyle font-heading font-extrabold text-white/90"
+              >
                 Lost a card?
-              </h2>
-              <p className="textstyles mt-3 max-w-prose font-sans">
+              </motion.h2>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="textstyles mt-3 max-w-prose font-sans"
+              >
                 Worry not! We've got you covered - The game box comes with four blank cards just for
                 this purpose.
-              </p>
-              <p className="textstyles mt-3 max-w-prose font-sans">Enter the card number below.</p>
+              </motion.p>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="textstyles mt-3 max-w-prose font-sans"
+              >
+                Enter the card number below.
+              </motion.p>
 
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <label className="sr-only" htmlFor="card-number">
-                  Card number
-                </label>
-                <input
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-6 flex flex-col gap-3 sm:flex-row"
+              >
+                <motion.input
+                  whileFocus={{ scale: 1.02 }}
                   id="card-number"
                   type="text"
                   inputMode="numeric"
@@ -876,23 +1041,36 @@ function LostCardHelper() {
                   className="w-full rounded-full border border-gray-300 bg-white px-5 py-3 text-sm text-gray-900 outline-none ring-0 focus:bg-white focus:ring-2 focus:ring-brand-teal/40 sm:max-w-xs"
                 />
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={showCard}
                   className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[120px]"
                 >
                   Show card
-                </button>
-                <button
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={resetToTray}
                   type="button"
                   className="group rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[100px]"
                 >
                   Reset
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
 
-              {error && <p className="mt-3 text-sm text-red-200">{error}</p>}
-            </div>
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 text-sm text-red-200"
+                >
+                  {error}
+                </motion.p>
+              )}
+            </motion.div>
           </div>
         </div>
       </div>
