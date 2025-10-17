@@ -82,47 +82,48 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
   `;
 
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; border: 2px solid #6A294D; padding: 20px; background: #fff;">
-      <!-- Header -->
-      <div style="text-align: center; border-bottom: 2px solid #6A294D; padding-bottom: 15px; margin-bottom: 20px;">
-        <h1 style="color: #6A294D; margin: 0; font-size: 28px;">TAX INVOICE</h1>
-        <h2 style="color: #EB6A42; margin: 5px 0; font-size: 20px;">Logicology Educational Products</h2>
-        <p style="margin: 5px 0; color: #666;">GSTIN: ${COMPANY_GST_NUMBER}</p>
-      </div>
-      
-      <!-- Invoice Table -->
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
-        <thead>
-          <tr style="background: #6A294D; color: white;">
-            <th style="padding: 12px; border: 1px solid #ddd;">#</th>
-            <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Item Description</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">HSN Code</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">Qty</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">Unit Price</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">GST Rate</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">GST Amount</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-      
-      ${gstBreakdown}
-      
-      <!-- Total Amount -->
-      <div style="text-align: right; font-size: 16px; font-weight: bold; padding: 15px; background: #6A294D; color: white; border-radius: 5px;">
-        Grand Total: ₹${totalAmount.toFixed(2)}
-      </div>
-      
-      <!-- Footer -->
-      <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px; color: #666;">
-        <p>This is a computer generated invoice. No signature required.</p>
-        <p>For queries, contact: logicologymeta@gmail.com | WhatsApp: 8446980747</p>
-      </div>
+  <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; border: 2px solid #0A8A80; padding: 20px; background: #fff; color: #333;">
+    <!-- Header -->
+    <div style="text-align: center; border-bottom: 2px solid #0A8A80; padding-bottom: 15px; margin-bottom: 20px;">
+      <h1 style="color: #0A8A80; margin: 0; font-size: 28px;">TAX INVOICE</h1>
+      <h2 style="color: #0A8A80; margin: 5px 0; font-size: 20px;">Logicology Ventures Private Limited</h2>
+      <p style="margin: 5px 0; color: #555;">GSTIN: ${COMPANY_GST_NUMBER}</p>
     </div>
-  `;
+
+    <!-- Invoice Table -->
+    <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
+      <thead>
+        <tr style="background: #0A8A80; color: white;">
+          <th style="padding: 12px; border: 1px solid #0A8A80;">#</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80; text-align: left;">Item Description</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">HSN Code</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">Qty</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">Unit Price</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">GST Rate</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">GST Amount</th>
+          <th style="padding: 12px; border: 1px solid #0A8A80;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+
+    ${gstBreakdown}
+
+    <!-- Total Amount -->
+    <div style="text-align: right; font-size: 16px; font-weight: bold; padding: 15px; background: #0A8A80; color: white; border-radius: 5px;">
+      Grand Total: ₹${totalAmount.toFixed(2)}
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #0A8A80; font-size: 11px; color: #555;">
+      <p>This is a computer generated invoice. No signature required.</p>
+      <p>For queries, contact: <span style="color: #0A8A80;">logicologymeta@gmail.com</span> | WhatsApp: <span style="color: #0A8A80;">8446980747</span></p>
+    </div>
+  </div>
+`;
+
 }
 
 const CartPage = () => {
@@ -136,7 +137,7 @@ const CartPage = () => {
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
-    phone: "",
+    // phone: "",
   });
   const [shipping, setShipping] = useState({
     name: "",
@@ -216,7 +217,7 @@ const CartPage = () => {
       setUserInfo({
         name: address.name || "",
         email: address.email || "",
-        phone: address.phone || "",
+        // phone: address.phone || "",
       });
       setShipping({
         name: address.name || "",
@@ -241,7 +242,7 @@ const CartPage = () => {
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
           <!-- Header -->
-          <div style="background: linear-gradient(135deg, #0B3F44, #0A8A80); padding: 30px; text-align: center; color: white;">
+          <div style="background: #0A8A80; padding: 30px; text-align: center; color: white;">
             <h1 style="margin: 0; font-size: 32px;">Payment Successful!</h1>
             <p style="margin: 10px 0 0; font-size: 18px; opacity: 0.9;">Thank you for your purchase from Logicology</p>
           </div>
@@ -325,18 +326,18 @@ const CartPage = () => {
       const emailResult = await emailRes.json();
 
       // Send SMS notification
-      try {
-        await fetch("/api/send-sms", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: userInfo.phone,
-            message: `Thank you for your Logicology purchase! Payment ID: ${paymentId}. Amount: ₹${total.toFixed(2)}. GST invoice sent to your email. For queries: 8446980747`,
-          }),
-        });
-      } catch (smsError) {
-        console.error("SMS sending failed:", smsError);
-      }
+      // try {
+      //   await fetch("/api/send-sms", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({
+      //       to: userInfo.phone,
+      //       message: `Thank you for your Logicology purchase! Payment ID: ${paymentId}. Amount: ₹${total.toFixed(2)}. GST invoice sent to your email. For queries: 8446980747`,
+      //     }),
+      //   });
+      // } catch (smsError) {
+      //   console.error("SMS sending failed:", smsError);
+      // }
 
       return { success: true, emailSent: emailResult.success };
     } catch (error: any) {
@@ -353,7 +354,7 @@ const CartPage = () => {
 
     try {
       // Validate required fields
-      if (!userInfo.name || !userInfo.email || !userInfo.phone) {
+      if (!userInfo.name || !userInfo.email) {
         alert("Please fill in all contact information");
         setStep(1);
         setIsProcessing(false);
@@ -365,8 +366,7 @@ const CartPage = () => {
         !shipping.address ||
         !shipping.pin ||
         !shipping.city ||
-        !shipping.state ||
-        !shipping.phone
+        !shipping.state 
       ) {
         alert("Please fill in all shipping information");
         setStep(2);
@@ -420,7 +420,7 @@ const CartPage = () => {
                 paymentId: response.razorpay_payment_id,
                 orderId: response.razorpay_order_id,
                 razorpayDesc: orderDescription,
-                razorpayContact: response.razorpay_contact || userInfo.phone,
+                razorpayContact: response.razorpay_contact ,
                 totalAmount: total,
               }),
             });
@@ -453,7 +453,7 @@ const CartPage = () => {
         prefill: {
           name: userInfo.name,
           email: userInfo.email,
-          contact: userInfo.phone,
+          // contact: userInfo.phone,
         },
         notes: {
           address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.pin}`,
@@ -519,377 +519,420 @@ const CartPage = () => {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-      {/* Checkout Modal */}
-      {isCheckoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white">
-            <div className="p-6">
-              {/* Header */}
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">
-                  {step === 1
-                    ? "Contact Information"
-                    : step === 2
-                      ? "Shipping Address"
-                      : "Review Order"}
-                </h2>
-                <button
-                  onClick={closeCheckoutModal}
-                  disabled={isProcessing}
-                  className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
-                >
-                  ×
-                </button>
-              </div>
+      {/* Checkout Modal - Updated for sidebar style on large screens */}
+      {/* Checkout Modal - Updated for sidebar style on large screens */}
+{/* Checkout Modal - Updated for sidebar style on large screens */}
+{isCheckoutModalOpen && (
+  <div className="fixed inset-0 z-50 flex">
+    {/* Backdrop with blur effect for entire screen */}
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+      onClick={closeCheckoutModal}
+    />
+    
+    {/* Modal Content - Sidebar style from right side for large screens */}
+    <div
+      className={`fixed inset-y-0 right-0 z-[100] w-full max-w-md transform bg-white shadow-xl transition-transform duration-300 ease-out ${
+        isCheckoutModalOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+    >
+      <div className="flex h-full flex-col bg-white">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 mt-20">
+          <h2 className="text-xl font-bold text-gray-900">
+            {step === 1
+              ? "Contact Information"
+              : step === 2
+                ? "Shipping Address"
+                : "Review Order"}
+          </h2>
+          <button
+            onClick={closeCheckoutModal}
+            disabled={isProcessing}
+            className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
+          >
+            ×
+          </button>
+        </div>
 
-              {/* Step 1: Contact Information */}
-              {step === 1 && (
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-gray-900">Contact Information</h3>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Full Name"
-                      value={userInfo.name}
-                      onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6">
+            {/* Step 1: Contact Information */}
+            {step === 1 && (
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  
+                  <input
+                    required
+                    type="text"
+                    placeholder="Full Name"
+                    value={userInfo.name}
+                    onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <div className="mt-4">
                     <input
                       required
                       type="email"
                       placeholder="Email Address"
                       value={userInfo.email}
                       onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      onBlur={(e) => {
+                        // Validate email on blur
+                        const email = e.target.value;
+                        if (email && !/\S+@\S+\.\S+/.test(email)) {
+                          setUserInfo((u) => ({
+                            ...u,
+                            emailError: "Please enter a valid email address",
+                          }));
+                        } else {
+                          setUserInfo((u) => ({ ...u, emailError: "" }));
+                        }
+                      }}
+                      className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                        (userInfo as any).emailError ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {(userInfo as any).emailError ? (
+                      <p className="mt-2 text-sm text-red-600">{(userInfo as any).emailError}</p>
+                    ) : (
+                      <p className="mt-2 text-sm text-gray-600">
+                        You will receive the receipts on this e-mail id
+                      </p>
+                    )}
+                  </div>
+                  {/* <input
+                    required
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={userInfo.phone}
+                    onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  /> */}
+                </div>
+
+                <button
+                  onClick={() => setStep(2)}
+                  disabled={!userInfo.name || !userInfo.email || !/\S+@\S+\.\S+/.test(userInfo.email)}
+                  className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                >
+                  Continue to Address
+                </button>
+              </div>
+            )}
+
+            {/* Step 2: Shipping Address */}
+            {step === 2 && (
+              <div className="space-y-6">
+                {/* Saved Addresses */}
+                {savedAddresses.length > 0 && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-gray-900">Select Saved Address</h3>
+                    {savedAddresses.map((address) => (
+                      <div
+                        key={address.id}
+                        className={`cursor-pointer rounded-lg border p-4 transition-all ${
+                          selectedAddress === address.id
+                            ? "border-orange-500 bg-orange-50"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                        onClick={() => {
+                          setSelectedAddress(address.id);
+                          loadSelectedAddress(address.id);
+                        }}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-medium text-gray-900">{address.name}</p>
+                            <p className="mt-1 text-sm text-gray-600">
+                              {address.address}, {address.building}, {address.street}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              {address.city}, {address.state} - {address.pin}
+                            </p>
+                            <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
+                          </div>
+                          {selectedAddress === address.id && (
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
+                              <div className="h-2 w-2 rounded-full bg-white" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="text-center">
+                      <button
+                        onClick={() => setSelectedAddress("")}
+                        className="text-sm font-medium text-orange-500 hover:text-orange-600"
+                      >
+                        + Add New Address
+                      </button>
+                    </div>
+
+                    <div className="border-t pt-4">
+                      <h3 className="mb-3 font-semibold text-gray-900">Or Enter New Address</h3>
+                    </div>
+                  </div>
+                )}
+
+                {/* Shipping Information Form */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-gray-900">
+                    {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
+                  </h3>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Full Name"
+                    value={shipping.name}
+                    onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      required
+                      type="text"
+                      placeholder="Building"
+                      value={shipping.building}
+                      onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
+                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
                     <input
                       required
-                      type="tel"
-                      placeholder="Phone Number"
-                      value={userInfo.phone}
-                      onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      type="text"
+                      placeholder="Street"
+                      value={shipping.street}
+                      onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Address"
+                    value={shipping.address}
+                    onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
 
+                  <input
+                    type="text"
+                    placeholder="Landmark (Optional)"
+                    value={shipping.landmark}
+                    onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      required
+                      type="text"
+                      placeholder="PIN Code"
+                      value={shipping.pin}
+                      onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder="City"
+                      value={shipping.city}
+                      onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    />
+                  </div>
+                  <select
+  required
+  value={shipping.state}
+  onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+>
+  <option value="">Select State</option>
+
+  {/* States */}
+  <option value="Andhra Pradesh">Andhra Pradesh</option>
+  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+  <option value="Assam">Assam</option>
+  <option value="Bihar">Bihar</option>
+  <option value="Chhattisgarh">Chhattisgarh</option>
+  <option value="Goa">Goa</option>
+  <option value="Gujarat">Gujarat</option>
+  <option value="Haryana">Haryana</option>
+  <option value="Himachal Pradesh">Himachal Pradesh</option>
+  <option value="Jharkhand">Jharkhand</option>
+  <option value="Karnataka">Karnataka</option>
+  <option value="Kerala">Kerala</option>
+  <option value="Madhya Pradesh">Madhya Pradesh</option>
+  <option value="Maharashtra">Maharashtra</option>
+  <option value="Manipur">Manipur</option>
+  <option value="Meghalaya">Meghalaya</option>
+  <option value="Mizoram">Mizoram</option>
+  <option value="Nagaland">Nagaland</option>
+  <option value="Odisha">Odisha</option>
+  <option value="Punjab">Punjab</option>
+  <option value="Rajasthan">Rajasthan</option>
+  <option value="Sikkim">Sikkim</option>
+  <option value="Tamil Nadu">Tamil Nadu</option>
+  <option value="Telangana">Telangana</option>
+  <option value="Tripura">Tripura</option>
+  <option value="Uttar Pradesh">Uttar Pradesh</option>
+  <option value="Uttarakhand">Uttarakhand</option>
+  <option value="West Bengal">West Bengal</option>
+
+  {/* Union Territories */}
+  <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+  <option value="Chandigarh">Chandigarh</option>
+  <option value="Dadra and Nagar Haveli and Daman and Diu">
+    Dadra and Nagar Haveli and Daman and Diu
+  </option>
+  <option value="Delhi">Delhi</option>
+  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+  <option value="Ladakh">Ladakh</option>
+  <option value="Lakshadweep">Lakshadweep</option>
+  <option value="Puducherry">Puducherry</option>
+</select>
+
+                  {/* Shipping Phone Number (optional) */}
+                  <input
+                    type="tel"
+                    placeholder="Shipping Phone Number (optional)"
+                    value={shipping.phone}
+                    onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <p className="text-sm text-gray-600">In case the receiver is not you</p>
+                </div>
+
+                <div className="flex space-x-3">
                   <button
-                    onClick={() => setStep(2)}
-                    disabled={!userInfo.name || !userInfo.email || !userInfo.phone}
-                    className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                    onClick={() => setStep(1)}
+                    disabled={isProcessing}
+                    className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
                   >
-                    Continue to Address
+                    Back
+                  </button>
+                  <button
+                    onClick={() => setStep(3)}
+                    disabled={
+                      !shipping.name ||
+                      !shipping.address ||
+                      !shipping.pin ||
+                      !shipping.city ||
+                      !shipping.state
+                    }
+                    className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                  >
+                    Continue to Review
                   </button>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Step 2: Shipping Address */}
-              {step === 2 && (
-                <div className="space-y-6">
-                  {/* Saved Addresses */}
-                  {savedAddresses.length > 0 && (
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-gray-900">Select Saved Address</h3>
-                      {savedAddresses.map((address) => (
-                        <div
-                          key={address.id}
-                          className={`cursor-pointer rounded-lg border p-4 transition-all ${
-                            selectedAddress === address.id
-                              ? "border-orange-500 bg-orange-50"
-                              : "border-gray-200 hover:border-gray-300"
-                          }`}
-                          onClick={() => {
-                            setSelectedAddress(address.id);
-                            loadSelectedAddress(address.id);
-                          }}
-                        >
-                          <div className="flex items-start justify-between">
+            {/* Step 3: Review Order */}
+            {step === 3 && (
+              <div className="space-y-6">
+                {/* Order Summary */}
+                <div className="rounded-xl bg-gray-50 p-4">
+                  <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
+                  <div className="space-y-3">
+                    {cart.map((item) => {
+                      const details = itemDetails[item.razorpayItemId] || {};
+                      const gstRate = details.tax_rate || 0;
+                      return (
+                        <div key={item.name} className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="h-12 w-12 rounded-lg object-cover"
+                            />
                             <div>
-                              <p className="font-medium text-gray-900">{address.name}</p>
-                              <p className="mt-1 text-sm text-gray-600">
-                                {address.address}, {address.building}, {address.street}
-                              </p>
+                              <p className="font-medium text-gray-900">{item.name}</p>
                               <p className="text-sm text-gray-600">
-                                {address.city}, {address.state} - {address.pin}
+                                {item.price} × {item.quantity}
                               </p>
-                              <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
+                              <p className="text-xs text-gray-500">
+                                GST: {gstRate}% | HSN: {details.hsn_code || "-"}
+                              </p>
                             </div>
-                            {selectedAddress === address.id && (
-                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
-                                <div className="h-2 w-2 rounded-full bg-white" />
-                              </div>
-                            )}
                           </div>
+                          <p className="font-semibold text-gray-900">
+                            ₹
+                            {(
+                              parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
+                            ).toFixed(2)}
+                          </p>
                         </div>
-                      ))}
-
-                      <div className="text-center">
-                        <button
-                          onClick={() => setSelectedAddress("")}
-                          className="text-sm font-medium text-orange-500 hover:text-orange-600"
-                        >
-                          + Add New Address
-                        </button>
-                      </div>
-
-                      <div className="border-t pt-4">
-                        <h3 className="mb-3 font-semibold text-gray-900">Or Enter New Address</h3>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Shipping Information Form */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-gray-900">
-                      {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
-                    </h3>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Full Name"
-                      value={shipping.name}
-                      onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <input
-                        required
-                        type="text"
-                        placeholder="Building"
-                        value={shipping.building}
-                        onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
-                        className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      />
-                      <input
-                        required
-                        type="text"
-                        placeholder="Street"
-                        value={shipping.street}
-                        onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
-                        className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      />
-                    </div>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Address"
-                      value={shipping.address}
-                      onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    
-                    <input
-                      type="text"
-                      placeholder="Landmark (Optional)"
-                      value={shipping.landmark}
-                      onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <input
-                        required
-                        type="text"
-                        placeholder="PIN Code"
-                        value={shipping.pin}
-                        onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
-                        className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      />
-                      <input
-                        required
-                        type="text"
-                        placeholder="City"
-                        value={shipping.city}
-                        onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
-                        className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      />
-                    </div>
-                    <select
-                      required
-                      value={shipping.state}
-                      onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    >
-                      <option value="">Select State</option>
-                      <option value="Andhra Pradesh">Andhra Pradesh</option>
-                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                      <option value="Assam">Assam</option>
-                      <option value="Bihar">Bihar</option>
-                      <option value="Chhattisgarh">Chhattisgarh</option>
-                      <option value="Goa">Goa</option>
-                      <option value="Gujarat">Gujarat</option>
-                      <option value="Haryana">Haryana</option>
-                      <option value="Himachal Pradesh">Himachal Pradesh</option>
-                      <option value="Jharkhand">Jharkhand</option>
-                      <option value="Karnataka">Karnataka</option>
-                      <option value="Kerala">Kerala</option>
-                      <option value="Madhya Pradesh">Madhya Pradesh</option>
-                      <option value="Maharashtra">Maharashtra</option>
-                      <option value="Manipur">Manipur</option>
-                      <option value="Meghalaya">Meghalaya</option>
-                      <option value="Mizoram">Mizoram</option>
-                      <option value="Nagaland">Nagaland</option>
-                      <option value="Odisha">Odisha</option>
-                      <option value="Punjab">Punjab</option>
-                      <option value="Rajasthan">Rajasthan</option>
-                      <option value="Sikkim">Sikkim</option>
-                      <option value="Tamil Nadu">Tamil Nadu</option>
-                      <option value="Telangana">Telangana</option>
-                      <option value="Tripura">Tripura</option>
-                      <option value="Uttar Pradesh">Uttar Pradesh</option>
-                      <option value="Uttarakhand">Uttarakhand</option>
-                      <option value="West Bengal">West Bengal</option>
-                      <option value="Andaman and Nicobar Islands">
-                        Andaman and Nicobar Islands
-                      </option>
-                      <option value="Chandigarh">Chandigarh</option>
-                      <option value="Dadra and Nagar Haveli and Daman and Diu">
-                        Dadra and Nagar Haveli and Daman and Diu
-                      </option>
-                      <option value="Delhi">Delhi</option>
-                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                      <option value="Ladakh">Ladakh</option>
-                      <option value="Lakshadweep">Lakshadweep</option>
-                      <option value="Puducherry">Puducherry</option>
-                    </select>
-
-                    <input
-                      required
-                      type="tel"
-                      placeholder="Shipping Phone Number"
-                      value={shipping.phone}
-                      onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
+                      );
+                    })}
                   </div>
 
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={() => setStep(1)}
-                      disabled={isProcessing}
-                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={() => setStep(3)}
-                      disabled={
-                        !shipping.name ||
-                        !shipping.address ||
-                        !shipping.pin ||
-                        !shipping.city ||
-                        !shipping.state ||
-                        !shipping.phone
-                      }
-                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                    >
-                      Continue to Review
-                    </button>
+                  {/* GST Breakdown - FIXED to show actual rates */}
+                  <div className="mt-4 border-t pt-4">
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Taxable Value:</span>
+                        <span>₹{taxableValue.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Total GST:</span>
+                        <span>₹{totalGST.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between border-t pt-2 text-lg font-bold">
+                        <span>Total Amount:</span>
+                        <span>₹{total.toFixed(2)}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
 
-              {/* Step 3: Review Order */}
-              {step === 3 && (
-                <div className="space-y-6">
-                  {/* Order Summary */}
-                  <div className="rounded-xl bg-gray-50 p-4">
-                    <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
-                    <div className="space-y-3">
-                      {cart.map((item) => {
-                        const details = itemDetails[item.razorpayItemId] || {};
-                        const gstRate = details.tax_rate || 0;
-                        return (
-                          <div key={item.name} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="h-12 w-12 rounded-lg object-cover"
-                              />
-                              <div>
-                                <p className="font-medium text-gray-900">{item.name}</p>
-                                <p className="text-sm text-gray-600">
-                                  {item.price} × {item.quantity}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  GST: {gstRate}% | HSN: {details.hsn_code || "-"}
-                                </p>
-                              </div>
-                            </div>
-                            <p className="font-semibold text-gray-900">
-                              ₹
-                              {(
-                                parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
-                              ).toFixed(2)}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* GST Breakdown - FIXED to show actual rates */}
-                    <div className="mt-4 border-t pt-4">
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>Taxable Value:</span>
-                          <span>₹{taxableValue.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Total GST:</span>
-                          <span>₹{totalGST.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between border-t pt-2 text-lg font-bold">
-                          <span>Total Amount:</span>
-                          <span>₹{total.toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contact Info Preview */}
-                  <div className="rounded-xl bg-gray-50 p-4">
-                    <h3 className="mb-2 font-semibold text-gray-900">Contact Information</h3>
-                    <p className="font-medium text-gray-900">{userInfo.name}</p>
-                    <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
-                    <p className="text-sm text-gray-600">{userInfo.phone}</p>
-                  </div>
-
-                  {/* Shipping Info Preview */}
-                  <div className="rounded-xl bg-gray-50 p-4">
-                    <h3 className="mb-2 font-semibold text-gray-900">Shipping to</h3>
-                    <p className="font-medium text-gray-900">{shipping.name}</p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      {shipping.address}, {shipping.building}, {shipping.street}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {shipping.landmark && `${shipping.landmark}, `}
-                      {shipping.city}, {shipping.state} - {shipping.pin}
-                    </p>
-                    <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
-                  </div>
-
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={() => setStep(2)}
-                      disabled={isProcessing}
-                      className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={handleCheckout}
-                      disabled={isProcessing}
-                      className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                    >
-                      {isProcessing ? "Processing..." : `Pay ₹${total.toFixed(2)}`}
-                    </button>
-                  </div>
+                {/* Contact Info Preview */}
+                <div className="rounded-xl bg-gray-50 p-4">
+                  <h3 className="mb-2 font-semibold text-gray-900">Contact Information</h3>
+                  <p className="font-medium text-gray-900">{userInfo.name}</p>
+                  <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
+                  {/* <p className="text-sm text-gray-600">{userInfo.phone}</p> */}
                 </div>
-              )}
-            </div>
+
+                {/* Shipping Info Preview */}
+                <div className="rounded-xl bg-gray-50 p-4">
+                  <h3 className="mb-2 font-semibold text-gray-900">Shipping to</h3>
+                  <p className="font-medium text-gray-900">{shipping.name}</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    {shipping.address}, {shipping.building}, {shipping.street}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {shipping.landmark && `${shipping.landmark}, `}
+                    {shipping.city}, {shipping.state} - {shipping.pin}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setStep(2)}
+                    disabled={isProcessing}
+                    className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={handleCheckout}
+                    disabled={isProcessing}
+                    className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                  >
+                    {isProcessing ? "Processing..." : `Pay ₹${total.toFixed(2)}`}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Main Cart Page */}
       <div className="min-h-screen bg-gray-50">

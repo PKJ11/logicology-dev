@@ -77,7 +77,7 @@ export function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
       <!-- Header -->
       <div style="text-align: center; border-bottom: 2px solid #6A294D; padding-bottom: 15px; margin-bottom: 20px;">
         <h1 style="color: #6A294D; margin: 0; font-size: 28px;">TAX INVOICE</h1>
-        <h2 style="color: #EB6A42; margin: 5px 0; font-size: 20px;">Logicology Educational Products</h2>
+        <h2 style="color: #EB6A42; margin: 5px 0; font-size: 20px;">Logicology Ventures Private Limited</h2>
         <p style="margin: 5px 0; color: #666;">GSTIN: ${COMPANY_GST_NUMBER}</p>
       </div>
       
