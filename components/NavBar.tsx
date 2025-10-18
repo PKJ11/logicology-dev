@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FiMenu, FiX, FiShoppingCart, FiSearch, FiLogIn, FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
+import { useCart } from "./CartContext";
 
 /* ================= Types ================= */
 
@@ -96,7 +97,6 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Games", href: "/games", hasDropdown: true, type: "games" },
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
-  // { name: "Products", href: "/products" },
   { name: "About Us", href: "/about" },
   { name: "Shop Now", href: "/products" },
 ];
@@ -116,6 +116,10 @@ const generateSlug = (title: string) =>
 
 export default function NavBar() {
   const router = useRouter();
+  const { cart } = useCart();
+  
+  // Calculate total items in cart
+  const cartItemsCount = cart.reduce((total:any, item:any) => total + item.quantity, 0);
 
   const [open, setOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -132,6 +136,10 @@ export default function NavBar() {
   const gamesTriggerRef = useRef<HTMLDivElement>(null);
   const booksTriggerRef = useRef<HTMLDivElement>(null);
 
+  // Track mouse position for dropdown checks
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+
   // Detect desktop once and on resize
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -139,6 +147,17 @@ export default function NavBar() {
     set();
     mq.addEventListener("change", set);
     return () => mq.removeEventListener("change", set);
+  }, []);
+
+  // Track mouse position
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouseX(e.clientX);
+      setMouseY(e.clientY);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   // Clear timeouts on unmount
@@ -161,7 +180,7 @@ export default function NavBar() {
       gamesHoverTimeout.current = setTimeout(() => {
         setGamesDropdownOpen(true);
         setBooksDropdownOpen(false);
-      }, 150); // Small delay to prevent accidental opening
+      }, 150);
     } else {
       booksHoverTimeout.current = setTimeout(() => {
         setBooksDropdownOpen(true);
@@ -177,11 +196,10 @@ export default function NavBar() {
     if (type === "games") {
       if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
       gamesHoverTimeout.current = setTimeout(() => {
-        // Check if mouse is actually over the dropdown before closing
         if (!isMouseOverDropdown("games")) {
           setGamesDropdownOpen(false);
         }
-      }, 200); // Give user time to move to dropdown
+      }, 200);
     } else {
       if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
       booksHoverTimeout.current = setTimeout(() => {
@@ -204,20 +222,6 @@ export default function NavBar() {
 
     return isInDropdown;
   };
-
-  // Track mouse position for dropdown checks
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMouseX(e.clientX);
-      setMouseY(e.clientY);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   // Keep dropdown open when hovering over it
   const handleDropdownHover = () => {
@@ -253,6 +257,18 @@ export default function NavBar() {
     setGamesDropdownOpen(false);
     setBooksDropdownOpen(false);
   };
+
+  // Cart icon with count badge component
+  const CartIconWithBadge = ({ className = "" }: { className?: string }) => (
+    <div className={`relative ${className}`}>
+      <FiShoppingCart className="text-xl" />
+      {cartItemsCount > 0 && (
+        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+          {cartItemsCount > 9 ? "9+" : cartItemsCount}
+        </span>
+      )}
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
@@ -421,25 +437,12 @@ export default function NavBar() {
 
           {/* Right actions (desktop) */}
           <div className="hidden items-center gap-5 text-slate-700 md:flex">
-            {/* <Link
-              href="/login"
-              className="relative py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
-            >
-              <span>Login</span>
-            </Link> */}
-            {/* <Link
-              href="/search"
-              aria-label="Search"
-              className="text-brand-teal hover:text-brand-tealDark"
-            >
-              <FiSearch />
-            </Link> */}
             <Link
               href="/cart"
               aria-label="Cart"
               className="text-brand-teal hover:text-brand-tealDark"
             >
-              <FiShoppingCart />
+              <CartIconWithBadge />
             </Link>
           </div>
 
@@ -494,7 +497,6 @@ export default function NavBar() {
                         href={href}
                         prefetch={false}
                         onClick={(e) => {
-                          // keep dropdown/menu open, just navigate
                           e.stopPropagation();
                           goto(href);
                         }}
@@ -571,13 +573,6 @@ export default function NavBar() {
             </div>
 
             {/* Rest simple links */}
-            {/* <Link
-              href="/products"
-              onClick={closeAll}
-              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
-            >
-              Products
-            </Link> */}
             <Link
               href="/about"
               onClick={closeAll}
@@ -588,28 +583,13 @@ export default function NavBar() {
 
             {/* Actions */}
             <div className="flex items-center gap-5 pt-2 text-slate-700">
-              {/* <Link
-                href="/login"
-                className="flex items-center gap-2 hover:text-brand-tealDark"
-                onClick={closeAll}
-              >
-                <FiLogIn /> <span>Login</span>
-              </Link>
-              <Link
-                href="/search"
-                aria-label="Search"
-                className="hover:text-brand-tealDark"
-                onClick={closeAll}
-              >
-                <FiSearch />
-              </Link> */}
               <Link
                 href="/cart"
                 aria-label="Cart"
                 className="hover:text-brand-tealDark"
                 onClick={closeAll}
               >
-                <FiShoppingCart />
+                <CartIconWithBadge />
               </Link>
             </div>
           </div>
