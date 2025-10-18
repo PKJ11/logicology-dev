@@ -580,6 +580,13 @@ export default function NavBar() {
             >
               About Us
             </Link>
+            <Link
+              href="/products"
+              onClick={closeAll}
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+            >
+              Shop Now
+            </Link>
 
             {/* Actions */}
             <div className="flex items-center gap-5 pt-2 text-slate-700">
