@@ -44,7 +44,7 @@ export default function WhyImportant() {
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                Why Logicology?
+                Why Logicology??
               </motion.p>
               <motion.p 
                 className="textstyles mt-4 max-w-xl font-sans"

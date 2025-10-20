@@ -178,7 +178,7 @@ const ProductShowcase = () => {
           })}
         </div>
 
-        <p className="mt-16 text-lg">
+        <p className="mt-16 text-lg px-4">
           All prices include GST. You will receive a detailed GST invoice after purchase.
         </p>
       </section>
