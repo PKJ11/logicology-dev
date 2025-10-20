@@ -92,7 +92,7 @@ const ProductShowcase = () => {
       <section className="bg-[#6A294D] py-16 text-center text-white">
         <h2 className="mb-4 text-4xl font-bold">Our Products</h2>
         <p className="mx-auto mb-12 max-w-xl text-lg">
-          At Logicology we endeavour to make learning fun so that children learn while they play.
+          Att Logicology we endeavour to make learning fun so that children learn while they play.
         </p>
 
         {/* Product Cards */}
