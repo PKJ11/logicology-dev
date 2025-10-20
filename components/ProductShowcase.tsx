@@ -33,7 +33,7 @@ const products = [
     initialprice: "₹299",
     razorpayItemId: "item_RNn0h9rGIq8zOL", 
     description: "Logicoland Volume 1",
-    image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
+    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
   },
   {
@@ -42,7 +42,7 @@ const products = [
     initialprice: undefined,
     razorpayItemId: "item_RVa7Osutc07pfB", 
     description: "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
+    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
   },
 ];
