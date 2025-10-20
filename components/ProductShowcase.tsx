@@ -33,16 +33,16 @@ const products = [
     initialprice: "₹299",
     razorpayItemId: "item_RNn0h9rGIq8zOL", 
     description: "Logicoland Volume 1",
-    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
     rating: 5,
   },
   {
-    name: "Logicoland Volume 1 Bundle - 20 Books " ,
+    name: "Logicoland Volume 1  Bundle - 20 Books " ,
     price: "₹4000",
     initialprice: undefined,
     razorpayItemId: "item_RVa7Osutc07pfB", 
     description: "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?updatedAt=1757748175426",
     rating: 5,
   },
 ];
@@ -92,7 +92,7 @@ const ProductShowcase = () => {
       <section className="bg-[#6A294D] py-16 text-center text-white">
         <h2 className="mb-4 text-4xl font-bold">Our Products</h2>
         <p className="mx-auto mb-12 max-w-xl text-lg">
-          Att Logicology we endeavour to make learning fun so that children learn while they play.
+          At Logicology we endeavour to make learning fun so that children learn while they play.
         </p>
 
         {/* Product Cards */}
@@ -178,7 +178,7 @@ const ProductShowcase = () => {
           })}
         </div>
 
-        <p className="mt-16 text-lg px-4">
+        <p className="mt-16 text-lg">
           All prices include GST. You will receive a detailed GST invoice after purchase.
         </p>
       </section>
