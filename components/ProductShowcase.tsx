@@ -37,7 +37,7 @@ const products = [
     rating: 5,
   },
   {
-    name: "Logicoland Volume 1  Bundle - 20 Books " ,
+    name: "Logicoland Volume 1 Bundle - 20 Books".replace(/\u00A0/g, " ") ,
     price: "₹4000",
     initialprice: undefined,
     razorpayItemId: "item_RVa7Osutc07pfB", 
