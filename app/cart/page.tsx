@@ -28,7 +28,25 @@ interface ItemDetails {
   };
 }
 
-function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
+// Add PromoCode type
+interface PromoCode {
+  success: boolean;
+  promoCode: string;
+  discountAmount: number;
+  finalAmount: number;
+  promoDetails: {
+    type: string;
+    value: number;
+    minAmount: number;
+    maxDiscount?: number;
+  };
+}
+
+function generateGSTReceipt(
+  cart: CartItem[],
+  itemDetails: ItemDetails,
+  discountAmount: number = 0
+) {
   let totalAmount = 0;
   let totalGST = 0;
   let cgstTotal = 0;
@@ -68,6 +86,9 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
     `;
   });
 
+  // Apply discount
+  const grandTotal = totalAmount - discountAmount;
+
   // Dynamic GST breakdown based on actual rates
   const gstBreakdown = `
     <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
@@ -75,6 +96,7 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ""}
         ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ""}
+        ${discountAmount > 0 ? `<div style="color: #e53e3e;">Discount:</div><div style="color: #e53e3e; text-align: right;">-₹${discountAmount.toFixed(2)}</div>` : ""}
         <div style="font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px;">Total GST:</div>
         <div style="font-weight: bold; text-align: right; border-top: 1px solid #ddd; padding-top: 5px;">₹${totalGST.toFixed(2)}</div>
       </div>
@@ -113,7 +135,7 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
 
     <!-- Total Amount -->
     <div style="text-align: right; font-size: 16px; font-weight: bold; padding: 15px; background: #0A8A80; color: white; border-radius: 5px;">
-      Grand Total: ₹${totalAmount.toFixed(2)}
+      Grand Total: ₹${grandTotal.toFixed(2)}
     </div>
 
     <!-- Footer -->
@@ -123,7 +145,6 @@ function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
     </div>
   </div>
 `;
-
 }
 
 const CartPage = () => {
@@ -156,6 +177,23 @@ const CartPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
 
+  // Promo code state
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+  const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+  const [promoError, setPromoError] = useState("");
+
+  useEffect(() => {
+    if (appliedPromo) {
+      removePromoCode();
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    if (appliedPromo) {
+      removePromoCode();
+    }
+  }, [cart.length]);
   // Load saved addresses and item details
   useEffect(() => {
     const saved = localStorage.getItem("savedAddresses");
@@ -166,6 +204,12 @@ const CartPage = () => {
     const userData = localStorage.getItem("userInfo");
     if (userData) {
       setUserInfo(JSON.parse(userData));
+    }
+
+    // Load applied promo from localStorage
+    const savedPromo = localStorage.getItem("appliedPromo");
+    if (savedPromo) {
+      setAppliedPromo(JSON.parse(savedPromo));
     }
 
     // Fetch item details for GST calculation
@@ -191,12 +235,73 @@ const CartPage = () => {
     }
   };
 
-  const total = cart.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
-    return sum + price * (item.quantity || 1);
-  }, 0);
+  const calculateCartTotal = () => {
+    return cart.reduce((sum, item) => {
+      const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
+      return sum + price * (item.quantity || 1);
+    }, 0);
+  };
+
+  const total = calculateCartTotal();
+  const discountAmount = appliedPromo?.discountAmount || 0;
+  const finalAmount = appliedPromo?.finalAmount || total;
 
   const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+
+  // Promo code functions
+  const validatePromoCode = async () => {
+    if (!promoCode.trim()) {
+      setPromoError("Please enter a promo code");
+      return;
+    }
+
+    setIsValidatingPromo(true);
+    setPromoError("");
+
+    try {
+      const res = await fetch("/api/validate-promo-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          promoCode: promoCode.trim(),
+          cartTotal: total,
+        }),
+      });
+
+      // Add this check for HTTP errors
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to validate promo code");
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        setAppliedPromo(data);
+        localStorage.setItem("appliedPromo", JSON.stringify(data));
+        setPromoCode("");
+        setPromoError("");
+      } else {
+        setPromoError(data.message);
+        setAppliedPromo(null);
+        localStorage.removeItem("appliedPromo");
+      }
+    } catch (error: any) {
+      setPromoError(error.message || "Failed to validate promo code. Please try again.");
+      console.error("Promo code validation error:", error);
+      setAppliedPromo(null);
+      localStorage.removeItem("appliedPromo");
+    } finally {
+      setIsValidatingPromo(false);
+    }
+  };
+
+  const removePromoCode = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
+    setPromoError("");
+    localStorage.removeItem("appliedPromo");
+  };
 
   const saveAddressToLocalStorage = () => {
     const newAddress = {
@@ -235,8 +340,8 @@ const CartPage = () => {
 
   const sendGSTInvoice = async (paymentId: string, orderDescription: string) => {
     try {
-      // Generate GST receipt
-      const gstReceiptHtml = generateGSTReceipt(cart, itemDetails);
+      // Generate GST receipt with discount
+      const gstReceiptHtml = generateGSTReceipt(cart, itemDetails, discountAmount);
 
       // Create email content
       const emailHtml = `
@@ -273,6 +378,16 @@ const CartPage = () => {
                 <strong style="color: #333;">Contact Email:</strong><br>
                 <span style="color: #666;">${userInfo.email}</span>
               </div>
+              ${
+                appliedPromo
+                  ? `
+              <div>
+                <strong style="color: #333;">Promo Code Applied:</strong><br>
+                <span style="color: #666;">${appliedPromo.promoCode} (Saved ₹${discountAmount})</span>
+              </div>
+              `
+                  : ""
+              }
             </div>
           </div>
 
@@ -321,20 +436,6 @@ const CartPage = () => {
 
       const emailResult = await emailRes.json();
 
-      // Send SMS notification
-      // try {
-      //   await fetch("/api/send-sms", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({
-      //       to: userInfo.phone,
-      //       message: `Thank you for your Logicology purchase! Payment ID: ${paymentId}. Amount: ₹${total.toFixed(2)}. GST invoice sent to your email. For queries: 8446980747`,
-      //     }),
-      //   });
-      // } catch (smsError) {
-      //   console.error("SMS sending failed:", smsError);
-      // }
-
       return { success: true, emailSent: emailResult.success };
     } catch (error: any) {
       console.error("Error sending GST invoice:", error);
@@ -362,7 +463,7 @@ const CartPage = () => {
         !shipping.address ||
         !shipping.pin ||
         !shipping.city ||
-        !shipping.state 
+        !shipping.state
       ) {
         alert("Please fill in all shipping information");
         setStep(2);
@@ -375,8 +476,8 @@ const CartPage = () => {
         saveAddressToLocalStorage();
       }
 
-      // Amount in paise
-      const amount = Math.round(total);
+      // Amount in paise (use final amount after discount)
+      const amount = Math.round(finalAmount);
       const res = await fetch("/api/razorpay-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -394,7 +495,7 @@ const CartPage = () => {
         return;
       }
 
-      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}`;
+      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}`;
 
       const options = {
         key: RAZORPAY_KEY_ID,
@@ -416,8 +517,10 @@ const CartPage = () => {
                 paymentId: response.razorpay_payment_id,
                 orderId: response.razorpay_order_id,
                 razorpayDesc: orderDescription,
-                razorpayContact: response.razorpay_contact ,
-                totalAmount: total,
+                razorpayContact: response.razorpay_contact,
+                totalAmount: finalAmount,
+                discountAmount: discountAmount,
+                appliedPromo: appliedPromo,
               }),
             });
 
@@ -433,6 +536,8 @@ const CartPage = () => {
             setStep(1);
             setSelectedAddress("");
             setIsProcessing(false);
+            setAppliedPromo(null);
+            localStorage.removeItem("appliedPromo");
 
             // Show success message
             setTimeout(() => {
@@ -454,6 +559,7 @@ const CartPage = () => {
         notes: {
           address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.pin}`,
           shipping_phone: shipping.phone,
+          promo_code: appliedPromo?.promoCode || "",
         },
         theme: { color: "#EB6A42" },
       };
@@ -470,7 +576,18 @@ const CartPage = () => {
       alert("An error occurred during checkout. Please try again.");
       setIsProcessing(false);
     }
-  }, [cart, total, userInfo, shipping, selectedAddress, isProcessing, clearCart, itemDetails]);
+  }, [
+    cart,
+    finalAmount,
+    userInfo,
+    shipping,
+    selectedAddress,
+    isProcessing,
+    clearCart,
+    itemDetails,
+    appliedPromo,
+    discountAmount,
+  ]);
 
   const openCheckoutModal = () => {
     setIsCheckoutModalOpen(true);
@@ -495,7 +612,7 @@ const CartPage = () => {
       const details = itemDetails[item.razorpayItemId] || {};
       const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
       const quantity = item.quantity || 1;
-      const gstRate = details.tax_rate || 0; // Use actual rate from API
+      const gstRate = details.tax_rate || 0;
 
       if (gstRate > 0) {
         const gstAmount = (price * gstRate) / (100 + gstRate);
@@ -516,419 +633,386 @@ const CartPage = () => {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
       {/* Checkout Modal - Updated for sidebar style on large screens */}
-      {/* Checkout Modal - Updated for sidebar style on large screens */}
-{/* Checkout Modal - Updated for sidebar style on large screens */}
-{isCheckoutModalOpen && (
-  <div className="fixed inset-0 z-50 flex">
-    {/* Backdrop with blur effect for entire screen */}
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-      onClick={closeCheckoutModal}
-    />
-    
-    {/* Modal Content - Sidebar style from right side for large screens */}
-    <div
-      className={`fixed inset-y-0 right-0 z-[100] w-full max-w-md transform bg-white shadow-xl transition-transform duration-300 ease-out ${
-        isCheckoutModalOpen ? "translate-x-0" : "translate-x-full"
-      }`}
-    >
-      <div className="flex h-full flex-col bg-white">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 mt-20">
-          <h2 className="text-xl font-bold text-gray-900">
-            {step === 1
-              ? "Contact Information"
-              : step === 2
-                ? "Shipping Address"
-                : "Review Order"}
-          </h2>
-          <button
+      {isCheckoutModalOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Backdrop with blur effect for entire screen */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
             onClick={closeCheckoutModal}
-            disabled={isProcessing}
-            className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
+          />
+
+          {/* Modal Content - Sidebar style from right side for large screens */}
+          <div
+            className={`fixed inset-y-0 right-0 z-[100] w-full max-w-md transform bg-white shadow-xl transition-transform duration-300 ease-out ${
+              isCheckoutModalOpen ? "translate-x-0" : "translate-x-full"
+            }`}
           >
-            ×
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-6">
-            {/* Step 1: Contact Information */}
-            {step === 1 && (
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  
-                  <input
-                    required
-                    type="text"
-                    placeholder="Full Name"
-                    value={userInfo.name}
-                    onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <div className="mt-4">
-                    <input
-                      required
-                      type="email"
-                      placeholder="Email Address"
-                      value={userInfo.email}
-                      onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
-                      onBlur={(e) => {
-                        // Validate email on blur
-                        const email = e.target.value;
-                        if (email && !/\S+@\S+\.\S+/.test(email)) {
-                          setUserInfo((u) => ({
-                            ...u,
-                            emailError: "Please enter a valid email address",
-                          }));
-                        } else {
-                          setUserInfo((u) => ({ ...u, emailError: "" }));
-                        }
-                      }}
-                      className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                        (userInfo as any).emailError ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    {(userInfo as any).emailError ? (
-                      <p className="mt-2 text-sm text-red-600">{(userInfo as any).emailError}</p>
-                    ) : (
-                      <p className="mt-2 text-sm text-gray-600">
-                        You will receive the receipts on this e-mail id
-                      </p>
-                    )}
-                  </div>
-                  {/* <input
-                    required
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={userInfo.phone}
-                    onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  /> */}
-                </div>
-
+            <div className="flex h-full flex-col bg-white">
+              {/* Header */}
+              <div className="mt-20 flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                <h2 className="text-xl font-bold text-gray-900">
+                  {step === 1
+                    ? "Contact Information"
+                    : step === 2
+                      ? "Shipping Address"
+                      : "Review Order"}
+                </h2>
                 <button
-                  onClick={() => setStep(2)}
-                  disabled={!userInfo.name || !userInfo.email || !/\S+@\S+\.\S+/.test(userInfo.email)}
-                  className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                  onClick={closeCheckoutModal}
+                  disabled={isProcessing}
+                  className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
                 >
-                  Continue to Address
+                  ×
                 </button>
               </div>
-            )}
 
-            {/* Step 2: Shipping Address */}
-            {step === 2 && (
-              <div className="space-y-6">
-                {/* Saved Addresses */}
-                {savedAddresses.length > 0 && (
-                  <div className="space-y-3">
-                    <h3 className="font-semibold text-gray-900">Select Saved Address</h3>
-                    {savedAddresses.map((address) => (
-                      <div
-                        key={address.id}
-                        className={`cursor-pointer rounded-lg border p-4 transition-all ${
-                          selectedAddress === address.id
-                            ? "border-orange-500 bg-orange-50"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                        onClick={() => {
-                          setSelectedAddress(address.id);
-                          loadSelectedAddress(address.id);
-                        }}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-gray-900">{address.name}</p>
-                            <p className="mt-1 text-sm text-gray-600">
-                              {address.address}, {address.building}, {address.street}
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto">
+                <div className="p-6">
+                  {/* Step 1: Contact Information */}
+                  {step === 1 && (
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <input
+                          required
+                          type="text"
+                          placeholder="Full Name"
+                          value={userInfo.name}
+                          onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+                        <div className="mt-4">
+                          <input
+                            required
+                            type="email"
+                            placeholder="Email Address"
+                            value={userInfo.email}
+                            onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
+                            onBlur={(e) => {
+                              // Validate email on blur
+                              const email = e.target.value;
+                              if (email && !/\S+@\S+\.\S+/.test(email)) {
+                                setUserInfo((u) => ({
+                                  ...u,
+                                  emailError: "Please enter a valid email address",
+                                }));
+                              } else {
+                                setUserInfo((u) => ({ ...u, emailError: "" }));
+                              }
+                            }}
+                            className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                              (userInfo as any).emailError ? "border-red-500" : "border-gray-300"
+                            }`}
+                          />
+                          {(userInfo as any).emailError ? (
+                            <p className="mt-2 text-sm text-red-600">
+                              {(userInfo as any).emailError}
                             </p>
-                            <p className="text-sm text-gray-600">
-                              {address.city}, {address.state} - {address.pin}
+                          ) : (
+                            <p className="mt-2 text-sm text-gray-600">
+                              You will receive the receipts on this e-mail id
                             </p>
-                            <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
-                          </div>
-                          {selectedAddress === address.id && (
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
-                              <div className="h-2 w-2 rounded-full bg-white" />
-                            </div>
                           )}
                         </div>
                       </div>
-                    ))}
 
-                    <div className="text-center">
                       <button
-                        onClick={() => setSelectedAddress("")}
-                        className="text-sm font-medium text-orange-500 hover:text-orange-600"
+                        onClick={() => setStep(2)}
+                        disabled={
+                          !userInfo.name || !userInfo.email || !/\S+@\S+\.\S+/.test(userInfo.email)
+                        }
+                        className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                       >
-                        + Add New Address
+                        Continue to Address
                       </button>
                     </div>
+                  )}
 
-                    <div className="border-t pt-4">
-                      <h3 className="mb-3 font-semibold text-gray-900">Or Enter New Address</h3>
+                  {/* Step 2: Shipping Address */}
+                  {step === 2 && (
+                    <div className="space-y-6">
+                      {/* Saved Addresses */}
+                      {savedAddresses.length > 0 && (
+                        <div className="space-y-3">
+                          <h3 className="font-semibold text-gray-900">Select Saved Address</h3>
+                          {savedAddresses.map((address) => (
+                            <div
+                              key={address.id}
+                              className={`cursor-pointer rounded-lg border p-4 transition-all ${
+                                selectedAddress === address.id
+                                  ? "border-orange-500 bg-orange-50"
+                                  : "border-gray-200 hover:border-gray-300"
+                              }`}
+                              onClick={() => {
+                                setSelectedAddress(address.id);
+                                loadSelectedAddress(address.id);
+                              }}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="font-medium text-gray-900">{address.name}</p>
+                                  <p className="mt-1 text-sm text-gray-600">
+                                    {address.address}, {address.building}, {address.street}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {address.city}, {address.state} - {address.pin}
+                                  </p>
+                                  <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
+                                </div>
+                                {selectedAddress === address.id && (
+                                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
+                                    <div className="h-2 w-2 rounded-full bg-white" />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+
+                          <div className="text-center">
+                            <button
+                              onClick={() => setSelectedAddress("")}
+                              className="text-sm font-medium text-orange-500 hover:text-orange-600"
+                            >
+                              + Add New Address
+                            </button>
+                          </div>
+
+                          <div className="border-t pt-4">
+                            <h3 className="mb-3 font-semibold text-gray-900">
+                              Or Enter New Address
+                            </h3>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Shipping Information Form */}
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-gray-900">
+                          {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
+                        </h3>
+                        <input
+                          required
+                          type="text"
+                          placeholder="Full Name"
+                          value={shipping.name}
+                          onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+                        <div className="grid grid-cols-2 gap-3">
+                          <input
+                            required
+                            type="text"
+                            placeholder="Building"
+                            value={shipping.building}
+                            onChange={(e) =>
+                              setShipping((s) => ({ ...s, building: e.target.value }))
+                            }
+                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          />
+                          <input
+                            required
+                            type="text"
+                            placeholder="Street"
+                            value={shipping.street}
+                            onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          />
+                        </div>
+                        <input
+                          required
+                          type="text"
+                          placeholder="Address"
+                          value={shipping.address}
+                          onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+
+                        <input
+                          type="text"
+                          placeholder="Landmark (Optional)"
+                          value={shipping.landmark}
+                          onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+                        <div className="grid grid-cols-2 gap-3">
+                          <input
+                            required
+                            type="text"
+                            placeholder="PIN Code"
+                            value={shipping.pin}
+                            onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          />
+                          <input
+                            required
+                            type="text"
+                            placeholder="City"
+                            value={shipping.city}
+                            onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          />
+                        </div>
+                        <select
+                          required
+                          value={shipping.state}
+                          onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        >
+                          <option value="">Select State</option>
+                          {/* States */}
+                        </select>
+
+                        {/* Shipping Phone Number (optional) */}
+                        <input
+                          type="tel"
+                          placeholder="Shipping Phone Number (optional)"
+                          value={shipping.phone}
+                          onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
+                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+                        <p className="text-sm text-gray-600">In case the receiver is not you</p>
+                      </div>
+
+                      <div className="flex space-x-3">
+                        <button
+                          onClick={() => setStep(1)}
+                          disabled={isProcessing}
+                          className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          Back
+                        </button>
+                        <button
+                          onClick={() => setStep(3)}
+                          disabled={
+                            !shipping.name ||
+                            !shipping.address ||
+                            !shipping.pin ||
+                            !shipping.city ||
+                            !shipping.state
+                          }
+                          className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                        >
+                          Continue to Review
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Shipping Information Form */}
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-gray-900">
-                    {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
-                  </h3>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Full Name"
-                    value={shipping.name}
-                    onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Building"
-                      value={shipping.building}
-                      onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
-                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <input
-                      required
-                      type="text"
-                      placeholder="Street"
-                      value={shipping.street}
-                      onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
-                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                  </div>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Address"
-                    value={shipping.address}
-                    onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+                  {/* Step 3: Review Order */}
+                  {step === 3 && (
+                    <div className="space-y-6">
+                      {/* Order Summary */}
+                      <div className="rounded-xl bg-gray-50 p-4">
+                        <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
+                        <div className="space-y-3">
+                          {cart.map((item) => {
+                            const details = itemDetails[item.razorpayItemId] || {};
+                            const gstRate = details.tax_rate || 0;
+                            return (
+                              <div key={item.name} className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="h-12 w-12 rounded-lg object-cover"
+                                  />
+                                  <div>
+                                    <p className="font-medium text-gray-900">{item.name}</p>
+                                    <p className="text-sm text-gray-600">
+                                      {item.price} × {item.quantity}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                      GST: {gstRate}% | HSN: {details.hsn_code || "-"}
+                                    </p>
+                                  </div>
+                                </div>
+                                <p className="font-semibold text-gray-900">
+                                  ₹
+                                  {(
+                                    parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
+                                  ).toFixed(2)}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
 
-                  <input
-                    type="text"
-                    placeholder="Landmark (Optional)"
-                    value={shipping.landmark}
-                    onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      required
-                      type="text"
-                      placeholder="PIN Code"
-                      value={shipping.pin}
-                      onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
-                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <input
-                      required
-                      type="text"
-                      placeholder="City"
-                      value={shipping.city}
-                      onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
-                      className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                  </div>
-                  <select
-  required
-  value={shipping.state}
-  onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
-  className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
->
-  <option value="">Select State</option>
-
-  {/* States */}
-  <option value="Andhra Pradesh">Andhra Pradesh</option>
-  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-  <option value="Assam">Assam</option>
-  <option value="Bihar">Bihar</option>
-  <option value="Chhattisgarh">Chhattisgarh</option>
-  <option value="Goa">Goa</option>
-  <option value="Gujarat">Gujarat</option>
-  <option value="Haryana">Haryana</option>
-  <option value="Himachal Pradesh">Himachal Pradesh</option>
-  <option value="Jharkhand">Jharkhand</option>
-  <option value="Karnataka">Karnataka</option>
-  <option value="Kerala">Kerala</option>
-  <option value="Madhya Pradesh">Madhya Pradesh</option>
-  <option value="Maharashtra">Maharashtra</option>
-  <option value="Manipur">Manipur</option>
-  <option value="Meghalaya">Meghalaya</option>
-  <option value="Mizoram">Mizoram</option>
-  <option value="Nagaland">Nagaland</option>
-  <option value="Odisha">Odisha</option>
-  <option value="Punjab">Punjab</option>
-  <option value="Rajasthan">Rajasthan</option>
-  <option value="Sikkim">Sikkim</option>
-  <option value="Tamil Nadu">Tamil Nadu</option>
-  <option value="Telangana">Telangana</option>
-  <option value="Tripura">Tripura</option>
-  <option value="Uttar Pradesh">Uttar Pradesh</option>
-  <option value="Uttarakhand">Uttarakhand</option>
-  <option value="West Bengal">West Bengal</option>
-
-  {/* Union Territories */}
-  <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-  <option value="Chandigarh">Chandigarh</option>
-  <option value="Dadra and Nagar Haveli and Daman and Diu">
-    Dadra and Nagar Haveli and Daman and Diu
-  </option>
-  <option value="Delhi">Delhi</option>
-  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-  <option value="Ladakh">Ladakh</option>
-  <option value="Lakshadweep">Lakshadweep</option>
-  <option value="Puducherry">Puducherry</option>
-</select>
-
-                  {/* Shipping Phone Number (optional) */}
-                  <input
-                    type="tel"
-                    placeholder="Shipping Phone Number (optional)"
-                    value={shipping.phone}
-                    onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <p className="text-sm text-gray-600">In case the receiver is not you</p>
-                </div>
-
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => setStep(1)}
-                    disabled={isProcessing}
-                    className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={() => setStep(3)}
-                    disabled={
-                      !shipping.name ||
-                      !shipping.address ||
-                      !shipping.pin ||
-                      !shipping.city ||
-                      !shipping.state
-                    }
-                    className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                  >
-                    Continue to Review
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Review Order */}
-            {step === 3 && (
-              <div className="space-y-6">
-                {/* Order Summary */}
-                <div className="rounded-xl bg-gray-50 p-4">
-                  <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
-                  <div className="space-y-3">
-                    {cart.map((item) => {
-                      const details = itemDetails[item.razorpayItemId] || {};
-                      const gstRate = details.tax_rate || 0;
-                      return (
-                        <div key={item.name} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="h-12 w-12 rounded-lg object-cover"
-                            />
-                            <div>
-                              <p className="font-medium text-gray-900">{item.name}</p>
-                              <p className="text-sm text-gray-600">
-                                {item.price} × {item.quantity}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                GST: {gstRate}% | HSN: {details.hsn_code || "-"}
-                              </p>
+                        {/* GST Breakdown - FIXED to show actual rates */}
+                        <div className="mt-4 border-t pt-4">
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span>Taxable Value:</span>
+                              <span>₹{taxableValue.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Total GST:</span>
+                              <span>₹{totalGST.toFixed(2)}</span>
+                            </div>
+                            {appliedPromo && (
+                              <>
+                                <div className="flex justify-between text-green-600">
+                                  <span>Discount ({appliedPromo.promoCode}):</span>
+                                  <span>-₹{discountAmount.toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between border-t pt-2 font-semibold">
+                                  <span>Final Amount:</span>
+                                  <span>₹{finalAmount.toFixed(2)}</span>
+                                </div>
+                              </>
+                            )}
+                            <div className="flex justify-between border-t pt-2 text-lg font-bold">
+                              <span>Total Amount:</span>
+                              <span>₹{finalAmount.toFixed(2)}</span>
                             </div>
                           </div>
-                          <p className="font-semibold text-gray-900">
-                            ₹
-                            {(
-                              parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
-                            ).toFixed(2)}
-                          </p>
                         </div>
-                      );
-                    })}
-                  </div>
+                      </div>
 
-                  {/* GST Breakdown - FIXED to show actual rates */}
-                  <div className="mt-4 border-t pt-4">
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Taxable Value:</span>
-                        <span>₹{taxableValue.toFixed(2)}</span>
+                      {/* Contact Info Preview */}
+                      <div className="rounded-xl bg-gray-50 p-4">
+                        <h3 className="mb-2 font-semibold text-gray-900">Contact Information</h3>
+                        <p className="font-medium text-gray-900">{userInfo.name}</p>
+                        <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
                       </div>
-                      <div className="flex justify-between">
-                        <span>Total GST:</span>
-                        <span>₹{totalGST.toFixed(2)}</span>
+
+                      {/* Shipping Info Preview */}
+                      <div className="rounded-xl bg-gray-50 p-4">
+                        <h3 className="mb-2 font-semibold text-gray-900">Shipping to</h3>
+                        <p className="font-medium text-gray-900">{shipping.name}</p>
+                        <p className="mt-1 text-sm text-gray-600">
+                          {shipping.address}, {shipping.building}, {shipping.street}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {shipping.landmark && `${shipping.landmark}, `}
+                          {shipping.city}, {shipping.state} - {shipping.pin}
+                        </p>
+                        <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
                       </div>
-                      <div className="flex justify-between border-t pt-2 text-lg font-bold">
-                        <span>Total Amount:</span>
-                        <span>₹{total.toFixed(2)}</span>
+
+                      <div className="flex space-x-3">
+                        <button
+                          onClick={() => setStep(2)}
+                          disabled={isProcessing}
+                          className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          Back
+                        </button>
+                        <button
+                          onClick={handleCheckout}
+                          disabled={isProcessing}
+                          className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
+                        >
+                          {isProcessing ? "Processing..." : `Pay ₹${finalAmount.toFixed(2)}`}
+                        </button>
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                {/* Contact Info Preview */}
-                <div className="rounded-xl bg-gray-50 p-4">
-                  <h3 className="mb-2 font-semibold text-gray-900">Contact Information</h3>
-                  <p className="font-medium text-gray-900">{userInfo.name}</p>
-                  <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
-                  {/* <p className="text-sm text-gray-600">{userInfo.phone}</p> */}
-                </div>
-
-                {/* Shipping Info Preview */}
-                <div className="rounded-xl bg-gray-50 p-4">
-                  <h3 className="mb-2 font-semibold text-gray-900">Shipping to</h3>
-                  <p className="font-medium text-gray-900">{shipping.name}</p>
-                  <p className="mt-1 text-sm text-gray-600">
-                    {shipping.address}, {shipping.building}, {shipping.street}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {shipping.landmark && `${shipping.landmark}, `}
-                    {shipping.city}, {shipping.state} - {shipping.pin}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
-                </div>
-
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => setStep(2)}
-                    disabled={isProcessing}
-                    className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleCheckout}
-                    disabled={isProcessing}
-                    className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                  >
-                    {isProcessing ? "Processing..." : `Pay ₹${total.toFixed(2)}`}
-                  </button>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
       {/* Main Cart Page */}
       <div className="min-h-screen bg-gray-50">
@@ -955,7 +1039,7 @@ const CartPage = () => {
                 <div className="mb-8 space-y-4">
                   {cart.map((item) => {
                     const details = itemDetails[item.razorpayItemId] || {};
-                    const gstRate = details.tax_rate || 0;
+                    const gstRate = details.tax_rate || 5;
                     return (
                       <div
                         key={item.name}
@@ -1013,23 +1097,79 @@ const CartPage = () => {
                   })}
                 </div>
 
+                {/* Promo Code Section */}
+                <div className="mb-6 rounded-xl border border-gray-200 p-4">
+                  <h3 className="mb-3 font-semibold text-gray-900">Apply Promo Code</h3>
+                  {!appliedPromo ? (
+                    <div className="flex space-x-3">
+                      <input
+                        type="text"
+                        placeholder="Enter promo code"
+                        value={promoCode}
+                        onChange={(e) => {
+                          setPromoCode(e.target.value);
+                          setPromoError("");
+                        }}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            validatePromoCode();
+                          }
+                        }}
+                        className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      />
+                      <button
+                        onClick={validatePromoCode}
+                        disabled={isValidatingPromo || !promoCode.trim()}
+                        className="rounded-xl bg-gray-800 px-6 py-3 font-semibold text-white transition-colors hover:bg-gray-900 disabled:bg-gray-400"
+                      >
+                        {isValidatingPromo ? "Applying..." : "Apply"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="rounded-lg bg-green-50 p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-green-800">
+                            Promo Code Applied: {appliedPromo.promoCode}
+                          </p>
+                          <p className="text-sm text-green-600">You saved ₹{discountAmount}!</p>
+                        </div>
+                        <button
+                          onClick={removePromoCode}
+                          className="text-sm font-medium text-red-500 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {promoError && <p className="mt-2 text-sm text-red-600">{promoError}</p>}
+                  {/* <div className="mt-3 text-xs text-gray-500">
+                    <p>Available promo codes: WELCOME10, SAVE20, FLAT500, SUMMER25</p>
+                  </div> */}
+                </div>
+
                 {/* GST Summary - FIXED to show actual GST calculation */}
                 <div className="mb-6 rounded-xl bg-blue-50 p-4">
-                  <h3 className="mb-3 font-semibold text-blue-900">GST Summary</h3>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-blue-700">Taxable Value:</span>
-                      <span className="float-right font-medium">₹{taxableValue.toFixed(2)}</span>
+                  <h3 className="mb-3 font-semibold text-blue-900">Order Summary</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Taxable Value:</span>
+                      <span>₹{taxableValue.toFixed(2)}</span>
                     </div>
-                    <div>
-                      <span className="text-blue-700">GST Amount:</span>
-                      <span className="float-right font-medium">₹{totalGST.toFixed(2)}</span>
+                    <div className="flex justify-between">
+                      <span>GST Amount:</span>
+                      <span>₹{totalGST.toFixed(2)}</span>
                     </div>
-                    <div className="col-span-2 border-t pt-2">
-                      <span className="font-semibold text-blue-900">Grand Total:</span>
-                      <span className="float-right font-bold text-blue-900">
-                        ₹{total.toFixed(2)}
-                      </span>
+                    {appliedPromo && (
+                      <div className="flex justify-between text-green-600">
+                        <span>Discount Applied:</span>
+                        <span>-₹{discountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between border-t pt-2 text-lg font-bold text-blue-900">
+                      <span>Grand Total:</span>
+                      <span>₹{finalAmount.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -1037,8 +1177,10 @@ const CartPage = () => {
                 <div className="border-t pt-6">
                   <div className="mb-6 flex items-center justify-between">
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">₹{total.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">Total amount (incl. GST)</p>
+                      <p className="text-2xl font-bold text-gray-900">₹{finalAmount.toFixed(2)}</p>
+                      <p className="text-sm text-gray-600">
+                        Total amount {appliedPromo && "(After discount) "}(incl. GST)
+                      </p>
                     </div>
                     <button
                       onClick={clearCart}
