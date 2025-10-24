@@ -5,8 +5,8 @@ export async function POST(req: NextRequest) {
   const { amount, currency, receipt } = await req.json();
 
   const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk",
-    key_secret: process.env.RAZORPAY_KEY_SECRET || "t8NMj5PKyi0Af2b15uARbtLl",
+    key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod",
+    key_secret: process.env.RAZORPAY_KEY_SECRET || "ED0M86MSh0Axn3oYK3dn2GNJ",
   });
 
   const options = {
