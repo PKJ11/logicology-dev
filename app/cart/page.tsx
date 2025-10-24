@@ -858,51 +858,8 @@ const CartPage = () => {
                           onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
                           className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                         >
-                          <option value="">Select State / Union Territory</option>
-
+                          <option value="">Select State</option>
                           {/* States */}
-                          <option value="andhra pradesh">Andhra Pradesh</option>
-                          <option value="arunachal pradesh">Arunachal Pradesh</option>
-                          <option value="assam">Assam</option>
-                          <option value="bihar">Bihar</option>
-                          <option value="chhattisgarh">Chhattisgarh</option>
-                          <option value="goa">Goa</option>
-                          <option value="gujarat">Gujarat</option>
-                          <option value="haryana">Haryana</option>
-                          <option value="himachal pradesh">Himachal Pradesh</option>
-                          <option value="jharkhand">Jharkhand</option>
-                          <option value="karnataka">Karnataka</option>
-                          <option value="kerala">Kerala</option>
-                          <option value="madhya pradesh">Madhya Pradesh</option>
-                          <option value="maharashtra">Maharashtra</option>
-                          <option value="manipur">Manipur</option>
-                          <option value="meghalaya">Meghalaya</option>
-                          <option value="mizoram">Mizoram</option>
-                          <option value="nagaland">Nagaland</option>
-                          <option value="odisha">Odisha</option>
-                          <option value="punjab">Punjab</option>
-                          <option value="rajasthan">Rajasthan</option>
-                          <option value="sikkim">Sikkim</option>
-                          <option value="tamil nadu">Tamil Nadu</option>
-                          <option value="telangana">Telangana</option>
-                          <option value="tripura">Tripura</option>
-                          <option value="uttar pradesh">Uttar Pradesh</option>
-                          <option value="uttarakhand">Uttarakhand</option>
-                          <option value="west bengal">West Bengal</option>
-
-                          {/* Union Territories */}
-                          <option value="andaman and nicobar islands">
-                            Andaman and Nicobar Islands
-                          </option>
-                          <option value="chandigarh">Chandigarh</option>
-                          <option value="dadra and nagar haveli and daman and diu">
-                            Dadra and Nagar Haveli and Daman and Diu
-                          </option>
-                          <option value="delhi">Delhi</option>
-                          <option value="jammu and kashmir">Jammu and Kashmir</option>
-                          <option value="ladakh">Ladakh</option>
-                          <option value="lakshadweep">Lakshadweep</option>
-                          <option value="puducherry">Puducherry</option>
                         </select>
 
                         {/* Shipping Phone Number (optional) */}
