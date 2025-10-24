@@ -8,6 +8,7 @@ import {
   signInWithPhoneNumber,
   ConfirmationResult,
 } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -36,16 +37,18 @@ interface CommunitySignupModalProps {
   onNavigateToCommunity?: () => void;
 }
 
-interface ApiError {
-  msg: string;
-  param?: string;
-}
-
 interface UserData {
   id: string;
   name: string;
   email: string;
   phone: string;
+}
+
+interface LoginResponse {
+  success: boolean;
+  token?: string;
+  user?: UserData;
+  message?: string;
 }
 
 // Utility function to check if JWT token is valid
@@ -79,11 +82,14 @@ const getUserData = (): UserData | null => {
   }
 };
 
+type TabType = "signup" | "login";
+
 export default function CommunitySignupModal({
   open,
   onClose,
   onNavigateToCommunity,
 }: CommunitySignupModalProps) {
+  const [activeTab, setActiveTab] = useState<TabType>("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -97,6 +103,7 @@ export default function CommunitySignupModal({
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
+  const router = useRouter();
 
   // Check for existing session when modal opens
   useEffect(() => {
@@ -110,9 +117,16 @@ export default function CommunitySignupModal({
     }
   }, [open]);
 
-  // Initialize reCAPTCHA
+  // Reset form when switching tabs
   useEffect(() => {
-    if (!open) return;
+    if (open) {
+      resetForm();
+    }
+  }, [activeTab, open]);
+
+  // Initialize reCAPTCHA only when needed and OTP not sent (for signup only)
+  useEffect(() => {
+    if (!open || otpSent || activeTab === "login") return;
 
     try {
       if (recaptchaVerifier.current) {
@@ -129,7 +143,7 @@ export default function CommunitySignupModal({
       });
 
       return () => {
-        if (recaptchaVerifier.current) {
+        if (recaptchaVerifier.current && !otpSent) {
           try {
             recaptchaVerifier.current.clear();
           } catch (error) {
@@ -141,7 +155,7 @@ export default function CommunitySignupModal({
       console.error("Error initializing reCAPTCHA:", error);
       setErrorMessage("Failed to initialize security verification. Please refresh the page.");
     }
-  }, [open]);
+  }, [open, otpSent, activeTab]);
 
   const resetRecaptcha = () => {
     try {
@@ -160,6 +174,43 @@ export default function CommunitySignupModal({
     }
   };
 
+  // Check if user exists in database
+  const checkExistingMember = async (phoneNumber: string): Promise<boolean> => {
+    try {
+      const response = await fetch("/api/check-community-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: phoneNumber }),
+      });
+
+      const data = await response.json();
+      return data.exists || false;
+    } catch (error) {
+      console.error("Error checking existing member:", error);
+      return false;
+    }
+  };
+
+  // Login existing member
+  const loginExistingMember = async (phoneNumber: string): Promise<LoginResponse> => {
+    try {
+      const response = await fetch("/api/login-community-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: phoneNumber }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error logging in:", error);
+      return { success: false, message: "Login failed" };
+    }
+  };
+
   const handleSendOtp = async () => {
     if (!phone || phone.length < 10) {
       setErrorMessage("Please enter a valid 10-digit mobile number");
@@ -169,6 +220,30 @@ export default function CommunitySignupModal({
     try {
       setLoading(true);
       setErrorMessage(null);
+
+      // For login tab, directly login without OTP
+      if (activeTab === "login") {
+        const isExisting = await checkExistingMember(phone);
+        if (!isExisting) {
+          setErrorMessage("No account found with this phone number. Please sign up instead.");
+          return;
+        }
+
+        // Directly login if user exists
+        const loginResult = await loginExistingMember(phone);
+        if (loginResult.success && loginResult.token && loginResult.user) {
+          // Store JWT token and user data
+          localStorage.setItem("communityToken", loginResult.token);
+          localStorage.setItem("userData", JSON.stringify(loginResult.user));
+          setUserData(loginResult.user);
+          setHasExistingSession(true);
+        } else {
+          throw new Error(loginResult.message || "Login failed");
+        }
+        return;
+      }
+
+      // For signup tab, proceed with OTP verification
       const formattedPhone = `+91${phone}`;
 
       if (!recaptchaVerifier.current) {
@@ -179,10 +254,13 @@ export default function CommunitySignupModal({
 
       setConfirmationResult(result);
       setOtpSent(true);
+
     } catch (error: any) {
-      console.error("Error sending OTP:", error);
-      setErrorMessage(`Failed to send OTP: ${error.message || "Unknown error"}`);
-      resetRecaptcha();
+      console.error("Error:", error);
+      setErrorMessage(`Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`);
+      if (activeTab === "signup") {
+        resetRecaptcha();
+      }
     } finally {
       setLoading(false);
     }
@@ -204,6 +282,7 @@ export default function CommunitySignupModal({
       setErrorMessage(null);
       await confirmationResult.confirm(otp);
       setOtpVerified(true);
+
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
       setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
@@ -215,16 +294,29 @@ export default function CommunitySignupModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!otpVerified) {
-      setErrorMessage("Please verify your phone number first");
+    // For login tab, no need to submit form (already handled in handleSendOtp)
+    if (activeTab === "login") {
       return;
+    }
+
+    // For signup tab, validate OTP and fields
+    if (activeTab === "signup") {
+      if (!otpVerified) {
+        setErrorMessage("Please verify your phone number first");
+        return;
+      }
+
+      if (!name || !email) {
+        setErrorMessage("Please fill in all required fields");
+        return;
+      }
     }
 
     try {
       setLoading(true);
       setErrorMessage(null);
 
-      // Save user to MongoDB community collection
+      // Register new user
       const response = await fetch("/api/save-community-user", {
         method: "POST",
         headers: {
@@ -243,13 +335,22 @@ export default function CommunitySignupModal({
         throw new Error(data.error || "Registration failed");
       }
 
-      // Store user data locally
-      const userData = { id: Date.now().toString(), name, email, phone };
-      localStorage.setItem("userData", JSON.stringify(userData));
-      setUserData(userData);
+      // Store JWT token and user data
+      if (data.token && data.user) {
+        localStorage.setItem("communityToken", data.token);
+        localStorage.setItem("userData", JSON.stringify(data.user));
+        setUserData(data.user);
+      } else {
+        // Fallback: create local user data
+        const userData = { id: data.userId || Date.now().toString(), name, email, phone };
+        localStorage.setItem("userData", JSON.stringify(userData));
+        localStorage.setItem("communityToken", data.token || "fallback-token");
+        setUserData(userData);
+      }
 
       setRegistrationSuccess(true);
       setHasExistingSession(true);
+
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setErrorMessage(`Registration failed: ${error.message || "Unknown error"}`);
@@ -261,6 +362,9 @@ export default function CommunitySignupModal({
   const handleGoToCommunity = () => {
     resetForm();
     onClose();
+    // Use router for navigation
+    router.push("/community");
+    // Also call the callback if provided
     if (onNavigateToCommunity) {
       onNavigateToCommunity();
     }
@@ -284,12 +388,32 @@ export default function CommunitySignupModal({
     setConfirmationResult(null);
     setRegistrationSuccess(false);
     setErrorMessage(null);
+    
+    // Clear reCAPTCHA
+    if (recaptchaVerifier.current) {
+      try {
+        recaptchaVerifier.current.clear();
+      } catch (error) {
+        console.log("Error clearing reCAPTCHA:", error);
+      }
+    }
+  };
+
+  // Close modal when clicking outside
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      resetForm();
+      onClose();
+    }
   };
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      onClick={handleBackdropClick}
+    >
       <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-8 shadow-brand">
         <button
           onClick={() => {
@@ -384,113 +508,192 @@ export default function CommunitySignupModal({
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
-                placeholder="Enter your full name"
-                disabled={loading}
-              />
+          <div className="space-y-6">
+            {/* Tab Navigation */}
+            <div className="flex bg-brand-grayBg rounded-xl p-1">
+              <button
+                type="button"
+                onClick={() => setActiveTab("signup")}
+                className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "signup"
+                    ? "bg-white text-brand-tealDark shadow-sm"
+                    : "text-brand-tealDark/60 hover:text-brand-tealDark"
+                }`}
+              >
+                New Member
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("login")}
+                className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "login"
+                    ? "bg-white text-brand-tealDark shadow-sm"
+                    : "text-brand-tealDark/60 hover:text-brand-tealDark"
+                }`}
+              >
+                Existing Member
+              </button>
             </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
-                placeholder="Enter your email"
-                disabled={loading}
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-brand-tealDark">
-                Mobile Number *
-              </label>
-              <div className="flex gap-3">
-                <div className="relative flex-1">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                    <span className="text-brand-tealDark/60">+91</span>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name and Email fields only for signup */}
+              {activeTab === "signup" && !otpSent && (
+                <>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-brand-tealDark">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
+                      placeholder="Enter your full name"
+                      disabled={loading}
+                    />
                   </div>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                    required
-                    disabled={otpSent || loading}
-                    maxLength={10}
-                    className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 pl-12 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50 disabled:bg-brand-grayBg"
-                    placeholder="10-digit number"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  disabled={otpSent || !phone || phone.length < 10 || loading}
-                  className="whitespace-nowrap rounded-xl bg-brand-teal px-5 py-3 text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
-                >
-                  {loading ? "Sending..." : otpSent ? "Sent" : "Send OTP"}
-                </button>
-              </div>
-            </div>
 
-            {otpSent && (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-brand-tealDark">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
+                      placeholder="Enter your email"
+                      disabled={loading}
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Phone number field for both tabs */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-brand-tealDark">
-                  Enter OTP *
+                  Mobile Number *
                 </label>
                 <div className="flex gap-3">
-                  <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                    placeholder="6-digit OTP"
-                    maxLength={6}
-                    className="flex-1 rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
-                    disabled={loading || otpVerified}
-                  />
+                  <div className="relative flex-1">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                      <span className="text-brand-tealDark/60">+91</span>
+                    </div>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                      required
+                      disabled={(activeTab === "signup" && otpSent) || loading}
+                      maxLength={10}
+                      className="w-full rounded-xl border border-brand-teal/20 px-4 py-3 pl-12 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50 disabled:bg-brand-grayBg"
+                      placeholder="10-digit number"
+                    />
+                  </div>
                   <button
                     type="button"
-                    onClick={handleVerifyOtp}
-                    disabled={otpVerified || !otp || otp.length !== 6 || loading}
-                    className={`rounded-xl px-5 py-3 shadow-md transition-colors ${
-                      otpVerified
-                        ? "bg-green-600 text-white hover:bg-green-700"
-                        : "bg-brand-teal text-white hover:bg-brand-tealDark"
-                    } whitespace-nowrap disabled:cursor-not-allowed disabled:bg-brand-teal/40`}
+                    onClick={handleSendOtp}
+                    disabled={!phone || phone.length < 10 || loading}
+                    className="whitespace-nowrap rounded-xl bg-brand-teal px-5 py-3 text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
                   >
-                    {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
+                    {loading 
+                      ? activeTab === "login" ? "Logging in..." : "Sending..." 
+                      : activeTab === "login" ? "Login" : otpSent ? "Sent" : "Send OTP"
+                    }
                   </button>
                 </div>
               </div>
-            )}
 
-            <div id="recaptcha-container"></div>
+              {/* OTP field - Only for signup tab */}
+              {activeTab === "signup" && otpSent && (
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-brand-tealDark">
+                    Enter OTP *
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                      placeholder="6-digit OTP"
+                      maxLength={6}
+                      className="flex-1 rounded-xl border border-brand-teal/20 px-4 py-3 transition-all focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/50"
+                      disabled={loading || otpVerified}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      disabled={otpVerified || !otp || otp.length !== 6 || loading}
+                      className={`rounded-xl px-5 py-3 shadow-md transition-colors ${
+                        otpVerified
+                          ? "bg-green-600 text-white hover:bg-green-700"
+                          : "bg-brand-teal text-white hover:bg-brand-tealDark"
+                      } whitespace-nowrap disabled:cursor-not-allowed disabled:bg-brand-teal/40`}
+                    >
+                      {loading ? "Verifying..." : otpVerified ? "Verified" : "Verify"}
+                    </button>
+                  </div>
+                </div>
+              )}
 
-            <button
-              type="submit"
-              disabled={!otpVerified || loading}
-              className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
-            >
-              {loading ? "Processing..." : "Save & Join Community"}
-            </button>
+              {/* reCAPTCHA container - Only for signup tab */}
+              {activeTab === "signup" && <div id="recaptcha-container"></div>}
 
-            <p className="mt-6 text-center text-xs text-brand-tealDark/60">
-              By joining, you agree to our Terms of Service and Privacy Policy
-            </p>
-          </form>
+              {/* Submit buttons */}
+              {activeTab === "signup" && otpVerified && (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full rounded-xl bg-brand-teal px-6 py-3 font-medium text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
+                >
+                  {loading ? "Processing..." : "Save & Join Community"}
+                </button>
+              )}
+
+              {activeTab === "signup" && !otpVerified && (
+                <button
+                  type="submit"
+                  disabled={true}
+                  className="w-full rounded-xl bg-brand-teal/40 px-6 py-3 font-medium text-white cursor-not-allowed"
+                >
+                  Verify OTP to Continue
+                </button>
+              )}
+
+              <p className="mt-6 text-center text-xs text-brand-tealDark/60">
+                By joining, you agree to our Terms of Service and Privacy Policy
+              </p>
+            </form>
+
+            {/* Tab switch suggestion */}
+            <div className="text-center">
+              <p className="text-sm text-brand-tealDark/60">
+                {activeTab === "signup" ? (
+                  <>Already a member?{" "}
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("login")}
+                      className="text-brand-teal font-medium hover:text-brand-tealDark transition-colors"
+                    >
+                      Login here
+                    </button>
+                  </>
+                ) : (
+                  <>New to our community?{" "}
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("signup")}
+                      className="text-brand-teal font-medium hover:text-brand-tealDark transition-colors"
+                    >
+                      Sign up here
+                    </button>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </div>

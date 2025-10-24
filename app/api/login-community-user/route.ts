@@ -9,7 +9,7 @@ const COLLECTION = "community";
 const JWT_SECRET = process.env.JWT_SECRET || "your-jwt-secret";
 
 export async function POST(req: NextRequest) {
-  const { name, email, phone } = await req.json();
+  const { phone } = await req.json();
 
   try {
     const client = new MongoClient(MONGO_URI);
@@ -17,46 +17,32 @@ export async function POST(req: NextRequest) {
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
     
-    // Check if user already exists
-    const existingUser = await col.findOne({ phone });
-    if (existingUser) {
-      await client.close();
-      return NextResponse.json({ 
-        success: false, 
-        error: "User already exists" 
-      }, { status: 400 });
-    }
+    const user = await col.findOne({ phone });
+    await client.close();
 
-    // Insert new user
-    const result = await col.insertOne({ 
-      name, 
-      email, 
-      phone, 
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
+    if (!user) {
+      return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+    }
 
     // Generate JWT token
     const token = jwt.sign(
       { 
-        userId: result.insertedId, 
-        phone: phone,
-        name: name 
+        userId: user._id, 
+        phone: user.phone,
+        name: user.name 
       },
       JWT_SECRET,
       { expiresIn: '30d' }
     );
 
-    await client.close();
-
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       token,
       user: {
-        id: result.insertedId.toString(),
-        name,
-        email,
-        phone
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        phone: user.phone
       }
     });
   } catch (error: any) {
