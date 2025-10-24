@@ -363,7 +363,7 @@ export default function CommunitySignupModal({
     resetForm();
     onClose();
     // Use router for navigation
-    router.push("/community");
+    router.push("/Community");
     // Also call the callback if provided
     if (onNavigateToCommunity) {
       onNavigateToCommunity();
