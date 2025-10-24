@@ -44,7 +44,7 @@ export default function WhyImportant() {
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                Why Logicology??
+                Why Logicology?
               </motion.p>
               <motion.p 
                 className="textstyles mt-4 max-w-xl font-sans"
@@ -54,7 +54,7 @@ export default function WhyImportant() {
               >
                 Children learn the best when they are engaged. Our thoroughly researched and tested
                 content is crafted to engage children. Gamification helps children learn in a fun
-                way. At Logicology we want to make learning fun and engaging—that&apos;s why we
+                way. At Logicology, we want to make learning fun and engaging—that&apos;s why we
                 exist.
               </motion.p>
 

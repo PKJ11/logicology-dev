@@ -37,7 +37,7 @@ export default function Benefit() {
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                At Logicology we have a bouquet of products and subscriptions that help your child
+                At Logicology, we have a bouquet of products and subscriptions that help your child
                 develop Logical Reasoning and Critical Thinking Skills. You can choose from our
                 offerings (see below) to choose the one that suits you the best.
               </motion.p>

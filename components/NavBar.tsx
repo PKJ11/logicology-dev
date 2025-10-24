@@ -97,8 +97,9 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Games", href: "/games", hasDropdown: true, type: "games" },
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
+  { name: "Shop", href: "/products" },
   { name: "About Us", href: "/about" },
-  { name: "Shop Now", href: "/products" },
+  
 ];
 
 /* ================= Utils ================= */

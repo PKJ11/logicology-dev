@@ -40,7 +40,7 @@ export default function Hero() {
       title: "Learn to Play.",
       subtitle: "Play to Learn.",
       description:
-        "At Logicology we endeavour to make learning fun so that children learn while they play.",
+        "At Logicology, we endeavour to make learning fun so that children learn while they play.",
       image: {
         desktop:
           "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-1-FOR-DESKTOP.png?updatedAt=1758349826819",
@@ -56,7 +56,7 @@ export default function Hero() {
       title: "Conceptual Understanding",
       subtitle: "Through Engaging Content",
       description:
-        "In an AI-powered world deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
+        "In an AI-powered world, deep conceptual understanding gives humans a chance. Develop it through our highly engaging fun learning content.",
       image: {
         desktop:
           "https://ik.imagekit.io/pratik11/LOGICOLOGIC-WEB-PAGE-SLIDER-2-FOR-DESKTOP.png?updatedAt=1758359619262",
