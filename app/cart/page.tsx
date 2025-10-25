@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { INDIAN_STATES_AND_UTS } from "../utils/indianStates";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -158,7 +159,6 @@ const CartPage = () => {
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
-    // phone: "",
   });
   const [shipping, setShipping] = useState({
     name: "",
@@ -175,6 +175,7 @@ const CartPage = () => {
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const router = useRouter();
 
   // Promo code state
@@ -194,6 +195,7 @@ const CartPage = () => {
       removePromoCode();
     }
   }, [cart.length]);
+
   // Load saved addresses and item details
   useEffect(() => {
     const saved = localStorage.getItem("savedAddresses");
@@ -268,7 +270,6 @@ const CartPage = () => {
         }),
       });
 
-      // Add this check for HTTP errors
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.message || "Failed to validate promo code");
@@ -322,7 +323,6 @@ const CartPage = () => {
       setUserInfo({
         name: address.name || "",
         email: address.email || "",
-        // phone: address.phone || "",
       });
       setShipping({
         name: address.name || "",
@@ -506,6 +506,9 @@ const CartPage = () => {
         order_id: order.id,
         handler: async function (response: any) {
           try {
+            // Show payment processing overlay
+            setIsPaymentProcessing(true);
+
             // Save order info
             await fetch("/api/save-order-info", {
               method: "POST",
@@ -539,13 +542,15 @@ const CartPage = () => {
             setAppliedPromo(null);
             localStorage.removeItem("appliedPromo");
 
-            // Show success message
+            // Hide payment processing overlay and redirect
             setTimeout(() => {
+              setIsPaymentProcessing(false);
               router.push(`/my-orders?paymentId=${response.razorpay_payment_id}`);
             }, 500);
           } catch (error) {
             console.error("Error in payment handler:", error);
             setIsProcessing(false);
+            setIsPaymentProcessing(false);
             alert(
               "Payment was successful but there was an issue sending your GST invoice. Please contact support with your Payment ID."
             );
@@ -554,7 +559,6 @@ const CartPage = () => {
         prefill: {
           name: userInfo.name,
           email: userInfo.email,
-          // contact: userInfo.phone,
         },
         notes: {
           address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.pin}`,
@@ -631,6 +635,46 @@ const CartPage = () => {
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+
+      {/* Payment Processing Overlay */}
+      {isPaymentProcessing && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+          {/* Blurred Backdrop */}
+          <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md" />
+
+          {/* Loading Content */}
+          <div className="relative z-10 flex flex-col items-center justify-center rounded-2xl bg-white p-8 shadow-2xl">
+            {/* Spinner */}
+            <div className="mb-4 h-16 w-16 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+
+            {/* Message */}
+            <h3 className="mb-2 text-xl font-bold text-gray-900">Processing Payment</h3>
+            <p className="mb-4 text-center text-gray-600">
+              Please wait while we process your payment and generate your invoice...
+            </p>
+
+            {/* Warning */}
+            <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      fillRule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-yellow-800">
+                    Do not refresh or close this page
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Checkout Modal - Updated for sidebar style on large screens */}
       {isCheckoutModalOpen && (
@@ -859,50 +903,11 @@ const CartPage = () => {
                           className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                         >
                           <option value="">Select State / Union Territory</option>
-
-                          {/* States */}
-                          <option value="andhra pradesh">Andhra Pradesh</option>
-                          <option value="arunachal pradesh">Arunachal Pradesh</option>
-                          <option value="assam">Assam</option>
-                          <option value="bihar">Bihar</option>
-                          <option value="chhattisgarh">Chhattisgarh</option>
-                          <option value="goa">Goa</option>
-                          <option value="gujarat">Gujarat</option>
-                          <option value="haryana">Haryana</option>
-                          <option value="himachal pradesh">Himachal Pradesh</option>
-                          <option value="jharkhand">Jharkhand</option>
-                          <option value="karnataka">Karnataka</option>
-                          <option value="kerala">Kerala</option>
-                          <option value="madhya pradesh">Madhya Pradesh</option>
-                          <option value="maharashtra">Maharashtra</option>
-                          <option value="manipur">Manipur</option>
-                          <option value="meghalaya">Meghalaya</option>
-                          <option value="mizoram">Mizoram</option>
-                          <option value="nagaland">Nagaland</option>
-                          <option value="odisha">Odisha</option>
-                          <option value="punjab">Punjab</option>
-                          <option value="rajasthan">Rajasthan</option>
-                          <option value="sikkim">Sikkim</option>
-                          <option value="tamil nadu">Tamil Nadu</option>
-                          <option value="telangana">Telangana</option>
-                          <option value="tripura">Tripura</option>
-                          <option value="uttar pradesh">Uttar Pradesh</option>
-                          <option value="uttarakhand">Uttarakhand</option>
-                          <option value="west bengal">West Bengal</option>
-
-                          {/* Union Territories */}
-                          <option value="andaman and nicobar islands">
-                            Andaman and Nicobar Islands
-                          </option>
-                          <option value="chandigarh">Chandigarh</option>
-                          <option value="dadra and nagar haveli and daman and diu">
-                            Dadra and Nagar Haveli and Daman and Diu
-                          </option>
-                          <option value="delhi">Delhi</option>
-                          <option value="jammu and kashmir">Jammu and Kashmir</option>
-                          <option value="ladakh">Ladakh</option>
-                          <option value="lakshadweep">Lakshadweep</option>
-                          <option value="puducherry">Puducherry</option>
+                          {INDIAN_STATES_AND_UTS.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
                         </select>
 
                         {/* Shipping Phone Number (optional) */}
@@ -1187,9 +1192,6 @@ const CartPage = () => {
                     </div>
                   )}
                   {promoError && <p className="mt-2 text-sm text-red-600">{promoError}</p>}
-                  {/* <div className="mt-3 text-xs text-gray-500">
-                    <p>Available promo codes: WELCOME10, SAVE20, FLAT500, SUMMER25</p>
-                  </div> */}
                 </div>
 
                 {/* GST Summary - FIXED to show actual GST calculation */}
