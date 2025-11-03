@@ -24,6 +24,7 @@ export default function PrimeTimeProductPage() {
 }
 
 // ---------- 1️⃣ PRODUCT SECTION ----------
+
 const ProductSection = () => {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
@@ -44,16 +45,19 @@ const ProductSection = () => {
     razorpayItemId: "prime-time-logicology-01",
   };
 
+  // ✅ Main Image State
+  const [mainImage, setMainImage] = useState(product.images[0]);
+
   const handleAddToCart = () => {
     addToCart({
-  name: product.name,
-  price: product.price,
-  initialprice: product.initialprice,
-  description: product.description, // ✅ Added
-  image: product.images[0],
-  razorpayItemId: product.razorpayItemId,
-  rating: 5, // ✅ Added default rating
-});
+      name: product.name,
+      price: product.price,
+      initialprice: product.initialprice,
+      description: product.description,
+      image: mainImage, // ✅ will add the current main image
+      razorpayItemId: product.razorpayItemId,
+      rating: 5,
+    });
 
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
@@ -63,27 +67,34 @@ const ProductSection = () => {
     <section className="max-w-[80vw] mx-auto grid md:grid-cols-2 gap-10 pt-16">
       {/* LEFT: GALLERY */}
       <div>
-        <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-xl">
+        {/* MAIN IMAGE */}
+        <div className="relative w-full aspect-square rounded-3xl overflow-hidden shadow-xl group">
           <Image
-            src={product.images[0]}
-            alt="Prime Time Board Game"
+            src={mainImage}
+            alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover transition-opacity duration-300 group-hover:opacity-95"
             priority
           />
         </div>
 
+        {/* THUMBNAIL GRID */}
         <div className="grid grid-cols-4 gap-3 mt-3">
           {product.images.map((src, i) => (
             <div
               key={i}
-              className="relative aspect-square rounded-xl overflow-hidden border border-gray-200"
+              onClick={() => setMainImage(src)}
+              className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer border transition-all duration-200 ${
+                mainImage === src ? "border-brand-teal scale-105" : "border-gray-200 hover:border-gray-400"
+              }`}
             >
               <Image
                 src={src}
-                alt={`thumb-${i}`}
+                alt={`thumbnail-${i}`}
                 fill
-                className="object-cover hover:scale-105 transition"
+                className={`object-cover transition-transform duration-200 ${
+                  mainImage === src ? "scale-105" : "hover:scale-105"
+                }`}
               />
             </div>
           ))}
@@ -92,22 +103,16 @@ const ProductSection = () => {
 
       {/* RIGHT: INFO */}
       <div className="flex flex-col justify-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 leading-snug">
           Prime Time™ – Where Kids Learn Effortlessly and Adults Get Hooked
         </h1>
         <p className="text-gray-700 text-lg mb-4">{product.description}</p>
 
         <div className="bg-white rounded-3xl p-5 shadow-soft w-full md:max-w-sm">
           <div className="flex items-end gap-2">
-            <p className="text-3xl font-bold text-brand-teal">
-              {product.price}
-            </p>
-            <p className="text-gray-400 line-through text-lg">
-              {product.initialprice}
-            </p>
-            <span className="text-brand-coral font-semibold">
-              SAVE {product.discount}
-            </span>
+            <p className="text-3xl font-bold text-brand-teal">{product.price}</p>
+            <p className="text-gray-400 line-through text-lg">{product.initialprice}</p>
+            <span className="text-brand-coral font-semibold">SAVE {product.discount}</span>
           </div>
           <p className="text-gray-500 text-sm mt-1">(Inclusive of all taxes)</p>
 
@@ -126,6 +131,7 @@ const ProductSection = () => {
           </p>
         </div>
 
+        {/* GAME DETAILS */}
         <div className="mt-8 space-y-3">
           <div className="bg-white rounded-3xl p-4 shadow-soft flex items-center gap-3">
             <span className="text-2xl">🎲</span>
@@ -136,8 +142,7 @@ const ProductSection = () => {
           <div className="bg-white rounded-3xl p-4 shadow-soft flex items-center gap-3">
             <span className="text-2xl">📦</span>
             <p className="font-medium text-gray-800">
-              Includes game cards, instruction booklet + blank cards for lost
-              ones
+              Includes game cards, instruction booklet + blank cards for lost ones
             </p>
           </div>
         </div>
@@ -145,6 +150,8 @@ const ProductSection = () => {
     </section>
   );
 };
+
+
 
 // ---------- 3️⃣ BIG ADD-TO-CART CTA SECTION ----------
 const  BigAddToCartBanner=() => {
