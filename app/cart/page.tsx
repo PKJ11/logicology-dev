@@ -424,11 +424,12 @@ const CartPage = () => {
       `;
 
       // Send email with GST invoice
+      const HOSTINGER_EMAIL = process.env.HOSTINGER_EMAIL || "orders@logicology.in";
       const emailRes = await fetch("/api/send-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: userInfo.email,
+          to: [userInfo.email, HOSTINGER_EMAIL],
           subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
           html: emailHtml,
         }),
