@@ -249,6 +249,7 @@ const CartPage = () => {
   const finalAmount = appliedPromo?.finalAmount || total;
 
   const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
   // Promo code functions
   const validatePromoCode = async () => {
@@ -338,7 +339,131 @@ const CartPage = () => {
     }
   };
 
-  const sendGSTInvoice = async (paymentId: string, orderDescription: string) => {
+  // New function to handle Interakt.ai WhatsApp messaging
+// Updated function to handle Interakt.ai WhatsApp messaging
+const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string, razorpayContact?: string) => {
+  // Use phone number from Razorpay contact if available, otherwise use shipping phone
+  const phoneNumber = razorpayContact || shipping.phone;
+  console.log(" phoneNumber for whatsapp:", phoneNumber);  
+  
+  if (!phoneNumber) {
+    console.warn("No phone number available for WhatsApp message");
+    return {
+      userTracked: false,
+      messageSent: false,
+      messageId: null,
+      error: "No phone number provided"
+    };
+  }
+
+  // Clean the phone number - remove any non-digit characters and country code if present
+  let cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+  
+  // Remove country code if present (assuming Indian numbers)
+  if (cleanedPhoneNumber.startsWith('91') && cleanedPhoneNumber.length === 12) {
+    cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
+  } else if (cleanedPhoneNumber.startsWith('+91')) {
+    cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
+  }
+  
+  // Ensure the number is 10 digits
+  if (cleanedPhoneNumber.length !== 10) {
+    console.warn("Invalid phone number format:", phoneNumber);
+    return {
+      userTracked: false,
+      messageSent: false,
+      messageId: null,
+      error: "Invalid phone number format"
+    };
+  }
+  console.log("cleaned phone number:", cleanedPhoneNumber);
+  const countryCode = "+91";
+  
+  // Prepare shipping address string
+  const shippingAddress = `${shipping.city}, ${shipping.state}`;
+  
+  // Prepare order items string
+  const orderItems = cart.length > 0 ? 
+    cart[0].name + (cart.length > 1 ? ` and ${cart.length - 1} more item(s)` : '') : 
+    'Your order';
+
+  try {
+    // Step 1: Track/Update user in Interakt
+    const trackUserResponse = await fetch('https://api.interakt.ai/v1/public/track/users/', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumber: cleanedPhoneNumber,
+        countryCode: countryCode,
+        traits: {
+          name: userInfo.name,
+          email: userInfo.email,
+          lastOrderDate: new Date().toISOString(),
+          totalOrders: 1,
+          lastPaymentId: paymentId,
+          shippingAddress: shippingAddress
+        }
+      }),
+    });
+
+    const trackUserResult = await trackUserResponse.json();
+    
+    if (!trackUserResult.result) {
+      console.warn("Failed to track user:", trackUserResult.message);
+      // Continue with message sending even if tracking fails
+    }
+
+    // Step 2: Send WhatsApp message
+    const messageResponse = await fetch('https://api.interakt.ai/v1/public/message/', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        countryCode: countryCode,
+        phoneNumber: cleanedPhoneNumber,
+        type: "Template",
+        template: {
+          name: "checkout",
+          languageCode: "en",
+          bodyValues: [
+            userInfo.name, // Customer name
+            orderItems, // Order items
+            finalAmount.toFixed(0), // Amount
+            shippingAddress, // Shipping address
+            paymentId, // Payment ID
+            "Logicology" // Brand name
+          ]
+        }
+      }),
+    });
+
+    const messageResult = await messageResponse.json();
+    
+    if (!messageResult.id) {
+      throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
+    }
+
+    return {
+      userTracked: trackUserResult.result || false,
+      messageSent: true,
+      messageId: messageResult.id
+    };
+  } catch (error) {
+    console.error("Error in WhatsApp messaging:", error);
+    return {
+      userTracked: false,
+      messageSent: false,
+      messageId: null,
+      error: error instanceof Error ? error.message : "Unknown error"
+    };
+  }
+};
+  const sendGSTInvoice = async (paymentId: string, orderDescription: string , razorpayContact?: string) => {
     try {
       // Generate GST receipt with discount
       const gstReceiptHtml = generateGSTReceipt(cart, itemDetails, discountAmount);
@@ -437,7 +562,16 @@ const CartPage = () => {
 
       const emailResult = await emailRes.json();
 
+      try {
+      await sendInteraktWhatsAppMessage(paymentId, orderDescription,razorpayContact);
+    } catch (whatsappError) {
+      console.error("WhatsApp message failed:", whatsappError);
+      // Don't throw error here as email is primary, WhatsApp is secondary
+    }
+
       return { success: true, emailSent: emailResult.success };
+
+
     } catch (error: any) {
       console.error("Error sending GST invoice:", error);
       return { success: false, error: error.message };
@@ -531,7 +665,8 @@ const CartPage = () => {
             // Send GST invoice
             const invoiceResult = await sendGSTInvoice(
               response.razorpay_payment_id,
-              orderDescription
+              orderDescription,
+               response.razorpay_contact
             );
 
             // Clear cart and reset
