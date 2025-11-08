@@ -159,6 +159,7 @@ const CartPage = () => {
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
+    phone: ""
   });
   const [shipping, setShipping] = useState({
     name: "",
@@ -248,8 +249,8 @@ const CartPage = () => {
   const discountAmount = appliedPromo?.discountAmount || 0;
   const finalAmount = appliedPromo?.finalAmount || total;
 
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
-  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
   // Promo code functions
   const validatePromoCode = async () => {
@@ -324,6 +325,7 @@ const CartPage = () => {
       setUserInfo({
         name: address.name || "",
         email: address.email || "",
+        phone: shipping.phone || "",
       });
       setShipping({
         name: address.name || "",
@@ -343,6 +345,7 @@ const CartPage = () => {
 // Updated function to handle Interakt.ai WhatsApp messaging
 const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string, razorpayContact?: string) => {
   // Use phone number from Razorpay contact if available, otherwise use shipping phone
+  console.log("razorpaycontact:", razorpayContact);
   const phoneNumber = razorpayContact || shipping.phone;
   console.log(" phoneNumber for whatsapp:", phoneNumber);  
   
@@ -642,8 +645,9 @@ const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: 
         handler: async function (response: any) {
           try {
             // Show payment processing overlay
+            console.log("hi")
             setIsPaymentProcessing(true);
-
+            console.log("Full Razorpay Response:", response);
             // Save order info
             await fetch("/api/save-order-info", {
               method: "POST",
@@ -1049,12 +1053,12 @@ const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: 
                         {/* Shipping Phone Number (optional) */}
                         <input
                           type="tel"
-                          placeholder="Shipping Phone Number (optional)"
+                          placeholder="Shipping Phone Number"
                           value={shipping.phone}
                           onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
                           className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <p className="text-sm text-gray-600">In case the receiver is not you</p>
+                        {/* <p className="text-sm text-gray-600">In case the receiver is not you</p> */}
                       </div>
 
                       <div className="flex space-x-3">
