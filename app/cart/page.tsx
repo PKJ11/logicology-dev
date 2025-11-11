@@ -341,8 +341,6 @@ const CartPage = () => {
     }
   };
 
-  // New function to handle Interakt.ai WhatsApp messaging
-// Updated function to handle Interakt.ai WhatsApp messaging
 const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string, razorpayContact?: string) => {
   // Use phone number from Razorpay contact if available, otherwise use shipping phone
   console.log("razorpaycontact:", razorpayContact);
