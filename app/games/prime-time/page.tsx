@@ -35,7 +35,7 @@ export default function PrimeTimeLanding() {
       <InteractiveGames />
       <LostCardHelper />
       <GallerySection />
-      <SymmetryPatternGame/>
+      <SymmetryPatternGame />
       <Community />
       <Footer />
     </main>
@@ -550,7 +550,9 @@ function InstructionVideos() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                  animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }}
+                  animate={
+                    isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }
+                  }
                   transition={{ duration: 0.5, delay: 0.1 * i }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   onClick={() => handleVideoClick(i)}
@@ -651,7 +653,6 @@ function InstructionVideos() {
   );
 }
 
-
 function SymmetryPatternGame() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
@@ -703,7 +704,7 @@ function SymmetryPatternGame() {
     const horizontalPartner = [row, gridSize - 1 - col];
     const verticalPartner = [gridSize - 1 - row, col];
     const diagonalPartner = [gridSize - 1 - row, gridSize - 1 - col];
-    
+
     return [horizontalPartner, verticalPartner, diagonalPartner];
   };
 
@@ -724,12 +725,12 @@ function SymmetryPatternGame() {
     if (!isBlackCell(row, col)) return; // Only allow editing black cells
 
     const newGrid = grid.map((r) => [...r]);
-    
+
     // Update only the clicked black cell
     newGrid[row][col] = selectedColor;
-    
+
     setGrid(newGrid);
-    
+
     // Check if the new grid matches the solution
     const solved = checkSolution(newGrid);
     setIsSymmetric(solved);
@@ -765,8 +766,8 @@ function SymmetryPatternGame() {
             Complete the Symmetric Pattern!
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
-            Fill in the black cells to match the hidden symmetric pattern. 
-            Look at the colored cells - they already show you the symmetric relationships!
+            Fill in the black cells to match the hidden symmetric pattern. Look at the colored cells
+            - they already show you the symmetric relationships!
           </p>
         </motion.div>
 
@@ -805,13 +806,13 @@ function SymmetryPatternGame() {
                   onClick={() => handleCellClick(i, j)}
                   style={{ backgroundColor: cell }}
                   className={`h-12 w-12 cursor-pointer border border-gray-300 transition-all ${
-                    isBlackCell(i, j) 
-                      ? 'hover:scale-105 hover:border-2 hover:border-black hover:shadow-md' 
-                      : 'cursor-default'
-                  } ${
-                    cell === "#000000" ? 'border-2 border-dashed border-yellow-500' : ''
-                  }`}
-                  title={isBlackCell(i, j) ? `Click to fill with ${selectedColor}` : 'Already colored'}
+                    isBlackCell(i, j)
+                      ? "hover:scale-105 hover:border-2 hover:border-black hover:shadow-md"
+                      : "cursor-default"
+                  } ${cell === "#000000" ? "border-2 border-dashed border-yellow-500" : ""}`}
+                  title={
+                    isBlackCell(i, j) ? `Click to fill with ${selectedColor}` : "Already colored"
+                  }
                 />
               ))
             )}
@@ -826,14 +827,16 @@ function SymmetryPatternGame() {
               animate={{ opacity: 1, scale: 1 }}
               className="inline-block rounded-full bg-green-500 px-6 py-3"
             >
-              <span className="font-bold text-white text-lg">
+              <span className="text-lg font-bold text-white">
                 🎉 Perfect! You completed the symmetric pattern! 🎉
               </span>
             </motion.div>
           ) : (
             <div className="text-sm text-brand-tealDark/70">
               <p>Fill all black cells to match the hidden symmetric pattern</p>
-              <p className="mt-1 text-xs">Black cells: {grid.flat().filter(cell => cell === "#000000").length} remaining</p>
+              <p className="mt-1 text-xs">
+                Black cells: {grid.flat().filter((cell) => cell === "#000000").length} remaining
+              </p>
             </div>
           )}
         </div>
@@ -849,14 +852,13 @@ function SymmetryPatternGame() {
         </div>
 
         <p className="mt-4 text-center text-sm text-brand-tealDark/70">
-          Tip: Look at the colored cells - they show you how symmetry works! Each color appears in multiple symmetric positions.
+          Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
+          multiple symmetric positions.
         </p>
       </motion.div>
     </section>
   );
 }
-
-
 
 // --------------------- Interactive Games (Gray) ---------------------
 function InteractiveGames() {
@@ -961,7 +963,10 @@ function GallerySection() {
   const showNext = () => setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16">
+    <section
+      ref={sectionRef}
+      className="relative w-full bg-gradient-to-b from-white to-brand-grayBg/40 py-16"
+    >
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(10,138,128,0.08),transparent_60%)]" />
       <div className="mx-auto px-4 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <motion.div
@@ -995,7 +1000,9 @@ function GallerySection() {
             <SwiperSlide key={`${src}-${i}`} className="!h-auto select-none">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }}
+                animate={
+                  isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 30 }
+                }
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
                 className="group relative h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-white/60 shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
@@ -1207,7 +1214,7 @@ function LostCardHelper() {
               >
                 Lost a card?
               </motion.h2>
-              
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -1217,7 +1224,7 @@ function LostCardHelper() {
                 Worry not! We've got you covered - The game box comes with four blank cards just for
                 this purpose.
               </motion.p>
-              
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -1253,17 +1260,17 @@ function LostCardHelper() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={showCard}
-                  className="group rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[120px]"
+                  className="group min-w-[120px] rounded-full bg-white px-2 py-3 font-sans text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Show card
                 </motion.button>
-                
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={resetToTray}
                   type="button"
-                  className="group rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 min-w-[100px]"
+                  className="group min-w-[100px] rounded-full bg-white px-6 py-3 text-[14px] font-medium text-[#557f28] transition-colors hover:bg-[#557f28] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40"
                 >
                   Reset
                 </motion.button>

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 // This is a placeholder SMS sending API endpoint.
 // For production,  with a real SMS gintegrateateway (e.g., Twilio, MSG91, Textlocal).
@@ -10,8 +10,11 @@ export async function POST(request: Request) {
     // Simulate SMS sending (for development/testing only)
     // In production, call SMS gateway API here
     console.log(`Sending SMS to ${phone}: ${message}`);
-    return NextResponse.json({ success: true, message: 'SMS sent (simulated)' });
-  } catch (error:any) {
-    return NextResponse.json({ success: false, error: error?.message || 'Failed to send SMS' }, { status: 500 });
+    return NextResponse.json({ success: true, message: "SMS sent (simulated)" });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error?.message || "Failed to send SMS" },
+      { status: 500 }
+    );
   }
 }

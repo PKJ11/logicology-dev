@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import nodemailer from "nodemailer";
 
-const MONGO_URI = "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI =
+  "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const DB_NAME = "logicology";
 const COLLECTION = "feedback";
 
@@ -19,16 +20,19 @@ export async function POST(req: NextRequest) {
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
-    await col.insertOne({ 
-      name, 
-      email, 
-      phone: phoneNumber, 
-      feedback: feedbackText, 
-      createdAt: new Date() 
+    await col.insertOne({
+      name,
+      email,
+      phone: phoneNumber,
+      feedback: feedbackText,
+      createdAt: new Date(),
     });
     await client.close();
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err?.message || "DB error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err?.message || "DB error" },
+      { status: 500 }
+    );
   }
 
   // Email configuration
@@ -109,7 +113,7 @@ export async function POST(req: NextRequest) {
     // Send both emails
     await transporter.sendMail(notificationMailOptions);
     await transporter.sendMail(thankYouMailOptions);
-    
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

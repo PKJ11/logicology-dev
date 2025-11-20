@@ -99,7 +99,6 @@ const navItems = [
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
   { name: "Shop", href: "/products" },
   { name: "About Us", href: "/about" },
-  
 ];
 
 /* ================= Utils ================= */
@@ -118,9 +117,9 @@ const generateSlug = (title: string) =>
 export default function NavBar() {
   const router = useRouter();
   const { cart } = useCart();
-  
+
   // Calculate total items in cart
-  const cartItemsCount = cart.reduce((total:any, item:any) => total + item.quantity, 0);
+  const cartItemsCount = cart.reduce((total: any, item: any) => total + item.quantity, 0);
 
   const [open, setOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);

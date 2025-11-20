@@ -23,9 +23,12 @@ const roboto = Roboto({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${roboto.variable}`}> 
+    <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
       <head>
-        <link rel="icon" href="https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538" />
+        <link
+          rel="icon"
+          href="https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538"
+        />
       </head>
       <body>
         <CartProvider>

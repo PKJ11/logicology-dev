@@ -7,6 +7,7 @@ const nextConfig = {
       { protocol: "https", hostname: "plus.unsplash.com" },
       { protocol: "https", hostname: "ik.imagekit.io" },
       { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "www.logicology.in" },
     ],
   },
 };

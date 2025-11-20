@@ -7,7 +7,7 @@ const HOSTINGER_PASSWORD = process.env.HOSTINGER_PASSWORD || "Raha@1ogic$$$";
 export async function POST(req: NextRequest) {
   try {
     const { to, subject, html, pdfUrl } = await req.json();
-    
+
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com", // Hostinger SMTP server
       port: 465, // SSL port

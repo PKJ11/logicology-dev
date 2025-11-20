@@ -25,26 +25,26 @@ export function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
   let cgstTotal = 0;
   let sgstTotal = 0;
   let rows = "";
-  
+
   cart.forEach((item, idx) => {
     const details = itemDetails[item.razorpayItemId] || {};
     const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
     const quantity = item.quantity || 1;
     const gstRate = details.tax_rate || 0;
     const hsnCode = details.hsn_code || "-";
-    
+
     // GST calculation: Assuming price is GST inclusive
     const gstAmount = gstRate > 0 ? (price * gstRate) / (100 + gstRate) : 0;
     const cgstAmount = gstAmount / 2;
     const sgstAmount = gstAmount / 2;
     const basePrice = price - gstAmount;
     const totalItemAmount = price * quantity;
-    
+
     totalAmount += totalItemAmount;
     totalGST += gstAmount * quantity;
     cgstTotal += cgstAmount * quantity;
     sgstTotal += sgstAmount * quantity;
-    
+
     rows += `
       <tr style="border-bottom: 1px solid #ddd;">
         <td style="padding: 10px; text-align: center;">${idx + 1}</td>
@@ -64,8 +64,8 @@ export function generateGSTReceipt(cart: CartItem[], itemDetails: ItemDetails) {
     <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
       <h3 style="color: #6A294D; margin-top: 0;">GST Breakdown</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ''}
-        ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ''}
+        ${cgstTotal > 0 ? `<div>CGST:</div><div style="text-align: right;">₹${cgstTotal.toFixed(2)}</div>` : ""}
+        ${sgstTotal > 0 ? `<div>SGST:</div><div style="text-align: right;">₹${sgstTotal.toFixed(2)}</div>` : ""}
         <div style="font-weight: bold; border-top: 1px solid #ddd; padding-top: 5px;">Total GST:</div>
         <div style="font-weight: bold; text-align: right; border-top: 1px solid #ddd; padding-top: 5px;">₹${totalGST.toFixed(2)}</div>
       </div>

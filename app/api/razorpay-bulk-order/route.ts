@@ -16,10 +16,13 @@ export async function POST(req: NextRequest) {
       amount: amount * 100, // INR paise
       currency: "INR",
       receipt,
-  payment_capture: true,
+      payment_capture: true,
     });
     return NextResponse.json({ success: true, order, key: RAZORPAY_KEY_ID });
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err?.message || "Razorpay error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err?.message || "Razorpay error" },
+      { status: 500 }
+    );
   }
 }

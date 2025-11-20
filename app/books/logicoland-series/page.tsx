@@ -13,11 +13,11 @@ import BuySection from "@/components/BuySection";
 ============================================================ */
 export default function Logicoland1Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
-    const sections = ['hero', 'buy', 'puzzles', 'printables', 'community'];
-    
+    const sections = ["hero", "buy", "puzzles", "printables", "community"];
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -26,13 +26,13 @@ export default function Logicoland1Page() {
           }
         });
       },
-      { 
+      {
         threshold: 0.3,
-        rootMargin: '-10% 0px -10% 0px'
+        rootMargin: "-10% 0px -10% 0px",
       }
     );
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const element = document.getElementById(section);
       if (element) observer.observe(element);
     });
@@ -42,12 +42,12 @@ export default function Logicoland1Page() {
 
   return (
     <>
-      <NavBar  />
+      <NavBar />
 
       <main className="bg-brand-grayBg text-brand-tealDark">
         {/* ================= HERO ================= */}
         <section id="hero">
-          <HeroVideo isActive={activeSection === 'hero'} />
+          <HeroVideo isActive={activeSection === "hero"} />
         </section>
 
         {/* ================= LOGICOLAND V1 ================= */}
@@ -57,17 +57,17 @@ export default function Logicoland1Page() {
 
         {/* ================= INTERACTIVE PUZZLES ================= */}
         <section id="puzzles">
-          <InteractivePuzzlesSection isActive={activeSection === 'puzzles'} />
+          <InteractivePuzzlesSection isActive={activeSection === "puzzles"} />
         </section>
 
         {/* ================= PRINTABLES ================= */}
         <section id="printables">
-          <PrintablesSection isActive={activeSection === 'printables'} />
+          <PrintablesSection isActive={activeSection === "printables"} />
         </section>
 
         {/* ================= COMMUNITY ================= */}
         <section id="community">
-          <Community  />
+          <Community />
         </section>
 
         <SiteFooter />
@@ -109,8 +109,8 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
     if (!videoRef.current) return;
     try {
       if (isIOS) {
-        videoRef.current.removeAttribute('playsInline');
-        videoRef.current.setAttribute('controls', 'true');
+        videoRef.current.removeAttribute("playsInline");
+        videoRef.current.setAttribute("controls", "true");
         if (videoRef.current.webkitEnterFullscreen) {
           videoRef.current.webkitEnterFullscreen();
           setIsFullscreen(true);
@@ -125,16 +125,18 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
         }
       }
     } catch (error) {
-      console.error('Fullscreen error:', error);
+      console.error("Fullscreen error:", error);
     }
   };
 
   return (
-    <section className="w-full bg-white overflow-hidden" ref={sectionRef}>
+    <section className="w-full overflow-hidden bg-white" ref={sectionRef}>
       <div className="px-3 py-10 sm:px-5">
-        <div className={`relative rounded-[28px] bg-white px-2 transition-all duration-1000 ${
-          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div
+          className={`relative rounded-[28px] bg-white px-2 transition-all duration-1000 ${
+            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           <div className="relative overflow-hidden rounded-[22px]">
             <video
               ref={videoRef}
@@ -156,31 +158,47 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
 
             {/* centered overlay content */}
             <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-              <div className={`mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white sm:px-10 sm:py-14 transition-all duration-1000 ${
-                isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}>
-                <p className="textstyles mb-3 transition-all duration-500 delay-200" style={{
-                  transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-                  opacity: isActive ? 1 : 0
-                }}>Empowering Minds</p>
-                <h1 className="headingstyle font-extrabold leading-tight transition-all duration-500 delay-400" style={{
-                  transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-                  opacity: isActive ? 1 : 0
-                }}>
+              <div
+                className={`mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white transition-all duration-1000 sm:px-10 sm:py-14 ${
+                  isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                }`}
+              >
+                <p
+                  className="textstyles mb-3 transition-all delay-200 duration-500"
+                  style={{
+                    transform: isActive ? "translateY(0)" : "translateY(20px)",
+                    opacity: isActive ? 1 : 0,
+                  }}
+                >
+                  Empowering Minds
+                </p>
+                <h1
+                  className="headingstyle delay-400 font-extrabold leading-tight transition-all duration-500"
+                  style={{
+                    transform: isActive ? "translateY(0)" : "translateY(20px)",
+                    opacity: isActive ? 1 : 0,
+                  }}
+                >
                   Through STEM Play
                   <br /> and Logic-Based Learning
                 </h1>
-                <p className="textstyles mt-4 max-w-md text-white/90 transition-all duration-500 delay-600" style={{
-                  transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-                  opacity: isActive ? 1 : 0
-                }}>
+                <p
+                  className="textstyles delay-600 mt-4 max-w-md text-white/90 transition-all duration-500"
+                  style={{
+                    transform: isActive ? "translateY(0)" : "translateY(20px)",
+                    opacity: isActive ? 1 : 0,
+                  }}
+                >
                   At Logicology we endeavour to make learning fun so that children learn while they
                   play.
                 </p>
-                <div className="mt-6 transition-all duration-500 delay-800" style={{
-                  transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-                  opacity: isActive ? 1 : 0
-                }}>
+                <div
+                  className="delay-800 mt-6 transition-all duration-500"
+                  style={{
+                    transform: isActive ? "translateY(0)" : "translateY(20px)",
+                    opacity: isActive ? 1 : 0,
+                  }}
+                >
                   <CTAButton
                     text="Learn More"
                     href="#buy"
@@ -210,13 +228,15 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
             </div>
 
             {/* Controls group (bottom-right) */}
-            <div className={`absolute bottom-4 right-4 z-30 flex items-center gap-2 transition-all duration-500 delay-1000 ${
-              isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}>
+            <div
+              className={`absolute bottom-4 right-4 z-30 flex items-center gap-2 transition-all delay-1000 duration-500 ${
+                isActive ? "scale-100 opacity-100" : "scale-95 opacity-0"
+              }`}
+            >
               {/* Mute/Unmute */}
               <button
                 onClick={toggleMute}
-                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-all duration-300 hover:scale-110"
+                className="rounded-full bg-black/50 p-2 text-white transition-all duration-300 hover:scale-110 hover:bg-black/70"
                 aria-label={isMuted ? "Unmute video" : "Mute video"}
               >
                 {isMuted ? (
@@ -263,7 +283,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-all duration-300 hover:scale-110"
+                className="rounded-full bg-black/50 p-2 text-white transition-all duration-300 hover:scale-110 hover:bg-black/70"
                 aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
               >
                 {!isFullscreen ? (
@@ -314,24 +334,32 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
-    <section ref={sectionRef} className="w-full bg-brand-coral text-white overflow-hidden">
+    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-coral text-white">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-        <div className={`grid items-center gap-12 md:grid-cols-2 transition-all duration-1000 ${
-          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div
+          className={`grid items-center gap-12 transition-all duration-1000 md:grid-cols-2 ${
+            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           {/* Text Content */}
-          <div className="sm:px-4 space-y-6">
-            <div className="transition-all duration-500 delay-200" style={{
-              transform: isActive ? 'translateX(0)' : 'translateX(-50px)',
-              opacity: isActive ? 1 : 0
-            }}>
+          <div className="space-y-6 sm:px-4">
+            <div
+              className="transition-all delay-200 duration-500"
+              style={{
+                transform: isActive ? "translateX(0)" : "translateX(-50px)",
+                opacity: isActive ? 1 : 0,
+              }}
+            >
               <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
             </div>
 
-            <div className="transition-all duration-500 delay-400" style={{
-              transform: isActive ? 'translateX(0)' : 'translateX(-50px)',
-              opacity: isActive ? 1 : 0
-            }}>
+            <div
+              className="delay-400 transition-all duration-500"
+              style={{
+                transform: isActive ? "translateX(0)" : "translateX(-50px)",
+                opacity: isActive ? 1 : 0,
+              }}
+            >
               <p className="textstyles mt-4 font-sans text-white/90">
                 Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
               </p>
@@ -342,10 +370,13 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
               </ol>
             </div>
 
-            <div className="transition-all duration-500 delay-600" style={{
-              transform: isActive ? 'translateX(0)' : 'translateX(-50px)',
-              opacity: isActive ? 1 : 0
-            }}>
+            <div
+              className="delay-600 transition-all duration-500"
+              style={{
+                transform: isActive ? "translateX(0)" : "translateX(-50px)",
+                opacity: isActive ? 1 : 0,
+              }}
+            >
               <div className="mt-6 flex gap-4">
                 <CTAButton
                   text="Watch Demo"
@@ -361,10 +392,12 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
           </div>
 
           {/* Puzzle Content */}
-          <div className={`transition-all duration-1000 delay-500 ${
-            isActive ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 rotate-3'
-          }`}>
-            <div className="rounded-[26px] bg-white p-3 hover:scale-[1.02] transition-transform duration-500">
+          <div
+            className={`transition-all delay-500 duration-1000 ${
+              isActive ? "rotate-0 scale-100 opacity-100" : "rotate-3 scale-75 opacity-0"
+            }`}
+          >
+            <div className="rounded-[26px] bg-white p-3 transition-transform duration-500 hover:scale-[1.02]">
               <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
                 <SudokuSlider isActive={isActive} />
               </div>
@@ -375,10 +408,10 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 
       {/* ---- Modal ---- */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 animate-fade-in">
-          <div className="relative w-full max-w-lg rounded-lg bg-white p-4 animate-scale-in">
+        <div className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="animate-scale-in relative w-full max-w-lg rounded-lg bg-white p-4">
             <button
-              className="absolute right-3 top-3 text-gray-600 hover:text-black transition-colors duration-200 hover:scale-110"
+              className="absolute right-3 top-3 text-gray-600 transition-colors duration-200 hover:scale-110 hover:text-black"
               onClick={() => setIsOpen(false)}
             >
               ✕
@@ -400,16 +433,21 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 ============================================================ */
 function PrintablesSection({ isActive }: { isActive: boolean }) {
   return (
-    <section className="w-full bg-brand-grayBg overflow-hidden">
+    <section className="w-full overflow-hidden bg-brand-grayBg">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-        <div className={`rounded-[22px] bg-white p-6 shadow-soft sm:p-10 transition-all duration-1000 ${
-          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div
+          className={`rounded-[22px] bg-white p-6 shadow-soft transition-all duration-1000 sm:p-10 ${
+            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           {/* Header */}
-          <div className="transition-all duration-500 delay-200" style={{
-            transform: isActive ? 'translateY(0)' : 'translateY(-30px)',
-            opacity: isActive ? 1 : 0
-          }}>
+          <div
+            className="transition-all delay-200 duration-500"
+            style={{
+              transform: isActive ? "translateY(0)" : "translateY(-30px)",
+              opacity: isActive ? 1 : 0,
+            }}
+          >
             <h3 className="headingstyle text-center font-extrabold text-brand-teal">Printables</h3>
             <p className="textstyles mt-2 text-center text-brand-teal">
               Done with Logicoland 1 already? Here are a few more worksheets for your practice.
@@ -418,10 +456,13 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
 
           {/* Cards Grid */}
           <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <div className="transition-all duration-500 delay-400" style={{
-              transform: isActive ? 'translateX(0)' : 'translateX(-50px)',
-              opacity: isActive ? 1 : 0
-            }}>
+            <div
+              className="delay-400 transition-all duration-500"
+              style={{
+                transform: isActive ? "translateX(0)" : "translateX(-50px)",
+                opacity: isActive ? 1 : 0,
+              }}
+            >
               <PrintableCard
                 bgImage="https://ik.imagekit.io/pratik11/logicaoldandpdf1.JPG?updatedAt=1758342080344"
                 buttonColor="#7E5C2E"
@@ -432,10 +473,13 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
               />
             </div>
 
-            <div className="transition-all duration-500 delay-600" style={{
-              transform: isActive ? 'translateX(0)' : 'translateX(50px)',
-              opacity: isActive ? 1 : 0
-            }}>
+            <div
+              className="delay-600 transition-all duration-500"
+              style={{
+                transform: isActive ? "translateX(0)" : "translateX(50px)",
+                opacity: isActive ? 1 : 0,
+              }}
+            >
               <PrintableCard
                 bgImage="https://ik.imagekit.io/pratik11/logicolandpdf2.JPG?updatedAt=1758342079963"
                 buttonColor="#AB4637"
@@ -448,10 +492,13 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
           </div>
 
           {/* Footer Text */}
-          <div className="transition-all duration-500 delay-800" style={{
-            transform: isActive ? 'translateY(0)' : 'translateY(30px)',
-            opacity: isActive ? 1 : 0
-          }}>
+          <div
+            className="delay-800 transition-all duration-500"
+            style={{
+              transform: isActive ? "translateY(0)" : "translateY(30px)",
+              opacity: isActive ? 1 : 0,
+            }}
+          >
             <p className="mt-8 text-center text-brand-tealDark/70">
               For more such printables, join our community.
             </p>
@@ -540,64 +587,82 @@ const PUZZLES: Puzzle[] = [
 
 function SudokuSlider({ isActive }: { isActive: boolean }) {
   const [idx, setIdx] = useState(0);
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+  const [direction, setDirection] = useState<"left" | "right">("right");
   const total = PUZZLES.length;
 
   const next = () => {
-    setDirection('right');
+    setDirection("right");
     setIdx((i) => (i + 1) % total);
   };
-  
+
   const prev = () => {
-    setDirection('left');
+    setDirection("left");
     setIdx((i) => (i - 1 + total) % total);
   };
 
   return (
-    <div className={`w-full transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+    <div
+      className={`w-full transition-all duration-500 ${isActive ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
+    >
       <div className="mb-3 flex items-center justify-between">
-        <div className="font-semibold text-brand-tealDark transition-all duration-300 delay-200" style={{
-          transform: isActive ? 'translateX(0)' : 'translateX(-20px)',
-          opacity: isActive ? 1 : 0
-        }}>
+        <div
+          className="font-semibold text-brand-tealDark transition-all delay-200 duration-300"
+          style={{
+            transform: isActive ? "translateX(0)" : "translateX(-20px)",
+            opacity: isActive ? 1 : 0,
+          }}
+        >
           {PUZZLES[idx].name}
         </div>
-        <div className="flex items-center gap-2 transition-all duration-300 delay-400" style={{
-          transform: isActive ? 'translateX(0)' : 'translateX(20px)',
-          opacity: isActive ? 1 : 0
-        }}>
+        <div
+          className="delay-400 flex items-center gap-2 transition-all duration-300"
+          style={{
+            transform: isActive ? "translateX(0)" : "translateX(20px)",
+            opacity: isActive ? 1 : 0,
+          }}
+        >
           <button
             onClick={prev}
-            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90 transition-all duration-300 hover:scale-110 active:scale-95"
+            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-110 hover:bg-white/90 active:scale-95"
           >
             ◀
           </button>
           <button
             onClick={next}
-            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 hover:bg-white/90 transition-all duration-300 hover:scale-110 active:scale-95"
+            className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-110 hover:bg-white/90 active:scale-95"
           >
             ▶
           </button>
         </div>
       </div>
 
-      <div className={`transition-all duration-500 ${
-        direction === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'
-      }`}>
-        <ColorSudoku key={idx} start={PUZZLES[idx].start} solution={PUZZLES[idx].solution} isActive={isActive} />
+      <div
+        className={`transition-all duration-500 ${
+          direction === "right" ? "animate-slide-in-right" : "animate-slide-in-left"
+        }`}
+      >
+        <ColorSudoku
+          key={idx}
+          start={PUZZLES[idx].start}
+          solution={PUZZLES[idx].solution}
+          isActive={isActive}
+        />
       </div>
 
-      <div className="mt-3 flex justify-center gap-2 transition-all duration-300 delay-600" style={{
-        transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-        opacity: isActive ? 1 : 0
-      }}>
+      <div
+        className="delay-600 mt-3 flex justify-center gap-2 transition-all duration-300"
+        style={{
+          transform: isActive ? "translateY(0)" : "translateY(20px)",
+          opacity: isActive ? 1 : 0,
+        }}
+      >
         {PUZZLES.map((_, i) => (
           <button
             key={i}
             aria-label={`Go to puzzle ${i + 1}`}
             onClick={() => setIdx(i)}
             className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
-              i === idx ? "bg-brand-tealDark scale-125" : "bg-black/20 hover:bg-black/40"
+              i === idx ? "scale-125 bg-brand-tealDark" : "bg-black/20 hover:bg-black/40"
             }`}
           />
         ))}
@@ -623,7 +688,7 @@ function cellBorders(r: number, c: number) {
 function ColorSudoku({
   start,
   solution,
-  isActive
+  isActive,
 }: {
   start: (ColorKey | null)[][];
   solution: ColorKey[][];
@@ -716,13 +781,13 @@ function ColorSudoku({
               onClick={() => setSelectedColor((prev) => (prev === k ? null : k))}
               className={`h-8 w-8 rounded-full shadow ring-2 ring-white sm:h-10 sm:w-10 ${
                 COLOR_META[k].class
-              } cursor-grab outline-offset-2 active:cursor-grabbing transition-all duration-300 hover:scale-110 ${
-                active ? "outline outline-2 outline-black/70 scale-110" : ""
+              } cursor-grab outline-offset-2 transition-all duration-300 hover:scale-110 active:cursor-grabbing ${
+                active ? "scale-110 outline outline-2 outline-black/70" : ""
               }`}
               style={{
-                transitionDelay: isActive ? `${index * 100}ms` : '0ms',
-                transform: isActive ? 'scale(1)' : 'scale(0)',
-                opacity: isActive ? 1 : 0
+                transitionDelay: isActive ? `${index * 100}ms` : "0ms",
+                transform: isActive ? "scale(1)" : "scale(0)",
+                opacity: isActive ? 1 : 0,
               }}
               title={`Drag or tap ${COLOR_META[k].label}`}
               aria-pressed={active}
@@ -731,10 +796,13 @@ function ColorSudoku({
           );
         })}
 
-        <div className="ml-auto flex gap-2 transition-all duration-500 delay-700" style={{
-          transform: isActive ? 'translateX(0)' : 'translateX(50px)',
-          opacity: isActive ? 1 : 0
-        }}>
+        <div
+          className="ml-auto flex gap-2 transition-all delay-700 duration-500"
+          style={{
+            transform: isActive ? "translateX(0)" : "translateX(50px)",
+            opacity: isActive ? 1 : 0,
+          }}
+        >
           <button
             onClick={() => setShowMistakes((s) => !s)}
             className="rounded-full bg-black/70 px-3 py-1 text-xs text-white transition-all duration-300 hover:scale-105 active:scale-95"
@@ -747,8 +815,8 @@ function ColorSudoku({
           >
             Fill Complete
           </button>
-          <button 
-            onClick={reset} 
+          <button
+            onClick={reset}
             className="rounded-full bg-black/70 px-3 py-1 text-xs text-white transition-all duration-300 hover:scale-105 active:scale-95"
           >
             Reset
@@ -757,10 +825,13 @@ function ColorSudoku({
       </div>
 
       {/* board */}
-      <div className="grid w-full touch-manipulation select-none grid-cols-4 gap-0 overflow-hidden rounded-[20px] bg-white ring-1 ring-black/10 transition-all duration-500 delay-300" style={{
-        transform: isActive ? 'scale(1)' : 'scale(0.9)',
-        opacity: isActive ? 1 : 0
-      }}>
+      <div
+        className="grid w-full touch-manipulation select-none grid-cols-4 gap-0 overflow-hidden rounded-[20px] bg-white ring-1 ring-black/10 transition-all delay-300 duration-500"
+        style={{
+          transform: isActive ? "scale(1)" : "scale(0.9)",
+          opacity: isActive ? 1 : 0,
+        }}
+      >
         {grid.map((row, r) =>
           row.map((cell, c) => {
             const key = `${r}-${c}`;
@@ -776,7 +847,7 @@ function ColorSudoku({
                   r,
                   c
                 )} flex items-center justify-center transition-all duration-300 ${
-                  cell.locked ? 'cursor-not-allowed' : 'cursor-pointer hover:brightness-95'
+                  cell.locked ? "cursor-not-allowed" : "cursor-pointer hover:brightness-95"
                 } ${
                   cell.value
                     ? COLOR_META[cell.value].class
@@ -799,7 +870,7 @@ function ColorSudoku({
                 )}
 
                 {!cell.value && !cell.locked && (
-                  <span className="text-[10px] text-black/40 sm:text-xs transition-all duration-300">
+                  <span className="text-[10px] text-black/40 transition-all duration-300 sm:text-xs">
                     Drop / Tap
                   </span>
                 )}
@@ -821,18 +892,24 @@ function ColorSudoku({
       </div>
 
       {won && (
-        <div className="mt-4 rounded-xl bg-[#DDB24D] px-4 py-3 text-center font-semibold text-white transition-all duration-500 delay-500" style={{
-          transform: isActive ? 'scale(1)' : 'scale(0)',
-          opacity: isActive ? 1 : 0
-        }}>
+        <div
+          className="mt-4 rounded-xl bg-[#DDB24D] px-4 py-3 text-center font-semibold text-white transition-all delay-500 duration-500"
+          style={{
+            transform: isActive ? "scale(1)" : "scale(0)",
+            opacity: isActive ? 1 : 0,
+          }}
+        >
           🎉 Great job! You solved it.
         </div>
       )}
 
-      <p className="mt-3 text-xs text-black/50 transition-all duration-500 delay-700" style={{
-        transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-        opacity: isActive ? 1 : 0
-      }}>
+      <p
+        className="mt-3 text-xs text-black/50 transition-all delay-700 duration-500"
+        style={{
+          transform: isActive ? "translateY(0)" : "translateY(20px)",
+          opacity: isActive ? 1 : 0,
+        }}
+      >
         Rule: Fill the 4×4 grid so that each row, column, and 2×2 box contains all four colors
         exactly once. Drag a color from the palette or tap a color, then tap a cell to place it.{" "}
         {showMistakes && "Conflicts are highlighted with a black ring and dark overlay."}
@@ -929,30 +1006,37 @@ function PrintableCard({
   downloadName,
   bgImage,
   overlayClass = "bg-black/10",
-  isActive = false
+  isActive = false,
 }: PrintableCardProps) {
   const useImage = !!bgImage;
 
   return (
-    <div className="rounded-[18px] bg-white p-3 shadow-soft h-full flex flex-col transition-all duration-500 hover:scale-[1.02]">
+    <div className="flex h-full flex-col rounded-[18px] bg-white p-3 shadow-soft transition-all duration-500 hover:scale-[1.02]">
       <div
         className={[
-          "relative h-64 overflow-hidden rounded-[14px] flex items-end justify-center transition-all duration-700",
+          "relative flex h-64 items-end justify-center overflow-hidden rounded-[14px] transition-all duration-700",
           useImage ? "bg-cover bg-center" : (colorClass ?? ""),
         ].join(" ")}
-        style={{ 
+        style={{
           backgroundImage: useImage ? `url(${bgImage})` : undefined,
-          transform: isActive ? 'scale(1)' : 'scale(0.8)',
-          opacity: isActive ? 1 : 0
+          transform: isActive ? "scale(1)" : "scale(0.8)",
+          opacity: isActive ? 1 : 0,
         }}
       >
         {/* Optional contrast overlay for text/button legibility */}
-        {useImage && <div className={`absolute inset-0 ${overlayClass} transition-all duration-500 hover:bg-black/5`} />}
+        {useImage && (
+          <div
+            className={`absolute inset-0 ${overlayClass} transition-all duration-500 hover:bg-black/5`}
+          />
+        )}
 
-        <div className="relative z-10 mb-4 transform transition-all duration-500 hover:scale-105" style={{
-          transform: isActive ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
-          opacity: isActive ? 1 : 0
-        }}>
+        <div
+          className="relative z-10 mb-4 transform transition-all duration-500 hover:scale-105"
+          style={{
+            transform: isActive ? "translateY(0) scale(1)" : "translateY(20px) scale(0.9)",
+            opacity: isActive ? 1 : 0,
+          }}
+        >
           {/* anchor to force download */}
           <a href={filePath} download={downloadName || ""} className="block">
             <CTAButton
@@ -1122,7 +1206,7 @@ html {
 `;
 
 // Add global styles to document
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
   const styleSheet = document.createElement("style");
   styleSheet.innerText = globalStyles;
   document.head.appendChild(styleSheet);

@@ -3,7 +3,15 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
-export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: string; image: string ; text?: string;}) {
+export default function MediaLayoutRight({
+  videoSrc,
+  image,
+  text,
+}: {
+  videoSrc: string;
+  image: string;
+  text?: string;
+}) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
@@ -154,7 +162,9 @@ export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: s
                 style={{ backgroundColor: "#E45C48" }}
               >
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white md:text-xl lg:text-2xl">{text || "Why Logicology"}</div>
+                  <div className="text-2xl font-bold text-white md:text-xl lg:text-2xl">
+                    {text || "Why Logicology"}
+                  </div>
                   {/* Play icon overlay */}
                   <div className="pointer-events-none mt-4 flex justify-center">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow">
@@ -190,7 +200,7 @@ export default function MediaLayoutRight({ videoSrc, image,text }: { videoSrc: s
             {isVideoExpanded && (
               <button
                 className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   const video = videoRef.current;
                   // iOS Safari: exit fullscreen for video

@@ -14,7 +14,6 @@ import { useCart } from "@/components/CartContext";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
-
 // Sample product data
 const products = [
   {
@@ -30,7 +29,7 @@ const products = [
     name: "Logicoland - Volume 1",
     price: "₹249",
     initialprice: "₹299",
-    razorpayItemId: "item_RNn0h9rGIq8zOL", 
+    razorpayItemId: "item_RNn0h9rGIq8zOL",
     description: "Logicoland Volume 1",
     image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
@@ -39,8 +38,9 @@ const products = [
     name: "Logicoland Volume 1 Bundle - 20 Books",
     price: "₹4000",
     initialprice: undefined,
-    razorpayItemId: "item_RVa7Osutc07pfB", 
-    description: "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
+    razorpayItemId: "item_RVa7Osutc07pfB",
+    description:
+      "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
     image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
   },
@@ -48,7 +48,9 @@ const products = [
 
 const ProductShowcase = () => {
   const { addToCart } = useCart();
-  const [itemDetails, setItemDetails] = useState<Record<string, { tax_rate?: number; hsn_code?: string }>>({});
+  const [itemDetails, setItemDetails] = useState<
+    Record<string, { tax_rate?: number; hsn_code?: string }>
+  >({});
 
   useEffect(() => {
     async function fetchAllItems() {
@@ -60,7 +62,9 @@ const ProductShowcase = () => {
           // Map item details by item ID
           const details: Record<string, { tax_rate?: number; hsn_code?: string }> = {};
           for (const item of data.items) {
-            console.log(`[Item] id: ${item.id}, name: ${item.name}, description: ${item.description}, amount: ${item.amount}, currency: ${item.currency}, hsn_code: ${item.hsn_code}, tax_rate: ${item.tax_rate}`);
+            console.log(
+              `[Item] id: ${item.id}, name: ${item.name}, description: ${item.description}, amount: ${item.amount}, currency: ${item.currency}, hsn_code: ${item.hsn_code}, tax_rate: ${item.tax_rate}`
+            );
             details[item.id] = { tax_rate: item.tax_rate, hsn_code: item.hsn_code };
           }
           setItemDetails(details);
@@ -80,7 +84,7 @@ const ProductShowcase = () => {
     return {
       basePrice: basePrice.toFixed(2),
       gstAmount: gstAmount.toFixed(2),
-      total: numericPrice.toFixed(2)
+      total: numericPrice.toFixed(2),
     };
   };
 
@@ -105,9 +109,9 @@ const ProductShowcase = () => {
             console.log(`[Product Render]`, {
               product,
               razorpayDetails: details,
-              priceBreakdown
+              priceBreakdown,
             });
-            
+
             return (
               <div
                 key={index}
@@ -138,7 +142,7 @@ const ProductShowcase = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* GST Details */}
                   {/* <div className="mb-1 text-xs text-gray-700">
                     <div className="flex justify-between">
@@ -150,11 +154,11 @@ const ProductShowcase = () => {
                       <span>HSN: {details.hsn_code || "..."}</span>
                     </div>
                   </div> */}
-                  
+
                   {/* <div className="mb-1 text-xs text-gray-700">
                     <span>Includes GST | Razorpay ID: {product.razorpayItemId}</span>
                   </div> */}
-                  
+
                   <button
                     className="w-full max-w-[140px] rounded-full bg-[#EB6A42] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#d85b36]"
                     onClick={() => {

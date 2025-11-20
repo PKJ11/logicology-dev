@@ -5,7 +5,10 @@ export async function GET(req: NextRequest) {
   const key_id = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
   const key_secret = process.env.RAZORPAY_KEY_SECRET || "t8NMj5PKyi0Af2b15uARbtLl";
   if (!key_id || !key_secret) {
-    return NextResponse.json({ success: false, error: "Missing Razorpay credentials" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Missing Razorpay credentials" },
+      { status: 500 }
+    );
   }
   const url = `https://api.razorpay.com/v1/items`;
   const auth = Buffer.from(`${key_id}:${key_secret}`).toString("base64");
@@ -23,10 +26,16 @@ export async function GET(req: NextRequest) {
       amount: item.amount / 100, // Razorpay returns amount in paise
       currency: item.currency,
       hsn_code: item.hsn_code,
-      tax_rate: item.tax_rate /100,
+      tax_rate: item.tax_rate / 100,
     }));
     return NextResponse.json({ success: true, items });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.response?.data?.error?.description || "Failed to fetch items" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error?.response?.data?.error?.description || "Failed to fetch items",
+      },
+      { status: 500 }
+    );
   }
 }

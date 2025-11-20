@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
-    
+
     const user = await col.findOne({ phone });
     await client.close();
 
@@ -26,13 +26,13 @@ export async function POST(req: NextRequest) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: user._id, 
+      {
+        userId: user._id,
         phone: user.phone,
-        name: user.name 
+        name: user.name,
       },
       JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: "30d" }
     );
 
     return NextResponse.json({
@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
-        phone: user.phone
-      }
+        phone: user.phone,
+      },
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

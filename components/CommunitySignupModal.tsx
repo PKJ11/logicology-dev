@@ -153,7 +153,7 @@ export default function CommunitySignupModal({
         }
 
         // Wait a bit for DOM to be ready
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         // Initialize new reCAPTCHA
         recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
@@ -169,10 +169,11 @@ export default function CommunitySignupModal({
 
         recaptchaInitialized.current = true;
         console.log("reCAPTCHA initialized successfully");
-
       } catch (error) {
         console.error("Error initializing reCAPTCHA:", error);
-        setErrorMessage("Failed to initialize security verification. Please try switching tabs or refresh the page.");
+        setErrorMessage(
+          "Failed to initialize security verification. Please try switching tabs or refresh the page."
+        );
         recaptchaInitialized.current = false;
       }
     };
@@ -199,7 +200,7 @@ export default function CommunitySignupModal({
       const timer = setTimeout(() => {
         initializeRecaptcha();
       }, 300);
-      
+
       return () => clearTimeout(timer);
     }
   }, [open, activeTab, otpSent]);
@@ -237,7 +238,6 @@ export default function CommunitySignupModal({
       recaptchaInitialized.current = true;
       setErrorMessage(null);
       console.log("reCAPTCHA re-initialized successfully");
-
     } catch (error) {
       console.error("Error re-initializing reCAPTCHA:", error);
       setErrorMessage("Security verification failed. Please try again.");
@@ -325,7 +325,7 @@ export default function CommunitySignupModal({
       if (!recaptchaVerifier.current || !recaptchaInitialized.current) {
         initializeRecaptcha();
         // Wait a bit for initialization
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
       if (!recaptchaVerifier.current) {
@@ -337,10 +337,11 @@ export default function CommunitySignupModal({
       setConfirmationResult(result);
       setOtpSent(true);
       setErrorMessage(null);
-
     } catch (error: any) {
       console.error("Error:", error);
-      setErrorMessage(`Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`);
+      setErrorMessage(
+        `Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`
+      );
       if (activeTab === "signup") {
         // Reset reCAPTCHA on error
         recaptchaInitialized.current = false;
@@ -368,7 +369,6 @@ export default function CommunitySignupModal({
       await confirmationResult.confirm(otp);
       setOtpVerified(true);
       setErrorMessage(null);
-
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
       setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
@@ -436,7 +436,6 @@ export default function CommunitySignupModal({
 
       setRegistrationSuccess(true);
       setHasExistingSession(true);
-
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setErrorMessage(`Registration failed: ${error.message || "Unknown error"}`);
@@ -475,7 +474,7 @@ export default function CommunitySignupModal({
     setRegistrationSuccess(false);
     setErrorMessage(null);
     recaptchaInitialized.current = false;
-    
+
     // Clear reCAPTCHA
     if (recaptchaVerifier.current) {
       try {
@@ -496,7 +495,7 @@ export default function CommunitySignupModal({
   const handleTabSwitch = (tab: TabType) => {
     setActiveTab(tab);
     setErrorMessage(null);
-    
+
     // When switching to signup tab, ensure reCAPTCHA is ready
     if (tab === "signup") {
       setTimeout(() => {
@@ -516,7 +515,7 @@ export default function CommunitySignupModal({
   if (!open) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
       onClick={handleBackdropClick}
     >
@@ -616,11 +615,11 @@ export default function CommunitySignupModal({
         ) : (
           <div className="space-y-6">
             {/* Tab Navigation */}
-            <div className="flex bg-brand-grayBg rounded-xl p-1">
+            <div className="flex rounded-xl bg-brand-grayBg p-1">
               <button
                 type="button"
                 onClick={() => handleTabSwitch("signup")}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
                   activeTab === "signup"
                     ? "bg-white text-brand-tealDark shadow-sm"
                     : "text-brand-tealDark/60 hover:text-brand-tealDark"
@@ -631,7 +630,7 @@ export default function CommunitySignupModal({
               <button
                 type="button"
                 onClick={() => handleTabSwitch("login")}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
                   activeTab === "login"
                     ? "bg-white text-brand-tealDark shadow-sm"
                     : "text-brand-tealDark/60 hover:text-brand-tealDark"
@@ -704,10 +703,15 @@ export default function CommunitySignupModal({
                     disabled={!phone || phone.length < 10 || loading}
                     className="whitespace-nowrap rounded-xl bg-brand-teal px-5 py-3 text-white shadow-md transition-colors hover:bg-brand-tealDark disabled:cursor-not-allowed disabled:bg-brand-teal/40"
                   >
-                    {loading 
-                      ? activeTab === "login" ? "Logging in..." : "Sending..." 
-                      : activeTab === "login" ? "Login" : otpSent ? "Sent" : "Send OTP"
-                    }
+                    {loading
+                      ? activeTab === "login"
+                        ? "Logging in..."
+                        : "Sending..."
+                      : activeTab === "login"
+                        ? "Login"
+                        : otpSent
+                          ? "Sent"
+                          : "Send OTP"}
                   </button>
                 </div>
               </div>
@@ -762,7 +766,7 @@ export default function CommunitySignupModal({
                 <button
                   type="submit"
                   disabled={true}
-                  className="w-full rounded-xl bg-brand-teal/40 px-6 py-3 font-medium text-white cursor-not-allowed"
+                  className="w-full cursor-not-allowed rounded-xl bg-brand-teal/40 px-6 py-3 font-medium text-white"
                 >
                   Verify OTP to Continue
                 </button>
@@ -777,21 +781,23 @@ export default function CommunitySignupModal({
             <div className="text-center">
               <p className="text-sm text-brand-tealDark/60">
                 {activeTab === "signup" ? (
-                  <>Already a member?{" "}
+                  <>
+                    Already a member?{" "}
                     <button
                       type="button"
                       onClick={() => handleTabSwitch("login")}
-                      className="text-brand-teal font-medium hover:text-brand-tealDark transition-colors"
+                      className="font-medium text-brand-teal transition-colors hover:text-brand-tealDark"
                     >
                       Login here
                     </button>
                   </>
                 ) : (
-                  <>New to our community?{" "}
+                  <>
+                    New to our community?{" "}
                     <button
                       type="button"
                       onClick={() => handleTabSwitch("signup")}
-                      className="text-brand-teal font-medium hover:text-brand-tealDark transition-colors"
+                      className="font-medium text-brand-teal transition-colors hover:text-brand-tealDark"
                     >
                       Sign up here
                     </button>

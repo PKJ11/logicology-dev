@@ -124,14 +124,14 @@ export default function Hero() {
                 <div className="relative z-10 flex min-h-[700px] items-start md:items-center">
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
-                      <motion.div 
+                      <motion.div
                         className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12"
                         initial={{ y: 50, opacity: 0 }}
                         animate={isInView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                       >
                         {slide.pretitle.length > 0 && (
-                          <motion.h1 
+                          <motion.h1
                             className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
                             initial={{ y: 30, opacity: 0 }}
                             animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
@@ -140,7 +140,7 @@ export default function Hero() {
                             {slide.pretitle}
                           </motion.h1>
                         )}
-                        <motion.h1 
+                        <motion.h1
                           className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
                           initial={{ y: 30, opacity: 0 }}
                           animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
@@ -148,7 +148,7 @@ export default function Hero() {
                         >
                           {slide.title}
 
-                          <motion.span 
+                          <motion.span
                             className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
                             initial={{ y: 30, opacity: 0 }}
                             animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
@@ -157,7 +157,7 @@ export default function Hero() {
                             {slide.subtitle}
                           </motion.span>
                         </motion.h1>
-                        <motion.p 
+                        <motion.p
                           className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
                           initial={{ y: 30, opacity: 0 }}
                           animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}

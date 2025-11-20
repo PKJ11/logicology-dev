@@ -19,10 +19,12 @@ export default function WhyImportant() {
         <div className="overflow-hidden py-12 text-[#3F2F14]">
           <div className="flex flex-col items-center md:flex-row">
             {/* Media (left) */}
-            <motion.div 
+            <motion.div
               className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
               initial={{ x: -50, opacity: 0, scale: 0.9 }}
-              animate={isInView ? { x: 0, opacity: 1, scale: 1 } : { x: -50, opacity: 0, scale: 0.9 }}
+              animate={
+                isInView ? { x: 0, opacity: 1, scale: 1 } : { x: -50, opacity: 0, scale: 0.9 }
+              }
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <MediaLayoutRight
@@ -32,13 +34,13 @@ export default function WhyImportant() {
             </motion.div>
 
             {/* Content (right) */}
-            <motion.div 
+            <motion.div
               className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2"
               initial={{ x: 50, opacity: 0 }}
               animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <motion.p 
+              <motion.p
                 className="headingstyle font-heading text-[#3F2F14]"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -46,7 +48,7 @@ export default function WhyImportant() {
               >
                 Why Logicology?
               </motion.p>
-              <motion.p 
+              <motion.p
                 className="textstyles mt-4 max-w-xl font-sans"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -58,7 +60,7 @@ export default function WhyImportant() {
                 exist.
               </motion.p>
 
-              <motion.div 
+              <motion.div
                 className="mt-6"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}

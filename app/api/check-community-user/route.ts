@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
-    
+
     const user = await col.findOne({ phone });
     await client.close();
 

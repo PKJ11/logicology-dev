@@ -6,7 +6,10 @@ export async function GET(req: NextRequest, { params }: { params: { itemId: stri
   const key_id = process.env.RAZORPAY_KEY_ID;
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
   if (!key_id || !key_secret) {
-    return NextResponse.json({ success: false, error: "Missing Razorpay credentials" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Missing Razorpay credentials" },
+      { status: 500 }
+    );
   }
   const url = `https://api.razorpay.com/v1/items/${itemId}`;
   const auth = Buffer.from(`${key_id}:${key_secret}`).toString("base64");
@@ -31,6 +34,12 @@ export async function GET(req: NextRequest, { params }: { params: { itemId: stri
       },
     });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error?.response?.data?.error?.description || "Failed to fetch item" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error?.response?.data?.error?.description || "Failed to fetch item",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -13,26 +13,28 @@ export async function POST(req: NextRequest) {
   });
 
   // Fix address structure for Razorpay API
-  const billing_address = typeof body.billing_address === "object"
-    ? body.billing_address
-    : {
-        line1: body.billing_address || "",
-        line2: "",
-        zipcode: body.billing_zipcode || "",
-        city: body.billing_city || "",
-        state: body.billing_state || "",
-        country: "IN",
-      };
-  const shipping_address = typeof body.shipping_address === "object"
-    ? body.shipping_address
-    : {
-        line1: body.shipping_address || "",
-        line2: "",
-        zipcode: body.shipping_zipcode || "",
-        city: body.shipping_city || "",
-        state: body.shipping_state || "",
-        country: "IN",
-      };
+  const billing_address =
+    typeof body.billing_address === "object"
+      ? body.billing_address
+      : {
+          line1: body.billing_address || "",
+          line2: "",
+          zipcode: body.billing_zipcode || "",
+          city: body.billing_city || "",
+          state: body.billing_state || "",
+          country: "IN",
+        };
+  const shipping_address =
+    typeof body.shipping_address === "object"
+      ? body.shipping_address
+      : {
+          line1: body.shipping_address || "",
+          line2: "",
+          zipcode: body.shipping_zipcode || "",
+          city: body.shipping_city || "",
+          state: body.shipping_state || "",
+          country: "IN",
+        };
 
   const invoiceOptions: {
     type: "invoice" | "link";

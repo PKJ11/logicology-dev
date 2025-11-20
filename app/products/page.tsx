@@ -8,7 +8,7 @@ const page = () => {
     <div>
       <NavBar />
       <ProductShowcase />
-      <SiteFooter/>
+      <SiteFooter />
     </div>
   );
 };

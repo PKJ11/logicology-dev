@@ -11,6 +11,11 @@ const config: Config = {
           coral: "#E45C48",
           gold: "#D8AE4F",
           grayBg: "#F5F6F7",
+          maroon: "#6d2e46",
+          maroonDark: "#5a2438",
+          pink: "#b44b73",
+          yellow: "#fddf5c",
+          whiteText: "#f7f7f7",
         },
       },
       borderRadius: {

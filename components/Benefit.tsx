@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import MediaLayout from "./MediaLayout";
 import CTAButton from "./CTAButton";
@@ -17,13 +17,13 @@ export default function Benefit() {
           {/* Flex container */}
           <div className="flex flex-col items-center md:flex-row">
             {/* Content on left for larger screens, top for mobile */}
-            <motion.div 
+            <motion.div
               className="order-2 flex w-full flex-col justify-end p-8 sm:p-12 md:order-1 md:w-1/2"
               initial={{ x: -50, opacity: 0 }}
               animate={isInView ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <motion.p 
+              <motion.p
                 className="headingstyle font-heading"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -31,7 +31,7 @@ export default function Benefit() {
               >
                 How we Help?
               </motion.p>
-              <motion.p 
+              <motion.p
                 className="textstyles mt-4 max-w-xl font-sans text-white/90"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -41,7 +41,7 @@ export default function Benefit() {
                 develop Logical Reasoning and Critical Thinking Skills. You can choose from our
                 offerings (see below) to choose the one that suits you the best.
               </motion.p>
-              <motion.div 
+              <motion.div
                 className="mt-6"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -75,10 +75,12 @@ export default function Benefit() {
             </motion.div>
 
             {/* MediaLayout on right for larger screens, bottom for mobile */}
-            <motion.div 
+            <motion.div
               className="order-1 flex w-full items-center justify-center md:order-2 md:w-1/2 md:py-0"
               initial={{ x: 50, opacity: 0, scale: 0.9 }}
-              animate={isInView ? { x: 0, opacity: 1, scale: 1 } : { x: 50, opacity: 0, scale: 0.9 }}
+              animate={
+                isInView ? { x: 0, opacity: 1, scale: 1 } : { x: 50, opacity: 0, scale: 0.9 }
+              }
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <MediaLayout

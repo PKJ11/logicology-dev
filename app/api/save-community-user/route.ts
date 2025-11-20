@@ -16,48 +16,51 @@ export async function POST(req: NextRequest) {
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
-    
+
     // Check if user already exists
     const existingUser = await col.findOne({ phone });
     if (existingUser) {
       await client.close();
-      return NextResponse.json({ 
-        success: false, 
-        error: "User already exists" 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "User already exists",
+        },
+        { status: 400 }
+      );
     }
 
     // Insert new user
-    const result = await col.insertOne({ 
-      name, 
-      email, 
-      phone, 
+    const result = await col.insertOne({
+      name,
+      email,
+      phone,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: result.insertedId, 
+      {
+        userId: result.insertedId,
         phone: phone,
-        name: name 
+        name: name,
       },
       JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: "30d" }
     );
 
     await client.close();
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       token,
       user: {
         id: result.insertedId.toString(),
         name,
         email,
-        phone
-      }
+        phone,
+      },
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

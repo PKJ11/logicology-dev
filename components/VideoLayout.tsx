@@ -94,12 +94,14 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
     <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px]">
       {/* Video container - only show if videoSrc exists */}
       {hasVideo ? (
-        <div ref={videoContainerRef} className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6">
+        <div
+          ref={videoContainerRef}
+          className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6"
+        >
           <div
             className="relative h-full cursor-pointer overflow-hidden rounded-[22px]"
             onClick={handleVideoClick}
           >
-
             <video
               ref={videoRef}
               src={videoSrc}
@@ -111,7 +113,7 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
 
             {/* Dull screen overlay when playing */}
             {isPlaying && (
-              <div className="absolute inset-0 bg-black bg-opacity-40 pointer-events-none transition-opacity duration-300" />
+              <div className="pointer-events-none absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300" />
             )}
 
             {/* Play/Pause overlay */}
@@ -171,7 +173,7 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
             {isFullscreen && (
               <button
                 className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black bg-opacity-50"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   const video = videoRef.current;
                   // iOS Safari: exit fullscreen for video
@@ -209,4 +211,3 @@ export default function VideoLayout({ videoSrc }: { videoSrc: string }) {
     </div>
   );
 }
-

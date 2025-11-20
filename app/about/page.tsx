@@ -52,8 +52,8 @@ function HeroVideo() {
     try {
       if (isIOS) {
         // Remove playsInline and enable controls for iOS fullscreen
-        videoRef.current.removeAttribute('playsInline');
-        videoRef.current.setAttribute('controls', 'true');
+        videoRef.current.removeAttribute("playsInline");
+        videoRef.current.setAttribute("controls", "true");
         if (videoRef.current.webkitEnterFullscreen) {
           videoRef.current.webkitEnterFullscreen();
           setIsFullscreen(true);
@@ -78,30 +78,28 @@ function HeroVideo() {
         }
       }
     } catch (error) {
-      console.error('Fullscreen error:', error);
+      console.error("Fullscreen error:", error);
     }
   };
 
   // Add fullscreen change listeners for all browsers
   useEffect(() => {
     const doc = document as ExtendedDocument;
-    
+
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!(
-        doc.fullscreenElement ||
-        doc.webkitFullscreenElement ||
-        (doc as any).msFullscreenElement
-      ));
+      setIsFullscreen(
+        !!(doc.fullscreenElement || doc.webkitFullscreenElement || (doc as any).msFullscreenElement)
+      );
     };
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("msfullscreenchange", handleFullscreenChange);
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("msfullscreenchange", handleFullscreenChange);
     };
   }, []);
 
