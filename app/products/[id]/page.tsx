@@ -12,6 +12,7 @@ import ContactUs from "@/components/ContactUs";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
+import { trackProductView, trackAddToCart, trackEvent } from "@/lib/gtag";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -80,6 +81,14 @@ export default function PrimeTimeProductPage() {
             reviews: p.reviews || [],
             bannerImage: p.bannerImage || "",
           });
+
+          // Track product view in Google Analytics
+          trackProductView(
+            p.razorpayItemId || productId,
+            p.title || p.name || "",
+            p.price,
+            "products"
+          );
         } else {
           toast.error("Product not found");
           setProduct(null);
@@ -1272,11 +1281,25 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
       rating: 5,
     });
 
+    // Track add to cart event
+    trackAddToCart(
+      current.razorpayItemId,
+      itemDetails?.name || current.name,
+      1,
+      itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, ""))
+    );
+
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   };
 
   const handleBuyNow = () => {
+    // Track click event when user clicks "Buy Now"
+    trackEvent("buy_now_clicked", {
+      product_id: current.razorpayItemId,
+      product_name: current.name,
+      product_price: current.price,
+    });
     setIsCheckoutModalOpen(true);
   };
 

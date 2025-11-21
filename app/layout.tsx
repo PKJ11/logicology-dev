@@ -7,6 +7,7 @@ import { CartProvider } from "@/components/CartContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import MetaCapiPageView from "@/components/MetaCapiPageView";
+import GAProvider from "@/app/providers/GAProvider";
 
 export const metadata: Metadata = {
   title: "Logicology",
@@ -31,42 +32,64 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <CartProvider>
-          {/* Meta Pixel Script */}
-          <Script id="meta-pixel" strategy="afterInteractive">
-            {`
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '1374809147978540');
-              fbq('track', 'PageView');
-              window.fbq = window.fbq || fbq;
-            `}
-          </Script>
-
-          {/* Server-to-Meta: CAPI PageView ping from the browser */}
-          <MetaCapiPageView />
-
-          {/* NoScript fallback */}
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
-              src="https://www.facebook.com/tr?id=1374809147978540&ev=PageView&noscript=1"
-              alt="facebook pixel"
+        <GAProvider>
+          <CartProvider>
+            {/* Google Analytics Script */}
+            <Script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=G-E580K4QQ3Q"
+              strategy="afterInteractive"
             />
-          </noscript>
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-E580K4QQ3Q', {
+                  page_path: window.location.pathname,
+                  allow_google_signals: true,
+                  allow_ad_personalization_signals: true
+                });
+                window.gtag = gtag;
+              `}
+            </Script>
 
-          {children}
-          <FeedbackButton />
-          <Toaster position="top-right" />
-        </CartProvider>
+            {/* Meta Pixel Script */}
+            <Script id="meta-pixel" strategy="afterInteractive">
+              {`
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '1374809147978540');
+                fbq('track', 'PageView');
+                window.fbq = window.fbq || fbq;
+              `}
+            </Script>
+
+            {/* Server-to-Meta: CAPI PageView ping from the browser */}
+            <MetaCapiPageView />
+
+            {/* NoScript fallback */}
+            <noscript>
+              <img
+                height="1"
+                width="1"
+                style={{ display: "none" }}
+                src="https://www.facebook.com/tr?id=1374809147978540&ev=PageView&noscript=1"
+                alt="facebook pixel"
+              />
+            </noscript>
+
+            {children}
+            <FeedbackButton />
+            <Toaster position="top-right" />
+          </CartProvider>
+        </GAProvider>
       </body>
     </html>
   );

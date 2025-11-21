@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SiteFooter from "@/components/Footer";
+import { trackSignUp, trackEvent } from "@/lib/gtag";
 
 interface UserData {
   id: string;
@@ -31,7 +32,15 @@ export default function CommunityPage() {
       }
 
       try {
-        setUserData(JSON.parse(userData));
+        const user = JSON.parse(userData);
+        setUserData(user);
+
+        // Track community signup event when user accesses community page
+        trackSignUp("community_page", user.email);
+        trackEvent("community_access", {
+          user_email: user.email,
+          user_name: user.name,
+        });
       } catch (error) {
         console.error("Error parsing user data:", error);
         router.push("/");
