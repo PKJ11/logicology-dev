@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { trackFeedbackSubmission } from "@/lib/gtag";
 
 export default function FeedbackPage() {
   const [form, setForm] = useState({
@@ -26,9 +25,6 @@ export default function FeedbackPage() {
       });
       const result = await res.json();
       if (result.success) {
-        // Track feedback submission event
-        trackFeedbackSubmission("feedback_page", form.email);
-
         setSuccess(true);
         setForm({ name: "", email: "", phone: "", feedback: "" });
       } else {

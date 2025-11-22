@@ -7,7 +7,6 @@ import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "../utils/indianStates";
-import { trackRemoveFromCart, trackAddToCart, trackPurchase, trackEvent } from "@/lib/gtag";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -649,19 +648,6 @@ const CartPage = () => {
 
       const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}`;
 
-      // Track begin_checkout event
-      trackEvent("begin_checkout", {
-        currency: "INR",
-        value: finalAmount,
-        coupon: appliedPromo?.promoCode || "",
-        items: cart.map((item) => ({
-          item_id: item.razorpayItemId,
-          item_name: item.name,
-          quantity: item.quantity || 1,
-          price: parseFloat(item.price.replace(/[^\d.]/g, "")),
-        })),
-      });
-
       const options = {
         key: RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -675,20 +661,6 @@ const CartPage = () => {
             console.log("hi");
             setIsPaymentProcessing(true);
             console.log("Full Razorpay Response:", response);
-
-            // Track purchase event for GA
-            trackPurchase(
-              response.razorpay_payment_id,
-              finalAmount,
-              cart.map((item) => ({
-                id: item.razorpayItemId,
-                name: item.name,
-                quantity: item.quantity || 1,
-                price: parseFloat(item.price.replace(/[^\d.]/g, "")),
-              })),
-              userInfo.email
-            );
-
             // Save order info
             await fetch("/api/save-order-info", {
               method: "POST",
@@ -1306,16 +1278,7 @@ const CartPage = () => {
                               </button>
                             </div>
                             <button
-                              onClick={() => {
-                                // Track remove from cart event
-                                trackRemoveFromCart(
-                                  item.razorpayItemId,
-                                  item.name,
-                                  item.quantity || 1,
-                                  parseFloat(item.price.replace(/[^\d.]/g, ""))
-                                );
-                                removeFromCart(item.name);
-                              }}
+                              onClick={() => removeFromCart(item.name)}
                               className="text-sm font-medium text-red-500 transition-colors hover:text-red-700"
                             >
                               Remove

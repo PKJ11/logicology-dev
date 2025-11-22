@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ReactNode, ButtonHTMLAttributes } from "react";
-import { trackCTAClick } from "@/lib/gtag";
 
 type CTAButtonProps = {
   text: string;
@@ -18,7 +17,6 @@ type CTAButtonProps = {
   rightIcon?: ReactNode;
   className?: string;
   ariaLabel?: string;
-  ctaName?: string; // For analytics tracking
 };
 
 export default function CTAButton({
@@ -35,7 +33,6 @@ export default function CTAButton({
   rightIcon,
   className = "",
   ariaLabel,
-  ctaName,
 }: CTAButtonProps) {
   const sizeClasses =
     size === "sm"
@@ -63,12 +60,6 @@ export default function CTAButton({
     ["--btn-hover-color" as any]: hoverColor,
   } as React.CSSProperties;
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Track CTA click event
-    trackCTAClick(ctaName || text, text);
-    onClick?.(e as any);
-  };
-
   const content = (
     <span className={`${baseClasses} ${className}`} style={style} aria-label={ariaLabel}>
       {leftIcon}
@@ -82,26 +73,20 @@ export default function CTAButton({
     const isExternal = href.startsWith("http");
     if (isExternal) {
       return (
-        <Link
-          href={href}
-          aria-label={ariaLabel}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => trackCTAClick(ctaName || text, href)}
-        >
+        <Link href={href} aria-label={ariaLabel} target="_blank" rel="noopener noreferrer">
           {content}
         </Link>
       );
     }
     return (
-      <Link href={href} aria-label={ariaLabel} onClick={() => trackCTAClick(ctaName || text, href)}>
+      <Link href={href} aria-label={ariaLabel}>
         {content}
       </Link>
     );
   }
 
   return (
-    <button onClick={handleClick} aria-label={ariaLabel} className="contents">
+    <button onClick={onClick} aria-label={ariaLabel} className="contents">
       {content}
     </button>
   );
