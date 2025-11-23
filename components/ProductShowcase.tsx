@@ -13,6 +13,7 @@ import Script from "next/script";
 import { useCart } from "@/components/CartContext";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Sample product data
 const products = [
@@ -51,6 +52,7 @@ const ProductShowcase = () => {
   const [itemDetails, setItemDetails] = useState<
     Record<string, { tax_rate?: number; hsn_code?: string }>
   >({});
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchAllItems() {
@@ -88,6 +90,13 @@ const ProductShowcase = () => {
     };
   };
 
+  // Handle image click for Prime Time product
+  const handleImageClick = (productName: string) => {
+    if (productName === "Prime Time") {
+      router.push("products/691ae2894bd7d41a1fd0c785");
+    }
+  };
+
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
@@ -118,7 +127,10 @@ const ProductShowcase = () => {
                 className="mx-auto flex w-full max-w-md flex-row rounded-2xl bg-white p-3 shadow-md"
               >
                 {/* Left: Image */}
-                <div className="flex h-28 w-28 flex-shrink-0 items-center justify-center">
+                <div 
+                  className="flex h-28 w-28 flex-shrink-0 items-center justify-center cursor-pointer"
+                  onClick={() => handleImageClick(product.name)}
+                >
                   <Image
                     src={product.image}
                     alt={product.name}
