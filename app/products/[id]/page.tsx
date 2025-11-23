@@ -98,7 +98,7 @@ export default function PrimeTimeProductPage() {
   return (
     <div className="min-h-screen bg-brand-maroon font-sans text-white">
       <NavBar />
-      <main className="space-y-0 pb-20 pt-10">
+      <main className="space-y-0 overflow-x-hidden pb-20 pt-10">
         <ProductSection product={product} loading={loading} />
         <VideoShowcase videos={product?.videos} loading={loading} />
         <ReviewSection reviews={product?.reviews} loading={loading} />
@@ -1444,13 +1444,13 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
             <div className="mb-6 mt-6 w-full border-t border-white/30"></div>
 
             {/* ICON ROW */}
-            <div className="flex gap-10">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-10">
               {["Ages 8+", "2–6 players", "15-30 mins", "Math Skills"].map((label, i) => (
                 <div key={i} className="flex flex-col items-center text-center">
-                  <div className="flex h-[65px] w-[65px] items-center justify-center rounded-full bg-[#b44b73] text-3xl text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#b44b73] text-2xl text-white sm:h-[65px] sm:w-[65px] sm:text-3xl">
                     {i === 0 ? "👦" : i === 1 ? "👥" : i === 2 ? "⏱️" : "🧮"}
                   </div>
-                  <p className="mt-2 font-sans text-sm">{label}</p>
+                  <p className="mt-2 font-sans text-xs sm:text-sm">{label}</p>
                 </div>
               ))}
             </div>
@@ -1467,27 +1467,54 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
 const VideoShowcase = ({ videos, loading }: { videos?: any[]; loading?: boolean }) => {
   const defaults = [
     {
-      video: "https://ik.imagekit.io/pratik/Prime%20Numbers%20(Reel%201)_2.mp4",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.1.jpg",
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_2.mp4?updatedAt=1756253482407",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.1.jpg?updatedAt=1758361316632",
     },
     {
-      video: "https://ik.imagekit.io/pratik/Prime%20Numbers%20(Reel%201)_1.mp4",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.2.jpg",
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_1.mp4?updatedAt=1756253492642",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.2.jpg?updatedAt=1758361316632",
     },
     {
-      video: "https://ik.imagekit.io/pratik/Prime%20Numbers%20(Reel%201)_3.mp4",
-      thumbnail: "https://ik.imagekit.io/pratik11/1.3.jpg",
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%201)_3.mp4?updatedAt=1756253493297",
+      thumbnail: "https://ik.imagekit.io/pratik11/1.3.jpg?updatedAt=1758361316632",
+    },
+    {
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_1.mp4?updatedAt=1756253537445",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.1.jpg?updatedAt=1758361316632",
+    },
+    {
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_2.mp4?updatedAt=1756253535887",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.2.jpg?updatedAt=1758361316632",
+    },
+    {
+      video:
+        "https://ik.imagekit.io/pratik2002/Prime%20Numbers%20(Reel%202)_3.mp4?updatedAt=1756253528805",
+      thumbnail: "https://ik.imagekit.io/pratik11/2.3.jpg?updatedAt=1758361316632",
     },
   ];
 
   // Use API videos if available, otherwise defaults
-  const list = videos && videos.length > 0 ? videos.map((v: any) => ({ video: v })) : defaults;
+  const list =
+    videos && videos.length > 0
+      ? videos.map((v: any, idx: number) => ({
+          video: typeof v === "string" ? v : v.video || v.url || "",
+          thumbnail:
+            typeof v === "string"
+              ? ""
+              : v.thumbnail || v.thumb || (defaults[idx] ? defaults[idx].thumbnail : ""),
+        }))
+      : defaults;
 
   if (loading) {
     return (
       <section className="w-full border-b-4 border-gray-300 bg-gray-100 py-16">
         <div className="mx-auto max-w-[85vw]">
-          <div className="rounded-3xl bg-white p-12 shadow-lg">
+          <div className="rounded-3xl bg-white px-2 py-12 shadow-lg md:px-12">
             <div className="mx-auto mb-10 h-8 w-64 animate-pulse rounded bg-gray-300"></div>
             <div className="flex gap-6 overflow-x-auto pb-4">
               {[...Array(3)].map((_, idx) => (
@@ -1506,7 +1533,7 @@ const VideoShowcase = ({ videos, loading }: { videos?: any[]; loading?: boolean 
   return (
     <section className="w-full border-b-4 border-gray-300 bg-gray-100 py-16">
       <div className="mx-auto max-w-[85vw]">
-        <div className="rounded-3xl bg-white p-12 shadow-lg">
+        <div className="rounded-3xl bg-white px-2 py-12 shadow-lg md:px-12">
           <h2 className="headingstyle mb-10 text-center font-heading font-bold text-gray-800">
             Watch Prime Time™ in Action
           </h2>
@@ -1520,6 +1547,7 @@ const VideoShowcase = ({ videos, loading }: { videos?: any[]; loading?: boolean 
                 >
                   <video
                     src={v.video}
+                    poster={v.thumbnail || (defaults[idx] ? defaults[idx].thumbnail : "")}
                     controls
                     playsInline
                     className="absolute inset-0 h-full w-full object-cover"
@@ -1674,7 +1702,7 @@ const BigAddToCartBanner = ({ benefits }: { benefits?: string }) => {
   return (
     <section className="w-full border-b-4 border-gray-300 bg-gray-100 py-20">
       <div className="mx-auto max-w-[85vw]">
-        <div className="rounded-3xl bg-white p-12 shadow-lg">
+        <div className="rounded-3xl bg-white px-2 py-12 shadow-lg md:px-12">
           <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
             <div className="text-left">
               <h2 className="headingstyle mb-10 font-heading font-bold text-gray-800">
