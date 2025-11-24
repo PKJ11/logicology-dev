@@ -1,5 +1,5 @@
 import React from "react";
-import Logicoland1Page from "../books/logicoland/page";
+import Logicoland1Page from "../logicoland/page";
 
 const Logicoland = () => {
   return (
