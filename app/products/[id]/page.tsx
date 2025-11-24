@@ -12,6 +12,7 @@ import ContactUs from "@/components/ContactUs";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
+import { trackViewItem, trackAddToCart, trackPurchase, trackButtonClick } from "@/lib/gtag-events";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -66,8 +67,12 @@ export default function PrimeTimeProductPage() {
         const data = await res.json();
         if (data.success && data.product) {
           const p = data.product;
+          const productPrice = p.price || 0;
+          const productName = p.title || p.name || "Unknown Product";
+          const prodId = p.razorpayItemId || productId;
+          
           setProduct({
-            name: p.title || p.name || "",
+            name: productName,
             subtitle: p.subtitle || "",
             description: p.description || "",
             price: p.price ? `₹${p.price}` : "",
@@ -80,6 +85,9 @@ export default function PrimeTimeProductPage() {
             reviews: p.reviews || [],
             bannerImage: p.bannerImage || "",
           });
+          
+          // Track view_item event
+          trackViewItem(prodId, productName, productPrice, "INR");
         } else {
           toast.error("Product not found");
           setProduct(null);
@@ -1262,6 +1270,15 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
       priceToUse = `₹${itemDetails.price.toLocaleString("en-IN")}`;
     }
 
+    // Track add_to_cart event
+    trackAddToCart(
+      current.razorpayItemId,
+      itemDetails?.name || current.name,
+      itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, "")),
+      1,
+      "INR"
+    );
+
     addToCart({
       name: itemDetails?.name || current.name,
       price: priceToUse || current.price,
@@ -1277,6 +1294,8 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
   };
 
   const handleBuyNow = () => {
+    // Track button click
+    trackButtonClick("buy_now_btn", "product_page_hero");
     setIsCheckoutModalOpen(true);
   };
 

@@ -22,13 +22,28 @@ const roboto = Roboto({
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  
   return (
+    
     <html lang="en" className={`${outfit.variable} ${roboto.variable}`}>
       <head>
         <link
           rel="icon"
           href="https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538"
         />
+        {/* Google Analytics: gtag.js */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=G-V56MW94G3L`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} 
+            gtag('js', new Date());
+            gtag('config', 'G-V56MW94G3L', { page_path: window.location.pathname });
+          `}
+        </Script>
       </head>
       <body>
         <CartProvider>
