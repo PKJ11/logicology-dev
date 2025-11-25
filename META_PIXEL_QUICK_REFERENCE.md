@@ -3,17 +3,20 @@
 ## 🎯 What Was Added
 
 Meta Pixel purchase event tracking on:
+
 - ✅ **Cart Page** - Track purchases from `/cart`
 - ✅ **Product Page** - Track direct purchases from `/products/[id]`
 
 ## 🚀 How It Works
 
 ### On Cart Page
+
 ```
 Proceed to Checkout → Enter Details → Complete Payment → 🎯 Purchase Event Sent
 ```
 
 ### On Product Page
+
 ```
 View Product → Add to Cart → Buy Now → Enter Details → Complete Payment → 🎯 Purchase Event Sent
 ```
@@ -47,18 +50,21 @@ View Product → Add to Cart → Buy Now → Enter Details → Complete Payment 
 ## ✅ Verification Steps
 
 ### Step 1: Check Meta Pixel Helper (Chrome Extension)
+
 1. Install Meta Pixel Helper from Chrome Web Store
 2. Make a test purchase
 3. Click the extension icon
 4. Look for "Purchase" event in the list
 
 ### Step 2: Check Events Manager
+
 1. Go to Meta Business Suite → Events Manager
 2. Select your pixel
 3. Filter by "Purchase" event
 4. Should see events in real-time
 
 ### Step 3: Browser Console
+
 ```javascript
 // Should see fbq being called
 window.fbq('track', 'Purchase', {...})
@@ -69,6 +75,7 @@ window.fbq('track', 'Purchase', {...})
 ### To modify purchase event data:
 
 **In `/app/cart/page.tsx`** (around line 800):
+
 ```typescript
 trackMetaPixelPurchase(
   "INR",                    // Change currency if needed
@@ -79,6 +86,7 @@ trackMetaPixelPurchase(
 ```
 
 **In `/app/products/[id]/page.tsx`** (around line 680):
+
 ```typescript
 trackMetaPixelPurchase(
   "INR",
@@ -90,12 +98,12 @@ trackMetaPixelPurchase(
 
 ## 🐛 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
+| Issue              | Solution                               |
+| ------------------ | -------------------------------------- |
 | Events not showing | Verify Meta Pixel code in `layout.tsx` |
-| Wrong amount | Check `finalAmount` calculation |
-| Missing items | Ensure item IDs are mapped correctly |
-| fbq undefined | Meta Pixel script may not be loaded |
+| Wrong amount       | Check `finalAmount` calculation        |
+| Missing items      | Ensure item IDs are mapped correctly   |
+| fbq undefined      | Meta Pixel script may not be loaded    |
 
 ## 📱 Events Fired (Complete Journey)
 
@@ -117,19 +125,19 @@ trackMetaPixelPurchase(
 
 ```typescript
 // Purchase conversion
-trackMetaPixelPurchase(currency, value, items, transactionId)
+trackMetaPixelPurchase(currency, value, items, transactionId);
 
 // Add to cart
-trackMetaPixelAddToCart(currency, value, items)
+trackMetaPixelAddToCart(currency, value, items);
 
 // View product
-trackMetaPixelViewContent(currency, value, items)
+trackMetaPixelViewContent(currency, value, items);
 
 // Checkout started
-trackMetaPixelInitiateCheckout(currency, value, numItems)
+trackMetaPixelInitiateCheckout(currency, value, numItems);
 
 // Custom event
-trackMetaPixelCustomEvent(eventName, eventData)
+trackMetaPixelCustomEvent(eventName, eventData);
 ```
 
 ## 📝 Notes

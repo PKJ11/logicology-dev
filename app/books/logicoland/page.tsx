@@ -32,7 +32,7 @@ export default function Logicoland1Page() {
         {/* ================= PRINTABLES ================= */}
         <PrintablesSection />
 
-              <SymmetryPatternGame />
+        <SymmetryPatternGame />
         {/* ================= COMMUNITY ================= */}
         <Community />
 

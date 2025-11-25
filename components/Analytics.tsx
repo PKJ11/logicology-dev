@@ -14,7 +14,7 @@ export default function Analytics() {
 
   useEffect(() => {
     if (!window.gtag) return;
-    
+
     // Send page_view event for SPA route changes
     window.gtag("event", "page_view", {
       page_path: pathname,

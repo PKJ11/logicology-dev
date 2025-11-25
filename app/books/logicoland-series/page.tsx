@@ -64,7 +64,7 @@ export default function Logicoland1Page() {
         <section id="printables">
           <PrintablesSection isActive={activeSection === "printables"} />
         </section>
-        
+
         <section id="symmetry-game">
           <SymmetryPatternGame />
         </section>

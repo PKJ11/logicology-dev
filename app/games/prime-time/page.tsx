@@ -652,8 +652,6 @@ function InstructionVideos() {
   );
 }
 
-
-
 // --------------------- Interactive Games (Gray) ---------------------
 function InteractiveGames() {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -19,10 +19,10 @@ declare global {
 export const trackMetaPixelPurchase = (
   currency: string = "INR",
   value: number | string,
-  items?: Array<{ 
-    title?: string; 
-    item_id?: string; 
-    price?: number | string; 
+  items?: Array<{
+    title?: string;
+    item_id?: string;
+    price?: number | string;
     quantity?: number;
     category?: string;
   }>,
@@ -45,9 +45,9 @@ export const trackMetaPixelPurchase = (
 
   // Add items content array if provided
   if (items && items.length > 0) {
-    eventData.content_ids = items.map(item => item.item_id || item.title || "");
+    eventData.content_ids = items.map((item) => item.item_id || item.title || "");
     eventData.content_type = "product";
-    eventData.contents = items.map(item => ({
+    eventData.contents = items.map((item) => ({
       id: item.item_id || item.title || "",
       title: item.title || "",
       quantity: item.quantity || 1,
@@ -85,9 +85,9 @@ export const trackMetaPixelAddToCart = (
   };
 
   if (items && items.length > 0) {
-    eventData.content_ids = items.map(item => item.item_id || item.title || "");
+    eventData.content_ids = items.map((item) => item.item_id || item.title || "");
     eventData.content_type = "product";
-    eventData.contents = items.map(item => ({
+    eventData.contents = items.map((item) => ({
       id: item.item_id || item.title || "",
       title: item.title || "",
       quantity: item.quantity || 1,
@@ -124,9 +124,9 @@ export const trackMetaPixelViewContent = (
   };
 
   if (items && items.length > 0) {
-    eventData.content_ids = items.map(item => item.id || item.title || "");
+    eventData.content_ids = items.map((item) => item.id || item.title || "");
     eventData.content_type = "product";
-    eventData.contents = items.map(item => ({
+    eventData.contents = items.map((item) => ({
       id: item.id || item.title || "",
       title: item.title || "",
       category: item.category || "Product",
@@ -169,10 +169,7 @@ export const trackMetaPixelInitiateCheckout = (
  * @param event_name - Event name
  * @param event_data - Event data
  */
-export const trackMetaPixelCustomEvent = (
-  event_name: string,
-  event_data?: Record<string, any>
-) => {
+export const trackMetaPixelCustomEvent = (event_name: string, event_data?: Record<string, any>) => {
   if (!window.fbq) {
     console.warn("Meta Pixel (fbq) not loaded");
     return;

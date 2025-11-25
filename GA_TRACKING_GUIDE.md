@@ -43,11 +43,13 @@ trackPurchase(
 ## Available Tracking Functions
 
 ### Page Views
+
 Automatically tracked by `Analytics.tsx` on route changes. No action needed.
 
 ### Product Tracking
 
 #### `trackViewItem(item_id, item_name, price, currency)`
+
 Track when a user views a product.
 
 ```tsx
@@ -55,34 +57,25 @@ trackViewItem("item_RNn1BJlJAJ9sM8", "Prime Time", 1499, "INR");
 ```
 
 #### `trackAddToCart(item_id, item_name, price, quantity, currency)`
+
 Track when an item is added to cart.
 
 ```tsx
-trackAddToCart(
-  "item_RNn1BJlJAJ9sM8",
-  "Prime Time",
-  1499,
-  1,
-  "INR"
-);
+trackAddToCart("item_RNn1BJlJAJ9sM8", "Prime Time", 1499, 1, "INR");
 ```
 
 #### `trackRemoveFromCart(item_id, item_name, price, quantity, currency)`
+
 Track when an item is removed from cart.
 
 ```tsx
-trackRemoveFromCart(
-  "item_RNn1BJlJAJ9sM8",
-  "Prime Time",
-  1499,
-  1,
-  "INR"
-);
+trackRemoveFromCart("item_RNn1BJlJAJ9sM8", "Prime Time", 1499, 1, "INR");
 ```
 
 ### Checkout Tracking
 
 #### `trackBeginCheckout(items, value, currency)`
+
 Track when user starts checkout.
 
 ```tsx
@@ -97,24 +90,24 @@ trackBeginCheckout(
 ```
 
 #### `trackPurchase(transaction_id, items, total, currency, tax, shipping)`
+
 Track a completed purchase (call after successful payment).
 
 ```tsx
 trackPurchase(
   "ORDER-123456",
-  [
-    { item_id: "product-1", item_name: "Prime Time", price: 1499, quantity: 1 },
-  ],
+  [{ item_id: "product-1", item_name: "Prime Time", price: 1499, quantity: 1 }],
   1499,
   "INR",
-  0,      // tax
-  0       // shipping
+  0, // tax
+  0 // shipping
 );
 ```
 
 ### User Actions
 
 #### `trackSignUp(method)`
+
 Track user sign up (pass the method: email, google, facebook, etc.).
 
 ```tsx
@@ -123,6 +116,7 @@ trackSignUp("google");
 ```
 
 #### `trackLogin(method)`
+
 Track user login.
 
 ```tsx
@@ -130,6 +124,7 @@ trackLogin("email");
 ```
 
 #### `trackSearch(search_term)`
+
 Track search queries.
 
 ```tsx
@@ -139,6 +134,7 @@ trackSearch("board games");
 ### Form & Button Tracking
 
 #### `trackFormSubmit(form_name, form_data)`
+
 Track form submissions (feedback, contact, etc.).
 
 ```tsx
@@ -155,6 +151,7 @@ const handleSubmit = (e) => {
 ```
 
 #### `trackButtonClick(button_name, button_location)`
+
 Track button clicks for important CTAs.
 
 ```tsx
@@ -167,6 +164,7 @@ const handleBuyClick = () => {
 ### Custom Events
 
 #### `trackCustomEvent(event_name, event_data)`
+
 Track any custom event.
 
 ```tsx
@@ -179,6 +177,7 @@ trackCustomEvent("video_played", {
 ### Error Tracking
 
 #### `trackException(description, fatal)`
+
 Track errors/exceptions.
 
 ```tsx
@@ -209,13 +208,7 @@ export default function ProductPage({ product }) {
 
   const handleAddToCart = () => {
     trackButtonClick("add_to_cart_btn", "product_page");
-    trackAddToCart(
-      product.razorpayItemId,
-      product.name,
-      product.price,
-      1,
-      "INR"
-    );
+    trackAddToCart(product.razorpayItemId, product.name, product.price, 1, "INR");
     // ... actual add to cart logic ...
   };
 
@@ -285,7 +278,7 @@ export default function FeedbackForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Track form submission
     trackFormSubmit("feedback_form", {
       rating,
@@ -355,16 +348,19 @@ export default function LoginForm() {
 ## Viewing Events in Google Analytics
 
 ### Real-time Reporting
+
 1. Go to Google Analytics (analytics.google.com)
 2. Select your property (Logicology)
 3. Go to Reports → Realtime → Overview
 4. You'll see events sent from your site in real time
 
 ### Event Reports
+
 1. Reports → Events → [Event name]
 2. View event count, user engagement, etc.
 
 ### Custom Dashboards
+
 Create dashboards with event metrics for quick monitoring.
 
 ---
@@ -390,8 +386,9 @@ Create dashboards with event metrics for quick monitoring.
    - Status should be `204 No Content`
 
 2. **Verify gtag is loaded**:
+
    ```js
-   console.log(typeof window.gtag);  // should be "function"
+   console.log(typeof window.gtag); // should be "function"
    ```
 
 3. **Check for adblockers**: Disable ad blockers or use incognito window.
@@ -420,5 +417,6 @@ Create dashboards with event metrics for quick monitoring.
 ---
 
 For questions or issues, refer to:
+
 - [GA4 Event Reference](https://developers.google.com/analytics/devguides/collection/ga4/events)
 - [GA4 Implementation Guide](https://developers.google.com/analytics/devguides/collection/ga4)

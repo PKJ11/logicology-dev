@@ -1,12 +1,15 @@
 # Meta Pixel Purchase Event Tracking Guide
 
 ## Overview
+
 Meta Pixel purchase events are now integrated into your Logicology application for tracking conversions on both the **Cart Page** and **Product Detail Page**.
 
 ## Files Modified/Created
 
 ### 1. **New File: `/lib/meta-pixel-events.ts`**
+
 This file contains utility functions for tracking Meta Pixel events:
+
 - `trackMetaPixelPurchase()` - Track purchase conversions
 - `trackMetaPixelAddToCart()` - Track add to cart
 - `trackMetaPixelViewContent()` - Track product views
@@ -14,12 +17,16 @@ This file contains utility functions for tracking Meta Pixel events:
 - `trackMetaPixelCustomEvent()` - Track custom events
 
 ### 2. **Updated: `/app/cart/page.tsx`**
+
 Added Meta Pixel purchase tracking in the payment success handler:
+
 - Imported `trackMetaPixelPurchase` from `@/lib/meta-pixel-events`
 - Added Meta Pixel purchase event tracking after successful payment
 
 ### 3. **Updated: `/app/products/[id]/page.tsx`**
+
 Added Meta Pixel tracking across multiple user interactions:
+
 - Imported Meta Pixel tracking functions
 - Added product view tracking (`trackMetaPixelViewContent()`)
 - Added add to cart tracking (`trackMetaPixelAddToCart()`)
@@ -31,6 +38,7 @@ Added Meta Pixel tracking across multiple user interactions:
 ### Purchase Event Flow
 
 #### On Cart Page (Buy Now → Checkout):
+
 ```
 1. User completes payment
 2. Payment success handler triggers
@@ -44,6 +52,7 @@ Added Meta Pixel tracking across multiple user interactions:
 ```
 
 #### On Product Page (Buy Now → Checkout):
+
 ```
 1. User views product
    → trackMetaPixelViewContent() fires
@@ -58,6 +67,7 @@ Added Meta Pixel tracking across multiple user interactions:
 ## Meta Pixel Event Data Format
 
 ### Purchase Event
+
 ```javascript
 {
   currency: "INR",
@@ -79,22 +89,24 @@ Added Meta Pixel tracking across multiple user interactions:
 ## Implementation Details
 
 ### Cart Page Integration
+
 ```typescript
 // After successful Razorpay payment
 trackMetaPixelPurchase(
   "INR",
-  finalAmount,              // Total amount after discount
-  cart.map(item => ({
+  finalAmount, // Total amount after discount
+  cart.map((item) => ({
     item_id: item.razorpayItemId,
     title: item.name,
     price: parseFloat(item.price.replace(/[^\d.]/g, "")),
     quantity: item.quantity || 1,
   })),
-  response.razorpay_payment_id  // Transaction ID
+  response.razorpay_payment_id // Transaction ID
 );
 ```
 
 ### Product Page Integration
+
 ```typescript
 // On payment success
 trackMetaPixelPurchase(
@@ -140,9 +152,10 @@ To verify Meta Pixel purchase events are firing:
    - Check the "Events" tab for "Purchase" events
 
 2. **In Browser Console**:
+
    ```javascript
    // Meta Pixel will log if window.fbq is available
-   window.fbq('track', 'Purchase', {...eventData})
+   window.fbq("track", "Purchase", { ...eventData });
    ```
 
 3. **In Meta Events Manager**:
@@ -154,10 +167,12 @@ To verify Meta Pixel purchase events are firing:
 ## Key Points
 
 ✅ **Purchase events fire on both pages**:
+
 - Cart page: After checkout completion
 - Product page: After direct purchase
 
 ✅ **Data includes**:
+
 - Transaction ID (Payment ID)
 - Currency
 - Total value
@@ -165,11 +180,13 @@ To verify Meta Pixel purchase events are firing:
 - Quantities
 
 ✅ **Integration with existing tracking**:
+
 - Works alongside Google Analytics
 - No conflicts or duplicates
 - Both systems capture the same conversion
 
 ✅ **Error handling**:
+
 - Checks if `window.fbq` exists before calling
 - Logs warnings if Meta Pixel not loaded
 - Gracefully handles missing data
@@ -189,20 +206,24 @@ To verify Meta Pixel purchase events are firing:
 ## Troubleshooting
 
 **Issue**: Purchase event not appearing in Meta Events Manager
+
 - **Solution**: Verify Meta Pixel code is loaded in `layout.tsx`
 - **Check**: Browser console for `window.fbq` availability
 
 **Issue**: Wrong amount or currency in events
+
 - **Solution**: Verify `finalAmount` calculation and currency code
 - **Check**: Amount is in correct format (2 decimal places)
 
 **Issue**: Missing item data
+
 - **Solution**: Ensure `item_id`, `title`, `quantity` are properly mapped
 - **Check**: No undefined values being passed
 
 ## Next Steps
 
 Consider implementing:
+
 1. **AddPaymentInfo** event tracking for when users enter payment details
 2. **OptimizeEvents** - Let Meta optimize for purchases
 3. **Server-side conversions API** for improved attribution

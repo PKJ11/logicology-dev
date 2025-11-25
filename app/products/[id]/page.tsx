@@ -120,7 +120,7 @@ export default function PrimeTimeProductPage() {
   }, [productId]);
 
   return (
-    <div className="min-h-screen bg-brand-maroon font-sans text-white">
+    <div className="min-h-screen bg-brand-maroon font-sans">
       <NavBar />
       <main className="space-y-0 overflow-x-hidden pb-20 pt-10">
         <ProductSection product={product} loading={loading} />
@@ -360,15 +360,14 @@ const CheckoutModal = ({
           phoneNumber: cleanedPhoneNumber,
           type: "Template",
           template: {
-            name: "checkout",
+            name: "Purchase",
             languageCode: "en",
             bodyValues: [
-              userInfo.name,
-              product.name,
-              finalAmount.toFixed(0),
-              shippingAddress,
-              paymentId,
-              "Logicology",
+              userInfo.name, // {{1}} Customer name
+              product.name, // {{2}} Product name
+              finalAmount.toFixed(0), // {{3}} Amount
+              shippingAddress, // {{4}} Shipping address
+              paymentId, // {{5}} Payment ID
             ],
           },
         }),

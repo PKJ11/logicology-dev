@@ -127,8 +127,8 @@ const ProductShowcase = () => {
                 className="mx-auto flex w-full max-w-md flex-row rounded-2xl bg-white p-3 shadow-md"
               >
                 {/* Left: Image */}
-                <div 
-                  className="flex h-28 w-28 flex-shrink-0 items-center justify-center cursor-pointer"
+                <div
+                  className="flex h-28 w-28 flex-shrink-0 cursor-pointer items-center justify-center"
                   onClick={() => handleImageClick(product.name)}
                 >
                   <Image

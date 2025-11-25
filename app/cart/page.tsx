@@ -7,7 +7,13 @@ import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "../utils/indianStates";
-import { trackRemoveFromCart, trackBeginCheckout, trackPurchase, trackFormSubmit, trackButtonClick } from "@/lib/gtag-events";
+import {
+  trackRemoveFromCart,
+  trackBeginCheckout,
+  trackPurchase,
+  trackFormSubmit,
+  trackButtonClick,
+} from "@/lib/gtag-events";
 import { trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
 
 // GST Utility Functions
@@ -444,15 +450,14 @@ const CartPage = () => {
           phoneNumber: cleanedPhoneNumber,
           type: "Template",
           template: {
-            name: "checkout",
+            name: "Purchase",
             languageCode: "en",
             bodyValues: [
-              userInfo.name, // Customer name
-              orderItems, // Order items
-              finalAmount.toFixed(0), // Amount
-              shippingAddress, // Shipping address
-              paymentId, // Payment ID
-              "Logicology", // Brand name
+              userInfo.name, // {{1}} Customer name
+              orderItems, // {{2}} Order items
+              finalAmount.toFixed(0), // {{3}} Amount
+              shippingAddress, // {{4}} Shipping address
+              paymentId, // {{5}} Payment ID
             ],
           },
         }),
@@ -663,9 +668,9 @@ const CartPage = () => {
             console.log("hi");
             setIsPaymentProcessing(true);
             console.log("Full Razorpay Response:", response);
-            
+
             // Track purchase event for Google Analytics
-            const purchaseItems = cart.map(item => ({
+            const purchaseItems = cart.map((item) => ({
               item_id: item.razorpayItemId,
               item_name: item.name,
               price: parseFloat(item.price.replace(/[^\d.]/g, "")),
@@ -684,7 +689,7 @@ const CartPage = () => {
             trackMetaPixelPurchase(
               "INR",
               finalAmount,
-              cart.map(item => ({
+              cart.map((item) => ({
                 item_id: item.razorpayItemId,
                 title: item.name,
                 price: parseFloat(item.price.replace(/[^\d.]/g, "")),
@@ -692,7 +697,7 @@ const CartPage = () => {
               })),
               response.razorpay_payment_id
             );
-            
+
             // Save order info
             await fetch("/api/save-order-info", {
               method: "POST",
@@ -780,14 +785,14 @@ const CartPage = () => {
 
   const openCheckoutModal = () => {
     // Track begin_checkout event
-    const cartItems = cart.map(item => ({
+    const cartItems = cart.map((item) => ({
       item_id: item.razorpayItemId,
       item_name: item.name,
       price: parseFloat(item.price.replace(/[^\d.]/g, "")),
       quantity: item.quantity || 1,
     }));
     trackBeginCheckout(cartItems, finalAmount, "INR");
-    
+
     setIsCheckoutModalOpen(true);
     setStep(1);
     setSelectedAddress("");
@@ -1322,7 +1327,13 @@ const CartPage = () => {
                               onClick={() => {
                                 // Track remove_from_cart event
                                 const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
-                                trackRemoveFromCart(item.razorpayItemId, item.name, price, item.quantity || 1, "INR");
+                                trackRemoveFromCart(
+                                  item.razorpayItemId,
+                                  item.name,
+                                  price,
+                                  item.quantity || 1,
+                                  "INR"
+                                );
                                 removeFromCart(item.name);
                               }}
                               className="text-sm font-medium text-red-500 transition-colors hover:text-red-700"
