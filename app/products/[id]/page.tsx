@@ -360,7 +360,7 @@ const CheckoutModal = ({
           phoneNumber: cleanedPhoneNumber,
           type: "Template",
           template: {
-            name: "Purchase",
+            name: "purchase",
             languageCode: "en",
             bodyValues: [
               userInfo.name, // {{1}} Customer name
