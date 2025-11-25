@@ -13,6 +13,7 @@ import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
 import { trackViewItem, trackAddToCart, trackPurchase, trackButtonClick } from "@/lib/gtag-events";
+import { trackMetaPixelViewContent, trackMetaPixelAddToCart, trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -88,6 +89,16 @@ export default function PrimeTimeProductPage() {
           
           // Track view_item event
           trackViewItem(prodId, productName, productPrice, "INR");
+
+          // Track view_item event for Meta Pixel
+          trackMetaPixelViewContent("INR", productPrice, [
+            {
+              id: prodId,
+              title: productName,
+              category: "Product",
+              price: productPrice,
+            },
+          ]);
         } else {
           toast.error("Product not found");
           setProduct(null);
@@ -647,6 +658,21 @@ const CheckoutModal = ({
               rating: 5,
               quantity: 1,
             };
+
+            // Track purchase event for Meta Pixel
+            trackMetaPixelPurchase(
+              "INR",
+              finalAmount,
+              [
+                {
+                  item_id: product.razorpayItemId,
+                  title: itemDetails?.name || product.name,
+                  price: itemDetails?.price || parseFloat(product.price.replace(/[^\d.]/g, "")),
+                  quantity: 1,
+                },
+              ],
+              response.razorpay_payment_id
+            );
 
             // Save order info
             await fetch("/api/save-order-info", {
@@ -1279,6 +1305,20 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
       "INR"
     );
 
+    // Track add_to_cart event for Meta Pixel
+    trackMetaPixelAddToCart(
+      "INR",
+      itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, "")),
+      [
+        {
+          item_id: current.razorpayItemId,
+          title: itemDetails?.name || current.name,
+          price: itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, "")),
+          quantity: 1,
+        },
+      ]
+    );
+
     addToCart({
       name: itemDetails?.name || current.name,
       price: priceToUse || current.price,
@@ -1296,6 +1336,14 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
   const handleBuyNow = () => {
     // Track button click
     trackButtonClick("buy_now_btn", "product_page_hero");
+    
+    // Track checkout initiation for Meta Pixel
+    trackMetaPixelInitiateCheckout(
+      "INR",
+      itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, "")),
+      1
+    );
+    
     setIsCheckoutModalOpen(true);
   };
 
@@ -1550,7 +1598,7 @@ const VideoShowcase = ({ videos, loading }: { videos?: any[]; loading?: boolean 
   }
 
   return (
-    <section className="w-full border-b-4 border-gray-300 bg-gray-100 py-16">
+    <section className="w-full border-b-4 border-gray-300 bg-gray-100 py-16" id="video-showcase">
       <div className="mx-auto max-w-[85vw]">
         <div className="rounded-3xl bg-white px-2 py-12 shadow-lg md:px-12">
           <h2 className="headingstyle mb-10 text-center font-heading font-bold text-gray-800">

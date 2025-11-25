@@ -8,6 +8,7 @@ import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "../utils/indianStates";
 import { trackRemoveFromCart, trackBeginCheckout, trackPurchase, trackFormSubmit, trackButtonClick } from "@/lib/gtag-events";
+import { trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -663,7 +664,7 @@ const CartPage = () => {
             setIsPaymentProcessing(true);
             console.log("Full Razorpay Response:", response);
             
-            // Track purchase event
+            // Track purchase event for Google Analytics
             const purchaseItems = cart.map(item => ({
               item_id: item.razorpayItemId,
               item_name: item.name,
@@ -677,6 +678,19 @@ const CartPage = () => {
               "INR",
               totalGST,
               0
+            );
+
+            // Track purchase event for Meta Pixel
+            trackMetaPixelPurchase(
+              "INR",
+              finalAmount,
+              cart.map(item => ({
+                item_id: item.razorpayItemId,
+                title: item.name,
+                price: parseFloat(item.price.replace(/[^\d.]/g, "")),
+                quantity: item.quantity || 1,
+              })),
+              response.razorpay_payment_id
             );
             
             // Save order info
