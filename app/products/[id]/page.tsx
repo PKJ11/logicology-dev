@@ -13,7 +13,12 @@ import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
 import { trackViewItem, trackAddToCart, trackPurchase, trackButtonClick } from "@/lib/gtag-events";
-import { trackMetaPixelViewContent, trackMetaPixelAddToCart, trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
+import {
+  trackMetaPixelViewContent,
+  trackMetaPixelAddToCart,
+  trackMetaPixelPurchase,
+  trackMetaPixelInitiateCheckout,
+} from "@/lib/meta-pixel-events";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -71,7 +76,7 @@ export default function PrimeTimeProductPage() {
           const productPrice = p.price || 0;
           const productName = p.title || p.name || "Unknown Product";
           const prodId = p.razorpayItemId || productId;
-          
+
           setProduct({
             name: productName,
             subtitle: p.subtitle || "",
@@ -86,7 +91,7 @@ export default function PrimeTimeProductPage() {
             reviews: p.reviews || [],
             bannerImage: p.bannerImage || "",
           });
-          
+
           // Track view_item event
           trackViewItem(prodId, productName, productPrice, "INR");
 
@@ -1336,14 +1341,14 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
   const handleBuyNow = () => {
     // Track button click
     trackButtonClick("buy_now_btn", "product_page_hero");
-    
+
     // Track checkout initiation for Meta Pixel
     trackMetaPixelInitiateCheckout(
       "INR",
       itemDetails?.price || parseFloat(current.price.replace(/[^\d.]/g, "")),
       1
     );
-    
+
     setIsCheckoutModalOpen(true);
   };
 
@@ -1781,7 +1786,14 @@ const BigAddToCartBanner = ({ benefits }: { benefits?: string }) => {
                 {benefits ||
                   "At Logicology we endeavour to make learning fun so that children learn while they play."}
               </p>
-              <button className="mt-6 rounded-full bg-[#6d2e46] px-6 py-2 font-sans text-white transition hover:bg-[#b44b73]">
+              <button
+                className="mt-6 rounded-full bg-[#6d2e46] px-6 py-2 font-sans text-white transition hover:bg-[#b44b73]"
+                onClick={() => {
+                  document.getElementById("video-showcase")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+              >
                 Learn more
               </button>
             </div>
