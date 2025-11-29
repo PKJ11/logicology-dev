@@ -359,7 +359,7 @@ function GameDetails() {
               className="mt-6"
             >
               <CTAButton
-                text="Learn more"
+                text="Watch How to play Video"
                 onClick={() => setOpen(true)}
                 bg="#FFFFFF"
                 color="#7E5C2E"
