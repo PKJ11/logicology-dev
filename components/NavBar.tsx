@@ -585,7 +585,7 @@ export default function NavBar() {
               onClick={closeAll}
               className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
-              Shop Now
+              Shop 
             </Link>
 
             {/* Actions */}
