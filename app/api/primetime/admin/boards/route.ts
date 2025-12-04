@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import BoardAllocation from '@/app/models/BoardAllocation';
+import User from '@/app/models/User';
 // REMOVE the User import - it's not needed!
 
 export async function GET(request: NextRequest) {
@@ -40,6 +41,7 @@ export async function GET(request: NextRequest) {
         boardPromises.push(board.save());
       }
       await Promise.all(boardPromises);
+      const user = User;
       
       boards = await BoardAllocation.find({ day, timeSlot })
         .sort({ boardNumber: 1 })
