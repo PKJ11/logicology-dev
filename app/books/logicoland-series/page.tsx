@@ -517,6 +517,7 @@ function SymmetryPatternGame() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const gridSize = 6;
+  const BLANK_CELL_COLOR = "#f5deb3"; // Wheatish white
 
   // 🌈 Bright, kid-friendly palette
   const colors = [
@@ -530,6 +531,7 @@ function SymmetryPatternGame() {
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [isSymmetric, setIsSymmetric] = useState(false);
+  const [draggedColor, setDraggedColor] = useState<string | null>(null);
 
   // Step 1: Create a perfect symmetric solution grid
   const solutionGrid = [
@@ -541,30 +543,26 @@ function SymmetryPatternGame() {
     ["#e74c3c", "#f1c40f", "#2ecc71", "#2ecc71", "#f1c40f", "#e74c3c"],
   ];
 
-  // Step 2: Create initial grid with some cells colored black (editable cells) and their complementary cells already filled with correct colors
+  // Step 2: Create initial grid with some cells colored wheatish white (editable cells)
   const initialGrid = [
-    ["#000000", "#f1c40f", "#2ecc71", "#2ecc71", "#f1c40f", "#e74c3c"],
-    ["#f1c40f", "#3498db", "#9b59b6", "#9b59b6", "#000000", "#f1c40f"],
-    ["#2ecc71", "#9b59b6", "#ff8c00", "#000000", "#9b59b6", "#2ecc71"],
-    ["#2ecc71", "#9b59b6", "#000000", "#000000", "#9b59b6", "#2ecc71"],
-    ["#f1c40f", "#000000", "#9b59b6", "#9b59b6", "#000000", "#f1c40f"],
-    ["#000000", "#f1c40f", "#2ecc71", "#2ecc71", "#f1c40f", "#000000"],
+    [BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#f1c40f", "#e74c3c"],
+    ["#f1c40f", "#3498db", "#9b59b6", "#9b59b6", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
+    [BLANK_CELL_COLOR, "#9b59b6", "#ff8c00", BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#2ecc71"],
+    ["#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#9b59b6", BLANK_CELL_COLOR],
+    ["#f1c40f", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR],
+    [BLANK_CELL_COLOR, "#f1c40f", "#2ecc71", "#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
   ];
 
   const [grid, setGrid] = useState(initialGrid);
 
-  // Function to check if a cell is a black cell (editable)
-  const isBlackCell = (row: number, col: number) => {
-    return grid[row][col] === "#000000";
+  // Function to check if a cell is a blank cell (editable)
+  const isBlankCell = (row: number, col: number) => {
+    return grid[row][col] === BLANK_CELL_COLOR;
   };
 
-  // Function to get all symmetric partner cells
-  const getSymmetricPartners = (row: number, col: number) => {
-    const horizontalPartner = [row, gridSize - 1 - col];
-    const verticalPartner = [gridSize - 1 - row, col];
-    const diagonalPartner = [gridSize - 1 - row, gridSize - 1 - col];
-
-    return [horizontalPartner, verticalPartner, diagonalPartner];
+  // Function to check if a cell is a color cell (can be dragged)
+  const isColorCell = (row: number, col: number) => {
+    return !isBlankCell(row, col);
   };
 
   // Function to check if current grid matches solution grid
@@ -579,17 +577,55 @@ function SymmetryPatternGame() {
     return true;
   };
 
-  // 🎨 Fill only the clicked black cell
+  // 🎨 Handle drag start from color cells
+  const handleDragStart = (row: number, col: number, e: React.DragEvent) => {
+    if (!isColorCell(row, col)) return;
+    
+    e.dataTransfer.setData("text/plain", JSON.stringify({ row, col, color: grid[row][col] }));
+    e.dataTransfer.effectAllowed = "copy";
+    setDraggedColor(grid[row][col]);
+  };
+
+  // 🎯 Handle drag over blank cells
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  // 🎯 Handle drop on blank cells
+  const handleDrop = (row: number, col: number, e: React.DragEvent) => {
+    e.preventDefault();
+    
+    if (!isBlankCell(row, col)) return;
+    
+    try {
+      const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+      const { color } = data;
+      
+      const newGrid = grid.map((r) => [...r]);
+      newGrid[row][col] = color;
+      
+      setGrid(newGrid);
+      
+      // Check if the new grid matches the solution
+      const solved = checkSolution(newGrid);
+      setIsSymmetric(solved);
+    } catch (error) {
+      console.error("Drop error:", error);
+    }
+    
+    setDraggedColor(null);
+  };
+
+  // 🎨 Handle click on blank cell with selected color from palette
   const handleCellClick = (row: number, col: number) => {
-    if (!isBlackCell(row, col)) return; // Only allow editing black cells
-
+    if (!isBlankCell(row, col)) return;
+    
     const newGrid = grid.map((r) => [...r]);
-
-    // Update only the clicked black cell
     newGrid[row][col] = selectedColor;
-
+    
     setGrid(newGrid);
-
+    
     // Check if the new grid matches the solution
     const solved = checkSolution(newGrid);
     setIsSymmetric(solved);
@@ -603,7 +639,7 @@ function SymmetryPatternGame() {
 
   // Show solution hint
   const showHint = () => {
-    alert("Look for the symmetric pattern! Each color has matching partners across both axes.");
+    alert("Look for the symmetric pattern! Each color has matching partners across both axes. Drag colors from colored cells to blank cells, or select a color and click on blank cells.");
   };
 
   return (
@@ -625,8 +661,7 @@ function SymmetryPatternGame() {
             Complete the Symmetric Pattern!
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
-            Fill in the black cells to match the hidden symmetric pattern. Look at the colored cells
-            - they already show you the symmetric relationships!
+            Drag colors from colored cells to blank cells, or select a color below and click on blank cells. Make the grid symmetric both vertically and horizontally.
           </p>
         </motion.div>
 
@@ -655,6 +690,12 @@ function SymmetryPatternGame() {
           </div>
         </div>
 
+        {/* Instructions */}
+        <div className="mb-4 text-center text-sm text-brand-tealDark/70">
+          <p>Selected color: <span className="font-semibold" style={{ color: selectedColor }}>{selectedColor}</span></p>
+          <p className="mt-1">Drag from colored cells or click on blank cells with selected color</p>
+        </div>
+
         {/* 🟩 6x6 Grid */}
         <div className="flex justify-center">
           <div className="grid grid-cols-6 gap-[2px] border-2 border-gray-300 bg-gray-200">
@@ -662,17 +703,33 @@ function SymmetryPatternGame() {
               row.map((cell, j) => (
                 <div
                   key={`${i}-${j}`}
+                  draggable={isColorCell(i, j)}
+                  onDragStart={(e) => handleDragStart(i, j, e)}
+                  onDragOver={isBlankCell(i, j) ? handleDragOver : undefined}
+                  onDrop={isBlankCell(i, j) ? (e) => handleDrop(i, j, e) : undefined}
                   onClick={() => handleCellClick(i, j)}
                   style={{ backgroundColor: cell }}
                   className={`h-12 w-12 cursor-pointer border border-gray-300 transition-all ${
-                    isBlackCell(i, j)
+                    isBlankCell(i, j)
                       ? "hover:scale-105 hover:border-2 hover:border-black hover:shadow-md"
+                      : isColorCell(i, j)
+                      ? "cursor-grab active:cursor-grabbing hover:opacity-90"
                       : "cursor-default"
-                  } ${cell === "#000000" ? "border-2 border-dashed border-yellow-500" : ""}`}
+                  } ${cell === BLANK_CELL_COLOR ? "border-2 border-dashed border-amber-600" : ""}`}
                   title={
-                    isBlackCell(i, j) ? `Click to fill with ${selectedColor}` : "Already colored"
+                    isBlankCell(i, j)
+                      ? `Click to fill with ${selectedColor}, or drop color here`
+                      : isColorCell(i, j)
+                      ? `Drag this ${cell} color to blank cells`
+                      : "Already colored"
                   }
-                />
+                >
+                  {isBlankCell(i, j) && (
+                    <div className="flex h-full items-center justify-center">
+                      <span className="text-xs text-amber-800 opacity-70">Drop</span>
+                    </div>
+                  )}
+                </div>
               ))
             )}
           </div>
@@ -692,9 +749,9 @@ function SymmetryPatternGame() {
             </motion.div>
           ) : (
             <div className="text-sm text-brand-tealDark/70">
-              <p>Fill all black cells to match the hidden symmetric pattern</p>
+              <p>Fill all blank cells to match the hidden symmetric pattern</p>
               <p className="mt-1 text-xs">
-                Black cells: {grid.flat().filter((cell) => cell === "#000000").length} remaining
+                Blank cells: {grid.flat().filter((cell) => cell === BLANK_CELL_COLOR).length} remaining
               </p>
             </div>
           )}
@@ -712,7 +769,7 @@ function SymmetryPatternGame() {
 
         <p className="mt-4 text-center text-sm text-brand-tealDark/70">
           Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
-          multiple symmetric positions.
+          multiple symmetric positions. Drag colors from existing colored cells to maintain symmetry.
         </p>
       </motion.div>
     </section>
