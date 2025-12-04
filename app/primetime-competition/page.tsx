@@ -15,13 +15,13 @@ export default function PrimetimeCompetitionPage() {
             </div>
 
             <h1 className="mb-6 font-heading text-5xl font-bold text-brand-tealDark md:text-7xl">
-              Primetime Chess
+              Primetime 
               <br />
-              Competition 2024
+              Competition 2025
             </h1>
 
             <p className="mx-auto mb-10 max-w-3xl text-xl text-gray-700">
-              Join the most prestigious chess competition in the region. Open to both school and
+              Join the most prestigious competition in the region. Open to both school and
               non-school participants. Show your skills and win amazing prizes!
             </p>
 
@@ -97,10 +97,7 @@ export default function PrimetimeCompetitionPage() {
                 <span className="mr-2 font-bold text-brand-gold">•</span>
                 School students must carry ID card
               </li>
-              <li className="flex items-start">
-                <span className="mr-2 font-bold text-brand-gold">•</span>6 chess boards with
-                balanced allocation
-              </li>
+              
             </ul>
           </div>
         </div>

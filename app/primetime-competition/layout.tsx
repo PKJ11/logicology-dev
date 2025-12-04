@@ -6,7 +6,7 @@ import { FaChessBoard } from "react-icons/fa";
 
 export const metadata: Metadata = {
   title: "Primetime Chess Competition 2024",
-  description: "Official registration portal for Primetime Chess Competition 2024",
+  description: "Official registration portal for Primetime Competition 2026",
 };
 
 export default function PrimetimeCompetitionLayout({ children }: { children: React.ReactNode }) {
@@ -56,14 +56,14 @@ export default function PrimetimeCompetitionLayout({ children }: { children: Rea
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-teal">
               <FaChessBoard className="h-8 w-8 text-white" />
             </div>
-            <h3 className="mb-4 font-heading text-2xl font-bold">Primetime Chess Competition</h3>
+            <h3 className="mb-4 font-heading text-2xl font-bold">Primetime Competition</h3>
             <p className="mx-auto mb-8 max-w-2xl text-gray-300">
-              A premier chess competition bringing together talented players from across the region.
+              A premier primetime competition bringing together talented players from across the region.
               Fair play, balanced boards, and exceptional sportsmanship.
             </p>
             <div className="text-sm text-gray-400">
-              <p>© 2024 Primetime Chess Competition. All rights reserved.</p>
-              <p className="mt-2">Contact: info@primetimechess.com | +91 9876543210</p>
+              <p>© 2024 Primetime Competition. All rights reserved.</p>
+              {/* <p className="mt-2">Contact: info@primetimechess.com | +91 9876543210</p> */}
             </div>
           </div>
         </div>
