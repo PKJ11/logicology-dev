@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import BoardAllocation from '@/app/models/BoardAllocation';
+import { NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import BoardAllocation from "@/app/models/BoardAllocation";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,31 +8,31 @@ export async function GET(request: NextRequest) {
 
     // Get all board allocations
     const allocations = await BoardAllocation.find({});
-    
+
     // Group by day
-    const stats = ['saturday', 'sunday'].map(day => {
-      const dayAllocations = allocations.filter(a => a.day === day);
-      
+    const stats = ["saturday", "sunday"].map((day) => {
+      const dayAllocations = allocations.filter((a) => a.day === day);
+
       return {
         _id: day,
         totalUsers: dayAllocations.reduce((sum, alloc) => sum + alloc.currentUsers, 0),
-        boards: dayAllocations.map(alloc => ({
+        boards: dayAllocations.map((alloc) => ({
           boardNumber: alloc.boardNumber,
           users: alloc.currentUsers,
           timeSlot: alloc.timeSlot,
-          maxUsers: alloc.maxUsers
-        }))
+          maxUsers: alloc.maxUsers,
+        })),
       };
     });
 
     return NextResponse.json({
       success: true,
-      stats
+      stats,
     });
   } catch (error: any) {
-    console.error('Board stats error:', error);
+    console.error("Board stats error:", error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch board stats' },
+      { error: error.message || "Failed to fetch board stats" },
       { status: 500 }
     );
   }

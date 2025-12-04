@@ -1,18 +1,18 @@
-import dbConnect from '@/lib/dbConnect';
-import BoardAllocation from '../models/BoardAllocation';
-import User from '../models/User';
-import mongoose from 'mongoose';
+import dbConnect from "@/lib/dbConnect";
+import BoardAllocation from "../models/BoardAllocation";
+import User from "../models/User";
+import mongoose from "mongoose";
 
 interface TimeSlot {
-  day: 'saturday' | 'sunday';
+  day: "saturday" | "sunday";
   timeSlot: string;
   startTime: string;
   endTime: string;
 }
 
 const TIME_SLOTS: TimeSlot[] = [
-  { day: 'saturday', timeSlot: '11:30-13:30', startTime: '11:30', endTime: '13:30' },
-  { day: 'sunday', timeSlot: '14:30-16:30', startTime: '14:30', endTime: '16:30' }
+  { day: "saturday", timeSlot: "11:30-13:30", startTime: "11:30", endTime: "13:30" },
+  { day: "sunday", timeSlot: "14:30-16:30", startTime: "14:30", endTime: "16:30" },
 ];
 
 const MAX_USERS_PER_BOARD = 6;
@@ -37,7 +37,10 @@ export interface AllocationResult {
 }
 
 // Main allocation function
-export async function allocateBoard(userId: string, day: 'saturday' | 'sunday'): Promise<{
+export async function allocateBoard(
+  userId: string,
+  day: "saturday" | "sunday"
+): Promise<{
   boardNumber: number;
   day: string;
   timeSlot: string;
@@ -45,7 +48,7 @@ export async function allocateBoard(userId: string, day: 'saturday' | 'sunday'):
 }> {
   await dbConnect();
 
-  const timeSlot = day === 'saturday' ? '11:30-13:30' : '14:30-16:30';
+  const timeSlot = day === "saturday" ? "11:30-13:30" : "14:30-16:30";
   const userObjectId = new mongoose.Types.ObjectId(userId);
 
   console.log(`Allocating user ${userId} to ${day} ${timeSlot}`);
@@ -62,18 +65,21 @@ export async function allocateBoard(userId: string, day: 'saturday' | 'sunday'):
         timeSlot,
         currentUsers: 0,
         maxUsers: MAX_USERS_PER_BOARD,
-        users: []
+        users: [],
       });
       await newBoard.save();
     }
   }
 
   // Refresh boards after creation
-  const allBoards = await BoardAllocation.find({ day, timeSlot }).sort({ currentUsers: 1, boardNumber: 1 });
+  const allBoards = await BoardAllocation.find({ day, timeSlot }).sort({
+    currentUsers: 1,
+    boardNumber: 1,
+  });
 
   // Find board with minimum users that has capacity
   let selectedBoard = null;
-  
+
   for (const board of allBoards) {
     if (board.currentUsers < MAX_USERS_PER_BOARD) {
       selectedBoard = board;
@@ -82,7 +88,7 @@ export async function allocateBoard(userId: string, day: 'saturday' | 'sunday'):
   }
 
   if (!selectedBoard) {
-    throw new Error('All boards are full for this time slot');
+    throw new Error("All boards are full for this time slot");
   }
 
   // Add user to board
@@ -98,79 +104,81 @@ export async function allocateBoard(userId: string, day: 'saturday' | 'sunday'):
     boardNumber: selectedBoard.boardNumber,
     day,
     timeSlot,
-    slotTime
+    slotTime,
   };
 }
 
 function calculateSlotTime(day: string, timeSlot: string): Date {
   const now = new Date();
-  const targetDay = day === 'saturday' ? 6 : 0; // 6 = Saturday, 0 = Sunday
-  
+  const targetDay = day === "saturday" ? 6 : 0; // 6 = Saturday, 0 = Sunday
+
   // Find next occurrence of the target day
   const daysUntilTarget = (targetDay + 7 - now.getDay()) % 7 || 7;
   const nextDay = new Date(now);
   nextDay.setDate(now.getDate() + daysUntilTarget);
-  
+
   // Set the time based on time slot
   let hours, minutes;
-  if (timeSlot === '11:30-13:30') {
+  if (timeSlot === "11:30-13:30") {
     hours = 11;
     minutes = 30;
   } else {
     hours = 14;
     minutes = 30;
   }
-  
+
   nextDay.setHours(hours, minutes, 0, 0);
-  
+
   return nextDay;
 }
 
 // Get board statistics
-export async function getBoardStats(day?: 'saturday' | 'sunday'): Promise<BoardStats[]> {
+export async function getBoardStats(day?: "saturday" | "sunday"): Promise<BoardStats[]> {
   await dbConnect();
-  
+
   const query = day ? { day } : {};
   const boards = await BoardAllocation.find(query);
-  
+
   const stats = await BoardAllocation.aggregate([
     { $match: query },
     {
       $group: {
-        _id: '$day',
+        _id: "$day",
         boards: {
           $push: {
-            boardNumber: '$boardNumber',
-            currentUsers: '$currentUsers',
-            maxUsers: '$maxUsers',
-            timeSlot: '$timeSlot',
-            users: '$users',
-            availableSlots: { $subtract: [6, '$currentUsers'] }
-          }
-        }
-      }
+            boardNumber: "$boardNumber",
+            currentUsers: "$currentUsers",
+            maxUsers: "$maxUsers",
+            timeSlot: "$timeSlot",
+            users: "$users",
+            availableSlots: { $subtract: [6, "$currentUsers"] },
+          },
+        },
+      },
     },
     {
       $project: {
         _id: 1,
-        totalUsers: { $sum: '$boards.currentUsers' },
-        totalCapacity: { $multiply: [{ $size: '$boards' }, 6] },
-        availableSlots: { $subtract: [{ $multiply: [{ $size: '$boards' }, 6] }, { $sum: '$boards.currentUsers' }] },
-        boards: 1
-      }
-    }
+        totalUsers: { $sum: "$boards.currentUsers" },
+        totalCapacity: { $multiply: [{ $size: "$boards" }, 6] },
+        availableSlots: {
+          $subtract: [{ $multiply: [{ $size: "$boards" }, 6] }, { $sum: "$boards.currentUsers" }],
+        },
+        boards: 1,
+      },
+    },
   ]);
 
   // Flatten the results for easier consumption
   const flattenedStats: BoardStats[] = [];
-  stats.forEach(dayStat => {
+  stats.forEach((dayStat) => {
     dayStat.boards.forEach((board: any) => {
       flattenedStats.push({
         boardNumber: board.boardNumber,
         currentUsers: board.currentUsers,
         maxUsers: board.maxUsers,
         users: board.users.map((id: mongoose.Types.ObjectId) => id.toString()),
-        availableSlots: board.availableSlots
+        availableSlots: board.availableSlots,
       });
     });
   });
@@ -179,49 +187,49 @@ export async function getBoardStats(day?: 'saturday' | 'sunday'): Promise<BoardS
 }
 
 // Get available slots
-export async function getAvailableSlots(day: 'saturday' | 'sunday') {
+export async function getAvailableSlots(day: "saturday" | "sunday") {
   await dbConnect();
-  
+
   const boards = await BoardAllocation.find({ day });
-  
+
   // Calculate total available slots
   const totalSlots = TOTAL_BOARDS * MAX_USERS_PER_BOARD;
   const usedSlots = boards.reduce((sum, board) => sum + board.currentUsers, 0);
   const availableSlots = totalSlots - usedSlots;
-  
+
   return {
     day,
     totalSlots,
     usedSlots,
     availableSlots,
     isFull: availableSlots <= 0,
-    boardDetails: boards.map(board => ({
+    boardDetails: boards.map((board) => ({
       boardNumber: board.boardNumber,
       currentUsers: board.currentUsers,
       maxUsers: board.maxUsers,
       available: board.currentUsers < board.maxUsers,
-      users: board.users
-    }))
+      users: board.users,
+    })),
   };
 }
 
 // Rebalance boards function
-export async function rebalanceBoards(day: 'saturday' | 'sunday', timeSlot: string): Promise<void> {
+export async function rebalanceBoards(day: "saturday" | "sunday", timeSlot: string): Promise<void> {
   await dbConnect();
 
   console.log(`Rebalancing boards for ${day} ${timeSlot}`);
 
   // Get all boards for the specified day and time slot
   const boards = await BoardAllocation.find({ day, timeSlot }).sort({ boardNumber: 1 });
-  
+
   if (boards.length === 0) {
-    console.log('No boards found to rebalance');
+    console.log("No boards found to rebalance");
     return;
   }
 
   // Collect all users from all boards
   const allUsers: mongoose.Types.ObjectId[] = [];
-  boards.forEach(board => {
+  boards.forEach((board) => {
     allUsers.push(...board.users);
   });
 
@@ -245,26 +253,28 @@ export async function rebalanceBoards(day: 'saturday' | 'sunday', timeSlot: stri
   for (let i = 0; i < boards.length; i++) {
     const board = boards[i];
     const usersForThisBoard = usersPerBoard + (i < remainder ? 1 : 0);
-    
+
     if (usersForThisBoard > 0) {
       board.users = allUsers.slice(userIndex, userIndex + usersForThisBoard);
       board.currentUsers = board.users.length;
       userIndex += usersForThisBoard;
-      
+
       await board.save();
-      
+
       // Update each user's competition slot
       for (const userId of board.users) {
         await User.findByIdAndUpdate(userId, {
           $set: {
-            'competitionSlot.boardNumber': board.boardNumber
-          }
+            "competitionSlot.boardNumber": board.boardNumber,
+          },
         });
       }
     }
   }
 
-  console.log(`Rebalancing complete. Redistributed ${totalUsers} users across ${boards.length} boards`);
+  console.log(
+    `Rebalancing complete. Redistributed ${totalUsers} users across ${boards.length} boards`
+  );
 }
 
 // Move user between boards
@@ -272,7 +282,7 @@ export async function moveUserBetweenBoards(
   userId: string,
   fromBoardNumber: number,
   toBoardNumber: number,
-  day: 'saturday' | 'sunday',
+  day: "saturday" | "sunday",
   timeSlot: string
 ): Promise<boolean> {
   await dbConnect();
@@ -285,7 +295,7 @@ export async function moveUserBetweenBoards(
   const sourceBoard = await BoardAllocation.findOne({
     day,
     timeSlot,
-    boardNumber: fromBoardNumber
+    boardNumber: fromBoardNumber,
   });
 
   if (!sourceBoard) {
@@ -294,7 +304,7 @@ export async function moveUserBetweenBoards(
   }
 
   // Check if user is on source board
-  const userIndex = sourceBoard.users.findIndex((id: mongoose.Types.ObjectId) => 
+  const userIndex = sourceBoard.users.findIndex((id: mongoose.Types.ObjectId) =>
     id.equals(userObjectId)
   );
 
@@ -307,7 +317,7 @@ export async function moveUserBetweenBoards(
   const destBoard = await BoardAllocation.findOne({
     day,
     timeSlot,
-    boardNumber: toBoardNumber
+    boardNumber: toBoardNumber,
   });
 
   if (!destBoard) {
@@ -334,11 +344,13 @@ export async function moveUserBetweenBoards(
   // Update user's competition slot
   await User.findByIdAndUpdate(userId, {
     $set: {
-      'competitionSlot.boardNumber': toBoardNumber
-    }
+      "competitionSlot.boardNumber": toBoardNumber,
+    },
   });
 
-  console.log(`Successfully moved user ${userId} from board ${fromBoardNumber} to board ${toBoardNumber}`);
+  console.log(
+    `Successfully moved user ${userId} from board ${fromBoardNumber} to board ${toBoardNumber}`
+  );
   return true;
 }
 
@@ -352,9 +364,9 @@ export async function getUserBoard(userId: string): Promise<{
   await dbConnect();
 
   const userObjectId = new mongoose.Types.ObjectId(userId);
-  
+
   const board = await BoardAllocation.findOne({
-    users: userObjectId
+    users: userObjectId,
   });
 
   if (!board) return null;
@@ -363,18 +375,22 @@ export async function getUserBoard(userId: string): Promise<{
     boardNumber: board.boardNumber,
     day: board.day,
     timeSlot: board.timeSlot,
-    usersOnBoard: board.users.map((id: mongoose.Types.ObjectId) => id.toString())
+    usersOnBoard: board.users.map((id: mongoose.Types.ObjectId) => id.toString()),
   };
 }
 
 // Get all users on a specific board
-export async function getUsersOnBoard(boardNumber: number, day: 'saturday' | 'sunday', timeSlot: string) {
+export async function getUsersOnBoard(
+  boardNumber: number,
+  day: "saturday" | "sunday",
+  timeSlot: string
+) {
   await dbConnect();
 
   const board = await BoardAllocation.findOne({
     boardNumber,
     day,
-    timeSlot
+    timeSlot,
   });
 
   if (!board) {
@@ -383,22 +399,22 @@ export async function getUsersOnBoard(boardNumber: number, day: 'saturday' | 'su
 
   // Get user details for each user on the board
   const users = await User.find({
-    _id: { $in: board.users }
-  }).select('name email phone userType schoolDetails');
+    _id: { $in: board.users },
+  }).select("name email phone userType schoolDetails");
 
   return users;
 }
 
 // Check if a board exists, create if not
-export async function ensureBoardsExist(day: 'saturday' | 'sunday', timeSlot: string) {
+export async function ensureBoardsExist(day: "saturday" | "sunday", timeSlot: string) {
   await dbConnect();
 
   const existingBoards = await BoardAllocation.countDocuments({ day, timeSlot });
-  
+
   if (existingBoards === 0) {
     console.log(`Creating boards for ${day} ${timeSlot}`);
     const boardPromises = [];
-    
+
     for (let i = 1; i <= TOTAL_BOARDS; i++) {
       const board = new BoardAllocation({
         boardNumber: i,
@@ -406,11 +422,11 @@ export async function ensureBoardsExist(day: 'saturday' | 'sunday', timeSlot: st
         timeSlot,
         currentUsers: 0,
         maxUsers: MAX_USERS_PER_BOARD,
-        users: []
+        users: [],
       });
       boardPromises.push(board.save());
     }
-    
+
     await Promise.all(boardPromises);
     console.log(`Created ${TOTAL_BOARDS} boards for ${day} ${timeSlot}`);
   }

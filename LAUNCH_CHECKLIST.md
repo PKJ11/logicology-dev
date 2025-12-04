@@ -468,9 +468,9 @@ Before declaring launch complete:
 
 ## 🚀 LAUNCH APPROVED
 
-**Date Approved**: ******\_\_\_\_******
-**Approved By**: ******\_\_\_\_******
-**Launch Time**: ******\_\_\_\_******
+**Date Approved**: **\*\***\_\_\_\_**\*\***
+**Approved By**: **\*\***\_\_\_\_**\*\***
+**Launch Time**: **\*\***\_\_\_\_**\*\***
 
 All systems go! Implementation is complete and tested.
 

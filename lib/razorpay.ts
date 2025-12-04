@@ -1,5 +1,5 @@
-import Razorpay from 'razorpay';
-import crypto from 'crypto';
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 export const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -18,7 +18,7 @@ export async function createPaymentOrder(orderData: PaymentOrder) {
     const order = await razorpay.orders.create(orderData);
     return order;
   } catch (error) {
-    console.error('Error creating Razorpay order:', error);
+    console.error("Error creating Razorpay order:", error);
     throw error;
   }
 }

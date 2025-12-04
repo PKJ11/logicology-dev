@@ -549,7 +549,14 @@ function SymmetryPatternGame() {
     ["#f1c40f", "#3498db", "#9b59b6", "#9b59b6", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
     [BLANK_CELL_COLOR, "#9b59b6", "#ff8c00", BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#2ecc71"],
     ["#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#9b59b6", BLANK_CELL_COLOR],
-    ["#f1c40f", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR],
+    [
+      "#f1c40f",
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+    ],
     [BLANK_CELL_COLOR, "#f1c40f", "#2ecc71", "#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
   ];
 
@@ -580,7 +587,7 @@ function SymmetryPatternGame() {
   // 🎨 Handle drag start from color cells
   const handleDragStart = (row: number, col: number, e: React.DragEvent) => {
     if (!isColorCell(row, col)) return;
-    
+
     e.dataTransfer.setData("text/plain", JSON.stringify({ row, col, color: grid[row][col] }));
     e.dataTransfer.effectAllowed = "copy";
     setDraggedColor(grid[row][col]);
@@ -595,37 +602,37 @@ function SymmetryPatternGame() {
   // 🎯 Handle drop on blank cells
   const handleDrop = (row: number, col: number, e: React.DragEvent) => {
     e.preventDefault();
-    
+
     if (!isBlankCell(row, col)) return;
-    
+
     try {
       const data = JSON.parse(e.dataTransfer.getData("text/plain"));
       const { color } = data;
-      
+
       const newGrid = grid.map((r) => [...r]);
       newGrid[row][col] = color;
-      
+
       setGrid(newGrid);
-      
+
       // Check if the new grid matches the solution
       const solved = checkSolution(newGrid);
       setIsSymmetric(solved);
     } catch (error) {
       console.error("Drop error:", error);
     }
-    
+
     setDraggedColor(null);
   };
 
   // 🎨 Handle click on blank cell with selected color from palette
   const handleCellClick = (row: number, col: number) => {
     if (!isBlankCell(row, col)) return;
-    
+
     const newGrid = grid.map((r) => [...r]);
     newGrid[row][col] = selectedColor;
-    
+
     setGrid(newGrid);
-    
+
     // Check if the new grid matches the solution
     const solved = checkSolution(newGrid);
     setIsSymmetric(solved);
@@ -639,7 +646,9 @@ function SymmetryPatternGame() {
 
   // Show solution hint
   const showHint = () => {
-    alert("Look for the symmetric pattern! Each color has matching partners across both axes. Drag colors from colored cells to blank cells, or select a color and click on blank cells.");
+    alert(
+      "Look for the symmetric pattern! Each color has matching partners across both axes. Drag colors from colored cells to blank cells, or select a color and click on blank cells."
+    );
   };
 
   return (
@@ -661,7 +670,8 @@ function SymmetryPatternGame() {
             Complete the Symmetric Pattern!
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
-            Drag colors from colored cells to blank cells, or select a color below and click on blank cells. Make the grid symmetric both vertically and horizontally.
+            Drag colors from colored cells to blank cells, or select a color below and click on
+            blank cells. Make the grid symmetric both vertically and horizontally.
           </p>
         </motion.div>
 
@@ -692,8 +702,15 @@ function SymmetryPatternGame() {
 
         {/* Instructions */}
         <div className="mb-4 text-center text-sm text-brand-tealDark/70">
-          <p>Selected color: <span className="font-semibold" style={{ color: selectedColor }}>{selectedColor}</span></p>
-          <p className="mt-1">Drag from colored cells or click on blank cells with selected color</p>
+          <p>
+            Selected color:{" "}
+            <span className="font-semibold" style={{ color: selectedColor }}>
+              {selectedColor}
+            </span>
+          </p>
+          <p className="mt-1">
+            Drag from colored cells or click on blank cells with selected color
+          </p>
         </div>
 
         {/* 🟩 6x6 Grid */}
@@ -713,15 +730,15 @@ function SymmetryPatternGame() {
                     isBlankCell(i, j)
                       ? "hover:scale-105 hover:border-2 hover:border-black hover:shadow-md"
                       : isColorCell(i, j)
-                      ? "cursor-grab active:cursor-grabbing hover:opacity-90"
-                      : "cursor-default"
+                        ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
+                        : "cursor-default"
                   } ${cell === BLANK_CELL_COLOR ? "border-2 border-dashed border-amber-600" : ""}`}
                   title={
                     isBlankCell(i, j)
                       ? `Click to fill with ${selectedColor}, or drop color here`
                       : isColorCell(i, j)
-                      ? `Drag this ${cell} color to blank cells`
-                      : "Already colored"
+                        ? `Drag this ${cell} color to blank cells`
+                        : "Already colored"
                   }
                 >
                   {isBlankCell(i, j) && (
@@ -751,7 +768,8 @@ function SymmetryPatternGame() {
             <div className="text-sm text-brand-tealDark/70">
               <p>Fill all blank cells to match the hidden symmetric pattern</p>
               <p className="mt-1 text-xs">
-                Blank cells: {grid.flat().filter((cell) => cell === BLANK_CELL_COLOR).length} remaining
+                Blank cells: {grid.flat().filter((cell) => cell === BLANK_CELL_COLOR).length}{" "}
+                remaining
               </p>
             </div>
           )}
@@ -769,7 +787,8 @@ function SymmetryPatternGame() {
 
         <p className="mt-4 text-center text-sm text-brand-tealDark/70">
           Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
-          multiple symmetric positions. Drag colors from existing colored cells to maintain symmetry.
+          multiple symmetric positions. Drag colors from existing colored cells to maintain
+          symmetry.
         </p>
       </motion.div>
     </section>

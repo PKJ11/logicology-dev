@@ -1,9 +1,9 @@
 // app/api/primetime/admin/save-all/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import BoardAllocation from '@/app/models/BoardAllocation';
-import User from '@/app/models/User';
-import mongoose from 'mongoose';
+import { NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import BoardAllocation from "@/app/models/BoardAllocation";
+import User from "@/app/models/User";
+import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,10 +12,7 @@ export async function POST(request: NextRequest) {
     const { day, timeSlot, boards } = await request.json();
 
     if (!day || !timeSlot || !boards) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const session = await mongoose.startSession();
@@ -25,9 +22,9 @@ export async function POST(request: NextRequest) {
       // Clear all users from boards for this time slot
       await BoardAllocation.updateMany(
         { day, timeSlot },
-        { 
+        {
           $set: { users: [], currentUsers: 0 },
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         { session }
       );
@@ -35,7 +32,7 @@ export async function POST(request: NextRequest) {
       // Update each board with new users
       for (const boardData of boards) {
         const { boardNumber, userIds } = boardData;
-        
+
         if (userIds.length > 6) {
           throw new Error(`Board ${boardNumber} cannot have more than 6 users`);
         }
@@ -45,11 +42,11 @@ export async function POST(request: NextRequest) {
         await BoardAllocation.findOneAndUpdate(
           { boardNumber, day, timeSlot },
           {
-            $set: { 
+            $set: {
               users: userObjectIds,
               currentUsers: userIds.length,
-              lastUpdated: new Date()
-            }
+              lastUpdated: new Date(),
+            },
           },
           { session, new: true }
         );
@@ -64,9 +61,9 @@ export async function POST(request: NextRequest) {
                 day,
                 timeSlot,
                 boardNumber,
-                slotTime
-              }
-            }
+                slotTime,
+              },
+            },
           },
           { session }
         );
@@ -75,8 +72,8 @@ export async function POST(request: NextRequest) {
       // Remove competition slot from users not on any board for this time slot
       await User.updateMany(
         {
-          'selectedSlot.day': day,
-          _id: { $nin: boards.flatMap((b: any) => b.userIds) }
+          "selectedSlot.day": day,
+          _id: { $nin: boards.flatMap((b: any) => b.userIds) },
         },
         { $unset: { competitionSlot: 1 } },
         { session }
@@ -87,19 +84,17 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'All board assignments saved successfully'
+        message: "All board assignments saved successfully",
       });
-
     } catch (error: any) {
       await session.abortTransaction();
       session.endSession();
       throw error;
     }
-
   } catch (error: any) {
-    console.error('Save all error:', error);
+    console.error("Save all error:", error);
     return NextResponse.json(
-      { error: error.message || 'Failed to save board assignments' },
+      { error: error.message || "Failed to save board assignments" },
       { status: 500 }
     );
   }
@@ -107,21 +102,21 @@ export async function POST(request: NextRequest) {
 
 function calculateSlotTime(day: string, timeSlot: string): Date {
   const now = new Date();
-  const targetDay = day === 'saturday' ? 6 : 0;
-  
+  const targetDay = day === "saturday" ? 6 : 0;
+
   const daysUntilTarget = (targetDay + 7 - now.getDay()) % 7 || 7;
   const nextDay = new Date(now);
   nextDay.setDate(now.getDate() + daysUntilTarget);
-  
+
   let hours, minutes;
-  if (timeSlot === '11:30-13:30') {
+  if (timeSlot === "11:30-13:30") {
     hours = 11;
     minutes = 30;
   } else {
     hours = 14;
     minutes = 30;
   }
-  
+
   nextDay.setHours(hours, minutes, 0, 0);
   return nextDay;
 }
