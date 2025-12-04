@@ -1,9 +1,12 @@
+// app/primetime-competition/payment/page.tsx - SIMPLIFIED
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Script from "next/script";
-import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Loader2, CreditCard, Shield, Check } from "lucide-react";
+
+const RAZORPAY_KEY_ID = "rzp_live_RNIwt54hh7eqmk";
 
 export default function PaymentPage() {
   const searchParams = useSearchParams();
@@ -11,52 +14,52 @@ export default function PaymentPage() {
   const userId = searchParams.get("userId");
 
   const [loading, setLoading] = useState(true);
-  const [paymentLoading, setPaymentLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [order, setOrder] = useState<any>(null);
+  const [processing, setProcessing] = useState(false);
+  const [userDetails, setUserDetails] = useState<any>(null);
 
   useEffect(() => {
     if (userId) {
-      createOrder();
+      fetchUserDetails();
+    } else {
+      router.push("/primetime-competition/register");
     }
   }, [userId]);
 
-  const createOrder = async () => {
+  const fetchUserDetails = async () => {
     try {
-      const response = await fetch("/api/primetime/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
+      const response = await fetch(`/api/primetime/user-details?userId=${userId}`);
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to create order");
-      }
+      if (data.success) {
+        setUserDetails(data.user);
 
-      setOrder(data.order);
-    } catch (err: any) {
-      setError(err.message);
+        // If already paid, redirect to confirmation
+        if (data.user.paymentStatus === "completed") {
+          router.push(`/primetime-competition/confirmation?userId=${userId}`);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePayment = () => {
-    if (!window.Razorpay || !order) return;
+  const initiatePayment = () => {
+    if (!window.Razorpay || !userDetails) return;
 
-    setPaymentLoading(true);
+    setProcessing(true);
 
     const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod",
-      amount: order.amount,
-      currency: order.currency,
-      name: "Primetime Chess Competition",
+      key: RAZORPAY_KEY_ID,
+      amount: 11800, // ₹118 in paise
+      currency: "INR",
+      name: "Logicology - PrimeTime Competition",
       description: "Registration Fee",
-      order_id: order.id,
-      handler: async function (response: any) {
-        // Verify payment
+      image: "https://www.logicology.in/logo.png",
+      order_id: undefined, // Razorpay will generate order automatically
+      handler: async (response: any) => {
+        // Send verification to your API
         const verifyRes = await fetch("/api/primetime/verify-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -65,35 +68,68 @@ export default function PaymentPage() {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_signature: response.razorpay_signature,
             userId,
+            amount: 11800,
           }),
         });
 
         const data = await verifyRes.json();
 
-        if (verifyRes.ok) {
-          router.push(`/primetime-competition/book-slot?userId=${userId}`);
+        if (data.success) {
+          // Send confirmation email
+          await sendConfirmationEmail(response.razorpay_payment_id);
+
+          // Redirect to confirmation page
+          router.push(
+            `/primetime-competition/confirmation?userId=${userId}&paymentId=${response.razorpay_payment_id}`
+          );
         } else {
-          setError("Payment verification failed");
-          setPaymentLoading(false);
+          alert("Payment verification failed. Please contact support.");
+          setProcessing(false);
         }
       },
       prefill: {
-        name: order.notes?.name || "",
-        email: order.notes?.email || "",
-        contact: order.notes?.phone || "",
+        name: userDetails.name,
+        email: userDetails.email,
+        contact: userDetails.phone,
+      },
+      notes: {
+        userId: userId,
+        purpose: "primetime_competition",
       },
       theme: {
         color: "#0A8A80",
       },
       modal: {
-        ondismiss: function () {
-          setPaymentLoading(false);
+        ondismiss: () => {
+          setProcessing(false);
         },
       },
     };
 
-    const razorpayInstance = new window.Razorpay(options);
-    razorpayInstance.open();
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  };
+
+  const sendConfirmationEmail = async (paymentId: string) => {
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: userDetails.email,
+          subject: "PrimeTime Competition - Payment Confirmation",
+          template: "payment-confirmation",
+          data: {
+            name: userDetails.name,
+            paymentId: paymentId,
+            amount: 118,
+            competitionDate: "Coming Soon",
+          },
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending confirmation email:", error);
+    }
   };
 
   if (loading) {
@@ -106,62 +142,80 @@ export default function PaymentPage() {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      <div className="min-h-screen bg-gradient-to-b from-brand-grayBg to-white py-12">
-        <div className="container mx-auto max-w-2xl px-4">
-          <div className="rounded-4xl bg-white p-8 shadow-soft">
-            <div className="mb-10 text-center">
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-brand-teal/10">
-                <CheckCircle className="h-10 w-10 text-brand-teal" />
+      <div className="min-h-screen bg-gray-50 px-4 py-12">
+        <div className="mx-auto max-w-md overflow-hidden rounded-2xl bg-white shadow-lg">
+          {/* Header */}
+          <div className="bg-brand-teal p-8 text-center text-white">
+            <CreditCard className="mx-auto mb-4 h-16 w-16" />
+            <h1 className="mb-2 text-2xl font-bold">Complete Registration</h1>
+            <p className="opacity-90">One last step to secure your spot</p>
+          </div>
+
+          {/* Content */}
+          <div className="p-8">
+            {/* User Info */}
+            <div className="mb-6 rounded-lg bg-gray-50 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-gray-600">Participant</span>
+                <span className="font-semibold">{userDetails?.name}</span>
               </div>
-              <h1 className="mb-4 font-heading text-4xl font-bold text-brand-tealDark">
-                Complete Your Registration
-              </h1>
-              <p className="text-gray-600">One more step to secure your spot in the competition</p>
-            </div>
-
-            <div className="mb-8 rounded-3xl bg-brand-grayBg p-8">
-              <h3 className="mb-6 text-xl font-bold text-brand-tealDark">Payment Details</h3>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-gray-200 py-3">
-                  <span className="text-gray-600">Registration Fee</span>
-                  <span className="text-2xl font-bold text-brand-teal">₹100</span>
-                </div>
-
-                <div className="rounded-2xl border-2 border-brand-yellow bg-yellow-50 p-4">
-                  <div className="flex items-start">
-                    <AlertCircle className="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-brand-gold" />
-                    <div className="text-sm">
-                      <span className="font-semibold">Note:</span> This is a one-time registration
-                      fee for non-school participants. School students register for free.
-                    </div>
-                  </div>
-                </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Amount</span>
+                <span className="text-2xl font-bold text-brand-coral">₹118</span>
               </div>
             </div>
 
-            {error && <div className="mb-6 rounded-xl bg-red-50 p-4 text-red-700">{error}</div>}
+            {/* Benefits */}
+            <div className="mb-8">
+              <h3 className="mb-3 font-semibold text-gray-900">What you get:</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <Check className="mr-2 h-5 w-5 text-green-500" />
+                  <span>Competition entry</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="mr-2 h-5 w-5 text-green-500" />
+                  <span>Certificate of participation</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="mr-2 h-5 w-5 text-green-500" />
+                  <span>Digital scorecard</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="mr-2 h-5 w-5 text-green-500" />
+                  <span>GST invoice</span>
+                </li>
+              </ul>
+            </div>
 
+            {/* Security */}
+            <div className="mb-6 flex items-center justify-center text-gray-600">
+              <Shield className="mr-2 h-5 w-5" />
+              <span className="text-sm">Secure payment by Razorpay</span>
+            </div>
+
+            {/* Payment Button */}
             <button
-              onClick={handlePayment}
-              disabled={paymentLoading || !order}
-              className="w-full rounded-full bg-brand-teal py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-brand-tealDark hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={initiatePayment}
+              disabled={processing}
+              className="w-full rounded-xl bg-brand-coral py-4 font-bold text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {paymentLoading ? (
+              {processing ? (
                 <div className="flex items-center justify-center">
-                  <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Processing...
                 </div>
               ) : (
-                "Pay ₹100 Now"
+                "Pay ₹118 Now"
               )}
             </button>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
-              Secure payment powered by Razorpay
-            </div>
+            {/* Help Text */}
+            <p className="mt-6 text-center text-sm text-gray-500">
+              Need help? Contact us at logicologymeta@gmail.com
+            </p>
           </div>
         </div>
       </div>

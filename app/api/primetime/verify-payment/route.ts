@@ -10,10 +10,15 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } =
-      await request.json();
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      userId,
+      amount = 11800,
+    } = await request.json();
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !userId) {
+    if (!razorpay_payment_id || !razorpay_signature || !userId) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
@@ -21,7 +26,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate expected signature
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const body = razorpay_order_id
+      ? `${razorpay_order_id}|${razorpay_payment_id}`
+      : `${razorpay_payment_id}`;
+
     const expectedSignature = crypto
       .createHmac("sha256", RAZORPAY_KEY_SECRET)
       .update(body)
@@ -43,9 +51,8 @@ export async function POST(request: NextRequest) {
       {
         paymentStatus: "completed",
         paymentId: razorpay_payment_id,
-        amountPaid: 100,
+        amountPaid: amount / 100, // Convert from paise to rupees
         isVerified: true,
-        $unset: { paymentError: 1 }, // Remove any previous payment errors
       },
       { new: true }
     );
@@ -57,30 +64,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Payment verified successfully",
-      payment: {
-        id: razorpay_payment_id,
-        orderId: razorpay_order_id,
-        amount: 100,
-        currency: "INR",
-        status: "completed",
-        verifiedAt: new Date().toISOString(),
-      },
+      paymentId: razorpay_payment_id,
       user: {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
-        paymentStatus: user.paymentStatus,
       },
     });
   } catch (error: any) {
     console.error("Verify payment error:", error);
-
-    // Log the error but don't expose details to client
     return NextResponse.json(
       {
         success: false,
         error: "Payment verification failed",
-        message: "Please contact support if the amount was deducted",
+        message: process.env.NODE_ENV === "development" ? error.message : undefined,
       },
       { status: 500 }
     );

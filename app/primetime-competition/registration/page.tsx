@@ -391,7 +391,7 @@ export default function RegistrationPage() {
       </div>
 
       {/* Board Availability Preview */}
-      {selectedSlot && (
+      {/* {selectedSlot && (
         <div className="mb-8 rounded-3xl bg-brand-grayBg p-6">
           <h3 className="mb-4 text-xl font-bold text-brand-tealDark">
             Board Availability for {selectedSlot.label}
@@ -439,7 +439,7 @@ export default function RegistrationPage() {
             </ul>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Important Notice for School Students */}
       {userType === "school" && (
