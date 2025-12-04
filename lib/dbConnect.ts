@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = "mongodb://localhost:27017/primetime-game"; // change DB name if needed
+const MONGODB_URI = "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/primetime-game?retryWrites=true&w=majority&appName=Cluster0"; // change DB name if needed
 
 async function dbConnect() {
   try {
