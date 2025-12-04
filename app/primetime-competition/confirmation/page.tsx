@@ -153,16 +153,7 @@ export default function ConfirmationPage() {
                     <Users className="mr-3 h-6 w-6 text-brand-teal" />
                     <span className="font-semibold">Reporting Time</span>
                   </div>
-                  <span className="text-lg font-bold text-brand-tealDark">
-                    {new Date(userDetails.competitionSlot.slotTime).toLocaleDateString("en-IN", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
+                  
                 </div>
               )}
             </div>
