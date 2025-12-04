@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import BoardAllocation from '@/app/models/BoardAllocation';
-import User from '@/app/models/User';
+// REMOVE the User import - it's not needed!
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
 
     // If no boards exist, create them
     if (boards.length === 0) {
+      console.log(`Creating boards for ${day} ${timeSlot}`);
       const boardPromises = [];
       for (let i = 1; i <= 6; i++) {
         const board = new BoardAllocation({
@@ -55,7 +56,11 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('Admin boards error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch boards' },
+      { 
+        success: false,
+        error: error.message || 'Failed to fetch boards',
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
       { status: 500 }
     );
   }
