@@ -5,7 +5,7 @@ import { Home } from "lucide-react";
 import { FaChessBoard } from "react-icons/fa";
 
 export const metadata: Metadata = {
-  title: "Primetime Chess Competition 2024",
+  title: "Primetime Competition 2025",
   description: "Official registration portal for Primetime Competition 2026",
 };
 
