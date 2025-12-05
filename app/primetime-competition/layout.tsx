@@ -22,9 +22,9 @@ export default function PrimetimeCompetitionLayout({ children }: { children: Rea
               </div>
               <div>
                 <div className="font-heading text-xl font-bold text-brand-tealDark">
-                  Primetime Chess
+                  Primetime 
                 </div>
-                <div className="text-sm text-gray-600">Competition 2024</div>
+                <div className="text-sm text-gray-600">Competition 2025</div>
               </div>
             </Link>
 
