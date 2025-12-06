@@ -39,11 +39,9 @@ MFosW29NvFLcJf24GSqihEE=
 };
 
 export async function GET(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams;
-    const range = searchParams.get("range") || "7days";
+  const searchParams = request.nextUrl.searchParams;
+  const range = searchParams.get("range") || "7days";
   try {
-    
-
     // Calculate date range
     const { startDate, endDate } = getDateRange(range);
 

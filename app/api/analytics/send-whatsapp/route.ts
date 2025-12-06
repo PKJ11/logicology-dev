@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     // Clean and validate phone number
     const cleanedPhone = cleanPhoneNumber(phoneNumber);
-    
+
     if (cleanedPhone.length !== 10) {
       return NextResponse.json(
         {
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Format the message for WhatsApp template
     const dateText = formatDateRange(analyticsData?.dateRange || { startDate: "", endDate: "" });
-    
+
     // Prepare message values for template
     const messageValues = [
       "Logicology", // {{1}} Company name
@@ -99,10 +99,10 @@ export async function POST(request: NextRequest) {
         });
       } else {
         console.error("Interakt API Error:", messageResult);
-        
+
         // Fallback to text message if template fails
         const fallbackResult = await sendTextMessage(cleanedPhone, analyticsData, dateRange);
-        
+
         return NextResponse.json({
           success: true,
           message: "WhatsApp message sent (fallback to text)",
@@ -112,13 +112,12 @@ export async function POST(request: NextRequest) {
           timestamp: new Date().toISOString(),
         });
       }
-
     } catch (interaktError: any) {
       console.error("Interakt API call failed:", interaktError);
-      
+
       // Simulate success for demo purposes
       const fallbackResult = await sendTextMessage(cleanedPhone, analyticsData, dateRange);
-      
+
       return NextResponse.json({
         success: true,
         message: "WhatsApp message would be sent (simulated)",
@@ -128,10 +127,9 @@ export async function POST(request: NextRequest) {
         timestamp: new Date().toISOString(),
       });
     }
-
   } catch (error: any) {
     console.error("WhatsApp sending error:", error);
-    
+
     return NextResponse.json(
       {
         success: false,
@@ -147,11 +145,11 @@ export async function POST(request: NextRequest) {
 // Helper function to send text message as fallback
 async function sendTextMessage(cleanedPhone: string, analyticsData: any, dateRange: string) {
   const whatsappMessage = formatAnalyticsMessage(analyticsData, dateRange);
-  
+
   console.log("📱 Fallback Text Message:");
   console.log("To: +91" + cleanedPhone);
   console.log("Preview:", whatsappMessage.substring(0, 200) + "...");
-  
+
   return {
     simulated: true,
     preview: whatsappMessage.substring(0, 500),
@@ -161,65 +159,65 @@ async function sendTextMessage(cleanedPhone: string, analyticsData: any, dateRan
 // Helper function to clean phone number
 function cleanPhoneNumber(phoneNumber: string): string {
   // Remove all non-digit characters
-  let cleaned = phoneNumber.replace(/\D/g, '');
-  
+  let cleaned = phoneNumber.replace(/\D/g, "");
+
   // Remove leading 0 if present
-  if (cleaned.startsWith('0')) {
+  if (cleaned.startsWith("0")) {
     cleaned = cleaned.substring(1);
   }
-  
+
   // Ensure 10 digits
   if (cleaned.length === 10) {
     return cleaned;
   }
-  
+
   // If number starts with 91 and is 12 digits, remove 91
-  if (cleaned.startsWith('91') && cleaned.length === 12) {
+  if (cleaned.startsWith("91") && cleaned.length === 12) {
     return cleaned.substring(2);
   }
-  
+
   // If number starts with +91, remove +91
-  if (cleaned.startsWith('+91')) {
+  if (cleaned.startsWith("+91")) {
     return cleaned.substring(3);
   }
-  
+
   return cleaned;
 }
 
 // Helper function to format analytics message (for fallback)
 function formatAnalyticsMessage(data: any, dateRange: string) {
   const dateText = formatDateRange(data?.dateRange || { startDate: "", endDate: "" });
-  
+
   let message = `📊 *Google Analytics Report* 📊\n\n`;
   message += `📅 Period: ${dateText}\n\n`;
-  
+
   message += `👥 *Users*: ${data?.totalUsers?.toLocaleString() || "0"}\n`;
   message += `👀 *Sessions*: ${data?.totalSessions?.toLocaleString() || "0"}\n`;
   message += `🖱️ *Page Views*: ${data?.pageViews?.toLocaleString() || "0"}\n`;
   message += `⏱️ *Avg. Session*: ${formatDuration(data?.avgSessionDuration || 0)}\n`;
   message += `📈 *Bounce Rate*: ${(data?.bounceRate || 0).toFixed(1)}%\n`;
   message += `🎯 *Conversion Rate*: ${(data?.conversionRate || 0).toFixed(1)}%\n\n`;
-  
+
   message += `🌍 *Top Countries*:\n`;
   (data?.topCountries || []).slice(0, 3).forEach((country: any, index: number) => {
     message += `${index + 1}. ${country.country}: ${country.sessions.toLocaleString()}\n`;
   });
-  
+
   message += `\n📱 *Devices*:\n`;
   (data?.devices || []).forEach((device: any) => {
     const percentage = ((device.sessions / (data?.totalSessions || 1)) * 100).toFixed(1);
     message += `${device.device}: ${device.sessions.toLocaleString()} (${percentage}%)\n`;
   });
-  
+
   message += `\n🔗 *Top Pages*:\n`;
   (data?.topPages || []).slice(0, 3).forEach((page: any, index: number) => {
-    const title = page.pageTitle.length > 30 ? 
-      page.pageTitle.substring(0, 27) + "..." : page.pageTitle;
+    const title =
+      page.pageTitle.length > 30 ? page.pageTitle.substring(0, 27) + "..." : page.pageTitle;
     message += `${index + 1}. ${title}: ${page.pageViews.toLocaleString()}\n`;
   });
-  
+
   message += `\n⚡ *Real-time Users*: ${data?.realTimeUsers || "0"}\n`;
-  
+
   message += `\n📊 Generated: ${new Date().toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
@@ -227,16 +225,16 @@ function formatAnalyticsMessage(data: any, dateRange: string) {
     hour: "2-digit",
     minute: "2-digit",
   })}`;
-  
+
   return message;
 }
 
 function formatDateRange(dateRange: { startDate: string; endDate: string }) {
   if (!dateRange.startDate || !dateRange.endDate) return "N/A";
-  
+
   const start = new Date(dateRange.startDate);
   const end = new Date(dateRange.endDate);
-  
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-IN", {
       day: "numeric",
@@ -244,7 +242,7 @@ function formatDateRange(dateRange: { startDate: string; endDate: string }) {
       year: "numeric",
     });
   };
-  
+
   return `${formatDate(start)} to ${formatDate(end)}`;
 }
 

@@ -15,7 +15,7 @@ export default function PrimetimeCompetitionPage() {
             </div>
 
             <h1 className="mb-6 font-heading text-5xl font-bold text-brand-tealDark md:text-7xl">
-              Primetime 
+              Primetime
               <br />
               Competition 2025
             </h1>
@@ -97,7 +97,6 @@ export default function PrimetimeCompetitionPage() {
                 <span className="mr-2 font-bold text-brand-gold">•</span>
                 School students must carry ID card
               </li>
-              
             </ul>
           </div>
         </div>

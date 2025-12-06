@@ -153,7 +153,6 @@ export default function ConfirmationPage() {
                     <Users className="mr-3 h-6 w-6 text-brand-teal" />
                     <span className="font-semibold">Reporting Time</span>
                   </div>
-                  
                 </div>
               )}
             </div>

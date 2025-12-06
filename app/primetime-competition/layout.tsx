@@ -21,9 +21,7 @@ export default function PrimetimeCompetitionLayout({ children }: { children: Rea
                 <FaChessBoard className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-heading text-xl font-bold text-brand-tealDark">
-                  Primetime 
-                </div>
+                <div className="font-heading text-xl font-bold text-brand-tealDark">Primetime</div>
                 <div className="text-sm text-gray-600">Competition 2025</div>
               </div>
             </Link>
@@ -58,8 +56,8 @@ export default function PrimetimeCompetitionLayout({ children }: { children: Rea
             </div>
             <h3 className="mb-4 font-heading text-2xl font-bold">Primetime Competition</h3>
             <p className="mx-auto mb-8 max-w-2xl text-gray-300">
-              A premier primetime competition bringing together talented players from across the region.
-              Fair play, balanced boards, and exceptional sportsmanship.
+              A premier primetime competition bringing together talented players from across the
+              region. Fair play, balanced boards, and exceptional sportsmanship.
             </p>
             <div className="text-sm text-gray-400">
               <p>© 2024 Primetime Competition. All rights reserved.</p>
