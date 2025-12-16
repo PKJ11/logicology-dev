@@ -5,6 +5,7 @@ export async function GET(req: NextRequest, { params }: { params: { itemId: stri
   const itemId = params.itemId;
   const key_id = process.env.RAZORPAY_KEY_ID;
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
+  console.log("Razorpay Key ID:", key_id);
   if (!key_id || !key_secret) {
     return NextResponse.json(
       { success: false, error: "Missing Razorpay credentials" },

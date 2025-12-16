@@ -651,6 +651,12 @@ function SymmetryPatternGame() {
     );
   };
 
+  // Show complete solution
+  const showSolution = () => {
+    setGrid(solutionGrid);
+    setIsSymmetric(true);
+  };
+
   return (
     <section ref={sectionRef} className="w-full bg-brand-grayBg py-12 sm:py-16 md:py-20">
       <motion.div
@@ -664,132 +670,149 @@ function SymmetryPatternGame() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-10 text-center"
+          className="mb-8 text-center"
         >
-          <h2 className="headingstyle mb-4 font-extrabold text-brand-teal">
+          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">
             Complete the Symmetric Pattern!
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
-            Drag colors from colored cells to blank cells, or select a color below and click on
-            blank cells. Make the grid symmetric both vertically and horizontally.
+            Drag colors from colored cells to blank cells, or select a color from palette and click on blank cells.
           </p>
         </motion.div>
 
-        {/* 🎨 Color Palette */}
-        <div className="mb-6 flex flex-col items-center gap-4">
-          <div className="flex justify-center gap-3">
-            {colors.map((color) => (
+        {/* Main Content Container */}
+        <div className="w-full">
+          {/* Game Controls Row - Similar to Sudoku slider */}
+          <div className="mb-6 flex items-center justify-between">
+            <div className="font-semibold text-brand-tealDark transition-all duration-300">
+              <span className="text-lg">Symmetry Challenge</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
               <button
-                key={color}
-                onClick={() => setSelectedColor(color)}
-                className={`h-10 w-10 rounded-full border-4 transition-transform ${
-                  selectedColor === color ? "scale-110 border-black" : "border-gray-300"
-                }`}
-                style={{ backgroundColor: color }}
-                aria-label={`Select ${color}`}
-              />
-            ))}
+                onClick={showHint}
+                className="rounded-full bg-black/70 px-4 py-2 text-sm text-white transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Hint
+              </button>
+              <button
+                onClick={handleReset}
+                className="rounded-full bg-white px-4 py-2 text-sm text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Reset
+              </button>
+              <button
+                onClick={showSolution}
+                className="rounded-full bg-black/70 px-4 py-2 text-sm text-white transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Show Solution
+              </button>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <button
-              onClick={showHint}
-              className="rounded-full bg-brand-teal/20 px-4 py-1 text-sm font-semibold text-brand-teal transition hover:bg-brand-teal/30"
-            >
-              Need a Hint?
-            </button>
-          </div>
-        </div>
 
-        {/* Instructions */}
-        <div className="mb-4 text-center text-sm text-brand-tealDark/70">
-          <p>
-            Selected color:{" "}
-            <span className="font-semibold" style={{ color: selectedColor }}>
-              {selectedColor}
-            </span>
-          </p>
-          <p className="mt-1">
-            Drag from colored cells or click on blank cells with selected color
-          </p>
-        </div>
-
-        {/* 🟩 6x6 Grid */}
-        <div className="flex justify-center">
-          <div className="grid grid-cols-6 gap-[2px] border-2 border-gray-300 bg-gray-200">
-            {grid.map((row, i) =>
-              row.map((cell, j) => (
-                <div
-                  key={`${i}-${j}`}
-                  draggable={isColorCell(i, j)}
-                  onDragStart={(e) => handleDragStart(i, j, e)}
-                  onDragOver={isBlankCell(i, j) ? handleDragOver : undefined}
-                  onDrop={isBlankCell(i, j) ? (e) => handleDrop(i, j, e) : undefined}
-                  onClick={() => handleCellClick(i, j)}
-                  style={{ backgroundColor: cell }}
-                  className={`h-12 w-12 cursor-pointer border border-gray-300 transition-all ${
-                    isBlankCell(i, j)
-                      ? "hover:scale-105 hover:border-2 hover:border-black hover:shadow-md"
-                      : isColorCell(i, j)
-                        ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
-                        : "cursor-default"
-                  } ${cell === BLANK_CELL_COLOR ? "border-2 border-dashed border-amber-600" : ""}`}
-                  title={
-                    isBlankCell(i, j)
-                      ? `Click to fill with ${selectedColor}, or drop color here`
-                      : isColorCell(i, j)
-                        ? `Drag this ${cell} color to blank cells`
-                        : "Already colored"
-                  }
-                >
-                  {isBlankCell(i, j) && (
-                    <div className="flex h-full items-center justify-center">
-                      <span className="text-xs text-amber-800 opacity-70">Drop</span>
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Solution Status */}
-        <div className="mt-6 text-center">
-          {isSymmetric ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-block rounded-full bg-green-500 px-6 py-3"
-            >
-              <span className="text-lg font-bold text-white">
-                🎉 Perfect! You completed the symmetric pattern! 🎉
+          {/* 🎨 Color Palette - Redesigned like Sudoku */}
+          <div className="mb-6">
+            <div className="mb-3 flex flex-wrap items-center gap-3">
+              {colors.map((color, index) => (
+                <button
+                  key={color}
+                  onClick={() => setSelectedColor(color)}
+                  className={`h-10 w-10 rounded-full shadow ring-2 ring-white cursor-pointer outline-offset-2 transition-all duration-300 hover:scale-110 ${
+                    selectedColor === color ? "scale-110 outline outline-2 outline-black/70" : ""
+                  }`}
+                  style={{ backgroundColor: color }}
+                  title={`Select ${color}`}
+                  aria-pressed={selectedColor === color}
+                  aria-label={`Select color ${index + 1}`}
+                />
+              ))}
+            </div>
+            <p className="text-sm text-brand-tealDark/70">
+              Selected color:{" "}
+              <span className="font-semibold" style={{ color: selectedColor }}>
+                {selectedColor}
               </span>
-            </motion.div>
-          ) : (
-            <div className="text-sm text-brand-tealDark/70">
-              <p>Fill all blank cells to match the hidden symmetric pattern</p>
-              <p className="mt-1 text-xs">
-                Blank cells: {grid.flat().filter((cell) => cell === BLANK_CELL_COLOR).length}{" "}
-                remaining
-              </p>
+            </p>
+            <p className="mt-1 text-xs text-brand-tealDark/70">
+              Drag from colored cells or click on blank cells with selected color
+            </p>
+          </div>
+
+          {/* 🟩 6x6 Grid Container - Matching Sudoku style */}
+          <div className="mx-auto w-full max-w-[min(92vw,520px)]">
+            <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-[20px] bg-white ring-1 ring-black/10">
+              {grid.map((row, i) =>
+                row.map((cell, j) => {
+                  const isDraggable = isColorCell(i, j);
+                  const isEditable = isBlankCell(i, j);
+                  
+                  return (
+                    <div
+                      key={`${i}-${j}`}
+                      draggable={isDraggable}
+                      onDragStart={(e) => handleDragStart(i, j, e)}
+                      onDragOver={isEditable ? handleDragOver : undefined}
+                      onDrop={isEditable ? (e) => handleDrop(i, j, e) : undefined}
+                      onClick={() => handleCellClick(i, j)}
+                      style={{ backgroundColor: cell }}
+                      className={`relative aspect-square w-full flex items-center justify-center transition-all duration-300 ${
+                        isEditable
+                          ? "cursor-pointer hover:brightness-95"
+                          : isDraggable
+                            ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
+                            : "cursor-default"
+                      } ${cell === BLANK_CELL_COLOR ? "border-2 border-dashed border-amber-600" : ""}`}
+                      role="button"
+                      aria-label={
+                        isEditable
+                          ? `Row ${i + 1} column ${j + 1} - Empty cell, click to fill with ${selectedColor}`
+                          : `Row ${i + 1} column ${j + 1} - ${cell} colored cell`
+                      }
+                      title={
+                        isEditable
+                          ? `Click to fill with ${selectedColor}, or drop color here`
+                          : isDraggable
+                            ? `Drag this color to blank cells`
+                            : "Colored cell"
+                      }
+                    >
+                      {cell === BLANK_CELL_COLOR && (
+                        <span className="text-xs text-amber-800 opacity-70">Drop</span>
+                      )}
+                      
+                      {/* Small dot for colored cells */}
+                      {cell !== BLANK_CELL_COLOR && (
+                        <span className="h-4/5 w-4/5 rounded-xl" />
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Solution Status - Matching Sudoku style */}
+          {isSymmetric && (
+            <div className="mt-6 rounded-xl bg-[#4CAF50] px-6 py-4 text-center font-semibold text-white transition-all duration-500">
+              🎉 Perfect! You completed the symmetric pattern! 🎉
             </div>
           )}
-        </div>
 
-        {/* Reset Button */}
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={handleReset}
-            className="rounded-full bg-brand-teal px-6 py-2 font-semibold text-white shadow-md transition hover:bg-brand-tealDark"
-          >
-            Reset Game
-          </button>
+          {/* Progress and Tips */}
+          <div className="mt-4">
+            <p className="text-center text-sm text-brand-tealDark/70">
+              Blank cells remaining:{" "}
+              <span className="font-semibold">
+                {grid.flat().filter((cell) => cell === BLANK_CELL_COLOR).length}
+              </span>
+            </p>
+            <p className="mt-2 text-center text-xs text-brand-tealDark/70">
+              Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
+              multiple symmetric positions. Drag colors from existing colored cells to maintain
+              symmetry.
+            </p>
+          </div>
         </div>
-
-        <p className="mt-4 text-center text-sm text-brand-tealDark/70">
-          Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
-          multiple symmetric positions. Drag colors from existing colored cells to maintain
-          symmetry.
-        </p>
       </motion.div>
     </section>
   );
