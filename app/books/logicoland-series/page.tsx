@@ -673,121 +673,127 @@ function SymmetryPatternGame() {
           className="mb-8 text-center"
         >
           <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">
-            Complete the Symmetric Pattern!
+            Complete the Symmetric Pattern
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
             Drag colors from colored cells to blank cells, or select a color from palette and click on blank cells.
           </p>
         </motion.div>
 
-        {/* Main Content Container */}
-        <div className="w-full">
-          {/* Game Controls Row - Similar to Sudoku slider */}
-          <div className="mb-6 flex items-center justify-between">
-            <div className="font-semibold text-brand-tealDark transition-all duration-300">
-              <span className="text-lg">Symmetry Challenge</span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <button
-                onClick={showHint}
-                className="rounded-full bg-black/70 px-4 py-2 text-sm text-white transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                Hint
-              </button>
-              <button
-                onClick={handleReset}
-                className="rounded-full bg-white px-4 py-2 text-sm text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                Reset
-              </button>
-              <button
-                onClick={showSolution}
-                className="rounded-full bg-black/70 px-4 py-2 text-sm text-white transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                Show Solution
-              </button>
-            </div>
-          </div>
-
-          {/* 🎨 Color Palette - Redesigned like Sudoku */}
-          <div className="mb-6">
-            <div className="mb-3 flex flex-wrap items-center gap-3">
-              {colors.map((color, index) => (
+        {/* Main Content Container - 60vw max width on md and lg screens */}
+        <div className="mx-auto max-w-[60vw] md:max-w-[60vw] lg:max-w-[60vw]">
+          {/* Container with bg-brand-grayBg */}
+          <div className="rounded-xl bg-brand-grayBg p-6">
+            {/* First row: Color palette on left, Reset button on right */}
+            <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+              {/* Color Palette - Left side */}
+              <div>
+                <div className="mb-3 flex flex-wrap items-center gap-3">
+                  {colors.map((color, index) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`h-10 w-10 rounded-full shadow ring-2 ring-white cursor-pointer outline-offset-2 transition-all duration-300 hover:scale-110 ${
+                        selectedColor === color ? "scale-110 outline outline-2 outline-black/70" : ""
+                      }`}
+                      style={{ backgroundColor: color }}
+                      title={`Select ${color}`}
+                      aria-pressed={selectedColor === color}
+                      aria-label={`Select color ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm text-brand-tealDark/70">
+                  Selected color:{" "}
+                  <span className="font-semibold" style={{ color: selectedColor }}>
+                    {selectedColor}
+                  </span>
+                </p>
+              </div>
+              
+              {/* Reset button - Right side */}
+              <div>
                 <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={`h-10 w-10 rounded-full shadow ring-2 ring-white cursor-pointer outline-offset-2 transition-all duration-300 hover:scale-110 ${
-                    selectedColor === color ? "scale-110 outline outline-2 outline-black/70" : ""
-                  }`}
-                  style={{ backgroundColor: color }}
-                  title={`Select ${color}`}
-                  aria-pressed={selectedColor === color}
-                  aria-label={`Select color ${index + 1}`}
-                />
-              ))}
+                  onClick={handleReset}
+                  className="rounded-full bg-white px-6 py-3 text-sm font-medium text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-105 hover:bg-gray-50 active:scale-95"
+                >
+                  Reset Pattern
+                </button>
+              </div>
             </div>
-            <p className="text-sm text-brand-tealDark/70">
-              Selected color:{" "}
-              <span className="font-semibold" style={{ color: selectedColor }}>
-                {selectedColor}
-              </span>
-            </p>
-            <p className="mt-1 text-xs text-brand-tealDark/70">
-              Drag from colored cells or click on blank cells with selected color
-            </p>
-          </div>
 
-          {/* 🟩 6x6 Grid Container - Matching Sudoku style */}
-          <div className="mx-auto w-full max-w-[min(92vw,520px)]">
-            <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-[20px] bg-white ring-1 ring-black/10">
-              {grid.map((row, i) =>
-                row.map((cell, j) => {
-                  const isDraggable = isColorCell(i, j);
-                  const isEditable = isBlankCell(i, j);
-                  
-                  return (
-                    <div
-                      key={`${i}-${j}`}
-                      draggable={isDraggable}
-                      onDragStart={(e) => handleDragStart(i, j, e)}
-                      onDragOver={isEditable ? handleDragOver : undefined}
-                      onDrop={isEditable ? (e) => handleDrop(i, j, e) : undefined}
-                      onClick={() => handleCellClick(i, j)}
-                      style={{ backgroundColor: cell }}
-                      className={`relative aspect-square w-full flex items-center justify-center transition-all duration-300 ${
-                        isEditable
-                          ? "cursor-pointer hover:brightness-95"
-                          : isDraggable
-                            ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
-                            : "cursor-default"
-                      } ${cell === BLANK_CELL_COLOR ? "border-2 border-dashed border-amber-600" : ""}`}
-                      role="button"
-                      aria-label={
-                        isEditable
-                          ? `Row ${i + 1} column ${j + 1} - Empty cell, click to fill with ${selectedColor}`
-                          : `Row ${i + 1} column ${j + 1} - ${cell} colored cell`
-                      }
-                      title={
-                        isEditable
-                          ? `Click to fill with ${selectedColor}, or drop color here`
-                          : isDraggable
-                            ? `Drag this color to blank cells`
-                            : "Colored cell"
-                      }
-                    >
-                      {cell === BLANK_CELL_COLOR && (
-                        <span className="text-xs text-amber-800 opacity-70">Drop</span>
-                      )}
+            {/* Grid below */}
+            <div className="mx-auto w-full">
+              <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-lg">
+                {grid.map((row, i) =>
+                  row.map((cell, j) => {
+                    const isDraggable = isColorCell(i, j);
+                    const isEditable = isBlankCell(i, j);
+                    
+                    // Function to get border classes similar to Sudoku
+                    const getBorderClass = () => {
+                      let classes = [];
                       
-                      {/* Small dot for colored cells */}
-                      {cell !== BLANK_CELL_COLOR && (
-                        <span className="h-4/5 w-4/5 rounded-xl" />
-                      )}
-                    </div>
-                  );
-                })
-              )}
+                      // Outer borders
+                      if (i === 0) classes.push("border-t border-black/30");
+                      if (i === gridSize - 1) classes.push("border-b border-black/30");
+                      if (j === 0) classes.push("border-l border-black/30");
+                      if (j === gridSize - 1) classes.push("border-r border-black/30");
+                      
+                      // Inner borders (all cells get borders)
+                      if (i < gridSize - 1) classes.push("border-b border-black/30");
+                      if (j < gridSize - 1) classes.push("border-r border-black/30");
+                      
+                      // Special thicker borders for symmetry quadrants (every 3 rows/cols)
+                      if (i === 2) classes.push("border-b-2 border-black/30");
+                      if (j === 2) classes.push("border-r-2 border-black/30");
+                      
+                      return classes.join(" ");
+                    };
+                    
+                    return (
+                      <div
+                        key={`${i}-${j}`}
+                        draggable={isDraggable}
+                        onDragStart={(e) => handleDragStart(i, j, e)}
+                        onDragOver={isEditable ? handleDragOver : undefined}
+                        onDrop={isEditable ? (e) => handleDrop(i, j, e) : undefined}
+                        onClick={() => handleCellClick(i, j)}
+                        style={{ backgroundColor: cell }}
+                        className={`relative aspect-square w-full flex items-center justify-center transition-all duration-300 ${getBorderClass()} ${
+                          isEditable
+                            ? "cursor-pointer hover:brightness-95"
+                            : isDraggable
+                              ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
+                              : "cursor-default"
+                        } ${cell === BLANK_CELL_COLOR ? "" : ""}`}
+                        role="button"
+                        aria-label={
+                          isEditable
+                            ? `Row ${i + 1} column ${j + 1} - Empty cell, click to fill with ${selectedColor}`
+                            : `Row ${i + 1} column ${j + 1} - ${cell} colored cell`
+                        }
+                        title={
+                          isEditable
+                            ? `Click to fill with ${selectedColor}, or drop color here`
+                            : isDraggable
+                              ? `Drag this color to blank cells`
+                              : "Colored cell"
+                        }
+                      >
+                        {cell === BLANK_CELL_COLOR && (
+                          <span className="text-xs text-gray-600 opacity-70">Drop</span>
+                        )}
+                        
+                        {/* Small dot for colored cells */}
+                        {cell !== BLANK_CELL_COLOR && (
+                          <span className="h-4/5 w-4/5 rounded-xl" />
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
 
