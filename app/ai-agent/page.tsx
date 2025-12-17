@@ -26,8 +26,25 @@ export default function AIAgentPage() {
   const [filesLoading, setFilesLoading] = useState<boolean>(false);
   const [expandedFiles, setExpandedFiles] = useState<Set<string>>(new Set());
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [uploadedFileName, setUploadedFileName] = useState<string>('');
+  const [uploadedFileContent, setUploadedFileContent] = useState<string>('');
   const typingSpeed = 20;
   const answerRef = useRef<string>('');
+  // Handle file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'text/plain') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setUploadedFileName(file.name);
+        setUploadedFileContent(event.target?.result as string || '');
+        toast.success(`Loaded file: ${file.name}`);
+      };
+      reader.readAsText(file);
+    } else {
+      toast.error('Please upload a valid .txt file');
+    }
+  };
 
   // Format text with bold markers - simplified version
   const formatTextWithBold = (text: string): React.ReactNode => {
@@ -119,23 +136,27 @@ export default function AIAgentPage() {
       return;
     }
 
-    if (selectedFiles.size === 0) {
-      toast.error('Please select at least one file');
-      return;
-    }
-
-    setLoading(true);
-    setDisplayedAnswer('');
-    setIsTyping(false);
-    
-    try {
-      const selectedFileContents: FileContent = {};
+    // If a file is uploaded, use it as the only context
+    let selectedFileContents: FileContent = {};
+    if (uploadedFileName && uploadedFileContent) {
+      selectedFileContents[uploadedFileName] = uploadedFileContent;
+    } else {
+      if (selectedFiles.size === 0) {
+        toast.error('Please select at least one file or upload a file');
+        return;
+      }
       selectedFiles.forEach(file => {
         if (fileContents[file]) {
           selectedFileContents[file] = fileContents[file];
         }
       });
+    }
 
+    setLoading(true);
+    setDisplayedAnswer('');
+    setIsTyping(false);
+
+    try {
       const response = await fetch('/api/ai-agent/process', {
         method: 'POST',
         headers: {
@@ -203,10 +224,26 @@ export default function AIAgentPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Panel - File Explorer */}
+          {/* Left Panel - File Explorer & File Upload */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">📂 Files</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">📂 Files & Upload</h2>
+
+              {/* File Upload */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Upload .txt File
+                </label>
+                <input
+                  type="file"
+                  accept=".txt"
+                  onChange={handleFileUpload}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                {uploadedFileName && (
+                  <div className="mt-2 text-xs text-green-700">Uploaded: {uploadedFileName}</div>
+                )}
+              </div>
 
               {/* Directory Input */}
               <div className="mb-4">
@@ -218,59 +255,69 @@ export default function AIAgentPage() {
                   value={directoryPath}
                   onChange={(e) => setDirectoryPath(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="e.g., D:\Downloads\ai project"
+                  placeholder="e.g., D:\\Downloads\\ai project"
+                  disabled={!!uploadedFileName}
                 />
               </div>
 
               {/* Load Files Button */}
               <button
                 onClick={loadFiles}
-                disabled={filesLoading}
+                disabled={filesLoading || !!uploadedFileName}
                 className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 mb-4 font-medium"
               >
                 {filesLoading ? '⏳ Loading...' : '🔄 Load Files'}
               </button>
 
               {/* File List */}
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {files.length === 0 ? (
-                  <p className="text-gray-500 text-sm">No files loaded</p>
-                ) : (
-                  files.map((filename) => (
-                    <div key={filename} className="bg-gray-50 rounded-lg p-3">
-                      <div className="flex items-start gap-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedFiles.has(filename)}
-                          onChange={() => toggleFileSelection(filename)}
-                          className="mt-1 w-4 h-4 cursor-pointer"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <button
-                            onClick={() => toggleFileExpanded(filename)}
-                            className="text-sm font-medium text-blue-600 hover:text-blue-700 truncate text-left w-full"
-                          >
-                            {expandedFiles.has(filename) ? '▼' : '▶'} {filename}
-                          </button>
-                          {expandedFiles.has(filename) && (
-                            <div className="mt-2 text-xs bg-gray-100 p-2 rounded max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap break-words">
-                              {fileContents[filename]?.substring(0, 300)}
-                              {fileContents[filename]?.length > 300 ? '...' : ''}
-                            </div>
-                          )}
+              {!uploadedFileName && (
+                <div className="space-y-2 max-h-96 overflow-y-auto">
+                  {files.length === 0 ? (
+                    <p className="text-gray-500 text-sm">No files loaded</p>
+                  ) : (
+                    files.map((filename) => (
+                      <div key={filename} className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-start gap-2">
+                          <input
+                            type="checkbox"
+                            checked={selectedFiles.has(filename)}
+                            onChange={() => toggleFileSelection(filename)}
+                            className="mt-1 w-4 h-4 cursor-pointer"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <button
+                              onClick={() => toggleFileExpanded(filename)}
+                              className="text-sm font-medium text-blue-600 hover:text-blue-700 truncate text-left w-full"
+                            >
+                              {expandedFiles.has(filename) ? '▼' : '▶'} {filename}
+                            </button>
+                            {expandedFiles.has(filename) && (
+                              <div className="mt-2 text-xs bg-gray-100 p-2 rounded max-h-40 overflow-y-auto text-gray-700 whitespace-pre-wrap break-words">
+                                {fileContents[filename]?.substring(0, 300)}
+                                {fileContents[filename]?.length > 300 ? '...' : ''}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
+              )}
 
               {/* Summary */}
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg text-sm">
-                <p className="text-gray-700">
-                  <strong>{selectedFiles.size}</strong> of <strong>{files.length}</strong> files selected
-                </p>
-              </div>
+              {!uploadedFileName && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg text-sm">
+                  <p className="text-gray-700">
+                    <strong>{selectedFiles.size}</strong> of <strong>{files.length}</strong> files selected
+                  </p>
+                </div>
+              )}
+              {uploadedFileName && (
+                <div className="mt-4 p-3 bg-green-50 rounded-lg text-sm text-green-800">
+                  Using uploaded file: <strong>{uploadedFileName}</strong>
+                </div>
+              )}
             </div>
           </div>
 
@@ -290,7 +337,7 @@ export default function AIAgentPage() {
 
               <button
                 onClick={processQuestion}
-                disabled={loading || selectedFiles.size === 0}
+                disabled={loading || (!uploadedFileName && selectedFiles.size === 0)}
                 className="w-full mt-4 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 font-medium text-lg"
               >
                 {loading ? '🤖 Processing...' : '🚀 Get Answer'}
