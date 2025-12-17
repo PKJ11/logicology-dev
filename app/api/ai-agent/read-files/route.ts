@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import * as fs from 'fs';
-import * as path from 'path';
+import { NextRequest, NextResponse } from "next/server";
+import * as fs from "fs";
+import * as path from "path";
 
 /**
  * Read files from a directory and return their content
@@ -9,39 +9,30 @@ import * as path from 'path';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const dirPath = searchParams.get('dir');
+    const dirPath = searchParams.get("dir");
 
     if (!dirPath) {
-      return NextResponse.json(
-        { error: 'Directory path is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Directory path is required" }, { status: 400 });
     }
 
     // Validate path - only allow reads from specific directories for security
-    const allowedPaths = [
-      'D:\\Downloads\\ai project',
-      'D:/Downloads/ai project'
-    ];
+    const allowedPaths = ["D:\\Downloads\\ai project", "D:/Downloads/ai project"];
 
     const normalizedPath = path.normalize(dirPath);
-    const isAllowed = allowedPaths.some(allowed => 
+    const isAllowed = allowedPaths.some((allowed) =>
       normalizedPath.toLowerCase().includes(path.normalize(allowed).toLowerCase())
     );
 
     if (!isAllowed) {
       return NextResponse.json(
-        { error: 'Access to this directory is not allowed' },
+        { error: "Access to this directory is not allowed" },
         { status: 403 }
       );
     }
 
     // Check if directory exists
     if (!fs.existsSync(normalizedPath)) {
-      return NextResponse.json(
-        { error: 'Directory not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Directory not found" }, { status: 404 });
     }
 
     // Read all files from directory
@@ -57,8 +48,21 @@ export async function GET(request: NextRequest) {
         try {
           // Support common text file formats
           const ext = path.extname(file).toLowerCase();
-          if (['.txt', '.md', '.json', '.csv', '.xml', '.html', '.js', '.ts', '.py', '.java'].includes(ext)) {
-            const content = fs.readFileSync(filePath, 'utf-8');
+          if (
+            [
+              ".txt",
+              ".md",
+              ".json",
+              ".csv",
+              ".xml",
+              ".html",
+              ".js",
+              ".ts",
+              ".py",
+              ".java",
+            ].includes(ext)
+          ) {
+            const content = fs.readFileSync(filePath, "utf-8");
             fileContents[file] = content;
           }
         } catch (err) {
@@ -72,14 +76,10 @@ export async function GET(request: NextRequest) {
       directory: normalizedPath,
       files: Object.keys(fileContents),
       contents: fileContents,
-      count: Object.keys(fileContents).length
+      count: Object.keys(fileContents).length,
     });
-
   } catch (error: any) {
-    console.error('Error reading files:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to read files' },
-      { status: 500 }
-    );
+    console.error("Error reading files:", error);
+    return NextResponse.json({ error: error.message || "Failed to read files" }, { status: 500 });
   }
 }

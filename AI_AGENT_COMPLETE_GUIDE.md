@@ -29,6 +29,7 @@ Returns detailed answer
 ## 📁 Files Created
 
 ### 1. **Frontend Page**
+
 ```
 /app/ai-agent/page.tsx
 ├─ File explorer
@@ -38,6 +39,7 @@ Returns detailed answer
 ```
 
 ### 2. **API Routes**
+
 ```
 /api/ai-agent/read-files/route.ts
 ├─ Reads files from directory
@@ -51,6 +53,7 @@ Returns detailed answer
 ```
 
 ### 3. **Configuration**
+
 ```
 /config/ai-agent.config.ts
 ├─ Gemini API settings
@@ -60,6 +63,7 @@ Returns detailed answer
 ```
 
 ### 4. **Documentation**
+
 ```
 /AI_AGENT_SETUP.md          - Setup instructions
 /AI_AGENT_COMPLETE_GUIDE.md - This file
@@ -78,6 +82,7 @@ npm install @google/generative-ai
 ### Step 2: Set Environment Variable
 
 Create `.env.local`:
+
 ```env
 GEMINI_API_KEY=AIzaSyDTN8jAXmLSj_BN7FJxEQsjzjlGYHIQUjo
 ```
@@ -179,14 +184,17 @@ gemini: {
 **Purpose**: Read files from directory
 
 **Query Parameters**:
+
 - `dir` (required): Directory path
 
 **Example**:
+
 ```
 GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -202,6 +210,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 **Error Responses**:
+
 - `400`: Directory not provided
 - `403`: Directory not allowed
 - `404`: Directory not found
@@ -214,6 +223,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 **Purpose**: Process files with AI
 
 **Request Body**:
+
 ```json
 {
   "fileContents": {
@@ -225,6 +235,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -236,6 +247,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 **Error Responses**:
+
 - `400`: Missing question or file contents
 - `500`: AI processing error
 
@@ -244,6 +256,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ## 🔍 File Types Supported
 
 By default:
+
 - `.txt` - Plain text
 - `.md` - Markdown
 - `.json` - JSON data
@@ -256,6 +269,7 @@ By default:
 - `.java` - Java
 
 To add more:
+
 1. Edit `/config/ai-agent.config.ts`
 2. Add extension to `supportedExtensions` array
 3. Restart server
@@ -265,6 +279,7 @@ To add more:
 ## 🎨 UI Components
 
 ### File Explorer (Left Panel)
+
 - Directory input
 - Load button
 - File list with checkboxes
@@ -272,11 +287,13 @@ To add more:
 - Selection summary
 
 ### Question Panel (Top Right)
+
 - Textarea for question
 - Submit button
 - Character counter (optional)
 
 ### Answer Panel (Bottom Right)
+
 - Formatted answer display
 - Copy button
 - Timestamp (optional)
@@ -286,28 +303,36 @@ To add more:
 ## 🔐 Security Features
 
 ### Directory Whitelist
+
 Only allowed directories can be accessed:
+
 ```typescript
 allowed: ['D:\\Downloads\\ai project', ...]
 ```
 
 ### File Type Validation
+
 Only specific file types can be read:
+
 ```typescript
 supportedExtensions: ['.txt', '.md', '.json', ...]
 ```
 
 ### Path Normalization
+
 Prevents directory traversal attacks:
+
 ```typescript
 const normalizedPath = path.normalize(dirPath);
 ```
 
 ### Error Handling
+
 Safe error messages without exposing paths:
+
 ```typescript
 if (!isAllowed) {
-  return { error: 'Access to this directory is not allowed' };
+  return { error: "Access to this directory is not allowed" };
 }
 ```
 
@@ -346,14 +371,14 @@ curl -X POST http://localhost:3000/api/ai-agent/process \
 
 ## 🐛 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| "Directory not found" | Check path spelling and existence |
-| "No files loaded" | Verify directory has supported file types |
-| "API Key error" | Check `.env.local` has correct key |
-| "Access denied" | Add directory to allowed list in config |
-| Empty answer | Increase `maxTokens` in config |
-| Slow response | Check file sizes, reduce if needed |
+| Issue                 | Solution                                  |
+| --------------------- | ----------------------------------------- |
+| "Directory not found" | Check path spelling and existence         |
+| "No files loaded"     | Verify directory has supported file types |
+| "API Key error"       | Check `.env.local` has correct key        |
+| "Access denied"       | Add directory to allowed list in config   |
+| Empty answer          | Increase `maxTokens` in config            |
+| Slow response         | Check file sizes, reduce if needed        |
 
 ---
 
@@ -382,6 +407,7 @@ curl -X POST http://localhost:3000/api/ai-agent/process \
 ### Scenario: Analyze Project Documentation
 
 **Step 1: Setup**
+
 ```bash
 npm install @google/generative-ai
 # Add GEMINI_API_KEY to .env.local
@@ -389,25 +415,30 @@ npm run dev
 ```
 
 **Step 2: Navigate**
+
 ```
 Open http://localhost:3000/ai-agent
 ```
 
 **Step 3: Load Files**
+
 - Directory: `D:\Downloads\ai project`
 - Click "Load Files"
 - See README.md, API.md, FEATURES.md
 
 **Step 4: Select Files**
+
 - Check all 3 files
 - Summary shows "3 of 3 selected"
 
 **Step 5: Ask Questions**
+
 - "What are the main features?"
 - Click "Get Answer"
 - See detailed feature list
 
 **Step 6: Ask More Questions**
+
 - "What API endpoints exist?"
 - "How to install?"
 - "What are the requirements?"
@@ -422,7 +453,7 @@ Edit `/config/ai-agent.config.ts`:
 
 ```typescript
 prompts: {
-  systemPrompt: `You are a software engineer. 
+  systemPrompt: `You are a software engineer.
   Analyze code files and provide detailed technical insights.
   Focus on architecture, design patterns, and best practices.`,
 }
@@ -434,7 +465,7 @@ Create a script to process multiple directories:
 
 ```typescript
 async function processDirectory(dirPath: string) {
-  const response = await fetch('/api/ai-agent/read-files?dir=' + dirPath);
+  const response = await fetch("/api/ai-agent/read-files?dir=" + dirPath);
   const data = await response.json();
   // Process data...
 }
@@ -446,9 +477,9 @@ Add button to export answer as PDF/TXT:
 
 ```typescript
 const exportAnswer = () => {
-  const element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + answer);
-  element.setAttribute('download', 'ai-answer.txt');
+  const element = document.createElement("a");
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + answer);
+  element.setAttribute("download", "ai-answer.txt");
   element.click();
 };
 ```

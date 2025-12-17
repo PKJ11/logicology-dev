@@ -16,36 +16,36 @@ export const AI_AGENT_CONFIG = {
   directories: {
     // Allowed directories for security
     allowed: [
-      'D:\\Downloads\\ai project',
-      'D:/Downloads/ai project',
+      "D:\\Downloads\\ai project",
+      "D:/Downloads/ai project",
       // Add more directories as needed
       // 'C:\\Users\\YourName\\Documents',
       // '/home/user/documents',
     ],
     // Default directory when page loads
-    default: 'D:\\Downloads\\ai project',
+    default: "D:\\Downloads\\ai project",
   },
 
   // Supported File Types
   files: {
     supportedExtensions: [
-      '.txt',    // Plain text
-      '.md',     // Markdown
-      '.json',   // JSON
-      '.csv',    // CSV
-      '.xml',    // XML
-      '.html',   // HTML
-      '.js',     // JavaScript
-      '.ts',     // TypeScript
-      '.py',     // Python
-      '.java',   // Java
-      '.cpp',    // C++
-      '.c',      // C
-      '.css',    // CSS
-      '.sql',    // SQL
-      '.sh',     // Shell scripts
-      '.yml',    // YAML
-      '.yaml',   // YAML
+      ".txt", // Plain text
+      ".md", // Markdown
+      ".json", // JSON
+      ".csv", // CSV
+      ".xml", // XML
+      ".html", // HTML
+      ".js", // JavaScript
+      ".ts", // TypeScript
+      ".py", // Python
+      ".java", // Java
+      ".cpp", // C++
+      ".c", // C
+      ".css", // CSS
+      ".sql", // SQL
+      ".sh", // Shell scripts
+      ".yml", // YAML
+      ".yaml", // YAML
     ],
     // Maximum file size to read (in bytes)
     maxFileSize: 5 * 1024 * 1024, // 5MB
@@ -73,18 +73,18 @@ You should:
 5. Use formatting (bullets, lists, etc.) when appropriate`,
 
     // Default question if user doesn't enter one
-    defaultQuestion: 'Please summarize the content of these files.',
+    defaultQuestion: "Please summarize the content of these files.",
   },
 
   // Error Messages
   messages: {
-    noQuestion: 'Please enter a question before submitting.',
-    noFilesSelected: 'Please select at least one file before asking.',
-    noFilesLoaded: 'No files were found in the selected directory.',
-    loadingFiles: 'Loading files...',
-    processing: 'Processing your question...',
-    success: 'Answer generated successfully',
-    error: 'An error occurred. Please try again.',
+    noQuestion: "Please enter a question before submitting.",
+    noFilesSelected: "Please select at least one file before asking.",
+    noFilesLoaded: "No files were found in the selected directory.",
+    loadingFiles: "Loading files...",
+    processing: "Processing your question...",
+    success: "Answer generated successfully",
+    error: "An error occurred. Please try again.",
   },
 };
 
@@ -92,7 +92,7 @@ You should:
  * Helper function to check if a file is supported
  */
 export function isSupportedFile(filename: string): boolean {
-  const ext = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+  const ext = filename.toLowerCase().substring(filename.lastIndexOf("."));
   return AI_AGENT_CONFIG.files.supportedExtensions.includes(ext);
 }
 
@@ -109,7 +109,7 @@ export function addAllowedDirectory(dirPath: string): void {
  * Helper function to check if directory is allowed
  */
 export function isDirectoryAllowed(dirPath: string): boolean {
-  return AI_AGENT_CONFIG.directories.allowed.some(allowed =>
+  return AI_AGENT_CONFIG.directories.allowed.some((allowed) =>
     dirPath.toLowerCase().includes(allowed.toLowerCase())
   );
 }
@@ -125,5 +125,5 @@ export function getSystemPrompt(): string {
  * Get supported extensions as comma-separated list
  */
 export function getSupportedExtensions(): string {
-  return AI_AGENT_CONFIG.files.supportedExtensions.join(', ');
+  return AI_AGENT_CONFIG.files.supportedExtensions.join(", ");
 }

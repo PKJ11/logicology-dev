@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDqeQ144Mx9kl-2roKdiGY5lGmxKQAgEmE";
 const MODEL_NAME = "gemini-2.5-flash";
@@ -12,23 +12,17 @@ export async function POST(request: NextRequest) {
     const { fileContents, question } = await request.json();
 
     if (!question) {
-      return NextResponse.json(
-        { error: 'Question is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Question is required" }, { status: 400 });
     }
 
     if (!fileContents || Object.keys(fileContents).length === 0) {
-      return NextResponse.json(
-        { error: 'No file contents provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No file contents provided" }, { status: 400 });
     }
 
     // Prepare file content summary with details
     const filesDetails = Object.entries(fileContents)
       .map(([filename, content]) => {
-        const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+        const contentStr = typeof content === "string" ? content : JSON.stringify(content);
         return `
 File: ${filename}
 Size: ${contentStr.length} characters
@@ -37,7 +31,7 @@ Content:
 ${contentStr}
 \`\`\``;
       })
-      .join('\n\n---\n\n');
+      .join("\n\n---\n\n");
 
     // Create the prompt
     const prompt = `You are an expert AI assistant that analyzes files and answers questions based on their content.
@@ -60,9 +54,9 @@ Instructions:
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
     const apiResponse = await fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         contents: [
@@ -83,17 +77,17 @@ Instructions:
 
     if (!apiResponse.ok) {
       const errorData = await apiResponse.json();
-      console.error('Gemini API Error:', errorData);
-      
+      console.error("Gemini API Error:", errorData);
+
       throw new Error(
         `API request failed with status ${apiResponse.status}: ${
-          errorData?.error?.message || 'Unknown error'
+          errorData?.error?.message || "Unknown error"
         }`
       );
     }
 
     const responseData = await apiResponse.json();
-    console.log('Gemini API Response:', responseData);
+    console.log("Gemini API Response:", responseData);
 
     // Extract the answer from the response
     if (
@@ -103,7 +97,7 @@ Instructions:
       !responseData.candidates[0].content.parts ||
       !responseData.candidates[0].content.parts[0]
     ) {
-      throw new Error('Invalid response structure from Gemini API');
+      throw new Error("Invalid response structure from Gemini API");
     }
 
     const answerText = responseData.candidates[0].content.parts[0].text;
@@ -117,20 +111,17 @@ Instructions:
       timestamp: new Date().toISOString(),
     });
   } catch (error: any) {
-    console.error('Error processing with Gemini:', error);
-    
+    console.error("Error processing with Gemini:", error);
+
     // Provide more helpful error messages
-    let errorMessage = error.message || 'Failed to process files with AI';
-    
-    if (error.message?.includes('429')) {
-      errorMessage = 'API quota exceeded. Please try again in a few moments.';
-    } else if (error.message?.includes('401') || error.message?.includes('403')) {
-      errorMessage = 'Invalid API key or insufficient permissions.';
+    let errorMessage = error.message || "Failed to process files with AI";
+
+    if (error.message?.includes("429")) {
+      errorMessage = "API quota exceeded. Please try again in a few moments.";
+    } else if (error.message?.includes("401") || error.message?.includes("403")) {
+      errorMessage = "Invalid API key or insufficient permissions.";
     }
 
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: error.status || 500 }
-    );
+    return NextResponse.json({ error: errorMessage }, { status: error.status || 500 });
   }
 }

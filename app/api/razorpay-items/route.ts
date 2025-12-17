@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
 export async function GET(req: NextRequest) {
-  const key_id =  "rzp_live_RNIwt54hh7eqmk";
-  const key_secret =  "t8NMj5PKyi0Af2b15uARbtLl";
+  const key_id = "rzp_live_RNIwt54hh7eqmk";
+  const key_secret = "t8NMj5PKyi0Af2b15uARbtLl";
   console.log("Razorpay Key ID:", key_id);
   if (!key_id || !key_secret) {
     return NextResponse.json(

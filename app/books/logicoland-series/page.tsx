@@ -676,7 +676,8 @@ function SymmetryPatternGame() {
             Complete the Symmetric Pattern
           </h2>
           <p className="textstyles mx-auto max-w-2xl text-brand-tealDark/80">
-            Drag colors from colored cells to blank cells, or select a color from palette and click on blank cells.
+            Drag colors from colored cells to blank cells, or select a color from palette and click
+            on blank cells.
           </p>
         </motion.div>
 
@@ -693,8 +694,10 @@ function SymmetryPatternGame() {
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`h-10 w-10 rounded-full shadow ring-2 ring-white cursor-pointer outline-offset-2 transition-all duration-300 hover:scale-110 ${
-                        selectedColor === color ? "scale-110 outline outline-2 outline-black/70" : ""
+                      className={`h-10 w-10 cursor-pointer rounded-full shadow outline-offset-2 ring-2 ring-white transition-all duration-300 hover:scale-110 ${
+                        selectedColor === color
+                          ? "scale-110 outline outline-2 outline-black/70"
+                          : ""
                       }`}
                       style={{ backgroundColor: color }}
                       title={`Select ${color}`}
@@ -710,7 +713,7 @@ function SymmetryPatternGame() {
                   </span>
                 </p>
               </div>
-              
+
               {/* Reset button - Right side */}
               <div>
                 <button
@@ -729,28 +732,28 @@ function SymmetryPatternGame() {
                   row.map((cell, j) => {
                     const isDraggable = isColorCell(i, j);
                     const isEditable = isBlankCell(i, j);
-                    
+
                     // Function to get border classes similar to Sudoku
                     const getBorderClass = () => {
                       let classes = [];
-                      
+
                       // Outer borders
                       if (i === 0) classes.push("border-t border-black/30");
                       if (i === gridSize - 1) classes.push("border-b border-black/30");
                       if (j === 0) classes.push("border-l border-black/30");
                       if (j === gridSize - 1) classes.push("border-r border-black/30");
-                      
+
                       // Inner borders (all cells get borders)
                       if (i < gridSize - 1) classes.push("border-b border-black/30");
                       if (j < gridSize - 1) classes.push("border-r border-black/30");
-                      
+
                       // Special thicker borders for symmetry quadrants (every 3 rows/cols)
                       if (i === 2) classes.push("border-b-2 border-black/30");
                       if (j === 2) classes.push("border-r-2 border-black/30");
-                      
+
                       return classes.join(" ");
                     };
-                    
+
                     return (
                       <div
                         key={`${i}-${j}`}
@@ -760,7 +763,7 @@ function SymmetryPatternGame() {
                         onDrop={isEditable ? (e) => handleDrop(i, j, e) : undefined}
                         onClick={() => handleCellClick(i, j)}
                         style={{ backgroundColor: cell }}
-                        className={`relative aspect-square w-full flex items-center justify-center transition-all duration-300 ${getBorderClass()} ${
+                        className={`relative flex aspect-square w-full items-center justify-center transition-all duration-300 ${getBorderClass()} ${
                           isEditable
                             ? "cursor-pointer hover:brightness-95"
                             : isDraggable
@@ -784,11 +787,9 @@ function SymmetryPatternGame() {
                         {cell === BLANK_CELL_COLOR && (
                           <span className="text-xs text-gray-600 opacity-70">Drop</span>
                         )}
-                        
+
                         {/* Small dot for colored cells */}
-                        {cell !== BLANK_CELL_COLOR && (
-                          <span className="h-4/5 w-4/5 rounded-xl" />
-                        )}
+                        {cell !== BLANK_CELL_COLOR && <span className="h-4/5 w-4/5 rounded-xl" />}
                       </div>
                     );
                   })
@@ -813,8 +814,8 @@ function SymmetryPatternGame() {
               </span>
             </p>
             <p className="mt-2 text-center text-xs text-brand-tealDark/70">
-              Tip: Look at the colored cells - they show you how symmetry works! Each color appears in
-              multiple symmetric positions. Drag colors from existing colored cells to maintain
+              Tip: Look at the colored cells - they show you how symmetry works! Each color appears
+              in multiple symmetric positions. Drag colors from existing colored cells to maintain
               symmetry.
             </p>
           </div>

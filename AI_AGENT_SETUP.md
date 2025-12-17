@@ -39,6 +39,7 @@ http://localhost:3000/ai-agent
 ### 1. **API Routes**
 
 #### `/api/ai-agent/read-files`
+
 - **Method**: GET
 - **Purpose**: Read files from a directory
 - **Parameters**:
@@ -47,11 +48,13 @@ http://localhost:3000/ai-agent
 - **Supported Formats**: `.txt`, `.md`, `.json`, `.csv`, `.xml`, `.html`, `.js`, `.ts`, `.py`, `.java`
 
 **Example:**
+
 ```
 GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -66,6 +69,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 ```
 
 #### `/api/ai-agent/process`
+
 - **Method**: POST
 - **Purpose**: Process files with Gemini AI
 - **Request Body**:
@@ -80,6 +84,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 - **Returns**: AI-generated answer
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -95,6 +100,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
 **Location**: `/app/ai-agent/page.tsx`
 
 **Features**:
+
 - 📂 File explorer with directory browsing
 - ✅ File selection/deselection
 - 👁️ File preview (expandable)
@@ -175,7 +181,7 @@ GET /api/ai-agent/read-files?dir=D:\Downloads\ai project
    - `.txt`, `.md`, `.json`, `.csv`, `.xml`, `.html`, `.js`, `.ts`, `.py`, `.java`
    - Edit the extension list in the route handler to add more types
 
-3. **API Key**: 
+3. **API Key**:
    - Should be stored in `.env.local` (not committed to git)
    - Add to `.gitignore`
 
@@ -220,15 +226,19 @@ curl -X POST http://localhost:3000/api/ai-agent/process \
 ## 🐛 Troubleshooting
 
 ### Issue: "Directory not found"
+
 **Solution**: Make sure the path exists and is spelled correctly
 
 ### Issue: "No files loaded"
+
 **Solution**: Check that the directory has supported file types
 
 ### Issue: "API Key error"
+
 **Solution**: Verify API key is set in `.env.local`
 
 ### Issue: "Access to this directory is not allowed"
+
 **Solution**: Edit allowed paths in `/api/ai-agent/read-files/route.ts`
 
 ---
