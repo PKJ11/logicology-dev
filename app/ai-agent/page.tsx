@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 interface FileContent {
@@ -21,9 +21,74 @@ export default function AIAgentPage() {
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [question, setQuestion] = useState<string>('');
   const [answer, setAnswer] = useState<string>('');
+  const [displayedAnswer, setDisplayedAnswer] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [filesLoading, setFilesLoading] = useState<boolean>(false);
   const [expandedFiles, setExpandedFiles] = useState<Set<string>>(new Set());
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const typingSpeed = 20;
+  const answerRef = useRef<string>('');
+
+  // Format text with bold markers - simplified version
+  const formatTextWithBold = (text: string): React.ReactNode => {
+    const regex = /\*\*(.*?)\*\*/g;
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match;
+    let key = 0;
+    
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the bold section
+      if (match.index > lastIndex) {
+        parts.push(
+          <span key={key++}>
+            {text.substring(lastIndex, match.index)}
+          </span>
+        );
+      }
+      
+      // Add bold text
+      parts.push(
+        <strong key={key++} className="font-bold text-gray-900">
+          {match[1]}
+        </strong>
+      );
+      
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(
+        <span key={key++}>
+          {text.substring(lastIndex)}
+        </span>
+      );
+    }
+    
+    return <>{parts}</>;
+  };
+
+  // Typewriter effect
+  const startTypingAnimation = (fullText: string) => {
+    answerRef.current = fullText;
+    setDisplayedAnswer('');
+    setIsTyping(true);
+    
+    let currentIndex = 0;
+    
+    const typeNextCharacter = () => {
+      if (currentIndex < fullText.length) {
+        setDisplayedAnswer(prev => prev + fullText[currentIndex]);
+        currentIndex++;
+        setTimeout(typeNextCharacter, typingSpeed);
+      } else {
+        setIsTyping(false);
+      }
+    };
+    
+    typeNextCharacter();
+  };
 
   // Load files from directory
   const loadFiles = async () => {
@@ -35,7 +100,7 @@ export default function AIAgentPage() {
       if (data.success) {
         setFiles(data.files || []);
         setFileContents(data.contents || {});
-        setSelectedFiles(new Set(data.files || [])); // Auto-select all files
+        setSelectedFiles(new Set(data.files || []));
         toast.success(`Loaded ${data.count} files`);
       } else {
         toast.error(data.error || 'Failed to load files');
@@ -60,8 +125,10 @@ export default function AIAgentPage() {
     }
 
     setLoading(true);
+    setDisplayedAnswer('');
+    setIsTyping(false);
+    
     try {
-      // Get content of selected files only
       const selectedFileContents: FileContent = {};
       selectedFiles.forEach(file => {
         if (fileContents[file]) {
@@ -84,6 +151,7 @@ export default function AIAgentPage() {
 
       if (data.success && data.answer) {
         setAnswer(data.answer);
+        startTypingAnimation(data.answer);
         toast.success('Answer generated successfully');
       } else {
         toast.error(data.error || 'Failed to generate answer');
@@ -115,6 +183,14 @@ export default function AIAgentPage() {
       newExpanded.add(filename);
     }
     setExpandedFiles(newExpanded);
+  };
+
+  // Skip typing animation and show full answer
+  const skipToFullAnswer = () => {
+    if (isTyping && answerRef.current) {
+      setDisplayedAnswer(answerRef.current);
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -222,36 +298,86 @@ export default function AIAgentPage() {
             </div>
 
             {/* Answer Display */}
-            {answer && (
+            {displayedAnswer && (
               <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">✨ Answer</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">✨ Answer</h2>
+                  {isTyping && (
+                    <button
+                      onClick={skipToFullAnswer}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      Skip animation
+                    </button>
+                  )}
+                </div>
+                
                 <div className="prose prose-sm max-w-none">
-                  <div className="bg-gradient-to-br from-green-50 to-blue-50 p-4 rounded-lg border border-green-200">
-                    <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-                      {answer}
-                    </p>
+                  <div className="bg-gradient-to-br from-green-50 to-blue-50 p-6 rounded-lg border border-green-200 min-h-[200px]">
+                    <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+                      {formatTextWithBold(displayedAnswer)}
+                      {isTyping && (
+                        <span className="inline-block w-2 h-5 ml-1 bg-blue-500 animate-pulse"></span>
+                      )}
+                    </div>
+                    
+                    {/* Progress indicator */}
+                    {isTyping && (
+                      <div className="mt-4">
+                        <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-blue-500 transition-all duration-300"
+                            style={{ 
+                              width: `${(displayedAnswer.length / answerRef.current.length) * 100}%` 
+                            }}
+                          ></div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 text-right">
+                          {Math.round((displayedAnswer.length / answerRef.current.length) * 100)}% complete
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Copy Button */}
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(answer);
-                    toast.success('Answer copied to clipboard');
-                  }}
-                  className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
-                >
-                  📋 Copy Answer
-                </button>
+                {/* Action Buttons */}
+                <div className="mt-4 flex gap-3">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(answerRef.current || answer);
+                      toast.success('Answer copied to clipboard');
+                    }}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2"
+                  >
+                    📋 Copy Answer
+                  </button>
+                  {!isTyping && (
+                    <button
+                      onClick={() => startTypingAnimation(answerRef.current)}
+                      className="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 font-medium flex items-center justify-center gap-2"
+                    >
+                      🔄 Replay Animation
+                    </button>
+                  )}
+                </div>
               </div>
             )}
 
             {/* Empty State */}
-            {!answer && (
+            {!displayedAnswer && (
               <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-                <p className="text-gray-500 text-lg">
+                <div className="text-gray-500 text-lg mb-4">
                   💡 Ask a question about your files to get started
-                </p>
+                </div>
+                <div className="text-sm text-gray-400 space-y-2">
+                  <p>Example questions:</p>
+                  <ul className="space-y-1">
+                    <li>"Summarize the main topics in these files"</li>
+                    <li>"What are the key findings?"</li>
+                    <li>"**Explain** the main concepts"</li>
+                    <li>Use **double asterisks** for bold text</li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>
@@ -266,6 +392,8 @@ export default function AIAgentPage() {
             <li>✅ Select the files you want to analyze</li>
             <li>✅ Ask your question and click "Get Answer"</li>
             <li>✅ The AI will analyze the selected files and provide answers</li>
+            <li>✅ Use **text** for bold formatting in your questions</li>
+            <li>✅ Answers appear with typing animation like ChatGPT</li>
           </ul>
         </div>
       </div>

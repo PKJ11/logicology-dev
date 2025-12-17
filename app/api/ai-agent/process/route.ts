@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDTN8jAXmLSj_BN7FJxEQsjzjlGYHIQUjo";
-const MODEL_NAME = "gemini-2.0-flash";
+const API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDqeQ144Mx9kl-2roKdiGY5lGmxKQAgEmE";
+const MODEL_NAME = "gemini-2.5-flash";
 
 /**
  * Process files with Gemini AI using direct HTTP fetch
@@ -56,8 +56,8 @@ Instructions:
 - Be concise but thorough in your explanation
 - Use specific references to the file contents when applicable`;
 
-    // Call Gemini API using direct HTTP fetch
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+    // Call Gemini API using direct HTTP fetch (v1 endpoint)
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
     const apiResponse = await fetch(apiUrl, {
       method: 'POST',
