@@ -25,6 +25,7 @@ const products = [
     description: "Prime Time Board Game",
     image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
     rating: 5,
+    specialOffer: "", // Empty string for others
   },
   {
     name: "Logicoland - Volume 1",
@@ -34,6 +35,7 @@ const products = [
     description: "Logicoland Volume 1",
     image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
+    specialOffer: "", // Empty string for others
   },
   {
     name: "Logicoland Volume 1 Bundle - 20 Books",
@@ -44,17 +46,19 @@ const products = [
       "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
     image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,
+    specialOffer: "", // Empty string for others
   },
   {
     name: "Turn the Tables",
-    price: "₹299",
-    initialprice: "₹399",
+    price: "₹399",
+    initialprice: "", // Fixed to show ₹399 only
     razorpayItemId: "item_RsD9AhoF8idQ21",
     description:
       "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
     image:
       "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
     rating: 5,
+    specialOffer: "Pay for 1 set and we will ship 2 sets for you!", // Special offer text
   },
 ];
 
@@ -155,7 +159,9 @@ const ProductShowcase = () => {
                 <div className="flex flex-1 flex-col justify-center pl-4 text-left">
                   <h3 className="mb-1 text-lg font-bold text-brand-teal">{product.name}</h3>
                   <div className="mb-0.5 text-yellow-400">{"★".repeat(product.rating)}</div>
-                  <div className="flex">
+                  
+                  {/* Price Display */}
+                  <div className="flex items-center">
                     <div className="mb-2 text-base font-semibold text-brand-teal">
                       {product.price}
                     </div>
@@ -166,7 +172,19 @@ const ProductShowcase = () => {
                     )}
                   </div>
 
-                  {/* GST Details */}
+                  {/* Special Offer Text - Only show if not empty */}
+                  {product.specialOffer && (
+                    <div className="mb-2">
+                      <div className="inline-flex items-center rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 text-xs font-bold text-white">
+                        🎁 SPECIAL OFFER
+                      </div>
+                      <p className="mt-1 text-xs font-medium text-green-700">
+                        {product.specialOffer}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* GST Details (Optional - you can uncomment if needed) */}
                   {/* <div className="mb-1 text-xs text-gray-700">
                     <div className="flex justify-between">
                       <span>Base Price: ₹{priceBreakdown.basePrice}</span>
@@ -176,10 +194,6 @@ const ProductShowcase = () => {
                       <span>GST Amt: ₹{priceBreakdown.gstAmount}</span>
                       <span>HSN: {details.hsn_code || "..."}</span>
                     </div>
-                  </div> */}
-
-                  {/* <div className="mb-1 text-xs text-gray-700">
-                    <span>Includes GST | Razorpay ID: {product.razorpayItemId}</span>
                   </div> */}
 
                   <button
