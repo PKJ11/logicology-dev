@@ -68,12 +68,12 @@ export default function Logicoland1Page() {
         <section id="symmetry-game">
           <SymmetryPatternGame />
         </section>
-        <section id="anagram-game">
+        {/* <section id="anagram-game">
   <AnagramGame />
 </section>
 <section id="anagram-game-lv2">
   <WordFormationGame />
-</section>
+</section> */}
         {/* ================= COMMUNITY ================= */}
         <section id="community">
           <Community />
