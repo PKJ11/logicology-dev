@@ -116,7 +116,7 @@ export default function CommunitySignupModal({
         setUserData(getUserData());
       }
       setErrorMessage(null);
-      
+
       // Only need reCAPTCHA for signup tab
       needsRecaptcha.current = activeTab === "signup";
     }
@@ -132,7 +132,7 @@ export default function CommunitySignupModal({
   // Initialize reCAPTCHA only when needed (signup tab and OTP not sent yet)
   useEffect(() => {
     if (!open) return;
-    
+
     // Only initialize reCAPTCHA for signup tab and when OTP is not sent
     if (activeTab === "signup" && !otpSent && needsRecaptcha.current) {
       initializeRecaptcha();
@@ -151,7 +151,7 @@ export default function CommunitySignupModal({
     try {
       // First, clean up any existing reCAPTCHA
       cleanupRecaptcha();
-      
+
       // Wait a bit for DOM to be ready
       setTimeout(() => {
         try {
@@ -161,7 +161,7 @@ export default function CommunitySignupModal({
             console.log("reCAPTCHA container not found");
             return;
           }
-          
+
           // Initialize new reCAPTCHA
           recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
             size: "invisible",
@@ -202,7 +202,7 @@ export default function CommunitySignupModal({
     }
     recaptchaInitialized.current = false;
     needsRecaptcha.current = false;
-    
+
     // Clear container
     const container = document.getElementById("recaptcha-container");
     if (container) {
@@ -296,13 +296,13 @@ export default function CommunitySignupModal({
       setErrorMessage(null);
     } catch (error: any) {
       console.error("Error:", error);
-      
+
       // Handle specific Firebase errors
-      if (error.code === 'auth/too-many-requests') {
+      if (error.code === "auth/too-many-requests") {
         setErrorMessage("Too many attempts. Please try again later.");
-      } else if (error.code === 'auth/invalid-phone-number') {
+      } else if (error.code === "auth/invalid-phone-number") {
         setErrorMessage("Invalid phone number format.");
-      } else if (error.code === 'auth/captcha-check-failed') {
+      } else if (error.code === "auth/captcha-check-failed") {
         setErrorMessage("Security verification failed. Please switch tabs and try again.");
         cleanupRecaptcha();
       } else {
@@ -310,7 +310,7 @@ export default function CommunitySignupModal({
           `Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`
         );
       }
-      
+
       // Reset reCAPTCHA on error for signup tab
       if (activeTab === "signup") {
         cleanupRecaptcha();
@@ -343,7 +343,7 @@ export default function CommunitySignupModal({
       await confirmationResult.confirm(otp);
       setOtpVerified(true);
       setErrorMessage(null);
-      
+
       // Clean up reCAPTCHA after successful OTP verification
       cleanupRecaptcha();
     } catch (error: any) {
@@ -450,7 +450,7 @@ export default function CommunitySignupModal({
     setConfirmationResult(null);
     setRegistrationSuccess(false);
     setErrorMessage(null);
-    
+
     // Clean up reCAPTCHA
     cleanupRecaptcha();
   };
@@ -458,13 +458,13 @@ export default function CommunitySignupModal({
   const handleTabSwitch = (tab: TabType) => {
     setActiveTab(tab);
     setErrorMessage(null);
-    
+
     // Update reCAPTCHA needs
     needsRecaptcha.current = tab === "signup";
-    
+
     // Clean up existing reCAPTCHA
     cleanupRecaptcha();
-    
+
     // Initialize reCAPTCHA if switching to signup tab
     if (tab === "signup") {
       needsRecaptcha.current = true;

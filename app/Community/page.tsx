@@ -13,6 +13,16 @@ interface UserData {
   phone: string;
 }
 
+interface Worksheet {
+  id: number;
+  title: string;
+  description: string;
+  pdfPath: string;
+  imagePath: string;
+  category: string;
+  difficulty: string;
+}
+
 // Jio Interakt API configuration
 const INTERAKT_API_KEY = "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=";
 const INTERAKT_BASE_URL = "https://api.interakt.ai/v1/public";
@@ -20,8 +30,62 @@ const INTERAKT_BASE_URL = "https://api.interakt.ai/v1/public";
 // WhatsApp template names - create these templates in Interakt under "Utility" category
 const WHATSAPP_TEMPLATES = {
   COMMUNITY_INVITE: "community_invite", // Create this template in Interakt
-  WELCOME: "community_welcome" // Optional: for welcoming new users
+  WELCOME: "community_welcome", // Optional: for welcoming new users
 };
+
+// Worksheets data with Worksheet001 to Worksheet005
+const WORKSHEETS: Worksheet[] = [
+  {
+    id: 1,
+    title: "Maze Games",
+    description:
+      "Navigate through challenging mazes and find the correct paths to develop problem-solving skills and spatial awareness.",
+    pdfPath: "/pdfs/Community/Worksheet001.pdf",
+    imagePath: "/Community/worksheet1-preview.jpg",
+    category: "",
+    difficulty: "",
+  },
+  {
+    id: 2,
+    title: "Country Word Search",
+    description:
+      "Discover countries from around the world in engaging word search puzzles that enhance vocabulary and geographical knowledge.",
+    pdfPath: "/pdfs/Community/Worksheet002.pdf",
+    imagePath: "/pdfs/Community/worksheet2-preview.jpg",
+    category: "",
+    difficulty: "",
+  },
+  {
+    id: 3,
+    title: "Colouring Activity",
+    description:
+      "Express creativity with beautiful coloring pages featuring animals, nature scenes, and fun characters for artistic development.",
+    pdfPath: "/pdfs/Community/Worksheet003.pdf",
+    imagePath: "/pdfs/Community/worksheet3-preview.jpg",
+    category: "",
+    difficulty: "",
+  },
+  {
+    id: 4,
+    title: "Find My Kite",
+    description:
+      "Help characters find their lost kites in visual search puzzles that improve observation skills and attention to detail.",
+    pdfPath: "/pdfs/Community/Worksheet004.pdf",
+    imagePath: "/Community/worksheet4-preview.jpg",
+    category: "",
+    difficulty: "",
+  },
+  {
+    id: 5,
+    title: "Crack The Zoo Codes",
+    description:
+      "Decipher secret codes and solve animal-themed puzzles to rescue zoo animals using logical thinking and pattern recognition.",
+    pdfPath: "/pdfs/Community/Worksheet005.pdf",
+    imagePath: "/Community/worksheet5-preview.jpg",
+    category: "",
+    difficulty: "",
+  },
+];
 
 export default function CommunityPage() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -35,6 +99,7 @@ export default function CommunityPage() {
     success: boolean;
     message: string;
   } | null>(null);
+  const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -84,21 +149,23 @@ export default function CommunityPage() {
   };
 
   // Function to extract country code (defaulting to +91 for India)
-  const extractCountryCode = (phoneNumber: string): { countryCode: string; cleanedNumber: string } => {
+  const extractCountryCode = (
+    phoneNumber: string
+  ): { countryCode: string; cleanedNumber: string } => {
     const cleaned = cleanPhoneNumber(phoneNumber);
-    
+
     // Check if number starts with country code
-    if (cleaned.startsWith('91') && cleaned.length >= 12) {
+    if (cleaned.startsWith("91") && cleaned.length >= 12) {
       return {
         countryCode: "+91",
-        cleanedNumber: cleaned.substring(2) // Remove country code
+        cleanedNumber: cleaned.substring(2), // Remove country code
       };
     }
-    
+
     // Default to Indian number without country code
     return {
       countryCode: "+91",
-      cleanedNumber: cleaned.length > 10 ? cleaned.slice(-10) : cleaned // Take last 10 digits
+      cleanedNumber: cleaned.length > 10 ? cleaned.slice(-10) : cleaned, // Take last 10 digits
     };
   };
 
@@ -182,7 +249,7 @@ export default function CommunityPage() {
     if (!friendName.trim() || !friendNumber.trim()) {
       setInviteStatus({
         success: false,
-        message: "Please enter both name and phone number"
+        message: "Please enter both name and phone number",
       });
       setTimeout(() => setInviteStatus(null), 3000);
       return;
@@ -210,40 +277,49 @@ export default function CommunityPage() {
       if (result.success) {
         setInviteStatus({
           success: true,
-          message: `Invitation sent successfully to ${friendName}!`
+          message: `Invitation sent successfully to ${friendName}!`,
         });
-        
+
         // Reset form
         setShowWhatsappForm(false);
         setFriendName("");
         setFriendNumber("");
-        
+
         // Clear success message after 5 seconds
         setTimeout(() => setInviteStatus(null), 5000);
       } else {
         setInviteStatus({
           success: false,
-          message: result.error || "Failed to send invitation. Please try again."
+          message: result.error || "Failed to send invitation. Please try again.",
         });
       }
     } catch (error: any) {
       setInviteStatus({
         success: false,
-        message: error.message || "An error occurred. Please try again."
+        message: error.message || "An error occurred. Please try again.",
       });
     } finally {
       setSendingInvite(false);
     }
   };
 
-  const downloadPDF = () => {
-    const pdfUrl = "/playthinkers-january-2026-worksheet.pdf";
+  const downloadPDF = (pdfPath: string, title: string) => {
     const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = "PlayThinkers_January_2026_Worksheet.pdf";
+    link.href = pdfPath;
+    // Extract filename from path for download
+    const filename = pdfPath.split("/").pop() || `${title.replace(/\s+/g, "_")}.pdf`;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const openPreview = (pdfPath: string) => {
+    setPreviewPdf(pdfPath);
+  };
+
+  const closePreview = () => {
+    setPreviewPdf(null);
   };
 
   if (isLoading) {
@@ -287,7 +363,7 @@ export default function CommunityPage() {
 
         {/* Show the Community component below the header */}
         <Community />
-        
+
         {/* Add some spacing and additional info */}
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-lg">
@@ -307,7 +383,9 @@ export default function CommunityPage() {
                   🧩
                 </div>
                 <h3 className="mb-2 font-semibold text-brand-tealDark">Learning Games</h3>
-                <p className="text-sm text-gray-600">Interactive games to develop critical thinking</p>
+                <p className="text-sm text-gray-600">
+                  Interactive games to develop critical thinking
+                </p>
               </div>
               <div className="rounded-xl bg-brand-grayBg p-6 text-center">
                 <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-gold/10 text-2xl">
@@ -324,7 +402,7 @@ export default function CommunityPage() {
                 <p className="text-sm text-gray-600">Earn badges and certificates</p>
               </div>
             </div>
-            
+
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Join the community to unlock all these benefits and more!
@@ -393,7 +471,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* Worksheet Section */}
+        {/* Worksheet Section - Updated with Worksheet001 to Worksheet005 */}
         <section className="mb-12 rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl">
           <div className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-teal to-brand-coral px-6 py-3 text-sm font-medium text-white shadow-md">
@@ -405,57 +483,38 @@ export default function CommunityPage() {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              New Worksheet Available!
+              Exclusive Worksheets Available!
             </div>
             <h2 className="mb-4 text-3xl font-bold text-brand-tealDark">
-              January 2026 Worksheet Set is available now!
+              Download Your Premium Worksheets
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
-              Download our exclusive PlayThinkers worksheet designed to enhance critical thinking
-              and problem-solving skills for kids.
+              Access our exclusive collection of PlayThinkers worksheets designed to enhance
+              critical thinking and problem-solving skills for kids of all ages.
             </p>
 
-            <button
-              onClick={downloadPDF}
-              className="group mb-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-brand-teal to-brand-coral px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
-            >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            {/* Worksheets Grid - 3 per row */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {WORKSHEETS.slice(0, 3).map((worksheet) => (
+                <WorksheetCard
+                  key={worksheet.id}
+                  worksheet={worksheet}
+                  onDownload={downloadPDF}
+                  onPreview={openPreview}
                 />
-              </svg>
-              Download PDF Worksheet
-            </button>
+              ))}
+            </div>
 
-            {/* Preview of worksheet types */}
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <WorksheetType
-                title="Pattern Recognition"
-                icon="🔍"
-                bgColor="bg-brand-teal/10"
-                textColor="text-brand-tealDark"
-              />
-              <WorksheetType
-                title="Logical Puzzles"
-                icon="🧩"
-                bgColor="bg-brand-coral/10"
-                textColor="text-brand-coral"
-              />
-              <WorksheetType
-                title="Memory Games"
-                icon="🧠"
-                bgColor="bg-brand-gold/10"
-                textColor="text-brand-tealDark"
-              />
-              <WorksheetType
-                title="Creative Thinking"
-                icon="🎨"
-                bgColor="bg-brand-pink/10"
-                textColor="text-brand-maroon"
-              />
+            {/* Row for worksheets 4 and 5 - centered with 2 per row */}
+            <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
+              {WORKSHEETS.slice(3, 5).map((worksheet) => (
+                <WorksheetCard
+                  key={worksheet.id}
+                  worksheet={worksheet}
+                  onDownload={downloadPDF}
+                  onPreview={openPreview}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -495,7 +554,7 @@ export default function CommunityPage() {
             <p className="mb-6 text-lg opacity-90">
               Keep visiting this page for more printable worksheets and exciting content.
             </p>
-            
+
             {/* Copy Link Option */}
             <div className="mb-8">
               <button
@@ -540,18 +599,20 @@ export default function CommunityPage() {
             ) : (
               <div className="mx-auto max-w-md rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
                 <h4 className="mb-4 text-lg font-semibold">Invite Friend via WhatsApp</h4>
-                
+
                 {/* Status Message */}
                 {inviteStatus && (
-                  <div className={`mb-4 rounded-lg p-3 text-sm ${
-                    inviteStatus.success 
-                      ? 'bg-green-500/20 text-green-100' 
-                      : 'bg-red-500/20 text-red-100'
-                  }`}>
+                  <div
+                    className={`mb-4 rounded-lg p-3 text-sm ${
+                      inviteStatus.success
+                        ? "bg-green-500/20 text-green-100"
+                        : "bg-red-500/20 text-red-100"
+                    }`}
+                  >
                     {inviteStatus.message}
                   </div>
                 )}
-                
+
                 <div className="space-y-4">
                   <input
                     type="text"
@@ -581,7 +642,7 @@ export default function CommunityPage() {
                           Sending...
                         </span>
                       ) : (
-                        'Send Invite via Jio Interakt'
+                        "Send Invite via Jio Interakt"
                       )}
                     </button>
                     <button
@@ -595,8 +656,8 @@ export default function CommunityPage() {
                       Cancel
                     </button>
                   </div>
-                  
-                  <p className="text-xs text-white/60 text-center mt-4">
+
+                  <p className="mt-4 text-center text-xs text-white/60">
                     Using Jio Interakt for reliable WhatsApp message delivery
                   </p>
                 </div>
@@ -607,12 +668,62 @@ export default function CommunityPage() {
 
         {/* More Coming Soon */}
         <section className="rounded-3xl border border-brand-teal/10 bg-white p-8 text-center shadow-xl">
-          <h3 className="mb-4 text-2xl font-bold text-brand-tealDark">More Exciting Content Coming Soon!</h3>
+          <h3 className="mb-4 text-2xl font-bold text-brand-tealDark">
+            More Exciting Content Coming Soon!
+          </h3>
           <p className="text-lg text-gray-600">
             Stay tuned for weekly puzzles, monthly challenges, and interactive learning games.
           </p>
         </section>
       </main>
+
+      {/* PDF Preview Modal */}
+      {previewPdf && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
+          <div className="relative w-full max-w-4xl rounded-lg bg-white p-4">
+            <button
+              onClick={closePreview}
+              className="absolute right-4 top-4 z-10 rounded-full bg-white p-2 shadow-lg hover:bg-gray-100"
+            >
+              <svg
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="h-[80vh]">
+              <iframe src={previewPdf} className="h-full w-full rounded-md" title="PDF Preview" />
+            </div>
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={() =>
+                  downloadPDF(
+                    previewPdf,
+                    previewPdf.split("/").pop()?.replace(".pdf", "") || "Worksheet"
+                  )
+                }
+                className="mr-3 rounded-lg bg-brand-teal px-6 py-2 text-white hover:bg-brand-tealDark"
+              >
+                Download
+              </button>
+              <button
+                onClick={closePreview}
+                className="rounded-lg border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <SiteFooter />
@@ -620,24 +731,114 @@ export default function CommunityPage() {
   );
 }
 
-// Worksheet Type Component
-function WorksheetType({ 
-  title, 
-  icon, 
-  bgColor, 
-  textColor 
-}: { 
-  title: string; 
-  icon: string; 
-  bgColor: string;
-  textColor: string;
+// Worksheet Card Component
+function WorksheetCard({
+  worksheet,
+  onDownload,
+  onPreview,
+}: {
+  worksheet: Worksheet;
+  onDownload: (pdfPath: string, title: string) => void;
+  onPreview: (pdfPath: string) => void;
 }) {
+  // Function to get worksheet number from filename
+  const getWorksheetNumber = (pdfPath: string) => {
+    const filename = pdfPath.split("/").pop() || "";
+    const match = filename.match(/Worksheet(\d+)/);
+    return match ? match[1] : "";
+  };
+
+  const worksheetNumber = getWorksheetNumber(worksheet.pdfPath);
+
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-transform hover:scale-105">
-      <div className={`mb-3 h-12 w-12 rounded-lg ${bgColor} flex items-center justify-center text-2xl`}>
-        {icon}
+    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
+      {/* Worksheet Header with Number */}
+      <div className="border-b border-gray-100 bg-gradient-to-r from-brand-teal/5 to-brand-coral/5 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-brand-teal to-brand-coral">
+              <span className="text-sm font-bold text-white">WS</span>
+            </div>
+            <div>
+              <div className="text-xs font-medium text-brand-tealDark opacity-80">Worksheet</div>
+              <div className="text-lg font-bold text-brand-tealDark">#{worksheetNumber}</div>
+            </div>
+          </div>
+          <div
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              worksheet.difficulty === "Beginner"
+                ? "bg-green-100 text-green-800"
+                : worksheet.difficulty === "Intermediate"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-red-100 text-red-800"
+            }`}
+          >
+            {worksheet.difficulty}
+          </div>
+        </div>
       </div>
-      <h4 className={`font-semibold ${textColor}`}>{title}</h4>
+
+      {/* Worksheet Content */}
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="mb-3 text-xl font-bold text-brand-tealDark">{worksheet.title}</h3>
+        <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">{worksheet.description}</p>
+
+        {/* Category */}
+        <div className="mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
+            <svg className="h-3 w-3 text-brand-teal" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="text-xs font-medium text-gray-700">{worksheet.category}</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={() => onPreview(worksheet.pdfPath)}
+            className="flex-1 rounded-lg border border-brand-teal bg-white px-4 py-3 text-sm font-medium text-brand-teal transition-all hover:bg-brand-teal/5 hover:shadow-sm"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+              Preview
+            </div>
+          </button>
+          <button
+            onClick={() => onDownload(worksheet.pdfPath, worksheet.title)}
+            className="flex-1 rounded-lg bg-gradient-to-r from-brand-teal to-brand-coral px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:scale-105 hover:shadow-md"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Download
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

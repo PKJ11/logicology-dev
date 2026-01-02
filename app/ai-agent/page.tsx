@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { FiUpload, FiFolder, FiSearch, FiCopy, FiRefreshCw, FiChevronRight, FiChevronDown, FiSend, FiCheck } from "react-icons/fi";
+import {
+  FiUpload,
+  FiFolder,
+  FiSearch,
+  FiCopy,
+  FiRefreshCw,
+  FiChevronRight,
+  FiChevronDown,
+  FiSend,
+  FiCheck,
+} from "react-icons/fi";
 import { AiOutlineRobot } from "react-icons/ai";
 
 interface FileContent {
@@ -231,7 +241,7 @@ export default function AIAgentPage() {
                 <AiOutlineRobot className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 font-heading">AI File Agent</h1>
+                <h1 className="font-heading text-2xl font-bold text-gray-900">AI File Agent</h1>
                 <p className="text-sm text-gray-600">Intelligent document analysis powered by AI</p>
               </div>
             </div>
@@ -288,7 +298,6 @@ export default function AIAgentPage() {
               </div>
 
               {/* File Explorer Card */}
-              
 
               {/* Stats Card */}
               <div className="rounded-2xl bg-gradient-to-br from-brand-maroonDark to-brand-maroon p-6 text-white">
@@ -336,7 +345,9 @@ export default function AIAgentPage() {
                       <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-brand-teal to-brand-tealDark">
                         <FiSearch className="h-8 w-8 text-white" />
                       </div>
-                      <h3 className="mb-2 text-xl font-semibold text-gray-900">Start a Conversation</h3>
+                      <h3 className="mb-2 text-xl font-semibold text-gray-900">
+                        Start a Conversation
+                      </h3>
                       <p className="mb-6 text-gray-600">
                         Upload files or select from directory, then ask your question
                       </p>
@@ -364,7 +375,7 @@ export default function AIAgentPage() {
                     <div className="flex justify-end">
                       <div className="max-w-[80%] rounded-2xl rounded-br-none bg-gradient-to-r from-brand-teal to-brand-tealDark p-4 text-white">
                         <div className="flex items-center gap-2">
-                          <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
                             <span className="text-xs">You</span>
                           </div>
                           <p className="font-medium">{question}</p>
@@ -383,10 +394,12 @@ export default function AIAgentPage() {
                         <div className="rounded-2xl rounded-tl-none bg-white p-6 shadow-soft">
                           <div className="mb-3 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <div className="h-6 w-6 rounded-full bg-gradient-to-br from-brand-maroon to-brand-pink flex items-center justify-center">
+                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-brand-maroon to-brand-pink">
                                 <span className="text-xs font-semibold text-white">AI</span>
                               </div>
-                              <span className="text-sm font-medium text-gray-900">AI Assistant</span>
+                              <span className="text-sm font-medium text-gray-900">
+                                AI Assistant
+                              </span>
                             </div>
                             {isTyping && (
                               <div className="flex items-center gap-2">
@@ -425,7 +438,10 @@ export default function AIAgentPage() {
                                   Skip to full answer
                                 </button>
                                 <span className="text-xs text-gray-500">
-                                  {Math.round((displayedAnswer.length / answerRef.current.length) * 100)}%
+                                  {Math.round(
+                                    (displayedAnswer.length / answerRef.current.length) * 100
+                                  )}
+                                  %
                                 </span>
                               </div>
                             </div>
@@ -472,7 +488,7 @@ export default function AIAgentPage() {
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="Ask anything about your documents..."
-                    className="w-full resize-none rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 pr-12 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/30 focus:outline-none"
+                    className="w-full resize-none rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 pr-12 focus:border-brand-teal focus:outline-none focus:ring-2 focus:ring-brand-teal/30"
                     rows={3}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
@@ -484,7 +500,7 @@ export default function AIAgentPage() {
                   <button
                     onClick={processQuestion}
                     disabled={loading || (!uploadedFileName && selectedFiles.size === 0)}
-                    className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-brand-teal to-brand-tealDark text-white transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-brand-teal to-brand-tealDark text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading ? (
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -506,7 +522,7 @@ export default function AIAgentPage() {
                   </div>
                   <div>
                     Press{" "}
-                    <kbd className="rounded bg-gray-200 px-2 py-1 text-xs font-mono">Enter</kbd> to
+                    <kbd className="rounded bg-gray-200 px-2 py-1 font-mono text-xs">Enter</kbd> to
                     send
                   </div>
                 </div>
@@ -520,15 +536,15 @@ export default function AIAgentPage() {
       <style jsx global>{`
         .toast {
           background: white;
-          border-left: 4px solid #0A8A80;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          border-left: 4px solid #0a8a80;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           font-family: var(--font-roboto), sans-serif;
         }
         .toast-success {
-          border-left-color: #10B981;
+          border-left-color: #10b981;
         }
         .toast-error {
-          border-left-color: #E45C48;
+          border-left-color: #e45c48;
         }
       `}</style>
     </div>

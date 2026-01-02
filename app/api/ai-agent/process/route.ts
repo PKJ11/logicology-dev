@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API_KEY = process.env.GEMINI_API_KEY ;
+const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL_NAME = "gemini-2.5-flash";
-console.log("Using Gemini API Key:", API_KEY ? "Provided" : "Not Provided");  
+console.log("Using Gemini API Key:", API_KEY ? "Provided" : "Not Provided");
 
 /**
  * Process files with Gemini AI using direct HTTP fetch

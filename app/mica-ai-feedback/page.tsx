@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { 
-  Check, 
-  ChevronRight, 
-  Sparkles, 
-  Users, 
-  Brain, 
-  Target, 
-  Star, 
+import {
+  Check,
+  ChevronRight,
+  Sparkles,
+  Users,
+  Brain,
+  Target,
+  Star,
   Zap,
   Send,
   ArrowRight,
   TrendingUp,
-  BookOpen
+  BookOpen,
 } from "lucide-react";
 
 const STUDENTS = [
@@ -59,10 +59,30 @@ const STUDENTS = [
 ];
 
 const AI_LEVELS = [
-  { label: "Novice", icon: "🌱", color: "from-emerald-100 to-emerald-50", description: "Just getting started" },
-  { label: "Some Understanding", icon: "📚", color: "from-blue-100 to-blue-50", description: "Basic knowledge" },
-  { label: "Fair Understanding", icon: "🎯", color: "from-purple-100 to-purple-50", description: "Confident with basics" },
-  { label: "Very Conversant", icon: "🚀", color: "from-violet-100 to-violet-50", description: "Advanced knowledge" },
+  {
+    label: "Novice",
+    icon: "🌱",
+    color: "from-emerald-100 to-emerald-50",
+    description: "Just getting started",
+  },
+  {
+    label: "Some Understanding",
+    icon: "📚",
+    color: "from-blue-100 to-blue-50",
+    description: "Basic knowledge",
+  },
+  {
+    label: "Fair Understanding",
+    icon: "🎯",
+    color: "from-purple-100 to-purple-50",
+    description: "Confident with basics",
+  },
+  {
+    label: "Very Conversant",
+    icon: "🚀",
+    color: "from-violet-100 to-violet-50",
+    description: "Advanced knowledge",
+  },
 ];
 
 const AI_CONCEPTS = [
@@ -82,21 +102,15 @@ const AI_TOPICS = [
   "How to leverage AI to improve your productivity",
 ];
 
-const AI_TOOLS = [
-  "Chat GPT",
-  "Gemini",
-  "Sora",
-  "Perplexity",
-  "Others",
-];
+const AI_TOOLS = ["Chat GPT", "Gemini", "Sora", "Perplexity", "Others"];
 
 const STEP_ICONS = [
-  <Users className="w-5 h-5" />,
-  <Brain className="w-5 h-5" />,
-  <Target className="w-5 h-5" />,
-  <Star className="w-5 h-5" />,
-  <BookOpen className="w-5 h-5" />,
-  <Zap className="w-5 h-5" />,
+  <Users className="h-5 w-5" />,
+  <Brain className="h-5 w-5" />,
+  <Target className="h-5 w-5" />,
+  <Star className="h-5 w-5" />,
+  <BookOpen className="h-5 w-5" />,
+  <Zap className="h-5 w-5" />,
 ];
 
 const STEPS = [
@@ -105,7 +119,7 @@ const STEPS = [
   "AI Concepts",
   "Awareness Level",
   "Topics of Interest",
-  "Tools Used"
+  "Tools Used",
 ];
 
 export default function MicaAIFeedback() {
@@ -121,26 +135,18 @@ export default function MicaAIFeedback() {
 
   const handleConceptChange = (concept: string) => {
     setConcepts((prev) =>
-      prev.includes(concept)
-        ? prev.filter((c) => c !== concept)
-        : [...prev, concept]
+      prev.includes(concept) ? prev.filter((c) => c !== concept) : [...prev, concept]
     );
   };
 
   const handleTopicChange = (topic: string) => {
     setTopics((prev) =>
-      prev.includes(topic)
-        ? prev.filter((t) => t !== topic)
-        : [...prev, topic]
+      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
     );
   };
 
   const handleToolChange = (tool: string) => {
-    setTools((prev) =>
-      prev.includes(tool)
-        ? prev.filter((t) => t !== tool)
-        : [...prev, tool]
-    );
+    setTools((prev) => (prev.includes(tool) ? prev.filter((t) => t !== tool) : [...prev, tool]));
   };
 
   const handleSubmit = async () => {
@@ -182,32 +188,38 @@ export default function MicaAIFeedback() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 px-4 py-8">
+      <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white px-6 py-3 rounded-full mb-4 shadow-lg">
-            <Sparkles className="w-6 h-6" />
+        <div className="mb-8 text-center">
+          <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 px-6 py-3 text-white shadow-lg">
+            <Sparkles className="h-6 w-6" />
             <h1 className="text-3xl font-bold tracking-tight">MICA AI Feedback Quiz</h1>
-            <Sparkles className="w-6 h-6" />
+            <Sparkles className="h-6 w-6" />
           </div>
-          <p className="text-slate-600 text-lg">Help us understand your AI knowledge journey</p>
+          <p className="text-lg text-slate-600">Help us understand your AI knowledge journey</p>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-10">
-          <div className="flex items-center justify-between mb-2">
+          <div className="mb-2 flex items-center justify-between">
             {STEPS.map((stepName, index) => (
-              <div key={index} className="flex flex-col items-center relative">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${step >= index ? 'bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-lg' : 'bg-slate-200 text-slate-500'}`}>
+              <div key={index} className="relative flex flex-col items-center">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 ${step >= index ? "bg-gradient-to-br from-blue-500 to-violet-500 text-white shadow-lg" : "bg-slate-200 text-slate-500"}`}
+                >
                   {STEP_ICONS[index]}
                 </div>
-                <span className={`text-sm mt-2 font-medium ${step >= index ? 'text-blue-600' : 'text-slate-400'}`}>{stepName}</span>
+                <span
+                  className={`mt-2 text-sm font-medium ${step >= index ? "text-blue-600" : "text-slate-400"}`}
+                >
+                  {stepName}
+                </span>
               </div>
             ))}
           </div>
-          <div className="h-2 bg-slate-200 rounded-full overflow-hidden mt-4">
-            <div 
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+            <div
               className="h-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500 ease-out"
               style={{ width: `${getProgressPercentage()}%` }}
             />
@@ -215,23 +227,23 @@ export default function MicaAIFeedback() {
         </div>
 
         {/* Main Content */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8 mb-8 border border-slate-200">
+        <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl">
           {/* Step 0 - Student Selection */}
           {step === 0 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-violet-100 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-100 to-violet-100">
+                  <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">Welcome! Let's Begin</h2>
                   <p className="text-slate-600">Please select your name from the list</p>
                 </div>
               </div>
-              
+
               <div className="relative mb-6">
                 <select
-                  className="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none"
+                  className="w-full appearance-none rounded-xl border-2 border-slate-200 bg-slate-50 p-4 pl-12 text-slate-700 transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   value={student?.id || ""}
                   onChange={(e) => {
                     const id = Number(e.target.value);
@@ -241,22 +253,24 @@ export default function MicaAIFeedback() {
                 >
                   <option value="">-- Select your name --</option>
                   {STUDENTS.map((s) => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
                   ))}
                 </select>
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">
-                  <Users className="w-5 h-5" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 transform text-slate-400">
+                  <Users className="h-5 w-5" />
                 </div>
               </div>
-              
+
               <button
-                className={`w-full py-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-[1.02] ${student ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg hover:shadow-xl' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+                className={`w-full transform rounded-xl py-4 text-lg font-semibold transition-all hover:scale-[1.02] ${student ? "bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg hover:shadow-xl" : "cursor-not-allowed bg-slate-100 text-slate-400"}`}
                 disabled={!student}
                 onClick={() => setStep(1)}
               >
                 {student ? (
                   <span className="flex items-center justify-center gap-2">
-                    Continue <ChevronRight className="w-5 h-5" />
+                    Continue <ChevronRight className="h-5 w-5" />
                   </span>
                 ) : (
                   "Select your name to continue"
@@ -268,9 +282,9 @@ export default function MicaAIFeedback() {
           {/* Step 1 - AI Understanding Level */}
           {step === 1 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-emerald-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100">
+                  <Brain className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">AI Understanding Level</h2>
@@ -278,22 +292,22 @@ export default function MicaAIFeedback() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {AI_LEVELS.map(({ label, icon, color, description }) => (
                   <button
                     key={label}
-                    className={`p-6 rounded-xl border-2 transition-all transform hover:scale-[1.02] ${aiLevel === label ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-lg' : 'border-slate-200 hover:border-blue-200'}`}
+                    className={`transform rounded-xl border-2 p-6 transition-all hover:scale-[1.02] ${aiLevel === label ? "border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-lg" : "border-slate-200 hover:border-blue-200"}`}
                     onClick={() => setAiLevel(label)}
                   >
                     <div className="flex items-start gap-4">
                       <span className="text-2xl">{icon}</span>
                       <div className="text-left">
                         <h3 className="font-bold text-slate-800">{label}</h3>
-                        <p className="text-sm text-slate-600 mt-1">{description}</p>
+                        <p className="mt-1 text-sm text-slate-600">{description}</p>
                       </div>
                       {aiLevel === label && (
-                        <div className="ml-auto bg-blue-500 text-white p-1 rounded-full">
-                          <Check className="w-4 h-4" />
+                        <div className="ml-auto rounded-full bg-blue-500 p-1 text-white">
+                          <Check className="h-4 w-4" />
                         </div>
                       )}
                     </div>
@@ -303,17 +317,17 @@ export default function MicaAIFeedback() {
 
               <div className="flex gap-4">
                 <button
-                  className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors"
+                  className="rounded-xl border-2 border-slate-200 px-6 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                   onClick={() => setStep(0)}
                 >
                   Back
                 </button>
                 <button
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02]"
+                  className="flex-1 transform rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 py-3 font-semibold text-white transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={!aiLevel}
                   onClick={() => setStep(2)}
                 >
-                  Continue <ArrowRight className="inline ml-2 w-5 h-5" />
+                  Continue <ArrowRight className="ml-2 inline h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -322,9 +336,9 @@ export default function MicaAIFeedback() {
           {/* Step 2 - AI Concepts */}
           {step === 2 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-amber-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100 to-orange-100">
+                  <Target className="h-6 w-6 text-amber-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">AI Concepts Knowledge</h2>
@@ -332,20 +346,20 @@ export default function MicaAIFeedback() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                 {AI_CONCEPTS.map((concept) => {
                   const isSelected = concepts.includes(concept);
                   return (
                     <button
                       key={concept}
-                      className={`p-4 rounded-xl border-2 transition-all transform hover:scale-[1.02] ${isSelected ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-lg' : 'border-slate-200 hover:border-blue-200'}`}
+                      className={`transform rounded-xl border-2 p-4 transition-all hover:scale-[1.02] ${isSelected ? "border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-lg" : "border-slate-200 hover:border-blue-200"}`}
                       onClick={() => handleConceptChange(concept)}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-slate-800">{concept}</span>
                         {isSelected && (
-                          <div className="bg-blue-500 text-white p-1 rounded-full">
-                            <Check className="w-3 h-3" />
+                          <div className="rounded-full bg-blue-500 p-1 text-white">
+                            <Check className="h-3 w-3" />
                           </div>
                         )}
                       </div>
@@ -356,16 +370,16 @@ export default function MicaAIFeedback() {
 
               <div className="flex gap-4">
                 <button
-                  className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors"
+                  className="rounded-xl border-2 border-slate-200 px-6 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                   onClick={() => setStep(1)}
                 >
                   Back
                 </button>
                 <button
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold transition-all transform hover:scale-[1.02]"
+                  className="flex-1 transform rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 py-3 font-semibold text-white transition-all hover:scale-[1.02]"
                   onClick={() => setStep(3)}
                 >
-                  Continue <ArrowRight className="inline ml-2 w-5 h-5" />
+                  Continue <ArrowRight className="ml-2 inline h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -374,9 +388,9 @@ export default function MicaAIFeedback() {
           {/* Step 3 - AI Awareness Slider */}
           {step === 3 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                  <Star className="w-6 h-6 text-purple-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-100 to-pink-100">
+                  <Star className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">AI Awareness Level</h2>
@@ -385,16 +399,16 @@ export default function MicaAIFeedback() {
               </div>
 
               <div className="mb-12">
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-violet-100 px-6 py-3 rounded-full">
-                    <TrendingUp className="w-5 h-5 text-blue-600" />
-                    <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+                <div className="mb-6 text-center">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-100 to-violet-100 px-6 py-3">
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-4xl font-bold text-transparent">
                       {awareness}
                     </span>
                     <span className="text-slate-600">/ 10</span>
                   </div>
                 </div>
-                
+
                 <div className="px-4">
                   <input
                     type="range"
@@ -402,9 +416,9 @@ export default function MicaAIFeedback() {
                     max={10}
                     value={awareness}
                     onChange={(e) => setAwareness(Number(e.target.value))}
-                    className="w-full h-3 bg-gradient-to-r from-blue-200 via-violet-200 to-purple-200 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-blue-600 [&::-webkit-slider-thumb]:to-violet-600 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg"
+                    className="h-3 w-full appearance-none rounded-full bg-gradient-to-r from-blue-200 via-violet-200 to-purple-200 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-blue-600 [&::-webkit-slider-thumb]:to-violet-600 [&::-webkit-slider-thumb]:shadow-lg"
                   />
-                  <div className="flex justify-between text-sm text-slate-500 mt-2">
+                  <div className="mt-2 flex justify-between text-sm text-slate-500">
                     <span>Beginner</span>
                     <span>Expert</span>
                   </div>
@@ -413,16 +427,16 @@ export default function MicaAIFeedback() {
 
               <div className="flex gap-4">
                 <button
-                  className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors"
+                  className="rounded-xl border-2 border-slate-200 px-6 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                   onClick={() => setStep(2)}
                 >
                   Back
                 </button>
                 <button
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold transition-all transform hover:scale-[1.02]"
+                  className="flex-1 transform rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 py-3 font-semibold text-white transition-all hover:scale-[1.02]"
                   onClick={() => setStep(4)}
                 >
-                  Continue <ArrowRight className="inline ml-2 w-5 h-5" />
+                  Continue <ArrowRight className="ml-2 inline h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -431,9 +445,9 @@ export default function MicaAIFeedback() {
           {/* Step 4 - Topics of Interest */}
           {step === 4 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-teal-100 flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-green-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-100 to-teal-100">
+                  <BookOpen className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">Topics of Interest</h2>
@@ -441,20 +455,20 @@ export default function MicaAIFeedback() {
                 </div>
               </div>
 
-              <div className="space-y-3 mb-8">
+              <div className="mb-8 space-y-3">
                 {AI_TOPICS.map((topic) => {
                   const isSelected = topics.includes(topic);
                   return (
                     <button
                       key={topic}
-                      className={`w-full p-5 rounded-xl border-2 text-left transition-all transform hover:scale-[1.01] ${isSelected ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-violet-50 shadow-md' : 'border-slate-200 hover:border-blue-200'}`}
+                      className={`w-full transform rounded-xl border-2 p-5 text-left transition-all hover:scale-[1.01] ${isSelected ? "border-blue-500 bg-gradient-to-r from-blue-50 to-violet-50 shadow-md" : "border-slate-200 hover:border-blue-200"}`}
                       onClick={() => handleTopicChange(topic)}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-slate-800">{topic}</span>
                         {isSelected && (
-                          <div className="bg-gradient-to-r from-blue-500 to-violet-500 text-white p-2 rounded-full">
-                            <Check className="w-4 h-4" />
+                          <div className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 p-2 text-white">
+                            <Check className="h-4 w-4" />
                           </div>
                         )}
                       </div>
@@ -465,16 +479,16 @@ export default function MicaAIFeedback() {
 
               <div className="flex gap-4">
                 <button
-                  className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors"
+                  className="rounded-xl border-2 border-slate-200 px-6 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                   onClick={() => setStep(3)}
                 >
                   Back
                 </button>
                 <button
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl font-semibold transition-all transform hover:scale-[1.02]"
+                  className="flex-1 transform rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 py-3 font-semibold text-white transition-all hover:scale-[1.02]"
                   onClick={() => setStep(5)}
                 >
-                  Continue <ArrowRight className="inline ml-2 w-5 h-5" />
+                  Continue <ArrowRight className="ml-2 inline h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -483,9 +497,9 @@ export default function MicaAIFeedback() {
           {/* Step 5 - Tools Used */}
           {step === 5 && (
             <div className="animate-fadeIn">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-orange-600" />
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-100 to-red-100">
+                  <Zap className="h-6 w-6 text-orange-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">AI Tools Experience</h2>
@@ -493,20 +507,20 @@ export default function MicaAIFeedback() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                 {AI_TOOLS.map((tool) => {
                   const isSelected = tools.includes(tool);
                   return (
                     <button
                       key={tool}
-                      className={`p-5 rounded-xl border-2 transition-all transform hover:scale-[1.02] ${isSelected ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-violet-50 shadow-md' : 'border-slate-200 hover:border-blue-200'}`}
+                      className={`transform rounded-xl border-2 p-5 transition-all hover:scale-[1.02] ${isSelected ? "border-blue-500 bg-gradient-to-r from-blue-50 to-violet-50 shadow-md" : "border-slate-200 hover:border-blue-200"}`}
                       onClick={() => handleToolChange(tool)}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-slate-800">{tool}</span>
                         {isSelected && (
-                          <div className="bg-gradient-to-r from-blue-500 to-violet-500 text-white p-2 rounded-full">
-                            <Check className="w-4 h-4" />
+                          <div className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 p-2 text-white">
+                            <Check className="h-4 w-4" />
                           </div>
                         )}
                       </div>
@@ -517,7 +531,7 @@ export default function MicaAIFeedback() {
 
               {tools.includes("Others") && (
                 <div className="mb-8">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
                     Please specify other tool(s)
                   </label>
                   <input
@@ -525,31 +539,31 @@ export default function MicaAIFeedback() {
                     placeholder="e.g., Claude, Midjourney, etc."
                     value={otherTool}
                     onChange={(e) => setOtherTool(e.target.value)}
-                    className="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                    className="w-full rounded-xl border-2 border-slate-200 p-4 transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   />
                 </div>
               )}
 
               <div className="flex gap-4">
                 <button
-                  className="px-6 py-3 border-2 border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors"
+                  className="rounded-xl border-2 border-slate-200 px-6 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
                   onClick={() => setStep(4)}
                 >
                   Back
                 </button>
                 <button
-                  className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] hover:shadow-lg"
+                  className="flex-1 transform rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3 font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={handleSubmit}
                   disabled={submitting}
                 >
                   {submitting ? (
                     <span className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                       Submitting...
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      Submit Feedback <Send className="w-5 h-5" />
+                      Submit Feedback <Send className="h-5 w-5" />
                     </span>
                   )}
                 </button>
@@ -559,17 +573,18 @@ export default function MicaAIFeedback() {
 
           {/* Success Screen */}
           {step === 99 && (
-            <div className="text-center py-12 animate-fadeIn">
-              <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Check className="w-12 h-12 text-emerald-600" />
+            <div className="animate-fadeIn py-12 text-center">
+              <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-emerald-100 to-teal-100">
+                <Check className="h-12 w-12 text-emerald-600" />
               </div>
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">Thank You!</h2>
-              <p className="text-slate-600 text-lg mb-8 max-w-md mx-auto">
-                Your feedback has been successfully submitted. Your insights will help us improve the AI learning experience.
+              <h2 className="mb-4 text-3xl font-bold text-slate-800">Thank You!</h2>
+              <p className="mx-auto mb-8 max-w-md text-lg text-slate-600">
+                Your feedback has been successfully submitted. Your insights will help us improve
+                the AI learning experience.
               </p>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-3 rounded-full">
-                <Sparkles className="w-5 h-5 text-emerald-600" />
-                <span className="text-emerald-700 font-medium">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-3">
+                <Sparkles className="h-5 w-5 text-emerald-600" />
+                <span className="font-medium text-emerald-700">
                   Feedback ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}
                 </span>
               </div>
@@ -578,15 +593,21 @@ export default function MicaAIFeedback() {
         </div>
 
         {/* Footer */}
-        <div className="text-center text-slate-500 text-sm">
+        <div className="text-center text-sm text-slate-500">
           <p>MICA AI Feedback Quiz • All responses are confidential</p>
         </div>
       </div>
 
       <style jsx global>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;

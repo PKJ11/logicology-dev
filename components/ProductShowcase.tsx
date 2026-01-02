@@ -159,7 +159,7 @@ const ProductShowcase = () => {
                 <div className="flex flex-1 flex-col justify-center pl-4 text-left">
                   <h3 className="mb-1 text-lg font-bold text-brand-teal">{product.name}</h3>
                   <div className="mb-0.5 text-yellow-400">{"★".repeat(product.rating)}</div>
-                  
+
                   {/* Price Display */}
                   <div className="flex items-center">
                     <div className="mb-2 text-base font-semibold text-brand-teal">
