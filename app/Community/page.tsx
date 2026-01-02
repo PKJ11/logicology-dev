@@ -339,7 +339,6 @@ export default function CommunityPage() {
     return (
       <div className="min-h-screen bg-brand-grayBg">
         {/* Header */}
-                {/* Header */}
         <header className="border-b border-gray-200 bg-gradient-to-r from-brand-teal to-brand-tealDark shadow-lg">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
@@ -347,7 +346,7 @@ export default function CommunityPage() {
                 <Link href="/" className="flex items-center">
                   <div className="relative h-12 w-48">
                     <Image
-                      src="/images/LOGO/PLAY THINKERS LOGO WHITE VERSION.png"
+                      src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
                       alt="PlayThinkers Logo"
                       fill
                       className="object-contain"
@@ -433,9 +432,17 @@ export default function CommunityPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
             <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <Link href="/" className="text-3xl font-bold text-white hover:opacity-90">
-                Logicology
-              </Link>
+              <Link href="/" className="flex items-center">
+                  <div className="relative h-12 w-48">
+                    <Image
+                      src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
+                      alt="PlayThinkers Logo"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                </Link>
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
                   PlayThinkers Community
