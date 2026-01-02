@@ -104,6 +104,7 @@ export default function CommunitySignupModal({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recaptchaVerifier = useRef<RecaptchaVerifier | null>(null);
   const recaptchaInitialized = useRef(false);
+  const needsRecaptcha = useRef(false); // Track if reCAPTCHA is needed
   const router = useRouter();
 
   // Check for existing session when modal opens
@@ -115,8 +116,11 @@ export default function CommunitySignupModal({
         setUserData(getUserData());
       }
       setErrorMessage(null);
+      
+      // Only need reCAPTCHA for signup tab
+      needsRecaptcha.current = activeTab === "signup";
     }
-  }, [open]);
+  }, [open, activeTab]);
 
   // Reset form when switching tabs
   useEffect(() => {
@@ -125,128 +129,85 @@ export default function CommunitySignupModal({
     }
   }, [activeTab, open]);
 
-  // Initialize reCAPTCHA when modal opens and activeTab is signup
+  // Initialize reCAPTCHA only when needed (signup tab and OTP not sent yet)
   useEffect(() => {
     if (!open) return;
-
-    const initializeRecaptcha = async () => {
-      // Only initialize for signup tab and when OTP is not sent
-      if (activeTab !== "signup" || otpSent) {
-        return;
-      }
-
-      try {
-        // Clear existing reCAPTCHA if any
-        if (recaptchaVerifier.current) {
-          try {
-            recaptchaVerifier.current.clear();
-          } catch (error) {
-            console.log("Error clearing existing reCAPTCHA:", error);
-          }
-          recaptchaVerifier.current = null;
-        }
-
-        // Clear the container
-        const container = document.getElementById("recaptcha-container");
-        if (container) {
-          container.innerHTML = "";
-        }
-
-        // Wait a bit for DOM to be ready
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        // Initialize new reCAPTCHA
-        recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
-          size: "invisible",
-          callback: () => {
-            console.log("reCAPTCHA solved");
-          },
-          "expired-callback": () => {
-            console.log("reCAPTCHA expired");
-            resetRecaptcha();
-          },
-        });
-
-        recaptchaInitialized.current = true;
-        console.log("reCAPTCHA initialized successfully");
-      } catch (error) {
-        console.error("Error initializing reCAPTCHA:", error);
-        setErrorMessage(
-          "Failed to initialize security verification. Please try switching tabs or refresh the page."
-        );
-        recaptchaInitialized.current = false;
-      }
-    };
-
-    initializeRecaptcha();
+    
+    // Only initialize reCAPTCHA for signup tab and when OTP is not sent
+    if (activeTab === "signup" && !otpSent && needsRecaptcha.current) {
+      initializeRecaptcha();
+    } else {
+      // Clean up reCAPTCHA if not needed
+      cleanupRecaptcha();
+    }
 
     // Cleanup function
     return () => {
-      if (recaptchaVerifier.current) {
-        try {
-          recaptchaVerifier.current.clear();
-        } catch (error) {
-          console.log("Error during reCAPTCHA cleanup:", error);
-        }
-        recaptchaVerifier.current = null;
-      }
-      recaptchaInitialized.current = false;
+      cleanupRecaptcha();
     };
-  }, [open, activeTab, otpSent]);
-
-  // Re-initialize reCAPTCHA when switching to signup tab
-  useEffect(() => {
-    if (open && activeTab === "signup" && !otpSent && !recaptchaInitialized.current) {
-      const timer = setTimeout(() => {
-        initializeRecaptcha();
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
   }, [open, activeTab, otpSent]);
 
   const initializeRecaptcha = () => {
     try {
-      // Clear existing
-      if (recaptchaVerifier.current) {
+      // First, clean up any existing reCAPTCHA
+      cleanupRecaptcha();
+      
+      // Wait a bit for DOM to be ready
+      setTimeout(() => {
         try {
-          recaptchaVerifier.current.clear();
-        } catch (error) {
-          console.log("Error clearing existing reCAPTCHA:", error);
+          // Check if container exists
+          const container = document.getElementById("recaptcha-container");
+          if (!container) {
+            console.log("reCAPTCHA container not found");
+            return;
+          }
+          
+          // Initialize new reCAPTCHA
+          recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
+            size: "invisible",
+            callback: () => {
+              console.log("reCAPTCHA solved");
+            },
+            "expired-callback": () => {
+              console.log("reCAPTCHA expired");
+              // Don't try to reinitialize on expired, just mark as not initialized
+              recaptchaInitialized.current = false;
+            },
+          });
+
+          recaptchaInitialized.current = true;
+          needsRecaptcha.current = true;
+          setErrorMessage(null);
+          console.log("reCAPTCHA initialized successfully");
+        } catch (innerError) {
+          console.error("Error in delayed reCAPTCHA initialization:", innerError);
+          recaptchaInitialized.current = false;
         }
-        recaptchaVerifier.current = null;
-      }
-
-      // Clear container
-      const container = document.getElementById("recaptcha-container");
-      if (container) {
-        container.innerHTML = "";
-      }
-
-      // Initialize new reCAPTCHA
-      recaptchaVerifier.current = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "invisible",
-        callback: () => {
-          console.log("reCAPTCHA solved");
-        },
-        "expired-callback": () => {
-          console.log("reCAPTCHA expired");
-          resetRecaptcha();
-        },
-      });
-
-      recaptchaInitialized.current = true;
-      setErrorMessage(null);
-      console.log("reCAPTCHA re-initialized successfully");
+      }, 300);
     } catch (error) {
-      console.error("Error re-initializing reCAPTCHA:", error);
-      setErrorMessage("Security verification failed. Please try again.");
+      console.error("Error initializing reCAPTCHA:", error);
+      // Don't show error to user for reCAPTCHA initialization issues
       recaptchaInitialized.current = false;
     }
   };
 
-  const resetRecaptcha = () => {
-    initializeRecaptcha();
+  const cleanupRecaptcha = () => {
+    if (recaptchaVerifier.current) {
+      try {
+        recaptchaVerifier.current.clear();
+      } catch (error) {
+        console.log("Error during reCAPTCHA cleanup:", error);
+      }
+      recaptchaVerifier.current = null;
+    }
+    recaptchaInitialized.current = false;
+    needsRecaptcha.current = false;
+    
+    // Clear container
+    const container = document.getElementById("recaptcha-container");
+    if (container) {
+      container.innerHTML = "";
+    }
   };
 
   // Check if user exists in database
@@ -296,7 +257,7 @@ export default function CommunitySignupModal({
       setLoading(true);
       setErrorMessage(null);
 
-      // For login tab, directly login without OTP
+      // For login tab, directly login without OTP or reCAPTCHA
       if (activeTab === "login") {
         const isExisting = await checkExistingMember(phone);
         if (!isExisting) {
@@ -321,15 +282,11 @@ export default function CommunitySignupModal({
       // For signup tab, proceed with OTP verification
       const formattedPhone = `+91${phone}`;
 
-      // Ensure reCAPTCHA is initialized
+      // Ensure reCAPTCHA is initialized for signup
       if (!recaptchaVerifier.current || !recaptchaInitialized.current) {
+        setErrorMessage("Security verification is initializing. Please try again in a moment.");
         initializeRecaptcha();
-        // Wait a bit for initialization
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-
-      if (!recaptchaVerifier.current) {
-        throw new Error("Security verification not ready. Please try again.");
+        return;
       }
 
       const result = await signInWithPhoneNumber(auth, formattedPhone, recaptchaVerifier.current);
@@ -339,13 +296,30 @@ export default function CommunitySignupModal({
       setErrorMessage(null);
     } catch (error: any) {
       console.error("Error:", error);
-      setErrorMessage(
-        `Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`
-      );
+      
+      // Handle specific Firebase errors
+      if (error.code === 'auth/too-many-requests') {
+        setErrorMessage("Too many attempts. Please try again later.");
+      } else if (error.code === 'auth/invalid-phone-number') {
+        setErrorMessage("Invalid phone number format.");
+      } else if (error.code === 'auth/captcha-check-failed') {
+        setErrorMessage("Security verification failed. Please switch tabs and try again.");
+        cleanupRecaptcha();
+      } else {
+        setErrorMessage(
+          `Failed to ${activeTab === "login" ? "login" : "send OTP"}: ${error.message || "Unknown error"}`
+        );
+      }
+      
+      // Reset reCAPTCHA on error for signup tab
       if (activeTab === "signup") {
-        // Reset reCAPTCHA on error
-        recaptchaInitialized.current = false;
-        initializeRecaptcha();
+        cleanupRecaptcha();
+        // Reinitialize after a delay
+        setTimeout(() => {
+          if (needsRecaptcha.current) {
+            initializeRecaptcha();
+          }
+        }, 1000);
       }
     } finally {
       setLoading(false);
@@ -369,6 +343,9 @@ export default function CommunitySignupModal({
       await confirmationResult.confirm(otp);
       setOtpVerified(true);
       setErrorMessage(null);
+      
+      // Clean up reCAPTCHA after successful OTP verification
+      cleanupRecaptcha();
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
       setErrorMessage(`Invalid OTP: ${error.message || "Please check the code and try again"}`);
@@ -473,33 +450,28 @@ export default function CommunitySignupModal({
     setConfirmationResult(null);
     setRegistrationSuccess(false);
     setErrorMessage(null);
-    recaptchaInitialized.current = false;
-
-    // Clear reCAPTCHA
-    if (recaptchaVerifier.current) {
-      try {
-        recaptchaVerifier.current.clear();
-      } catch (error) {
-        console.log("Error clearing reCAPTCHA:", error);
-      }
-      recaptchaVerifier.current = null;
-    }
-
-    // Clear container
-    const container = document.getElementById("recaptcha-container");
-    if (container) {
-      container.innerHTML = "";
-    }
+    
+    // Clean up reCAPTCHA
+    cleanupRecaptcha();
   };
 
   const handleTabSwitch = (tab: TabType) => {
     setActiveTab(tab);
     setErrorMessage(null);
-
-    // When switching to signup tab, ensure reCAPTCHA is ready
+    
+    // Update reCAPTCHA needs
+    needsRecaptcha.current = tab === "signup";
+    
+    // Clean up existing reCAPTCHA
+    cleanupRecaptcha();
+    
+    // Initialize reCAPTCHA if switching to signup tab
     if (tab === "signup") {
+      needsRecaptcha.current = true;
       setTimeout(() => {
-        initializeRecaptcha();
+        if (needsRecaptcha.current) {
+          initializeRecaptcha();
+        }
       }, 300);
     }
   };
@@ -749,7 +721,9 @@ export default function CommunitySignupModal({
               )}
 
               {/* reCAPTCHA container - Only for signup tab */}
-              {activeTab === "signup" && <div id="recaptcha-container"></div>}
+              {activeTab === "signup" && !otpVerified && (
+                <div id="recaptcha-container" className="min-h-[1px]"></div>
+              )}
 
               {/* Submit buttons */}
               {activeTab === "signup" && otpVerified && (

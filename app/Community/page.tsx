@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SiteFooter from "@/components/Footer";
-import Community from "@/components/Community"; // Import your existing Community component
+import Community from "@/components/Community";
 
 interface UserData {
   id: string;
@@ -13,6 +13,16 @@ interface UserData {
   phone: string;
 }
 
+// Jio Interakt API configuration
+const INTERAKT_API_KEY = "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=";
+const INTERAKT_BASE_URL = "https://api.interakt.ai/v1/public";
+
+// WhatsApp template names - create these templates in Interakt under "Utility" category
+const WHATSAPP_TEMPLATES = {
+  COMMUNITY_INVITE: "community_invite", // Create this template in Interakt
+  WELCOME: "community_welcome" // Optional: for welcoming new users
+};
+
 export default function CommunityPage() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,10 +30,14 @@ export default function CommunityPage() {
   const [friendName, setFriendName] = useState("");
   const [friendNumber, setFriendNumber] = useState("");
   const [copySuccess, setCopySuccess] = useState(false);
+  const [sendingInvite, setSendingInvite] = useState(false);
+  const [inviteStatus, setInviteStatus] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is authenticated
     const checkAuth = () => {
       if (typeof window === "undefined") return;
 
@@ -32,7 +46,7 @@ export default function CommunityPage() {
 
       if (!token || !userData) {
         setIsLoading(false);
-        return; // Don't redirect, just show Community component
+        return;
       }
 
       try {
@@ -57,10 +71,6 @@ export default function CommunityPage() {
     setUserData(null);
   };
 
-  const handleLoginSuccess = (userData: UserData) => {
-    setUserData(userData);
-  };
-
   const copyCommunityLink = () => {
     const link = "https://www.logicology.in/Community";
     navigator.clipboard.writeText(link);
@@ -68,22 +78,165 @@ export default function CommunityPage() {
     setTimeout(() => setCopySuccess(false), 3000);
   };
 
-  const handleWhatsappInvite = () => {
+  // Function to validate and clean phone number
+  const cleanPhoneNumber = (phoneNumber: string): string => {
+    return phoneNumber.replace(/\D/g, "");
+  };
+
+  // Function to extract country code (defaulting to +91 for India)
+  const extractCountryCode = (phoneNumber: string): { countryCode: string; cleanedNumber: string } => {
+    const cleaned = cleanPhoneNumber(phoneNumber);
+    
+    // Check if number starts with country code
+    if (cleaned.startsWith('91') && cleaned.length >= 12) {
+      return {
+        countryCode: "+91",
+        cleanedNumber: cleaned.substring(2) // Remove country code
+      };
+    }
+    
+    // Default to Indian number without country code
+    return {
+      countryCode: "+91",
+      cleanedNumber: cleaned.length > 10 ? cleaned.slice(-10) : cleaned // Take last 10 digits
+    };
+  };
+
+  // Function to send WhatsApp message via Jio Interakt
+  const sendInteraktMessage = async (
+    phoneNumber: string,
+    templateName: string,
+    bodyValues: string[]
+  ): Promise<{ success: boolean; messageId?: string; error?: string }> => {
+    try {
+      const { countryCode, cleanedNumber } = extractCountryCode(phoneNumber);
+
+      // Validate phone number
+      if (cleanedNumber.length !== 10) {
+        throw new Error("Invalid phone number. Please enter a 10-digit Indian mobile number.");
+      }
+
+      // Step 1: Track/Update user in Interakt
+      const trackUserResponse = await fetch(`${INTERAKT_BASE_URL}/track/users/`, {
+        method: "POST",
+        headers: {
+          Authorization: INTERAKT_API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phoneNumber: cleanedNumber,
+          countryCode: countryCode,
+          traits: {
+            name: friendName,
+            source: "community_invite",
+            invitedBy: userData?.name || "PlayThinkers Community",
+            invitedByEmail: userData?.email || "",
+            inviteDate: new Date().toISOString(),
+          },
+        }),
+      });
+
+      const trackUserResult = await trackUserResponse.json();
+      console.log("Track user result:", trackUserResult);
+
+      // Step 2: Send WhatsApp message
+      const messageResponse = await fetch(`${INTERAKT_BASE_URL}/message/`, {
+        method: "POST",
+        headers: {
+          Authorization: INTERAKT_API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          countryCode: countryCode,
+          phoneNumber: cleanedNumber,
+          type: "Template",
+          template: {
+            name: templateName,
+            languageCode: "en",
+            bodyValues: bodyValues,
+          },
+        }),
+      });
+
+      const messageResult = await messageResponse.json();
+      console.log("Message result:", messageResult);
+
+      if (!messageResult.id) {
+        throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
+      }
+
+      return {
+        success: true,
+        messageId: messageResult.id,
+      };
+    } catch (error: any) {
+      console.error("Error sending Interakt message:", error);
+      return {
+        success: false,
+        error: error.message || "Failed to send WhatsApp message",
+      };
+    }
+  };
+
+  const handleWhatsappInvite = async () => {
     if (!friendName.trim() || !friendNumber.trim()) {
-      alert("Please enter both name and phone number");
+      setInviteStatus({
+        success: false,
+        message: "Please enter both name and phone number"
+      });
+      setTimeout(() => setInviteStatus(null), 3000);
       return;
     }
 
-    const message = `Your friend ${friendName} has invited you to join the PlayThinkers community by Logicology. Join now to access fun learning worksheets and lots of other exciting content. Visit: https://www.logicology.in/Community`;
-    const whatsappUrl = `https://wa.me/${friendNumber.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    setShowWhatsappForm(false);
-    setFriendName("");
-    setFriendNumber("");
+    setSendingInvite(true);
+    setInviteStatus(null);
+
+    try {
+      // Prepare template variables
+      const bodyValues = [
+        friendName, // {{1}} - Friend's name
+        userData?.name || "A friend", // {{2}} - Inviter's name
+        "PlayThinkers Community", // {{3}} - Community name
+        "https://www.logicology.in/Community", // {{4}} - Community link
+      ];
+
+      // Send message via Jio Interakt
+      const result = await sendInteraktMessage(
+        friendNumber,
+        WHATSAPP_TEMPLATES.COMMUNITY_INVITE,
+        bodyValues
+      );
+
+      if (result.success) {
+        setInviteStatus({
+          success: true,
+          message: `Invitation sent successfully to ${friendName}!`
+        });
+        
+        // Reset form
+        setShowWhatsappForm(false);
+        setFriendName("");
+        setFriendNumber("");
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => setInviteStatus(null), 5000);
+      } else {
+        setInviteStatus({
+          success: false,
+          message: result.error || "Failed to send invitation. Please try again."
+        });
+      }
+    } catch (error: any) {
+      setInviteStatus({
+        success: false,
+        message: error.message || "An error occurred. Please try again."
+      });
+    } finally {
+      setSendingInvite(false);
+    }
   };
 
   const downloadPDF = () => {
-    // For now, create a dummy download - replace with actual PDF URL
     const pdfUrl = "/playthinkers-january-2026-worksheet.pdf";
     const link = document.createElement("a");
     link.href = pdfUrl;
@@ -185,7 +338,6 @@ export default function CommunityPage() {
     );
   }
 
-  // If user is logged in, show the community content
   return (
     <div className="min-h-screen bg-brand-grayBg">
       {/* Header */}
@@ -388,6 +540,18 @@ export default function CommunityPage() {
             ) : (
               <div className="mx-auto max-w-md rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
                 <h4 className="mb-4 text-lg font-semibold">Invite Friend via WhatsApp</h4>
+                
+                {/* Status Message */}
+                {inviteStatus && (
+                  <div className={`mb-4 rounded-lg p-3 text-sm ${
+                    inviteStatus.success 
+                      ? 'bg-green-500/20 text-green-100' 
+                      : 'bg-red-500/20 text-red-100'
+                  }`}>
+                    {inviteStatus.message}
+                  </div>
+                )}
+                
                 <div className="space-y-4">
                   <input
                     type="text"
@@ -395,28 +559,46 @@ export default function CommunityPage() {
                     value={friendName}
                     onChange={(e) => setFriendName(e.target.value)}
                     className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    disabled={sendingInvite}
                   />
                   <input
                     type="tel"
-                    placeholder="Friend's Phone Number"
+                    placeholder="Friend's 10-digit Phone Number"
                     value={friendNumber}
                     onChange={(e) => setFriendNumber(e.target.value)}
                     className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    disabled={sendingInvite}
                   />
                   <div className="flex gap-3">
                     <button
                       onClick={handleWhatsappInvite}
-                      className="flex-1 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-white shadow-lg hover:scale-105"
+                      disabled={sendingInvite}
+                      className="flex-1 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-white shadow-lg hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      Send Invite
+                      {sendingInvite ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
+                          Sending...
+                        </span>
+                      ) : (
+                        'Send Invite via Jio Interakt'
+                      )}
                     </button>
                     <button
-                      onClick={() => setShowWhatsappForm(false)}
-                      className="flex-1 rounded-full border border-white/30 bg-white/20 px-6 py-3 text-white backdrop-blur-sm hover:bg-white/30"
+                      onClick={() => {
+                        setShowWhatsappForm(false);
+                        setInviteStatus(null);
+                      }}
+                      disabled={sendingInvite}
+                      className="flex-1 rounded-full border border-white/30 bg-white/20 px-6 py-3 text-white backdrop-blur-sm hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       Cancel
                     </button>
                   </div>
+                  
+                  <p className="text-xs text-white/60 text-center mt-4">
+                    Using Jio Interakt for reliable WhatsApp message delivery
+                  </p>
                 </div>
               </div>
             )}
