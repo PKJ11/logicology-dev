@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SiteFooter from "@/components/Footer";
 import Community from "@/components/Community";
+import Image from "next/image";
 
 interface UserData {
   id: string;
@@ -338,12 +339,21 @@ export default function CommunityPage() {
     return (
       <div className="min-h-screen bg-brand-grayBg">
         {/* Header */}
+                {/* Header */}
         <header className="border-b border-gray-200 bg-gradient-to-r from-brand-teal to-brand-tealDark shadow-lg">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
               <div className="flex flex-col items-center gap-4 sm:flex-row">
-                <Link href="/" className="text-3xl font-bold text-white hover:opacity-90">
-                  Logicology
+                <Link href="/" className="flex items-center">
+                  <div className="relative h-12 w-48">
+                    <Image
+                      src="/images/LOGO/PLAY THINKERS LOGO WHITE VERSION.png"
+                      alt="PlayThinkers Logo"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                 </Link>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
@@ -782,20 +792,6 @@ function WorksheetCard({
       <div className="flex flex-1 flex-col p-6">
         <h3 className="mb-3 text-xl font-bold text-brand-tealDark">{worksheet.title}</h3>
         <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">{worksheet.description}</p>
-
-        {/* Category */}
-        <div className="mb-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1">
-            <svg className="h-3 w-3 text-brand-teal" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="text-xs font-medium text-gray-700">{worksheet.category}</span>
-          </div>
-        </div>
 
         {/* Action Buttons */}
         <div className="flex gap-3">
