@@ -99,6 +99,7 @@ const navItems = [
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
   { name: "Shop", href: "/products" },
   { name: "About Us", href: "/about" },
+  { name: "Community", href: "Community" }, // Added Community
 ];
 
 /* ================= Utils ================= */
@@ -574,6 +575,13 @@ export default function NavBar() {
 
             {/* Rest simple links */}
             <Link
+              href="/products"
+              onClick={closeAll}
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+            >
+              Shop
+            </Link>
+            <Link
               href="/about"
               onClick={closeAll}
               className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
@@ -581,11 +589,11 @@ export default function NavBar() {
               About Us
             </Link>
             <Link
-              href="/products"
+              href="Community"
               onClick={closeAll}
               className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >
-              Shop
+              Community
             </Link>
 
             {/* Actions */}

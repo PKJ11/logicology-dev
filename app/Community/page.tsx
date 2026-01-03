@@ -433,16 +433,16 @@ export default function CommunityPage() {
           <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
             <div className="flex flex-col items-center gap-4 sm:flex-row">
               <Link href="/" className="flex items-center">
-                  <div className="relative h-12 w-48">
-                    <Image
-                      src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
-                      alt="PlayThinkers Logo"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                </Link>
+                <div className="relative h-12 w-48">
+                  <Image
+                    src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
+                    alt="PlayThinkers Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </Link>
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
                   PlayThinkers Community
@@ -491,7 +491,7 @@ export default function CommunityPage() {
         {/* Worksheet Section - Updated with Worksheet001 to Worksheet005 */}
         <section className="mb-12 rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl">
           <div className="text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-teal to-brand-coral px-6 py-3 text-sm font-medium text-white shadow-md">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-teal to-brand-teal px-6 py-3 text-sm font-medium text-white shadow-md">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -659,7 +659,7 @@ export default function CommunityPage() {
                           Sending...
                         </span>
                       ) : (
-                        "Send Invite via Jio Interakt"
+                        "Send Invite"
                       )}
                     </button>
                     <button
@@ -773,7 +773,7 @@ function WorksheetCard({
       <div className="border-b border-gray-100 bg-gradient-to-r from-brand-teal/5 to-brand-coral/5 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-brand-teal to-brand-coral">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-brand-teal to-brand-teal">
               <span className="text-sm font-bold text-white">WS</span>
             </div>
             <div>
@@ -826,7 +826,7 @@ function WorksheetCard({
           </button>
           <button
             onClick={() => onDownload(worksheet.pdfPath, worksheet.title)}
-            className="flex-1 rounded-lg bg-gradient-to-r from-brand-teal to-brand-coral px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:scale-105 hover:shadow-md"
+            className="flex-1 rounded-lg bg-gradient-to-r from-brand-teal to-brand-teal px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:scale-105 hover:shadow-md"
           >
             <div className="flex items-center justify-center gap-2">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
