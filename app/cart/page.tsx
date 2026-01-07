@@ -579,7 +579,8 @@ const CartPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: [userInfo.email, HOSTINGER_EMAIL],
+          to: [userInfo.email, "orders@logicology.in"],
+          cc: ["orders@logicology.in"],
           subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
           html: emailHtml,
         }),
