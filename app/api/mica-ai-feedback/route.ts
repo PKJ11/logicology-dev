@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 const MONGO_URI =
   "mongodb+srv://pratikkumarjhavnit:pratik11@cluster0.2gksooz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const DB_NAME = "logicology";
-const COLLECTION = "mica-test-result";
+const COLLECTION = "ba-test-result";
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
