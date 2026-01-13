@@ -51,6 +51,22 @@ interface PromoCode {
   };
 }
 
+// New interface for shipping info
+interface ShippingInfo {
+  name: string;
+  address: string;
+  building: string;
+  street: string;
+  landmark: string;
+  pin: string;
+  city: string;
+  state: string;
+  phone: string;
+  email?: string;
+  isGift: boolean;
+  isDifferentFromBiller: boolean;
+}
+
 function generateGSTReceipt(
   cart: CartItem[],
   itemDetails: ItemDetails,
@@ -169,7 +185,7 @@ const CartPage = () => {
     email: "",
     phone: "",
   });
-  const [shipping, setShipping] = useState({
+  const [shipping, setShipping] = useState<ShippingInfo>({
     name: "",
     address: "",
     building: "",
@@ -179,6 +195,9 @@ const CartPage = () => {
     city: "",
     state: "",
     phone: "",
+    email: "",
+    isGift: false,
+    isDifferentFromBiller: false,
   });
   const [step, setStep] = useState(1);
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
@@ -265,8 +284,8 @@ const CartPage = () => {
   const discountAmount = appliedPromo?.discountAmount || 0;
   const finalAmount = appliedPromo?.finalAmount || total;
 
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
-  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
   // Promo code functions
   const validatePromoCode = async () => {
@@ -323,10 +342,16 @@ const CartPage = () => {
   };
 
   const saveAddressToLocalStorage = () => {
+    // Save both biller and recipient info if shipping to someone else
     const newAddress = {
       id: Date.now().toString(),
       ...shipping,
-      ...userInfo,
+      billerName: userInfo.name,
+      billerEmail: userInfo.email,
+      billerPhone: userInfo.phone,
+      recipientName: shipping.isDifferentFromBiller ? shipping.name : undefined,
+      recipientPhone: shipping.isDifferentFromBiller ? shipping.phone : undefined,
+      recipientEmail: shipping.isDifferentFromBiller ? shipping.email : undefined,
     };
 
     const updatedAddresses = [...savedAddresses, newAddress];
@@ -338,13 +363,15 @@ const CartPage = () => {
   const loadSelectedAddress = (addressId: string) => {
     const address = savedAddresses.find((addr) => addr.id === addressId);
     if (address) {
+      // Restore biller info
       setUserInfo({
-        name: address.name || "",
-        email: address.email || "",
-        phone: shipping.phone || "",
+        name: address.billerName || address.name || "",
+        email: address.billerEmail || address.email || "",
+        phone: address.billerPhone || address.phone || "",
       });
+      // Restore shipping/recipient info
       setShipping({
-        name: address.name || "",
+        name: address.isDifferentFromBiller ? address.recipientName || "" : address.name || "",
         address: address.address || "",
         building: address.building || "",
         street: address.street || "",
@@ -352,22 +379,23 @@ const CartPage = () => {
         pin: address.pin || "",
         city: address.city || "",
         state: address.state || "",
-        phone: address.phone || "",
+        phone: address.isDifferentFromBiller ? address.recipientPhone || "" : address.phone || "",
+        email: address.isDifferentFromBiller ? address.recipientEmail || "" : address.email || "",
+        isGift: address.isGift || false,
+        isDifferentFromBiller: address.isDifferentFromBiller || false,
       });
     }
   };
 
   const sendInteraktWhatsAppMessage = async (
     paymentId: string,
-    orderDescription: string,
-    razorpayContact?: string
+    orderDescription: string
   ) => {
-    // Use phone number from Razorpay contact if available, otherwise use shipping phone
-    console.log("razorpaycontact:", razorpayContact);
-    const phoneNumber = razorpayContact || shipping.phone;
-    console.log(" phoneNumber for whatsapp:", phoneNumber);
+    // Always send to userInfo.phone only
+    const targetPhone = userInfo.phone;
+    console.log("Phone number for WhatsApp:", targetPhone);
 
-    if (!phoneNumber) {
+    if (!targetPhone) {
       console.warn("No phone number available for WhatsApp message");
       return {
         userTracked: false,
@@ -378,7 +406,7 @@ const CartPage = () => {
     }
 
     // Clean the phone number - remove any non-digit characters and country code if present
-    let cleanedPhoneNumber = phoneNumber.replace(/\D/g, "");
+    let cleanedPhoneNumber = targetPhone.replace(/\D/g, "");
 
     // Remove country code if present (assuming Indian numbers)
     if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
@@ -389,7 +417,7 @@ const CartPage = () => {
 
     // Ensure the number is 10 digits
     if (cleanedPhoneNumber.length !== 10) {
-      console.warn("Invalid phone number format:", phoneNumber);
+      console.warn("Invalid phone number format:", targetPhone);
       return {
         userTracked: false,
         messageSent: false,
@@ -427,6 +455,8 @@ const CartPage = () => {
             totalOrders: 1,
             lastPaymentId: paymentId,
             shippingAddress: shippingAddress,
+            isGift: shipping.isGift,
+            isDifferentFromBiller: shipping.isDifferentFromBiller,
           },
         }),
       });
@@ -484,6 +514,7 @@ const CartPage = () => {
       };
     }
   };
+
   const sendGSTInvoice = async (
     paymentId: string,
     orderDescription: string,
@@ -492,6 +523,11 @@ const CartPage = () => {
     try {
       // Generate GST receipt with discount
       const gstReceiptHtml = generateGSTReceipt(cart, itemDetails, discountAmount);
+
+      // Determine recipient details for email
+      const recipientName = shipping.isDifferentFromBiller ? shipping.name : userInfo.name;
+      const recipientEmail = shipping.isDifferentFromBiller && shipping.email ? shipping.email : userInfo.email;
+      const recipientPhone = shipping.isDifferentFromBiller ? shipping.phone : userInfo.phone;
 
       // Create email content
       const emailHtml = `
@@ -521,21 +557,34 @@ const CartPage = () => {
                 })}</span>
               </div>
               <div>
-                <strong style="color: #333;">Customer Name:</strong><br>
+                <strong style="color: #333;">Biller Name:</strong><br>
                 <span style="color: #666;">${userInfo.name}</span>
               </div>
               <div>
-                <strong style="color: #333;">Contact Email:</strong><br>
+                <strong style="color: #333;">Biller Email:</strong><br>
                 <span style="color: #666;">${userInfo.email}</span>
               </div>
+              <div>
+                <strong style="color: #333;">Recipient Name:</strong><br>
+                <span style="color: #666;">${recipientName}</span>
+              </div>
+              <div>
+                <strong style="color: #333;">Recipient Contact:</strong><br>
+                <span style="color: #666;">${recipientPhone}</span>
+              </div>
+              ${
+                shipping.isGift
+                  ? `<div style="grid-column: span 2; padding: 10px; background: #FFF3CD; border-radius: 5px; text-align: center;">
+                      <strong style="color: #856404;">🎁 This order is marked as a gift</strong>
+                    </div>`
+                  : ""
+              }
               ${
                 appliedPromo
-                  ? `
-              <div>
-                <strong style="color: #333;">Promo Code Applied:</strong><br>
-                <span style="color: #666;">${appliedPromo.promoCode} (Saved ₹${discountAmount})</span>
-              </div>
-              `
+                  ? `<div>
+                      <strong style="color: #333;">Promo Code Applied:</strong><br>
+                      <span style="color: #666;">${appliedPromo.promoCode} (Saved ₹${discountAmount})</span>
+                    </div>`
                   : ""
               }
             </div>
@@ -554,6 +603,7 @@ const CartPage = () => {
               ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ""}
               ${shipping.city}, ${shipping.state} - ${shipping.pin}<br>
               📞 ${shipping.phone}
+              ${shipping.email ? `<br>📧 ${shipping.email}` : ""}
             </div>
           </div>
 
@@ -573,13 +623,18 @@ const CartPage = () => {
         </div>
       `;
 
-      // Send email with GST invoice
+      // Send email to both biller and recipient (if different)
+      const emailRecipients = [userInfo.email, "orders@logicology.in"];
+      if (shipping.isDifferentFromBiller && shipping.email) {
+        emailRecipients.push(shipping.email);
+      }
+
       const HOSTINGER_EMAIL = process.env.HOSTINGER_EMAIL || "orders@logicology.in";
       const emailRes = await fetch("/api/send-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: [userInfo.email, "orders@logicology.in"],
+          to: emailRecipients,
           cc: ["orders@logicology.in"],
           subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
           html: emailHtml,
@@ -588,8 +643,9 @@ const CartPage = () => {
 
       const emailResult = await emailRes.json();
 
+      // Send WhatsApp message only to userInfo.phone
       try {
-        await sendInteraktWhatsAppMessage(paymentId, orderDescription, razorpayContact);
+        await sendInteraktWhatsAppMessage(paymentId, orderDescription);
       } catch (whatsappError) {
         console.error("WhatsApp message failed:", whatsappError);
         // Don't throw error here as email is primary, WhatsApp is secondary
@@ -610,21 +666,29 @@ const CartPage = () => {
 
     try {
       // Validate required fields
-      if (!userInfo.name || !userInfo.email) {
-        alert("Please fill in all contact information");
+      if (!userInfo.name || !userInfo.email || !userInfo.phone) {
+        alert("Please fill in all contact information including phone number");
         setStep(1);
         setIsProcessing(false);
         return;
       }
 
       if (
-        !shipping.name ||
+        (shipping.isDifferentFromBiller && !shipping.name)||
         !shipping.address ||
         !shipping.pin ||
         !shipping.city ||
         !shipping.state
       ) {
         alert("Please fill in all shipping information");
+        setStep(2);
+        setIsProcessing(false);
+        return;
+      }
+
+      // Validate shipping phone if shipping to someone else
+      if (shipping.isDifferentFromBiller && !shipping.phone) {
+        alert("Shipping phone number is required when shipping to someone else");
         setStep(2);
         setIsProcessing(false);
         return;
@@ -654,7 +718,7 @@ const CartPage = () => {
         return;
       }
 
-      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}`;
+      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}${shipping.isGift ? " |  Gift" : ""}`;
 
       const options = {
         key: RAZORPAY_KEY_ID,
@@ -714,6 +778,8 @@ const CartPage = () => {
                 totalAmount: finalAmount,
                 discountAmount: discountAmount,
                 appliedPromo: appliedPromo,
+                isGift: shipping.isGift,
+                isDifferentFromBiller: shipping.isDifferentFromBiller,
               }),
             });
 
@@ -750,11 +816,15 @@ const CartPage = () => {
         prefill: {
           name: userInfo.name,
           email: userInfo.email,
+          contact: userInfo.phone,
         },
         notes: {
           address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.pin}`,
           shipping_phone: shipping.phone,
+          shipping_email: shipping.email || "",
           promo_code: appliedPromo?.promoCode || "",
+          is_gift: shipping.isGift.toString(),
+          is_different_from_biller: shipping.isDifferentFromBiller.toString(),
         },
         theme: { color: "#EB6A42" },
       };
@@ -896,7 +966,7 @@ const CartPage = () => {
               <div className="mt-20 flex items-center justify-between border-b border-gray-200 px-6 py-4">
                 <h2 className="text-xl font-bold text-gray-900">
                   {step === 1
-                    ? "Contact Information"
+                    ? "Biller Information"
                     : step === 2
                       ? "Shipping Address"
                       : "Review Order"}
@@ -913,10 +983,14 @@ const CartPage = () => {
               {/* Content */}
               <div className="flex-1 overflow-y-auto">
                 <div className="p-6">
-                  {/* Step 1: Contact Information */}
+                  {/* Step 1: Biller Information */}
                   {step === 1 && (
                     <div className="space-y-6">
                       <div className="space-y-4">
+                        <h3 className="font-semibold text-gray-900">Biller Details</h3>
+                        <p className="text-sm text-gray-600">
+                          This information will be used for billing and receipts
+                        </p>
                         <input
                           required
                           type="text"
@@ -925,7 +999,7 @@ const CartPage = () => {
                           onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
                           className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
-                        <div className="mt-4">
+                        <div>
                           <input
                             required
                             type="email"
@@ -954,20 +1028,36 @@ const CartPage = () => {
                             </p>
                           ) : (
                             <p className="mt-2 text-sm text-gray-600">
-                              You will receive the receipts on this e-mail id
+                              You will receive the GST invoice on this email
                             </p>
                           )}
+                        </div>
+                        <div>
+                          <input
+                            required
+                            type="tel"
+                            placeholder="Phone Number"
+                            value={userInfo.phone}
+                            onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
+                            className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          />
+                          <p className="mt-2 text-sm text-gray-600">
+                            WhatsApp notifications will be sent to this number
+                          </p>
                         </div>
                       </div>
 
                       <button
                         onClick={() => setStep(2)}
                         disabled={
-                          !userInfo.name || !userInfo.email || !/\S+@\S+\.\S+/.test(userInfo.email)
+                          !userInfo.name ||
+                          !userInfo.email ||
+                          !/\S+@\S+\.\S+/.test(userInfo.email) ||
+                          !userInfo.phone
                         }
                         className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                       >
-                        Continue to Address
+                        Continue to Shipping
                       </button>
                     </div>
                   )}
@@ -990,6 +1080,12 @@ const CartPage = () => {
                               onClick={() => {
                                 setSelectedAddress(address.id);
                                 loadSelectedAddress(address.id);
+                                // Reset shipping info when selecting saved address
+                                setShipping(s => ({
+                                  ...s,
+                                  isDifferentFromBiller: address.isDifferentFromBiller || false,
+                                  isGift: address.isGift || false
+                                }));
                               }}
                             >
                               <div className="flex items-start justify-between">
@@ -1002,6 +1098,16 @@ const CartPage = () => {
                                     {address.city}, {address.state} - {address.pin}
                                   </p>
                                   <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
+                                  {address.isDifferentFromBiller && (
+                                    <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
+                                      Shipping to someone else
+                                    </span>
+                                  )}
+                                  {address.isGift && (
+                                    <span className="mt-1 ml-2 inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
+                                      🎁 Gift
+                                    </span>
+                                  )}
                                 </div>
                                 {selectedAddress === address.id && (
                                   <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
@@ -1014,7 +1120,24 @@ const CartPage = () => {
 
                           <div className="text-center">
                             <button
-                              onClick={() => setSelectedAddress("")}
+                              onClick={() => {
+                                setSelectedAddress("");
+                                // Reset shipping info when adding new address
+                                setShipping({
+                                  name: userInfo.name,
+                                  address: "",
+                                  building: "",
+                                  street: "",
+                                  landmark: "",
+                                  pin: "",
+                                  city: "",
+                                  state: "",
+                                  phone: userInfo.phone,
+                                  email: "",
+                                  isGift: false,
+                                  isDifferentFromBiller: false,
+                                });
+                              }}
                               className="text-sm font-medium text-orange-500 hover:text-orange-600"
                             >
                               + Add New Address
@@ -1034,14 +1157,64 @@ const CartPage = () => {
                         <h3 className="font-semibold text-gray-900">
                           {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
                         </h3>
-                        <input
-                          required
-                          type="text"
-                          placeholder="Full Name"
-                          value={shipping.name}
-                          onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
+                        
+                        {/* Different Recipient Toggle */}
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="checkbox"
+                            id="differentRecipient"
+                            checked={shipping.isDifferentFromBiller}
+                            onChange={(e) => {
+                              const isChecked = e.target.checked;
+                              setShipping((s) => ({ 
+                                ...s, 
+                                isDifferentFromBiller: isChecked,
+                                name: isChecked ? "" : userInfo.name,
+                                phone: isChecked ? "" : userInfo.phone,
+                                email: isChecked ? "" : userInfo.email
+                              }));
+                            }}
+                            className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                          />
+                          <label htmlFor="differentRecipient" className="font-medium text-gray-900">
+                            Shipping to someone else?
+                          </label>
+                        </div>
+
+                        {shipping.isDifferentFromBiller && (
+                          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                            <p className="mb-3 text-sm text-blue-800">
+                              Please provide the recipient's details
+                            </p>
+                            <input
+                              required={shipping.isDifferentFromBiller}
+                              type="text"
+                              placeholder="Recipient's Full Name"
+                              value={shipping.name}
+                              onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
+                              className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                            <input
+                              required={shipping.isDifferentFromBiller}
+                              type="tel"
+                              placeholder="Recipient's Phone Number *"
+                              value={shipping.phone}
+                              onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
+                              className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                            <p className="mb-2 text-xs text-gray-600">
+                              * Phone number is required for delivery updates
+                            </p>
+                            <input
+                              type="email"
+                              placeholder="Recipient's Email (Optional)"
+                              value={shipping.email || ""}
+                              onChange={(e) => setShipping((s) => ({ ...s, email: e.target.value }))}
+                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                          </div>
+                        )}
+
                         <div className="grid grid-cols-2 gap-3">
                           <input
                             required
@@ -1110,15 +1283,19 @@ const CartPage = () => {
                           ))}
                         </select>
 
-                        {/* Shipping Phone Number (optional) */}
-                        <input
-                          type="tel"
-                          placeholder="Shipping Phone Number"
-                          value={shipping.phone}
-                          onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                        {/* <p className="text-sm text-gray-600">In case the receiver is not you</p> */}
+                        {/* Gift Checkbox */}
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="checkbox"
+                            id="isGift"
+                            checked={shipping.isGift}
+                            onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
+                            className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                          />
+                          <label htmlFor="isGift" className="font-medium text-gray-900">
+                            Is this a gift? 🎁
+                          </label>
+                        </div>
                       </div>
 
                       <div className="flex space-x-3">
@@ -1132,11 +1309,12 @@ const CartPage = () => {
                         <button
                           onClick={() => setStep(3)}
                           disabled={
-                            !shipping.name ||
+                            (shipping.isDifferentFromBiller && !shipping.name)||
                             !shipping.address ||
                             !shipping.pin ||
                             !shipping.city ||
-                            !shipping.state
+                            !shipping.state ||
+                            (shipping.isDifferentFromBiller && !shipping.phone)
                           }
                           className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                         >
@@ -1216,16 +1394,32 @@ const CartPage = () => {
                         </div>
                       </div>
 
-                      {/* Contact Info Preview */}
+                      {/* Biller Info Preview */}
                       <div className="rounded-xl bg-gray-50 p-4">
-                        <h3 className="mb-2 font-semibold text-gray-900">Contact Information</h3>
+                        <h3 className="mb-2 font-semibold text-gray-900">Biller Information</h3>
                         <p className="font-medium text-gray-900">{userInfo.name}</p>
                         <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
+                        <p className="text-sm text-gray-600">{userInfo.phone}</p>
+                        <p className="mt-2 text-xs text-gray-500">
+                          GST invoice and receipts will be sent here
+                        </p>
                       </div>
 
                       {/* Shipping Info Preview */}
                       <div className="rounded-xl bg-gray-50 p-4">
-                        <h3 className="mb-2 font-semibold text-gray-900">Shipping to</h3>
+                        <div className="mb-2 flex items-center justify-between">
+                          <h3 className="font-semibold text-gray-900">Shipping to</h3>
+                          {shipping.isDifferentFromBiller && (
+                            <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
+                              Different Recipient
+                            </span>
+                          )}
+                          {shipping.isGift && (
+                            <span className="ml-2 rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
+                              🎁 Gift
+                            </span>
+                          )}
+                        </div>
                         <p className="font-medium text-gray-900">{shipping.name}</p>
                         <p className="mt-1 text-sm text-gray-600">
                           {shipping.address}, {shipping.building}, {shipping.street}
@@ -1235,6 +1429,9 @@ const CartPage = () => {
                           {shipping.city}, {shipping.state} - {shipping.pin}
                         </p>
                         <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
+                        {shipping.email && (
+                          <p className="text-sm text-gray-600">{shipping.email}</p>
+                        )}
                       </div>
 
                       <div className="flex space-x-3">
