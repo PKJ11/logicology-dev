@@ -60,6 +60,26 @@ const products = [
     rating: 5,
     specialOffer: "Pay for 1 set and we will ship 2 sets for you!", // Special offer text
   },
+  {
+    name: "Logicoland - Volume 2",
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_S4UBymXQ91Vmk4",
+    description: "Logicoland Volume 2",
+    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    rating: 5,
+    specialOffer: "",
+  },
+  {
+    name: "Logicoland Volume 2 Bundle - 20 Books",
+    price: "₹4000",
+    initialprice: "₹4000",
+    razorpayItemId: "item_S4UDQe8qCtOp21",
+    description: "Perfect return gift, buy a set of 20 Logicoland Volume 2 books together for just 4000, which is 200 per copy.",
+    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    rating: 5,
+    specialOffer: "",
+  },
 ];
 
 const ProductShowcase = () => {

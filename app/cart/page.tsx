@@ -284,8 +284,8 @@ const CartPage = () => {
   const discountAmount = appliedPromo?.discountAmount || 0;
   const finalAmount = appliedPromo?.finalAmount || total;
 
-  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
   // Promo code functions
   const validatePromoCode = async () => {
