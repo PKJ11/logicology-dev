@@ -54,8 +54,15 @@ export default function BlogListPage() {
           <li><strong>Skill Focus:</strong> Different activities target different logical domains. Some focus on mathematical logic, others on verbal reasoning, and many on visual-spatial skills. Choose activities that complement your child's strengths and areas where they could use a little extra support.</li>
         </ul>
 
+        {/* Image 1.png above Quick Look */}
+        <div className="flex justify-center mb-4">
+          <img src="/Images/blogimge/1.png" alt="Logic Activity Visual 1" className="rounded-lg shadow-md max-h-64" />
+        </div>
         <h2 className="text-2xl font-bold mt-8 mb-4">Quick Look: Top Logic-Based Learning Activities</h2>
-        
+        {/* Image 2.png below Quick Look */}
+        <div className="flex justify-center mb-4">
+          <img src="/Images/blogimge/2.png" alt="Logic Activity Visual 2" className="rounded-lg shadow-md max-h-64" />
+        </div>
         <p className="mb-6">
           Here is a brief overview of some of the best logic-based learning activities that can help children develop crucial cognitive skills. Each offers a unique way to engage young minds and foster a love for critical thinking.
         </p>
@@ -128,6 +135,10 @@ export default function BlogListPage() {
           <p className="mb-2"><strong>Keep In Mind:</strong> These kits often require adult facilitation to set up and guide the experience. Ensure the theme and complexity are suitable for your child's age group to maximize engagement and minimize frustration.</p>
         </div>
 
+        {/* Image 3.png above Best Logic Activities For Different Scenarios */}
+        <div className="flex justify-center mb-4">
+          <img src="/Images/blogimge/3.png" alt="Logic Activity Visual 3" className="rounded-lg shadow-md max-h-64" />
+        </div>
         <h2 className="text-2xl font-bold mt-8 mb-4">Best Logic Activities For Different Scenarios</h2>
         
         <p className="mb-6">
@@ -181,11 +192,11 @@ export default function BlogListPage() {
         <div className="mt-12 pt-8 border-t">
           <h3 className="text-xl font-bold mb-4">Sources</h3>
           <ul className="list-disc pl-6 space-y-1 text-gray-600">
-            <li>Logic - Wikipedia</li>
-            <li>Critical thinking - Wikipedia</li>
-            <li>Educational game - Wikipedia</li>
-            <li>Cognition - Wikipedia</li>
-            <li>Problem-solving - Wikipedia</li>
+            <li><a href="https://en.wikipedia.org/wiki/Logic" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Logic - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Critical_thinking" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Critical thinking - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Educational_game" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Educational game - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Cognition" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Cognition - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Problem-solving" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Problem-solving - Wikipedia</a></li>
           </ul>
         </div>
 
