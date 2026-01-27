@@ -1,7 +1,11 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
     extend: {
       colors: {
@@ -16,6 +20,18 @@ const config: Config = {
           pink: "#b44b73",
           yellow: "#fddf5c",
           whiteText: "#f7f7f7",
+        },
+        sky: {
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
         },
       },
       borderRadius: {
@@ -33,7 +49,7 @@ const config: Config = {
         heading: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["var(--font-roboto)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
-      // Animation Configuration
+      // Animation Configuration - Merged
       animation: {
         'slide-in': 'slide-in 0.3s ease-out forwards',
         'slide-out': 'slide-out 0.3s ease-out forwards',
@@ -41,20 +57,23 @@ const config: Config = {
         'fade-out': 'fadeOut 0.5s ease-out',
         'bounce': 'bounce 0.5s ease infinite',
         'bounce-slow': 'bounce 2s ease infinite',
+        'bounce-soft': 'bounce 0.5s ease-in-out infinite',
         'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
         'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
         'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-soft': 'pulse 2s ease-in-out infinite',
         'spin-slow': 'spin 3s linear infinite',
         'wiggle': 'wiggle 1s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
         'shimmer': 'shimmer 2s infinite',
+        'confetti': 'confetti 3s linear forwards',
         'confetti-fall': 'confettiFall 5s linear infinite',
         'blink': 'blink 1s step-end infinite',
         'zoom-in': 'zoomIn 0.3s ease-out',
         'zoom-out': 'zoomOut 0.3s ease-out',
       },
-      // Keyframes Configuration
+      // Keyframes Configuration - Added missing 'confetti'
       keyframes: {
         'slide-in': {
           'from': { 
@@ -113,6 +132,16 @@ const config: Config = {
         'shimmer': {
           '0%': { backgroundPosition: '-200px 0' },
           '100%': { backgroundPosition: 'calc(200px + 100%) 0' },
+        },
+        'confetti': {
+          '0%': { 
+            transform: 'translateY(-100px) rotate(0deg)',
+            opacity: '1'
+          },
+          '100%': { 
+            transform: 'translateY(100vh) rotate(360deg)',
+            opacity: '0'
+          },
         },
         'confettiFall': {
           '0%': { 
