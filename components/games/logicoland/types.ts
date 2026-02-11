@@ -114,3 +114,43 @@ export const levels: Level[] = [
     words: ['SING', 'REST', 'LIST', 'TILE', 'GREEN', 'SENT', 'RING', 'TENT', 'LENS', 'STIR'],
   },
 ];
+
+export interface SkyPalette {
+  50: string;
+  100: string;
+  200: string;
+  300: string;
+  400: string;
+  500: string;
+  600: string;
+  700: string;
+  800: string;
+  900: string;
+}
+
+export interface BrandColors {
+  teal: string;
+  coral: string;
+  gold: string;
+  grayBg: string;
+}
+
+export interface Color {
+  name: string;
+  hex: string;
+  bgClass: string;
+  textClass: string;
+}
+
+export interface GameTile {
+  id: string;
+  type: 'color' | 'letter';
+  value: string | Color;
+  isPlaced: boolean;
+}
+
+export interface GameSlot {
+  id: string;
+  tile: GameTile | null;
+  correctValue: string | Color;
+}
