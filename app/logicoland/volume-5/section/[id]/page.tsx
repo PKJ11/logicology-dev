@@ -27,7 +27,7 @@ import { HelpCircle, RefreshCw, Check, SkipForward, Home, Target, MapPin } from 
 import Volume5Layout from '@/components/games/logicoland5/Volume5Layout';
 
 type FeedbackType = 'success' | 'error' | 'hint' | 'streak' | null;
-type GameMode = 'target-mode' | 'step-mode'; // New type for game modes
+type GameMode = 'target-mode' | 'step-mode';
 
 export default function SectionPage() {
   const params = useParams();
@@ -43,10 +43,10 @@ export default function SectionPage() {
   const [visitedPositions, setVisitedPositions] = useState<[number, number][]>([]);
   const [feedback, setFeedback] = useState<{ type: FeedbackType; message: string } | null>(null);
   const [gameState, setGameState] = useState<'playing' | 'completed' | 'hint'>('playing');
-  const [gameMode, setGameMode] = useState<GameMode>('target-mode'); // New state for game mode
+  const [gameMode, setGameMode] = useState<GameMode>('target-mode');
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [userPath, setUserPath] = useState<[number, number][]>([]); // For step-by-step mode
+  const [userPath, setUserPath] = useState<[number, number][]>([]);
 
   // Get current puzzle based on section
   const getCurrentPuzzle = () => {
@@ -56,9 +56,9 @@ export default function SectionPage() {
       case 2:
         return arrowsAddressPuzzles[currentPuzzleIndex];
       case 3:
-        return rightRoutePuzzles[0]; // Only 1 sample
+        return rightRoutePuzzles[0];
       case 4:
-        return knightPuzzles[0]; // Only 1 sample
+        return knightPuzzles[0];
       default:
         return colourCrawlPuzzles[0];
     }
@@ -156,12 +156,10 @@ export default function SectionPage() {
     
     // Check answer based on game mode
     if (gameMode === 'target-mode') {
-      // Mode 1: Click final position
       setTimeout(() => {
         checkFinalAnswer(row, col);
       }, 500);
     } else {
-      // Mode 2: Step-by-step movement
       handleStepModeClick(row, col);
     }
   };
@@ -181,11 +179,9 @@ export default function SectionPage() {
       });
       setGameState('completed');
       
-      // Show the full path when correct
       const correctPath = getCorrectPath();
       setVisitedPositions(correctPath);
       
-      // Move to next puzzle after delay
       if (currentPuzzleIndex < totalPuzzles - 1) {
         setTimeout(() => {
           setCurrentPuzzleIndex(prev => prev + 1);
@@ -205,7 +201,6 @@ export default function SectionPage() {
     const correctPath = getCorrectPath();
     const currentStepIndex = userPath.length - 1;
     
-    // Check if user is trying to move from current position
     const lastPosition = userPath[userPath.length - 1];
     const isAdjacent = 
       Math.abs(row - lastPosition[0]) + Math.abs(col - lastPosition[1]) === 1;
@@ -218,18 +213,16 @@ export default function SectionPage() {
       return;
     }
     
-    // Check if this is the correct next step
     if (currentStepIndex < correctPath.length - 1) {
       const nextCorrectStep = correctPath[currentStepIndex + 1];
       const isCorrectStep = row === nextCorrectStep[0] && col === nextCorrectStep[1];
       
       if (isCorrectStep) {
-        // Correct step
-        const newPath = [...userPath, [row, col]];
+        // Correct step - use explicit tuple casting
+        const newPath: [number, number][] = [...userPath, [row, col] as [number, number]];
         setUserPath(newPath);
         setVisitedPositions(newPath);
         
-        // Check if reached the end
         if (newPath.length === correctPath.length) {
           const points = 100 + (streak * 10);
           setScore(prev => prev + points);
@@ -252,16 +245,105 @@ export default function SectionPage() {
           });
         }
       } else {
-        // Wrong step
         setStreak(0);
         setFeedback({
           type: 'error',
           message: 'Wrong move! Try again.'
         });
-        // Reset to start or allow trying again?
-        // For now, just show error
       }
     }
+  };
+
+  // ADD THIS FUNCTION FOR RIGHT ROUTE SECTION
+  const handleRouteClick = (routeId: string) => {
+    if (gameState !== 'playing' || isAnimating) return;
+    
+    const puzzle = currentPuzzle as PuzzleRightRoute;
+    setSelectedRoute(routeId);
+    const route = puzzle.routes.find(r => r.id === routeId);
+    if (!route) return;
+    
+    setIsAnimating(true);
+    const startPos = getStartPosition();
+    setVisitedPositions([startPos]);
+    
+    let currentPos: [number, number] = [...startPos];
+    const pathPositions: [number, number][] = [currentPos];
+    
+    route.moves.forEach((move, index) => {
+      setTimeout(() => {
+        let nextPos: [number, number] = [...currentPos];
+        
+        switch (move) {
+          case '↑':
+            nextPos = [currentPos[0] - 1, currentPos[1]];
+            break;
+          case '↓':
+            nextPos = [currentPos[0] + 1, currentPos[1]];
+            break;
+          case '←':
+            nextPos = [currentPos[0], currentPos[1] - 1];
+            break;
+          case '→':
+            nextPos = [currentPos[0], currentPos[1] + 1];
+            break;
+        }
+        
+        if (
+          nextPos[0] >= 0 && nextPos[0] < puzzle.grid.length &&
+          nextPos[1] >= 0 && nextPos[1] < puzzle.grid[0].length
+        ) {
+          if (puzzle.grid[nextPos[0]][nextPos[1]] !== 'block') {
+            currentPos = nextPos;
+            pathPositions.push(currentPos);
+            setVisitedPositions([...pathPositions]);
+          } else {
+            setIsAnimating(false);
+            setFeedback({
+              type: 'error',
+              message: 'Route hit a blocked cell!'
+            });
+            return;
+          }
+        } else {
+          setIsAnimating(false);
+          setFeedback({
+            type: 'error',
+            message: 'Route goes out of bounds!'
+          });
+          return;
+        }
+        
+        if (index === route.moves.length - 1) {
+          const reachedTarget = 
+            currentPos[0] === puzzle.target[0] && 
+            currentPos[1] === puzzle.target[1];
+          
+          setTimeout(() => {
+            setIsAnimating(false);
+            
+            if (reachedTarget && route.isCorrect) {
+              const points = 100 + (streak * 10);
+              setScore(prev => prev + points);
+              setStreak(prev => prev + 1);
+              setFeedback({
+                type: 'success',
+                message: `Correct route! +${points} points`
+              });
+              setGameState('completed');
+            } else {
+              setStreak(0);
+              setFeedback({
+                type: 'error',
+                message: reachedTarget ? 
+                  'This route reaches the target but is not the intended solution!' : 
+                  'Route does not reach the target!'
+              });
+            }
+          }, 500);
+        }
+      }, index * 300);
+    });
   };
 
   // Get current position based on game mode
@@ -298,7 +380,6 @@ export default function SectionPage() {
     if (currentPuzzleIndex < totalPuzzles - 1) {
       setCurrentPuzzleIndex(prev => prev + 1);
     } else {
-      // All puzzles completed
       router.push('/logicoland/volume-5');
     }
   };
@@ -306,7 +387,6 @@ export default function SectionPage() {
   const handleStepChange = (step: number) => {
     setCurrentStep(step);
     
-    // Calculate visited positions up to this step
     if (sectionId === 1) {
       const puzzle = currentPuzzle as PuzzleColorCrawl;
       const { path } = GameLogic.calculateColorCrawlPosition(
@@ -421,15 +501,14 @@ export default function SectionPage() {
             Select the correct route from Start (S) to Target (⭐)
           </div>
           
-          {/* Grid for Section 3 */}
           <div className="mb-8">
             <GridBoard
               type="color"
               grid={puzzle.grid as any}
               currentPosition={getCurrentPosition()}
               visitedPositions={visitedPositions}
-              onCellClick={() => {}} // Disable direct cell clicks
-              isInteractive={false} // Disable direct grid interaction
+              onCellClick={() => {}}
+              isInteractive={false}
               showStart={true}
               startPosition={puzzle.start}
               targetPosition={puzzle.target}
@@ -456,7 +535,6 @@ export default function SectionPage() {
                 >
                   <h4 className="text-xl font-bold mb-4">{route.name}</h4>
                   
-                  {/* Route moves visualization */}
                   <div className="flex justify-center gap-2 mb-4 flex-wrap">
                     {route.moves.map((move, idx) => (
                       <div 
@@ -474,7 +552,6 @@ export default function SectionPage() {
                     ))}
                   </div>
                   
-                  {/* Status indicator */}
                   {isSelected && isAnimating && (
                     <div className="text-blue-600 font-medium mb-4 animate-pulse">
                       Animating path...
@@ -504,7 +581,6 @@ export default function SectionPage() {
             })}
           </div>
           
-          {/* Animation progress */}
           {isAnimating && selectedRoute && (
             <div className="mt-8">
               <div className="w-full bg-gray-200 rounded-full h-4">
@@ -539,7 +615,6 @@ export default function SectionPage() {
             Remember: Knights move in an L-shape (2 squares in one direction, then 1 square perpendicular)
           </p>
           
-          {/* Grid for Section 4 */}
           <div className="mb-8">
             <GridBoard
               type="color"
@@ -560,10 +635,8 @@ export default function SectionPage() {
 
     return (
       <>
-        {/* Game Mode Selector */}
         {renderGameModeSelector()}
 
-        {/* Grid Display */}
         <div className="mb-8">
           <GridBoard
             type={getGridType()}
@@ -579,7 +652,6 @@ export default function SectionPage() {
           />
         </div>
 
-        {/* Move Strip */}
         <div className="mb-8">
           <MoveStrip
             moves={sectionId === 1 ? 
@@ -591,7 +663,6 @@ export default function SectionPage() {
           />
         </div>
 
-        {/* Question - Updated for both modes */}
         <div className="bg-gradient-to-r from-orange-100 to-amber-100 rounded-2xl p-6 mb-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             {gameMode === 'target-mode' 
@@ -638,7 +709,6 @@ export default function SectionPage() {
       sectionNumber={sectionId}
       sectionName={getSectionName()}
     >
-      {/* Top Bar */}
       <TopBar
         onBack={() => router.push('/logicoland/volume-5')}
         title={`Section ${sectionId}: ${getSectionName()}`}
@@ -649,15 +719,12 @@ export default function SectionPage() {
         sectionNumber={sectionId}
       />
 
-      {/* Section Tabs */}
       <SectionTabs currentSection={sectionId} />
 
-      {/* Puzzle Content */}
       <div className="mb-8">
         {renderPuzzleContent()}
       </div>
 
-      {/* Hint Animator (when active) */}
       {showHint && (
         <div className="mb-8">
           <HintAnimator
@@ -673,7 +740,6 @@ export default function SectionPage() {
         </div>
       )}
 
-      {/* Action Buttons */}
       <div className="flex flex-wrap gap-4 justify-center mb-8">
         {gameState === 'playing' ? (
           <>
@@ -722,7 +788,6 @@ export default function SectionPage() {
         </SecondaryButton>
       </div>
 
-      {/* Puzzle Info */}
       <div className="bg-gray-50 rounded-2xl p-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
@@ -750,7 +815,6 @@ export default function SectionPage() {
         </div>
       </div>
 
-      {/* Feedback Toast */}
       {feedback && (
         <FeedbackToast
           type={feedback.type!}
