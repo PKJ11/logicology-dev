@@ -19,10 +19,10 @@ import { useRouter } from "next/navigation";
 const products = [
 
   {
-    name: "Logicoland - Volume 1",
+    name: "Test dummy product",
     price: "₹1",
-    initialprice: "₹299",
-    razorpayItemId: "item_RNn0h9rGIq8zOL",
+    initialprice: "",
+    razorpayItemId: "item_S4UBymXQ91Vmk4",
     description: "Logicoland Volume 1",
     image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
     rating: 5,

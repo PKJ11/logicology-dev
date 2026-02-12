@@ -50,15 +50,15 @@ const products = [
   },
   {
     name: "Turn the Tables",
-    price: "₹399",
-    initialprice: "", // Fixed to show ₹399 only
+    price: "₹299",
+    initialprice: "₹399", // Fixed to show ₹399 only
     razorpayItemId: "item_RsD9AhoF8idQ21",
     description:
       "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
     image:
       "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
     rating: 5,
-    specialOffer: "Pay for 1 set and we will ship 2 sets for you!", // Special offer text
+    specialOffer: "", // Special offer text
   },
   {
     name: "Logicoland - Volume 2",
@@ -66,7 +66,7 @@ const products = [
     initialprice: "₹299",
     razorpayItemId: "item_RNn0h9rGIq8zOL",
     description: "Logicoland Volume 2",
-    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
     rating: 5,
     specialOffer: "",
   },
@@ -76,7 +76,7 @@ const products = [
     initialprice: "₹4000",
     razorpayItemId: "item_S4UDQe8qCtOp21",
     description: "Perfect return gift, buy a set of 20 Logicoland Volume 2 books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
     rating: 5,
     specialOffer: "",
   },

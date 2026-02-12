@@ -102,14 +102,7 @@ export default function GamesPage() {
               onClick={() => openModal(game)}
             >
               <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
-                {/* Coming Soon badge for all EXCEPT PrimeTime */}
-                {!isPrimeTime(game) && (
-                  <div className="absolute right-3 top-3 z-10">
-                    <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-medium text-white">
-                      Coming Soon
-                    </span>
-                  </div>
-                )}
+                {/* Coming Soon badge removed */}
 
                 <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
                   <Image
@@ -186,17 +179,7 @@ export default function GamesPage() {
                       fill
                       className="rounded-t-4xl object-cover md:rounded-l-4xl md:rounded-tr-none"
                     />
-                    {/* Coming Soon overlay only for non-PrimeTime */}
-                    {!isPrimeTime(selectedGame) && (
-                      <div className="absolute inset-0 flex items-center justify-center rounded-t-4xl bg-black/70 md:rounded-l-4xl md:rounded-tr-none">
-                        <div className="p-6 text-center">
-                          <span className="mb-4 inline-flex items-center rounded-full bg-brand-coral px-4 py-2 text-lg font-bold text-white">
-                            Coming Soon
-                          </span>
-                          <p className="text-sm text-white">This game will be available shortly</p>
-                        </div>
-                      </div>
-                    )}
+                    {/* Coming Soon overlay removed */}
                   </div>
 
                   <div className="p-6 sm:p-8">
@@ -257,12 +240,15 @@ export default function GamesPage() {
                         Know More about {selectedGame.title}
                       </button>
                     ) : (
-                      <div className="rounded-2xl bg-brand-teal/5 p-4 text-center">
-                        <p className="mb-2 font-semibold text-brand-coral">Coming Soon</p>
-                        <p className="text-sm text-brand-tealDark/70">
-                          This game will be available shortly. Stay tuned!
-                        </p>
-                      </div>
+                      <button
+                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 active:scale-[.99]"
+                        onClick={() => {
+                          // You can add functionality for other games here
+                          console.log(`View details for ${selectedGame.title}`);
+                        }}
+                      >
+                        View Game Details
+                      </button>
                     )}
                   </div>
                 </div>
