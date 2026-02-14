@@ -93,47 +93,58 @@ export default function BooksPage() {
         </header>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-7 lg:grid-cols-3 xl:grid-cols-4">
-          {books.map((book) => (
-            <div
-              key={book.id}
-              className="group relative cursor-pointer transition-all duration-300 hover:z-10"
-              onClick={() => openModal(book)}
-            >
-              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
-                <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
-                  <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col">
-                  <h3 className="mb-1 text-xl font-bold text-brand-tealDark">{book.title}</h3>
-                  <p className="mb-2 text-xs text-brand-tealDark/70">by {book.author}</p>
-
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-semibold text-white">
-                      ★ {book.rating}
-                    </span>
-                    <button
-                      className="text-xs font-semibold text-brand-teal transition-colors hover:text-brand-coral"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openModal(book);
-                      }}
-                    >
-                      View details →
-                    </button>
+          {books.map((book) => {
+            const isComingSoon = book.title === "Speed Maths" || book.title === "Hidden in the Jungle";
+            return (
+              <div
+                key={book.id}
+                className="group relative cursor-pointer transition-all duration-300 hover:z-10"
+                onClick={() => {
+                  if (!isComingSoon) openModal(book);
+                }}
+              >
+                <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
+                  <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
+                    <Image
+                      src={book.imageUrl}
+                      alt={book.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {isComingSoon && (
+                      <span className="absolute left-2 top-2 z-10 rounded-full bg-brand-coral px-3 py-1 text-xs font-bold text-white shadow">Coming Soon</span>
+                    )}
                   </div>
-                </div>
 
-                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 transition-all group-hover:ring-2 group-hover:ring-brand-teal/35" />
+                  <div className="flex flex-1 flex-col">
+                    <h3 className="mb-1 text-xl font-bold text-brand-tealDark">{book.title}</h3>
+                    <p className="mb-2 text-xs text-brand-tealDark/70">by {book.author}</p>
+
+                    <div className="mt-auto flex items-center justify-between">
+                      <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-semibold text-white">
+                        ★ {book.rating}
+                      </span>
+                      <button
+                        className={`text-xs font-semibold transition-colors ${isComingSoon ? 'text-gray-400 cursor-not-allowed' : 'text-brand-teal hover:text-brand-coral'}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (!isComingSoon) {
+                            openModal(book);
+                          }
+                        }}
+                        disabled={isComingSoon}
+                      >
+                        {isComingSoon ? 'Coming Soon' : 'View details →'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 transition-all group-hover:ring-2 group-hover:ring-brand-teal/35" />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Book Modal */}
@@ -211,12 +222,21 @@ export default function BooksPage() {
                       </p>
                     </div>
 
-                    <button
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-coral bg-transparent px-6 py-3 font-semibold text-brand-coral transition-colors hover:bg-brand-coral hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
-                      onClick={handleLearnMore}
-                    >
-                      Know More about {selectedBook.title}
-                    </button>
+                    {['Speed Maths', 'Hidden in the Jungle'].includes(selectedBook.title) ? (
+                      <button
+                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-gray-400 bg-gray-200 px-6 py-3 font-semibold text-gray-400 cursor-not-allowed"
+                        disabled
+                      >
+                        Coming Soon
+                      </button>
+                    ) : (
+                      <button
+                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-coral bg-transparent px-6 py-3 font-semibold text-brand-coral transition-colors hover:bg-brand-coral hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
+                        onClick={handleLearnMore}
+                      >
+                        Know More about {selectedBook.title}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

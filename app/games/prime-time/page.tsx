@@ -69,8 +69,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-MOBILE-VIEW.png?updatedAt=1758442535388",
       },
-      cta: "Buy Now On Amazon",
-      ctaLink: "https://amzn.in/d/h4WRyPf",
+      cta: "Buy Now",
+      ctaLink: "/products",
     },
     {
       id: 2,
@@ -85,8 +85,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-2-MOBILE-VIEW.png?updatedAt=1758359620876",
       },
-      cta: "Buy Now On Amazon",
-      ctaLink: "https://amzn.in/d/h4WRyPf",
+      cta: "Buy Now",
+      ctaLink: "/products",
     },
     {
       id: 3,
@@ -101,8 +101,8 @@ function Hero() {
         mobile:
           "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-3-MOBILE-VIEW.png?updatedAt=1758359662353",
       },
-      cta: "Buy Now On Amazon",
-      ctaLink: "https://amzn.in/d/h4WRyPf",
+      cta: "Buy Now",
+      ctaLink: "/products",
     },
   ];
 
