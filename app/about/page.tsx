@@ -6,9 +6,138 @@ import CTAButton from "@/components/CTAButton";
 import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
+import Head from "next/head";
 
 export default function AboutUs() {
   return (
+    <>
+    <Head>
+        <title>About Logicology - Our Story, Team & Vision | Educational Games for Kids</title>
+        <meta name="description" content="Learn about Logicology's mission to create engaging gamified educational content for children. Meet our passionate team of designers, developers, and educators dedicated to making learning fun through innovative games and books." />
+        <meta name="keywords" content="about logicology, educational games company, kids learning games, STEM education company, game-based learning, educational content creators, childrens educational books, logic games for kids, learning through play, educational startup" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/about" />
+        <meta property="og:title" content="About Logicology - Empowering Minds Through Play" />
+        <meta property="og:description" content="Discover the story behind Logicology. We create innovative gamified content to help children develop 21st century skills through fun learning." />
+        <meta property="og:image" content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493" />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://yourdomain.com/about" />
+        <meta property="twitter:title" content="About Logicology - Our Story & Team" />
+        <meta property="twitter:description" content="Meet the team behind Logicology - passionate creators making learning fun through games." />
+        <meta property="twitter:image" content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493" />
+        
+        {/* Additional SEO meta tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Logicology Team" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#0A8A80" />
+        <link rel="canonical" href="https://yourdomain.com/about" />
+        
+        {/* Schema.org markup for Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Logicology",
+              "url": "https://yourdomain.com",
+              "logo": "https://ik.imagekit.io/pratik11/logo.png",
+              "description": "We create engaging gamified educational content for children to develop 21st century skills through fun learning.",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ameya Towers, 25, Humpyard Road, Dhantoli",
+                "addressLocality": "Nagpur",
+                "addressRegion": "Maharashtra",
+                "postalCode": "440012",
+                "addressCountry": "IN"
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "+91-8446980747",
+                  "contactType": "customer service",
+                  "email": "learn@logicology.in"
+                }
+              ],
+              "sameAs": [
+                "https://www.facebook.com/logicology",
+                "https://www.instagram.com/logicology",
+                "https://www.linkedin.com/company/logicology"
+              ],
+              "founders": [
+                {
+                  "@type": "Person",
+                  "name": "Gayatri Phadnis",
+                  "jobTitle": "Co-Founder"
+                },
+                {
+                  "@type": "Person",
+                  "name": "Kartik Girish Vyas",
+                  "jobTitle": "Co-Founder"
+                }
+              ],
+              "foundingDate": "2020",
+              "foundingLocation": "Nagpur, India",
+              "areaServed": "Worldwide",
+              "knowsAbout": ["Educational Games", "STEM Education", "Child Development", "Game-Based Learning"]
+            })
+          }}
+        />
+        
+        {/* Schema.org for Team Members */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              "itemListElement": [
+                {
+                  "@type": "Person",
+                  "name": "Gayatri Phadnis",
+                  "jobTitle": "Co-Founder",
+                  "worksFor": {
+                    "@type": "Organization",
+                    "name": "Logicology"
+                  }
+                },
+                {
+                  "@type": "Person",
+                  "name": "Kartik Girish Vyas",
+                  "jobTitle": "Co-Founder",
+                  "worksFor": {
+                    "@type": "Organization",
+                    "name": "Logicology"
+                  }
+                },
+                {
+                  "@type": "Person",
+                  "name": "Jasneet Singh Babra",
+                  "jobTitle": "Head of Design",
+                  "worksFor": {
+                    "@type": "Organization",
+                    "name": "Logicology"
+                  }
+                },
+                {
+                  "@type": "Person",
+                  "name": "Pratik Kumar Jha",
+                  "jobTitle": "Head of Technology",
+                  "worksFor": {
+                    "@type": "Organization",
+                    "name": "Logicology"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+      </Head>
     <main className="min-h-screen bg-brand-hero">
       <NavBar />
       <HeroVideo />
@@ -19,6 +148,7 @@ export default function AboutUs() {
       <Tribe />
       <Footer />
     </main>
+    </>
   );
 }
 

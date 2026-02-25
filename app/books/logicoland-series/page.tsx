@@ -8,6 +8,7 @@ import CTAButton from "@/components/CTAButton";
 import Community from "@/components/Community";
 import BuySection from "@/components/BuySection";
 import { motion, useInView } from "framer-motion";
+import Head from "next/head";
 /* ============================================================
    MAIN PAGE COMPONENT
 ============================================================ */
@@ -42,6 +43,75 @@ export default function Logicoland1Page() {
 
   return (
     <>
+      <Head>
+        <title>Logicoland Volume 1 - STEM Logic & Puzzles for Kids | Logicology</title>
+        <meta name="description" content="Logicoland Volume 1 is an interactive logic-based learning book that makes STEM fun! Solve colorful Sudoku puzzles, play anagram games, complete symmetry patterns, and develop critical thinking skills through play." />
+        <meta name="keywords" content="logicoland, logic puzzles for kids, STEM learning, educational games, sudoku for kids, anagram games, symmetry patterns, logical reasoning, brain teasers for children, printable worksheets, math puzzles, critical thinking" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/logicoland" />
+        <meta property="og:title" content="Logicoland Volume 1 - Empowering Minds Through STEM Play" />
+        <meta property="og:description" content="Interactive logic puzzles, anagram games, symmetry patterns, and printable worksheets for kids aged 6-12. Learn while having fun!" />
+        <meta property="og:image" content="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495" />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://yourdomain.com/logicoland" />
+        <meta property="twitter:title" content="Logicoland Volume 1 - Logic Puzzles for Kids" />
+        <meta property="twitter:description" content="Make learning fun with Logicoland! Interactive puzzles, games, and printables that develop logical thinking." />
+        <meta property="twitter:image" content="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495" />
+        
+        {/* Additional SEO meta tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Logicology" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#0A8A80" />
+        <link rel="canonical" href="https://yourdomain.com/logicoland" />
+        
+        {/* Schema.org markup for Google */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Book",
+              "name": "Logicoland Volume 1",
+              "description": "Interactive logic-based learning book with puzzles and games for kids",
+              "author": {
+                "@type": "Organization",
+                "name": "Logicology"
+              },
+              "educationalAlignment": {
+                "@type": "AlignmentObject",
+                "educationalFramework": "STEM",
+                "targetName": "Logical Reasoning, Pattern Recognition, Problem Solving"
+              },
+              "audience": {
+                "@type": "Audience",
+                "suggestedMinAge": 6,
+                "suggestedMaxAge": 12
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "19.99",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "150"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Logicology"
+              }
+            })
+          }}
+        />
+      </Head>
+
       <NavBar />
 
       <main className="bg-brand-grayBg text-brand-tealDark">

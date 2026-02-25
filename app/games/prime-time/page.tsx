@@ -24,9 +24,68 @@ import "swiper/css/pagination";
 import MediaLayoutRight from "@/components/MediaLayoutRight";
 import VideoModal from "@/components/VideoModal";
 import { motion, useInView } from "framer-motion";
+import Head from "next/head";
 
 export default function PrimeTimeLanding() {
   return (
+    <>
+     <Head>
+        <title>Prime Time™ - Fun Math Board Game for Kids & Adults | Logicoland</title>
+        <meta name="description" content="Prime Time™ is a fun, fast-paced board game that makes learning numbers exciting for kids (and surprisingly addictive for adults!). Reinforces prime numbers, composites, and factorization through gameplay." />
+        <meta name="keywords" content="prime time board game, math game for kids, logical reasoning game, number game, educational board game, prime numbers game, family board game, learning through play, Logicoland" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/primetime" />
+        <meta property="og:title" content="Prime Time™ - Where Kids Learn Numbers Effortlessly" />
+        <meta property="og:description" content="A lightning‑quick numbers game that rewards smart matching and prime‑factor insights. Perfect for 2–6 players, ages 8+." />
+        <meta property="og:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png" />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://yourdomain.com/primetime" />
+        <meta property="twitter:title" content="Prime Time™ - Fun Math Board Game" />
+        <meta property="twitter:description" content="Make numbers exciting with Prime Time™ - the addictive board game that teaches prime numbers naturally." />
+        <meta property="twitter:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png" />
+        
+        {/* Additional SEO meta tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Logicoland" />
+        <link rel="canonical" href="https://yourdomain.com/primetime" />
+        
+        {/* Schema.org markup for Google */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "Prime Time™ Board Game",
+              "description": "A fun, fast-paced board game that makes learning numbers exciting for kids and adults.",
+              "brand": {
+                "@type": "Brand",
+                "name": "Logicoland"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "29.99",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+              },
+              "audience": {
+                "@type": "Audience",
+                "suggestedMinAge": 8,
+                "suggestedMaxAge": 99
+              },
+              "educationalAlignment": {
+                "@type": "AlignmentObject",
+                "educationalFramework": "Mathematics",
+                "targetName": "Prime Numbers, Composites, Factorization"
+              }
+            })
+          }}
+        />
+      </Head>
     <main className="min-h-screen bg-brand-hero">
       <NavBar />
       <Hero />
@@ -38,6 +97,7 @@ export default function PrimeTimeLanding() {
       <Community />
       <Footer />
     </main>
+    </>
   );
 }
 
