@@ -15,8 +15,9 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Sample product data
+// Sample product data - reordered as requested
 const products = [
+  // Games (Prime Time and Turn the Tables)
   {
     name: "Prime Time",
     price: "₹1,499",
@@ -26,27 +27,7 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
     rating: 5,
     specialOffer: "", // Empty string for others
-  },
-  {
-    name: "Logicoland - Volume 1",
-    price: "₹249",
-    initialprice: "₹299",
-    razorpayItemId: "item_S4UBymXQ91Vmk4",
-    description: "Logicoland Volume 1",
-    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%201/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png?updatedAt=1773912123121",
-    rating: 5,
-    specialOffer: "", // Empty string for others
-  },
-  {
-    name: "Logicoland Volume 1 Bundle - 20 Books",
-    price: "₹4000",
-    initialprice: undefined,
-    razorpayItemId: "item_RVa7Osutc07pfB",
-    description:
-      "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
-    rating: 5,
-    specialOffer: "", // Empty string for others
+    category: "games",
   },
   {
     name: "Turn the Tables",
@@ -59,6 +40,33 @@ const products = [
       "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
     rating: 5,
     specialOffer: "", // Special offer text
+    category: "games",
+  },
+  
+  // Logicoland Set (All Volumes) - after games
+  {
+    name: "Logicoland Set (All Volumes)",
+    price: "₹999",
+    initialprice: undefined,
+    razorpayItemId: "item_SSxJhDUqb7HTiy",
+    description: "Complete Logicoland set including all volumes for holistic learning.",
+    image: "https://ik.imagekit.io/pratik2002/allbooks.JPG",
+    rating: 5,
+    specialOffer: "",
+    category: "set",
+  },
+  
+  // Logicoland Individual Volumes
+  {
+    name: "Logicoland - Volume 1",
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_S4UBymXQ91Vmk4",
+    description: "Logicoland Volume 1",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%201/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png?updatedAt=1773912123121",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
   },
   {
     name: "Logicoland - Volume 2",
@@ -69,16 +77,7 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%202/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%202.png?updatedAt=1773911827421",
     rating: 5,
     specialOffer: "",
-  },
-  {
-    name: "Logicoland Volume 2 Bundle - 20 Books",
-    price: "₹4000",
-    initialprice: "₹4000",
-    razorpayItemId: "item_S4UDQe8qCtOp21",
-    description: "Perfect return gift, buy a set of 20 Logicoland Volume 2 books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%202/LOGICOLAND%20SUDOKU%20VOLUMNE%202%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906051069",
-    rating: 5,
-    specialOffer: "",
+    category: "books",
   },
   {
     name: "Logicoland - Volume 3",
@@ -89,16 +88,7 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%203/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%203.png?updatedAt=1773906661637",
     rating: 5,
     specialOffer: "",
-  },
-  {
-    name: "Logicoland Volume 3 Bundle - 20 Books",
-    price: "₹4000",
-    initialprice: undefined,
-    razorpayItemId: "item_ST2GJDox7LUaVH",
-    description: "Perfect return gift, buy a set of 20 Logicoland Volume 3 books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%203/LOGICOLAND%20SUDOKU%20VOLUMNE%203%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906081265",
-    rating: 5,
-    specialOffer: "",
+    category: "books",
   },
   {
     name: "Logicoland - Volume 4",
@@ -109,16 +99,7 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%204/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%204.png?updatedAt=1773906764701",
     rating: 5,
     specialOffer: "",
-  },
-  {
-    name: "Logicoland Volume 4 Bundle - 20 Books",
-    price: "₹4000",
-    initialprice: undefined,
-    razorpayItemId: "item_ST2GnU6n3qjAEc",
-    description: "Perfect return gift, buy a set of 20 Logicoland Volume 4 books together for just 4000, which is 200 per copy.",
-    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%204/LOGICOLAND%20SUDOKU%20VOLUMNE%204%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906115914",
-    rating: 5,
-    specialOffer: "",
+    category: "books",
   },
   {
     name: "Logicoland - Volume 5",
@@ -129,6 +110,54 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%205/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%205.png?updatedAt=1773906863478",
     rating: 5,
     specialOffer: "",
+    category: "books",
+  },
+  
+  // Logicoland Bundles
+  {
+    name: "Logicoland Volume 1 Bundle - 20 Books",
+    price: "₹4000",
+    initialprice: undefined,
+    razorpayItemId: "item_RVa7Osutc07pfB",
+    description:
+      "Perfect return gift, buy a set of 20 Logicoland books together for just 4000, which is 200 per copy.",
+    image: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    rating: 5,
+    specialOffer: "",
+    category: "bundles",
+  },
+  {
+    name: "Logicoland Volume 2 Bundle - 20 Books",
+    price: "₹4000",
+    initialprice: "₹4000",
+    razorpayItemId: "item_S4UDQe8qCtOp21",
+    description: "Perfect return gift, buy a set of 20 Logicoland Volume 2 books together for just 4000, which is 200 per copy.",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%202/LOGICOLAND%20SUDOKU%20VOLUMNE%202%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906051069",
+    rating: 5,
+    specialOffer: "",
+    category: "bundles",
+  },
+  {
+    name: "Logicoland Volume 3 Bundle - 20 Books",
+    price: "₹4000",
+    initialprice: undefined,
+    razorpayItemId: "item_ST2GJDox7LUaVH",
+    description: "Perfect return gift, buy a set of 20 Logicoland Volume 3 books together for just 4000, which is 200 per copy.",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%203/LOGICOLAND%20SUDOKU%20VOLUMNE%203%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906081265",
+    rating: 5,
+    specialOffer: "",
+    category: "bundles",
+  },
+  {
+    name: "Logicoland Volume 4 Bundle - 20 Books",
+    price: "₹4000",
+    initialprice: undefined,
+    razorpayItemId: "item_ST2GnU6n3qjAEc",
+    description: "Perfect return gift, buy a set of 20 Logicoland Volume 4 books together for just 4000, which is 200 per copy.",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%204/LOGICOLAND%20SUDOKU%20VOLUMNE%204%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906115914",
+    rating: 5,
+    specialOffer: "",
+    category: "bundles",
   },
   {
     name: "Logicoland Volume 5 Bundle - 20 Books",
@@ -139,16 +168,7 @@ const products = [
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%205/LOGICOLAND%20SUDOKU%20VOLUMNE%205%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906134668",
     rating: 5,
     specialOffer: "",
-  },
-  {
-    name: "Logicoland Set (All Volumes)",
-    price: "₹999", // adjust if needed
-    initialprice: undefined,
-    razorpayItemId: "item_SSxJhDUqb7HTiy",
-    description: "Complete Logicoland set including all volumes for holistic learning.",
-    image: "https://ik.imagekit.io/pratik2002/allbooks.JPG",
-    rating: 5,
-    specialOffer: "",
+    category: "bundles",
   },
 ];
 
@@ -157,6 +177,7 @@ const ProductShowcase = () => {
   const [itemDetails, setItemDetails] = useState<
     Record<string, { tax_rate?: number; hsn_code?: string }>
   >({});
+  const [activeTab, setActiveTab] = useState("all");
   const router = useRouter();
 
   useEffect(() => {
@@ -202,19 +223,78 @@ const ProductShowcase = () => {
     }
   };
 
+  // Filter products based on active tab
+  const filteredProducts = activeTab === "all" 
+    ? products 
+    : products.filter(product => product.category === activeTab);
+
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
       <section className="bg-[#6A294D] py-16 text-center text-white">
         <h2 className="mb-4 text-4xl font-bold">Our Products</h2>
-        <p className="mx-auto mb-12 max-w-xl text-lg">
+        <p className="mx-auto mb-8 max-w-xl text-lg">
           At Logicology we endeavour to make learning fun so that children learn while they play.
         </p>
 
-        {/* Product Cards */}
-        <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:px-8">
-          {products.map((product, index) => {
+        {/* Tab Navigation */}
+        <div className="mx-auto mb-10 flex max-w-2xl flex-wrap justify-center gap-2 px-4">
+          <button
+            onClick={() => setActiveTab("all")}
+            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+              activeTab === "all"
+                ? "bg-white text-[#6A294D] shadow-lg"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            All Products
+          </button>
+          <button
+            onClick={() => setActiveTab("games")}
+            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+              activeTab === "games"
+                ? "bg-white text-[#6A294D] shadow-lg"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            Games
+          </button>
+          <button
+            onClick={() => setActiveTab("books")}
+            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+              activeTab === "books"
+                ? "bg-white text-[#6A294D] shadow-lg"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            Logicoland Books
+          </button>
+          <button
+            onClick={() => setActiveTab("bundles")}
+            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+              activeTab === "bundles"
+                ? "bg-white text-[#6A294D] shadow-lg"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            Bundles
+          </button>
+          <button
+            onClick={() => setActiveTab("set")}
+            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+              activeTab === "set"
+                ? "bg-white text-[#6A294D] shadow-lg"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            Complete Set
+          </button>
+        </div>
+
+        {/* Product Cards - 3 columns on large screens */}
+        <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-8">
+          {filteredProducts.map((product, index) => {
             const details = itemDetails[product.razorpayItemId] || {};
             const gstRate = details.tax_rate;
             const priceBreakdown = calculatePriceWithGST(product.price, gstRate);
@@ -229,7 +309,7 @@ const ProductShowcase = () => {
             return (
               <div
                 key={index}
-                className="mx-auto flex w-full max-w-md flex-row rounded-2xl bg-white p-3 shadow-md"
+                className="mx-auto flex w-full max-w-md flex-row rounded-2xl bg-white p-3 shadow-md hover:shadow-lg transition-shadow"
               >
                 {/* Left: Image */}
                 <div
