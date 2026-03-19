@@ -7,6 +7,9 @@ import { CartProvider } from "@/components/CartContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import MetaCapiPageView from "@/components/MetaCapiPageView";
+import { EdgeStoreProvider } from "./lib/edgestore";
+import { TiersProvider } from "./contexts/TiersContext";
+import { ToastProvider } from "./contexts/ToastContext";
 
 export const metadata: Metadata = {
   title: "Logicology",
@@ -45,6 +48,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <CartProvider>
+          <EdgeStoreProvider>
+            <TiersProvider>
+              <ToastProvider>
           {/* Meta Pixel Script */}
           <Script id="meta-pixel" strategy="afterInteractive">
             {`
@@ -79,6 +85,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <FeedbackButton />
           <Toaster position="top-right" />
+          </ToastProvider>
+          </TiersProvider>
+          </EdgeStoreProvider>
         </CartProvider>
       </body>
     </html>

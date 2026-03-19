@@ -1,20 +1,46 @@
+/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #0b3f44;
-}
-
-html,
-body {
-  height: 100%;
-}
 @layer base {
+  :root {
+   --background: #ffffff;
+  --foreground: #0b3f44;
+    --card: 222 97% 12%;
+    --card-foreground: 225 20% 90%;
+    --popover: 222 97% 12%;
+    --popover-foreground: 225 20% 90%;
+    --primary: 222 97% 12%;
+    --primary-foreground: 225 20% 90%;
+    --secondary: 225 30% 25%; /* #16256F approximation */
+    --secondary-foreground: 225 20% 90%;
+    --muted: 225 30% 25%;
+    --muted-foreground: 228 18% 47%; /* #636D8C */
+    --accent: 222 97% 12%;
+    --accent-foreground: 225 20% 90%;
+    --destructive: 0 72% 57%; /* #E0505D */
+    --destructive-foreground: 225 20% 90%;
+    --border: 225 30% 25%;
+    --input: 225 30% 25%;
+    --ring: 218 92% 57%; /* #2A72F7 */
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
   body {
-    @apply bg-white font-sans text-slate-800 antialiased;
-  } /* Roboto */
+    height: 100%;
+  }
+
+  body {
+    
+    font-family: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
+  }
+
   h1,
   h2,
   h3,
@@ -22,141 +48,379 @@ body {
   .heading-lg,
   .heading-md {
     @apply font-heading;
-  } /* Outfit */
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  }
 }
+
 @layer components {
   .headingstyle {
     @apply font-heading text-[41px] font-bold leading-tight sm:text-[44px] md:text-[50px] lg:text-[50px];
   }
-}
-@layer components {
+
   .textstyles {
     @apply font-heading text-[20px] leading-snug sm:text-[22px] md:text-[22px] lg:text-[22px];
   }
-}
 
-body {
-  @apply bg-white text-slate-800 antialiased;
-}
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
 
-.container-padding {
-  @apply px-4 sm:px-6 lg:px-8;
-}
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-soft transition-colors;
+  }
+  
+  .btn-primary {
+    @apply bg-[#2A72F7] text-white hover:bg-[#2A72F7]/90;
+  }
+  
+  .btn-dark {
+    @apply bg-[#16256F] text-white hover:bg-[#16256F]/90;
+  }
+  
+  .btn-light {
+    @apply bg-[#E2E3E8] text-[#020B39] hover:bg-[#E2E3E8]/90;
+  }
 
-.btn {
-  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-soft transition-colors;
-}
-.btn-primary {
-  @apply bg-brand-teal text-white hover:bg-brand-teal/90;
-}
-.btn-dark {
-  @apply bg-brand-tealDark text-white hover:bg-brand-tealDark/90;
-}
-.btn-light {
-  @apply bg-white text-brand-tealDark hover:bg-slate-50;
-}
+  .section {
+    @apply w-full;
+  }
 
-.section {
-  @apply w-full;
-}
+  .section-rounded {
+    @apply rounded-3xl md:rounded-4xl;
+  }
 
-.section-rounded {
-  @apply rounded-3xl md:rounded-4xl;
-}
+  .heading-xl {
+    @apply text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl;
+  }
+  
+  .heading-lg {
+    @apply text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl;
+  }
+  
+  .heading-md {
+    @apply text-xl font-extrabold tracking-tight sm:text-2xl md:text-3xl;
+  }
 
-.heading-xl {
-  @apply text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl;
-}
-.heading-lg {
-  @apply text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl;
-}
-.heading-md {
-  @apply text-xl font-extrabold tracking-tight sm:text-2xl md:text-3xl;
-}
-
-.lead {
-  @apply text-base text-slate-600 sm:text-lg;
-}
-
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Custom grid classes for dynamic grid columns */
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.grid-cols-5 {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.grid-cols-6 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #f97316, #f59e0b);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #ea580c, #d97706);
-}
-
-/* Prevent text selection in game elements */
-.no-select {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Improve tap targets on mobile */
-@media (max-width: 768px) {
-  button, 
-  [role="button"],
-  .tap-target {
-    min-height: 44px;
-    min-width: 44px;
+  .lead {
+    @apply text-base text-[#636D8C] sm:text-lg;
   }
 }
 
-/* Smooth animations */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
+@layer utilities {
+  /* Custom grid classes */
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
 
-/* Confetti canvas positioning */
-canvas.confetti-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* Background gradients with exact colors */
+  .bg-gradient-deep {
+    background: radial-gradient(circle at 0% 0%, #1A2F88 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, #16256F 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, #2A72F7 0%, transparent 50%),
+                #020B39;
+  }
+
+  .bg-shapes {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-shapes::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(251, 106, 49, 0.1) 0%, transparent 30%),
+      radial-gradient(circle at 80% 70%, rgba(224, 80, 93, 0.1) 0%, transparent 35%),
+      radial-gradient(circle at 40% 80%, rgba(170, 93, 139, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 90% 20%, rgba(42, 114, 247, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* Shadow utilities */
+  .shadow-soft {
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 30px rgba(42, 114, 247, 0.15);
+  }
+
+  .shadow-card {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out forwards;
+  }
+
+  .animate-slide-out {
+    animation: slide-out 0.3s ease-out forwards;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce 2s ease infinite;
+  }
+
+  .animate-bounce-soft {
+    animation: bounce 0.5s ease-in-out infinite;
+  }
+
+  .animate-ping-slow {
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  .animate-zoom-in {
+    animation: zoomIn 0.3s ease-out;
+  }
+
+  .animate-zoom-out {
+    animation: zoomOut 0.3s ease-out;
+  }
+
+  /* Keyframes */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes wiggle {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: calc(200px + 100%) 0;
+    }
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes zoomOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+
+  /* Transition utilities */
+  .duration-2000 {
+    transition-duration: 2000ms;
+  }
+
+  .duration-3000 {
+    transition-duration: 3000ms;
+  }
+
+  .ease-bounce-in {
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .ease-smooth {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #16256F;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #2A72F7, #AA5D8B);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #FB6A31, #E0505D);
+  }
+
+  /* Prevent text selection in game elements */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Improve tap targets on mobile */
+  @media (max-width: 768px) {
+    button, 
+    [role="button"],
+    .tap-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Smooth animations */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Confetti canvas positioning */
+  canvas.confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
 }

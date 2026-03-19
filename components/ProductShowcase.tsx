@@ -80,6 +80,48 @@ const products = [
     rating: 5,
     specialOffer: "",
   },
+  {
+    name: "Logicoland - Volume 3",
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxGzOM6REipuz",
+    description: "Logicoland Volume 3",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
+    rating: 5,
+    specialOffer: "",
+  },
+  {
+    name: "Logicoland - Volume 4",
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxHO3cngCSldC",
+    description: "Logicoland Volume 4",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
+    rating: 5,
+    specialOffer: "",
+  },
+  {
+    name: "Logicoland - Volume 5",
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxHltEcqtYsJ1",
+    description: "Logicoland Volume 5",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
+    rating: 5,
+    specialOffer: "",
+  },
+
+  // SET
+  {
+    name: "Logicoland Set (All Volumes)",
+    price: "₹999", // adjust if needed
+    initialprice: undefined,
+    razorpayItemId: "item_SSxJhDUqb7HTiy",
+    description: "Complete Logicoland set including all volumes for holistic learning.",
+    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
+    rating: 5,
+    specialOffer: "",
+  },
 ];
 
 const ProductShowcase = () => {
