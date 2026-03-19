@@ -33,7 +33,7 @@ const products = [
     initialprice: "₹299",
     razorpayItemId: "item_S4UBymXQ91Vmk4",
     description: "Logicoland Volume 1",
-    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%201/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png?updatedAt=1773906447193",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%201/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png?updatedAt=1773912123121",
     rating: 5,
     specialOffer: "", // Empty string for others
   },
@@ -66,7 +66,7 @@ const products = [
     initialprice: "₹299",
     razorpayItemId: "item_RNn0h9rGIq8zOL",
     description: "Logicoland Volume 2",
-    image: "https://ik.imagekit.io/pratik2002/LOGICOLAND%20SUDOKU%20VOLUMNE%20COVER%20MOCKUP2.png",
+    image: "https://ik.imagekit.io/pratik2002/VOLUMNE%202/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%202.png?updatedAt=1773911827421",
     rating: 5,
     specialOffer: "",
   },
