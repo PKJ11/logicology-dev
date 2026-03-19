@@ -33,15 +33,20 @@ export async function GET(req: NextRequest) {
       const items = response.data.items || [];
       
       // Process and add items to our collection
-      const processedItems = items.map((item: any) => ({
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        amount: item.amount / 100, // Razorpay returns amount in paise
-        currency: item.currency,
-        hsn_code: item.hsn_code,
-        tax_rate: item.tax_rate, // Keep as is (already in percentage from API)
-      }));
+      const processedItems = items.map((item: any) => {
+        // Convert tax_rate from Razorpay format (500 = 5%, 1800 = 18%)
+        const taxRate = item.tax_rate ? item.tax_rate / 100 : undefined;
+        
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          amount: item.amount / 100, // Convert paise to rupees
+          currency: item.currency,
+          hsn_code: item.hsn_code,
+          tax_rate: taxRate, // Now returns 5 for 5%, 18 for 18%, etc.
+        };
+      });
       
       allItems = [...allItems, ...processedItems];
       
@@ -54,6 +59,14 @@ export async function GET(req: NextRequest) {
     }
     
     console.log(`Fetched ${allItems.length} items from Razorpay`);
+    if (allItems.length > 0) {
+      console.log("Sample item with converted tax_rate:", {
+        id: allItems[0].id,
+        name: allItems[0].name,
+        tax_rate: allItems[0].tax_rate,
+        hsn_code: allItems[0].hsn_code
+      });
+    }
     return NextResponse.json({ success: true, items: allItems });
     
   } catch (error: any) {
