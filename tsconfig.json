@@ -16,7 +16,8 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/app/*": ["app/*"],
-      "@/lib/*": ["lib/*"]
+      "@/lib/*": ["lib/*"],
+      "@/hooks/*": ["hooks/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
@@ -27,5 +28,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "server.ts", "dist-server"]
 }

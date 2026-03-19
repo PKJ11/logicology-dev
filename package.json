@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
+    "dev:multi": "ts-node --project tsconfig.server.json server.ts",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
@@ -40,6 +41,8 @@
     "react-icons": "^5.2.1",
     "react-select": "^5.10.2",
     "react-simple-maps": "^3.0.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
@@ -50,7 +53,7 @@
     "@types/bcryptjs": "^3.0.0",
     "@types/canvas-confetti": "^1.9.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "24.3.0",
+    "@types/node": "^24.3.0",
     "@types/nodemailer": "^7.0.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
@@ -62,6 +65,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
