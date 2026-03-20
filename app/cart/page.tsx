@@ -1486,7 +1486,7 @@ const CartPage = () => {
                 <div className="mb-8 space-y-4">
                   {cart.map((item) => {
                     const details = itemDetails[item.razorpayItemId] || {};
-                    const gstRate = details.tax_rate || 5;
+                    const gstRate = details.tax_rate || 0;
                     return (
                       <div
                         key={item.name}
