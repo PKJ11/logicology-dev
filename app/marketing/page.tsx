@@ -338,15 +338,15 @@ export default function MarketingPage() {
           {/* Right: Single Image */}
           <div className="hero-visual relative flex items-center justify-center pr-4">
             <div className="hero-image-container">
-              <Image 
-                src="https://ik.imagekit.io/pratik2002/background-removebg-preview.png"
-                alt="Marketing Strategy Illustration"
-                width={500}
-                height={500}
-                className="w-full h-auto object-contain"
-                priority
-              />
-            </div>
+  <Image 
+    src="/Images/HIGHHEROIMAGE.png"
+    alt="Marketing Strategy Illustration"
+    width={500}
+    height={500}
+    className="w-full h-auto object-contain"
+    priority
+  />
+</div>
           </div>
         </div>
       </section>
