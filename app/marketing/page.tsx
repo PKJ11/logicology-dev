@@ -932,13 +932,13 @@ export default function MarketingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-[1000px] mx-auto mt-12 items-start">
             {/* Contact Info */}
             <div>
-              <h3 className="font-heading text-2xl mb-4" style={{color: '#19E9E3'}}>Kartik Girish Vyas</h3>
+              <h3 className="font-heading text-2xl mb-4" style={{color: '#19E9E3'}}>Logicology Marketing Team</h3>
               <p className="text-sm text-white/60 leading-relaxed mb-8" style={{fontFamily: 'Inter, sans-serif'}}>
                 Let's build a smarter, more efficient marketing engine for your business — one that delivers world-class results without the full-time overhead.
               </p>
               <div className="flex items-center gap-3 text-sm text-white/80 mb-3">
                 <span className="text-base" style={{color: '#19E9E3'}}>✉</span>
-                <a href="mailto:kartik@example.com" className="text-white/80 no-underline hover:text-white transition-colors" style={{fontFamily: 'Inter, sans-serif'}}>kartik@example.com</a>
+                <a href="mailto:marketing@logicology.com" className="text-white/80 no-underline hover:text-white transition-colors" style={{fontFamily: 'Inter, sans-serif'}}>marketing@logicology.com</a>
               </div>
               <div className="flex items-center gap-3 text-sm text-white/80 mb-8">
                 <span className="text-base" style={{color: '#19E9E3'}}>📞</span>
@@ -948,7 +948,7 @@ export default function MarketingPage() {
                 <a href="https://calendly.com" target="_blank" rel="noopener" className="text-white px-6 py-3 rounded text-xs font-bold tracking-widest uppercase no-underline hover:opacity-90 transition-all" style={{background: 'linear-gradient(135deg, #047FFF, #19E9E3)', color: '#17224C', fontFamily: 'Inter, sans-serif'}}>
                   Schedule a Call
                 </a>
-                <a href="mailto:kartik@example.com" className="bg-transparent text-white px-6 py-3 rounded text-xs font-semibold tracking-widest uppercase no-underline btn-secondary" style={{fontFamily: 'Inter, sans-serif'}}>
+                <a href="mailto:marketing@logicology.com" className="bg-transparent text-white px-6 py-3 rounded text-xs font-semibold tracking-widest uppercase no-underline btn-secondary" style={{fontFamily: 'Inter, sans-serif'}}>
                   Send an Email
                 </a>
               </div>
@@ -996,7 +996,7 @@ export default function MarketingPage() {
 
       {/* FOOTER */}
       <footer className="text-white/35 text-center py-8 px-[5%] text-xs tracking-wider" style={{background: '#070f18'}}>
-        <p style={{fontFamily: 'Inter, sans-serif'}}>© 2025 Kartik Girish Vyas · Fractional CMO & Marketing Services · <a href="mailto:kartik@example.com" className="text-white/35 hover:text-white/55 transition-colors" style={{fontFamily: 'Inter, sans-serif'}}>kartik@example.com</a></p>
+        <p style={{fontFamily: 'Inter, sans-serif'}}>© 2025 Logicology Marketing Team · Premium Marketing Solutions · <a href="mailto:marketing@logicology.com" className="text-white/35 hover:text-white/55 transition-colors" style={{fontFamily: 'Inter, sans-serif'}}>marketing@logicology.com</a></p>
       </footer>
     </main>
   );
