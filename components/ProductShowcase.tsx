@@ -296,7 +296,7 @@ const ProductShowcase = () => {
         <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-8">
           {filteredProducts.map((product, index) => {
             const details = itemDetails[product.razorpayItemId] || {};
-            const gstRate = details.tax_rate;
+            const gstRate = details.tax_rate ?? 0;
             const priceBreakdown = calculatePriceWithGST(product.price, gstRate);
             console.log("details", details);
             console.log("gst rate", gstRate);
