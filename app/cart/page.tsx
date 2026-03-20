@@ -259,6 +259,7 @@ const CartPage = () => {
             hsn_code: item.hsn_code,
           };
         }
+        console.log("Final item details with converted tax_rate:", details);
         setItemDetails(details);
       }
     } catch (error) {
