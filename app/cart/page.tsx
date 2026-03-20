@@ -253,6 +253,7 @@ const CartPage = () => {
       if (data.success && Array.isArray(data.items)) {
         const details: Record<string, { tax_rate?: number; hsn_code?: string }> = {};
         for (const item of data.items) {
+          console.log("Fetched item from API:", item);
           details[item.id] = {
             tax_rate: item.tax_rate??0,
             hsn_code: item.hsn_code,
