@@ -254,7 +254,7 @@ const CartPage = () => {
         const details: Record<string, { tax_rate?: number; hsn_code?: string }> = {};
         for (const item of data.items) {
           details[item.id] = {
-            tax_rate: item.tax_rate,
+            tax_rate: item.tax_rate??0,
             hsn_code: item.hsn_code,
           };
         }
