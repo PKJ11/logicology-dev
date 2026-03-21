@@ -46,26 +46,110 @@ const ANIMAL_AVATARS = [
 // ─── Fun Facts for Countries ─────────────────────────────────────────────────
 
 const COUNTRY_FACTS: Record<string, string> = {
+  // Americas
   "United States of America": "Home to Yellowstone, the world's first national park!",
-  "Canada": "Has over 2 million lakes!",
-  "Brazil": "Home to the Amazon rainforest!",
-  "Argentina": "Where the first animated movie was made!",
-  "United Kingdom": "Invented the World Wide Web!",
-  "France": "The Eiffel Tower grows taller in summer!",
-  "Germany": "Has over 1,500 types of sausages!",
-  "Italy": "Has three active volcanoes!",
-  "Spain": "Home to the world's oldest restaurant!",
-  "Russia": "Stretches across 11 time zones!",
-  "China": "Invented paper and fireworks!",
-  "India": "Has a floating post office!",
-  "Japan": "Has 5 million vending machines!",
-  "South Korea": "Made the first printed book!",
-  "Indonesia": "Has the world's largest volcanic lake!",
-  "Australia": "Home to the oldest living culture!",
-  "Egypt": "The Great Pyramid is 4,500 years old!",
-  "South Africa": "Has three capital cities!",
-  "Nigeria": "Has lots of twins!",
-  "Mexico": "Gave us chocolate and corn!",
+  "Canada": "Has more lakes than the rest of the world combined!",
+  "Brazil": "Home to the Amazon, the world's largest rainforest!",
+  "Argentina": "Has the highest peak in the Western Hemisphere — Mount Aconcagua!",
+  "Mexico": "Gave the world chocolate, corn, and chili peppers!",
+  "Colombia": "Is the only country in South America with both Pacific and Caribbean coasts!",
+  "Peru": "Home to Machu Picchu, built high in the Andes mountains!",
+  "Chile": "Is the longest country in the world from north to south!",
+  "Venezuela": "Has the world's highest waterfall — Angel Falls!",
+  "Ecuador": "Is one of the few countries named after a geographical feature — the Equator!",
+  "Bolivia": "Has two capital cities — Sucre and La Paz!",
+  "Paraguay": "Is one of only two landlocked countries in South America!",
+  "Uruguay": "Was the first country in the world to legalize marijuana!",
+  "Cuba": "Has one of the highest literacy rates in the world at over 99%!",
+  "Jamaica": "Is the birthplace of reggae music and Bob Marley!",
+  "Costa Rica": "Has no army and abolished its military in 1948!",
+  "Panama": "Has a canal that connects the Atlantic and Pacific Oceans!",
+  "Guatemala": "Home to over 30 volcanoes, many of which are still active!",
+  "Honduras": "Has the second largest coral reef in the world!",
+  "Haiti": "Was the first Black republic in the world, independent since 1804!",
+
+  // Europe
+  "United Kingdom": "Invented the World Wide Web and the steam engine!",
+  "France": "The Eiffel Tower grows 15cm taller in summer due to heat!",
+  "Germany": "Has over 1,500 different types of beer and 1,500 sausages!",
+  "Italy": "Is home to more UNESCO World Heritage Sites than any other country!",
+  "Spain": "Home to La Tomatina, a festival where people throw tomatoes at each other!",
+  "Russia": "Stretches across 11 time zones and is the world's largest country!",
+  "Netherlands": "Has more bicycles than people!",
+  "Sweden": "Invented the safety match, zipper, and Bluetooth!",
+  "Norway": "Has a town called Hell that freezes over every winter!",
+  "Denmark": "Is the happiest country in the world according to many surveys!",
+  "Finland": "Has more saunas than cars — about 3 million saunas!",
+  "Switzerland": "Has enough nuclear bunkers to shelter its entire population!",
+  "Austria": "Is the birthplace of Mozart, Freud, and Arnold Schwarzenegger!",
+  "Belgium": "Invented French fries — not France!",
+  "Portugal": "Has the oldest bookshop in the world, open since 1732!",
+  "Greece": "Is the birthplace of democracy, the Olympics, and Western philosophy!",
+  "Poland": "Is home to the world's largest castle by land area — Malbork Castle!",
+  "Ukraine": "Has the largest territory of any country entirely within Europe!",
+  "Czech Republic": "Czechs drink more beer per capita than any other nation!",
+  "Hungary": "Invented the Rubik's Cube, the ballpoint pen, and the helicopter!",
+  "Romania": "Home to Transylvania and the legend of Dracula!",
+  "Croatia": "Invented the necktie — Cravat comes from the word Croat!",
+  "Iceland": "Runs almost entirely on renewable geothermal and hydro energy!",
+  "Ireland": "Has more Nobel Prize winners per capita than almost any country!",
+  "Luxembourg": "Is the world's only Grand Duchy and one of the richest countries!",
+
+  // Asia
+  "China": "Invented paper, printing, gunpowder, and the compass!",
+  "India": "Has a floating post office on Dal Lake in Kashmir!",
+  "Japan": "Has 5.5 million vending machines — one for every 23 people!",
+  "South Korea": "Made the world's first metal movable type printing press!",
+  "Indonesia": "Is the world's largest archipelago with over 17,000 islands!",
+  "Saudi Arabia": "Is larger than Western Europe and mostly desert!",
+  "Turkey": "Sits on two continents — Europe and Asia!",
+  "Iran": "Was once the center of the world's largest empire — the Persian Empire!",
+  "Thailand": "Has over 40,000 temples and the head is considered sacred!",
+  "Vietnam": "Is home to the world's largest cave — Son Doong!",
+  "Philippines": "Is an archipelago of over 7,600 islands!",
+  "Malaysia": "Has the world's oldest rainforest, older than the Amazon!",
+  "Pakistan": "Has the second largest salt mine in the world — Khewra Salt Mine!",
+  "Bangladesh": "Is one of the most densely populated countries in the world!",
+  "Myanmar": "Has over 2,000 ancient temples and pagodas in Bagan!",
+  "Cambodia": "Home to Angkor Wat, the world's largest religious monument!",
+  "Nepal": "Has 8 of the world's 10 highest mountains including Everest!",
+  "Sri Lanka": "Is the world's largest tea exporter and known as the Pearl of the Indian Ocean!",
+  "United Arab Emirates": "Dubai has the world's tallest building — the Burj Khalifa!",
+  "Israel": "Has the lowest point on Earth's surface — the Dead Sea!",
+  "Jordan": "Home to Petra, an ancient city carved entirely into rose-red rock!",
+  "Iraq": "Is home to Mesopotamia, where writing was first invented!",
+  "Kazakhstan": "Is the world's largest landlocked country!",
+  "Mongolia": "Has more horses than people and invented the world's largest empire!",
+  "Singapore": "Is one of only three city-states in the world!",
+
+  // Africa
+  "Egypt": "The Great Pyramid was the tallest structure on Earth for 3,800 years!",
+  "South Africa": "Has three capital cities — Pretoria, Cape Town, and Bloemfontein!",
+  "Nigeria": "Has the highest rate of twin births in the world!",
+  "Ethiopia": "Is the only African country never colonized by a European power!",
+  "Kenya": "Is home to the Great Rift Valley, visible from space!",
+  "Tanzania": "Has Africa's highest mountain — Mount Kilimanjaro!",
+  "Morocco": "Has the world's oldest continuously operating university, founded in 859 AD!",
+  "Ghana": "Was the first sub-Saharan African country to gain independence in 1957!",
+  "Senegal": "Has a pink lake — Lac Rose — colored by algae and bacteria!",
+  "Madagascar": "Is home to 90% of wildlife found nowhere else on Earth!",
+  "Zimbabwe": "Home to Victoria Falls, one of the Seven Natural Wonders of the World!",
+  "Zambia": "Shares Victoria Falls with Zimbabwe — the largest waterfall in the world!",
+  "Uganda": "Is home to almost half of the world's remaining mountain gorillas!",
+  "Rwanda": "Banned plastic bags in 2008 and is one of the cleanest countries in Africa!",
+  "Tunisia": "Star Wars' Tatooine desert scenes were actually filmed here!",
+  "Algeria": "Is the largest country in Africa by total area!",
+  "Libya": "Has the Sahara Desert covering 90% of its territory!",
+  "Cameroon": "Is known as Africa in miniature due to its incredible geographic diversity!",
+  "Ivory Coast": "Is the world's largest producer of cocoa beans!",
+  "Democratic Republic of the Congo": "Has the world's second largest tropical rainforest!",
+
+  // Oceania & Pacific
+  "Australia": "Home to the oldest living culture on Earth — over 65,000 years old!",
+  "New Zealand": "Was the first country to give women the right to vote in 1893!",
+  "Papua New Guinea": "Has over 800 languages — more than any other country!",
+  "Fiji": "Has 333 islands and is known as the Soft Coral Capital of the World!",
+  "Samoa": "Is one of the first places on Earth to see the New Year each day!",
 };
 
 // ─── Simple Loading Spinner ─────────────────────────────────────────────────
@@ -369,12 +453,12 @@ function GameOverScreen({ players, reason, onBack }: { players: Player[]; reason
           ))}
         </div>
 
-        <button
+        {/* <button
           onClick={onBack}
           className="w-full py-3 bg-[#4A90E2] text-white rounded-xl font-medium hover:bg-[#357ABD] transition-colors"
         >
           Play Again
-        </button>
+        </button> */}
       </div>
     </div>
   );
