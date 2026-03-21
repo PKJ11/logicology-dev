@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "ts-node --project tsconfig.server.json server.ts",
+    "dev:socket": "ts-node --project tsconfig.server.json server.ts",
+    "dev:all": "concurrently \"next dev\" \"ts-node --project tsconfig.server.json server.ts\"",
     "dev:multi": "ts-node --project tsconfig.server.json server.ts",
     "build": "next build",
-    "start": "NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
+    "start": "next build && NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
+    "start:socket": "next build && NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
