@@ -1,4 +1,3 @@
-// hooks/useSocket.ts
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -38,8 +37,10 @@ let socketSingleton: Socket | null = null;
 
 function getSocket(): Socket {
   if (!socketSingleton) {
-    socketSingleton = io({
-      path: "/api/socket",
+    const SOCKET_URL = "https://logicology-map-socket.onrender.com";
+
+    socketSingleton = io(SOCKET_URL, {
+      // NO path — the Render server listens at root, not /api/socket
       transports: ["websocket", "polling"],
     });
   }
@@ -93,22 +94,16 @@ export function useSocket() {
       setLastResult(null);
     });
 
-    socket.on("round:timeout", () => {
-      setRoundTimeout(true);
-    });
+    socket.on("round:timeout", () => setRoundTimeout(true));
 
-    socket.on("click:result", (result: ClickResult) => {
-      setLastResult(result);
-    });
+    socket.on("click:result", (result: ClickResult) => setLastResult(result));
 
     socket.on("game:over", (data: { players: Player[]; reason?: string }) => {
       setGameOver(data);
       setGameStarted(false);
     });
 
-    socket.on("error", ({ message }: { message: string }) => {
-      setError(message);
-    });
+    socket.on("error", ({ message }: { message: string }) => setError(message));
 
     return () => {
       socket.off("connect", onConnect);
@@ -147,6 +142,11 @@ export function useSocket() {
     setRoundCountry(null);
     setLastResult(null);
     setRoundTimeout(false);
+    // Reset singleton so next game gets a fresh connection
+    if (socketSingleton) {
+      socketSingleton.disconnect();
+      socketSingleton = null;
+    }
   }, []);
 
   return {
