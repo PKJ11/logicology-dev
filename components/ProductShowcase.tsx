@@ -129,7 +129,7 @@ const products = [
   {
     name: "Logicoland Volume 2 Bundle - 20 Books",
     price: "₹4000",
-    initialprice: "₹4000",
+    initialprice: undefined,
     razorpayItemId: "item_S4UDQe8qCtOp21",
     description: "Perfect return gift, buy a set of 20 Logicoland Volume 2 books together for just 4000, which is 200 per copy.",
     image: "https://ik.imagekit.io/pratik2002/VOLUMNE%202/LOGICOLAND%20SUDOKU%20VOLUMNE%202%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906051069",
