@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState, useRef, createContext, useContext } from "react";
-import { motion, Variants, useReducedMotion } from "framer-motion";
+import { motion, Variants, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 /* ------------------------- Scroll Direction Context ------------------------ */
@@ -126,7 +126,7 @@ const bulletDesktop = (side: "left" | "right"): Variants => ({
 });
 
 const bulletMobile: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10},
   show: {
     opacity: 1,
     y: 0,
@@ -271,6 +271,129 @@ function MobileBulletItem({ title, desc, icon }: { title: string; desc: string; 
   );
 }
 
+/* ------------------------------- Slider Component ------------------------------ */
+
+function Slider({ children }: { children: React.ReactNode[] }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
+  };
+
+  const nextSlide = () => {
+    setDirection(1);
+    setCurrentSlide((prev) => (prev + 1) % children.length);
+  };
+
+  const prevSlide = () => {
+    setDirection(-1);
+    setCurrentSlide((prev) => (prev - 1 + children.length) % children.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000); // Auto-advance every 5 seconds
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden pb-16 md:pb-12">
+      <AnimatePresence initial={false} custom={direction} mode="wait">
+        <motion.div
+          key={currentSlide}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          className="w-full"
+        >
+          {children[currentSlide]}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Dots - Responsive sizing */}
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 md:gap-3 pb-2">
+        {children.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              setDirection(idx > currentSlide ? 1 : -1);
+              setCurrentSlide(idx);
+            }}
+            className={`transition-all duration-300 ${
+              idx === currentSlide 
+                ? isMobile 
+                  ? "w-6 h-1.5 bg-brand-teal rounded-full" 
+                  : "w-8 h-2 bg-brand-teal rounded-full"
+                : isMobile
+                  ? "w-1.5 h-1.5 bg-brand-teal/40 rounded-full hover:bg-brand-teal/60"
+                  : "w-2 h-2 bg-brand-teal/40 rounded-full hover:bg-brand-teal/60"
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------- Shop Now Button Component ------------------------------ */
+
+function ShopNowButton() {
+  return (
+    <Link href="/products">
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="inline-flex items-center rounded-full bg-brand-teal px-6 md:px-8 py-2.5 md:py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-brand-tealDark hover:shadow-xl"
+      >
+        <span className="text-base md:text-lg">Shop Now</span>
+        <svg
+          className="ml-2 h-4 w-4 md:h-5 md:w-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </motion.button>
+    </Link>
+  );
+}
+
 /* ------------------------------- Main Section ------------------------------ */
 
 export default function BuySection() {
@@ -295,6 +418,141 @@ export default function BuySection() {
   const desktop = isDesktop();
   const [containerRef, isContainerInView] = useViewportAnimation<HTMLDivElement>();
 
+  // Slide 1: Original content with bullets and book image
+  const FirstSlide = () => (
+    <div>
+      <div className="text-center">
+        <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
+          Logicoland Book Series
+        </h2>
+        <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
+          Logic through coloring!
+        </p>
+      </div>
+      {/* Desktop: 3 cols; Mobile: image on top, 2x2 grid below */}
+      <div className="items-center gap-y-10 md:grid md:grid-cols-3">
+        {/* LEFT (desktop only) */}
+        <motion.div
+          variants={containerStagger}
+          initial="hidden"
+          animate={isContainerInView ? "show" : "hidden"}
+          className="order-1 hidden space-y-[150px] md:block"
+        >
+          {leftBullets.map((b, i) => (
+            <BulletWithLine
+              key={`L-${i}-${b.title}`}
+              side="right"
+              title={b.title}
+              desc={b.desc}
+              icon={b.icon}
+            />
+          ))}
+        </motion.div>
+
+        {/* IMAGE (center on desktop, top on mobile) */}
+        <div className="order-1 mb-8 flex items-center justify-center md:order-2 md:mb-0">
+          <div className="relative aspect-[4/3] w-full max-w-full sm:aspect-[3/4] sm:max-w-[240px] md:max-w-[500px]">
+            <Image
+              src="https://ik.imagekit.io/pratik2002/ALL%20BOOK%20COVER%20MOCKUP.png"
+              alt="Logicoland Book"
+              width={500}
+              height={667}
+              className="h-full w-full object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* RIGHT (desktop only) */}
+        <motion.div
+          variants={containerStagger}
+          initial="hidden"
+          animate={isContainerInView ? "show" : "hidden"}
+          className="order-3 hidden space-y-[150px] md:block"
+        >
+          {rightBullets.map((b, i) => (
+            <BulletWithLine
+              key={`R-${i}-${b.title}`}
+              side="left"
+              title={b.title}
+              desc={b.desc}
+              icon={b.icon}
+            />
+          ))}
+        </motion.div>
+
+        {/* MOBILE: 2x2 grid below the image */}
+        <motion.div
+          variants={containerStagger}
+          initial="hidden"
+          animate={isContainerInView ? "show" : "hidden"}
+          className="order-2 mt-6 grid grid-cols-2 gap-4 md:hidden"
+        >
+          {bullets.map((b, i) => (
+            <MobileBulletItem
+              key={`M-${i}-${b.title}`}
+              title={b.title}
+              desc={b.desc}
+              icon={b.icon}
+            />
+          ))}
+        </motion.div>
+      </div>
+      
+      {/* Shop Now Button for First Slide - Added extra margin on mobile */}
+      <div className="mt-12 md:mt-8 text-center">
+        <ShopNowButton />
+      </div>
+    </div>
+  );
+
+  // Slide 2: Full book cover image with same heading
+  const SecondSlide = () => {
+    const [isMobile, setIsMobile] = useState(false);
+    
+    useEffect(() => {
+      setIsMobile(window.innerWidth < 768);
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    const imageSrc = isMobile
+      ? "/Images/Books/LOGICOLAND-ALL-BOOK-COVER-SLIDER 2 MOBILE VIEW.png" // Local public folder image for mobile
+      : "https://ik.imagekit.io/pratik2002/LOGICOLAND-ALL-BOOK-COVER-SLIDER%202%20(1).png";
+
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <div className="text-center">
+          <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
+            Logicoland Book Series
+          </h2>
+          <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
+            Logic through coloring!
+          </p>
+        </div>
+        
+        <div className="mt-8 flex w-full items-center justify-center">
+          <div className="relative w-full max-w-3xl">
+            <Image
+              src={imageSrc}
+              alt="Logicoland All Books Collection"
+              width={1200}
+              height={800}
+              className="h-auto w-full object-contain"
+              priority
+            />
+          </div>
+        </div>
+        
+        {/* Shop Now Button for Second Slide */}
+        <div className="mt-12 md:mt-8 text-center">
+          <ShopNowButton />
+        </div>
+      </div>
+    );
+  };
+
   // Skeleton during SSR to avoid hydration mismatch
   if (!isMounted) {
     return (
@@ -311,110 +569,10 @@ export default function BuySection() {
       <section id="buy" className="w-full bg-brand-gold">
         <div className="mx-auto px-3 py-6 sm:px-5 sm:py-8 md:py-10 lg:max-w-[80vw]">
           <div ref={containerRef} className="rounded-[22px] bg-white p-5 shadow-soft sm:p-8">
-            <div className="text-center">
-              <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
-                Logicoland Book Series
-              </h2>
-              {/* <h2 className="font-heading text-[36px] font-bold text-brand-teal">Volume 1</h2> */}
-
-              <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
-                Logic through coloring!
-              </p>
-            </div>
-            {/* Desktop: 3 cols; Mobile: image on top, 2x2 grid below */}
-            <div className="items-center gap-y-10 md:grid md:grid-cols-3">
-              {/* LEFT (desktop only) */}
-              <motion.div
-                variants={containerStagger}
-                initial="hidden"
-                animate={isContainerInView ? "show" : "hidden"}
-                className="order-1 hidden space-y-[150px] md:block"
-              >
-                {leftBullets.map((b, i) => (
-                  <BulletWithLine
-                    key={`L-${i}-${b.title}`}
-                    side="right"
-                    title={b.title}
-                    desc={b.desc}
-                    icon={b.icon}
-                  />
-                ))}
-              </motion.div>
-
-              {/* IMAGE (center on desktop, top on mobile) */}
-              <div className="order-1 mb-8 flex items-center justify-center md:order-2 md:mb-0">
-                <div className="relative aspect-[4/3] w-full max-w-full sm:aspect-[3/4] sm:max-w-[240px] md:max-w-[500px]">
-                  <Image
-                    src="https://ik.imagekit.io/pratik2002/ALL%20BOOK%20COVER%20MOCKUP.png"
-                    alt="Logicoland Book"
-                    width={500}
-                    height={667}
-                    className="h-full w-full object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-
-              {/* RIGHT (desktop only) */}
-              <motion.div
-                variants={containerStagger}
-                initial="hidden"
-                animate={isContainerInView ? "show" : "hidden"}
-                className="order-3 hidden space-y-[150px] md:block"
-              >
-                {rightBullets.map((b, i) => (
-                  <BulletWithLine
-                    key={`R-${i}-${b.title}`}
-                    side="left"
-                    title={b.title}
-                    desc={b.desc}
-                    icon={b.icon}
-                  />
-                ))}
-              </motion.div>
-
-              {/* MOBILE: 2x2 grid below the image */}
-              <motion.div
-                variants={containerStagger}
-                initial="hidden"
-                animate={isContainerInView ? "show" : "hidden"}
-                className="order-2 mt-6 grid grid-cols-2 gap-4 md:hidden"
-              >
-                {bullets.map((b, i) => (
-                  <MobileBulletItem
-                    key={`M-${i}-${b.title}`}
-                    title={b.title}
-                    desc={b.desc}
-                    icon={b.icon}
-                  />
-                ))}
-              </motion.div>
-            </div>
-
-            {/* CTA Button */}
-            <div className=" text-center">
-              <Link href="/products">
-                <motion.button
-                  className="inline-flex items-center rounded-full bg-brand-teal px-8 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-brand-tealDark hover:shadow-xl"
-                >
-                  <span className="text-lg">Shop Now</span>
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </motion.button>
-              </Link>
-            </div>
+            <Slider>
+              <FirstSlide />
+              <SecondSlide />
+            </Slider>
           </div>
         </div>
       </section>
