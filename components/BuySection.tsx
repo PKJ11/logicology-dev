@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useState, useRef, createContext, useContext } from "react";
 import { motion, Variants, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 
 /* ------------------------- Scroll Direction Context ------------------------ */
 
@@ -311,11 +311,11 @@ export default function BuySection() {
       <section id="buy" className="w-full bg-brand-gold">
         <div className="mx-auto px-3 py-6 sm:px-5 sm:py-8 md:py-10 lg:max-w-[80vw]">
           <div ref={containerRef} className="rounded-[22px] bg-white p-5 shadow-soft sm:p-8">
-            <div className="mb-8 text-center">
+            <div className="text-center">
               <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
-                Logicoland
+                Logicoland Book Series
               </h2>
-              <h2 className="font-heading text-[36px] font-bold text-brand-teal">Volume 1</h2>
+              {/* <h2 className="font-heading text-[36px] font-bold text-brand-teal">Volume 1</h2> */}
 
               <p className="textstyles mt-2 font-sans text-brand-tealDark/80">
                 Logic through coloring!
@@ -345,7 +345,7 @@ export default function BuySection() {
               <div className="order-1 mb-8 flex items-center justify-center md:order-2 md:mb-0">
                 <div className="relative aspect-[4/3] w-full max-w-full sm:aspect-[3/4] sm:max-w-[240px] md:max-w-[500px]">
                   <Image
-                    src="https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913"
+                    src="https://ik.imagekit.io/pratik2002/ALL%20BOOK%20COVER%20MOCKUP.png"
                     alt="Logicoland Book"
                     width={500}
                     height={667}
@@ -391,13 +391,29 @@ export default function BuySection() {
               </motion.div>
             </div>
 
-            {/* CTA */}
-            <div className="mt-10 text-center">
-              <div className="mt-6">
-                <span className="inline-flex items-center rounded-full bg-brand-teal px-6 py-3 font-semibold text-white">
-                  Volumes 2 to 5 coming soon…
-                </span>
-              </div>
+            {/* CTA Button */}
+            <div className=" text-center">
+              <Link href="/products">
+                <motion.button
+                  className="inline-flex items-center rounded-full bg-brand-teal px-8 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:bg-brand-tealDark hover:shadow-xl"
+                >
+                  <span className="text-lg">Shop Now</span>
+                  <svg
+                    className="ml-2 h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </motion.button>
+              </Link>
             </div>
           </div>
         </div>

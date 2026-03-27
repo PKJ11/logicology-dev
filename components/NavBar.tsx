@@ -436,8 +436,9 @@ export default function NavBar() {
             ))}
           </nav>
 
-          {/* Right actions (desktop) */}
-          <div className="hidden items-center gap-5 text-slate-700 md:flex">
+          {/* Right actions - Now cart is always visible on mobile */}
+          <div className="flex items-center gap-5 text-slate-700">
+            {/* Cart - Always visible on all screen sizes */}
             <Link
               href="/cart"
               aria-label="Cart"
@@ -445,16 +446,16 @@ export default function NavBar() {
             >
               <CartIconWithBadge />
             </Link>
+            
+            {/* Mobile toggle - Only visible on mobile */}
+            <button
+              onClick={() => setOpen((s) => !s)}
+              className="p-2 text-2xl md:hidden"
+              aria-label="Toggle menu"
+            >
+              {open ? <FiX /> : <FiMenu />}
+            </button>
           </div>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen((s) => !s)}
-            className="ml-2 p-2 text-2xl md:hidden"
-            aria-label="Toggle menu"
-          >
-            {open ? <FiX /> : <FiMenu />}
-          </button>
         </div>
       </div>
 
@@ -595,18 +596,6 @@ export default function NavBar() {
             >
               Community
             </Link>
-
-            {/* Actions */}
-            <div className="flex items-center gap-5 pt-2 text-slate-700">
-              <Link
-                href="/cart"
-                aria-label="Cart"
-                className="hover:text-brand-tealDark"
-                onClick={closeAll}
-              >
-                <CartIconWithBadge />
-              </Link>
-            </div>
           </div>
         </div>
       )}
