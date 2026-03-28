@@ -166,7 +166,7 @@ function BulletWithLine({
         style={{ transformOrigin: side === "left" ? "left center" : "right center" }}
         initial={{ opacity: 0, scaleX: 0 }}
         animate={isInView && !prefersReduced ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+        transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
       >
         <span
           className={`absolute -top-[4px] h-1.5 w-1.5 rounded-full bg-[#1EB6E9] ${
@@ -175,7 +175,7 @@ function BulletWithLine({
         />
       </motion.div>
 
-      {/* icon — reduced h-14 w-14 */}
+      {/* icon */}
       <motion.div
         whileHover={prefersReduced ? undefined : { scale: isDesktop() ? 1.06 : 1 }}
         transition={{ type: "spring", stiffness: 400, damping: 24 }}
@@ -238,7 +238,7 @@ function MobileBulletItem({ title, desc, icon }: { title: string; desc: string; 
   );
 }
 
-/* ------------------------------- Content Slider (middle only) ------------------------------ */
+/* ------------------------------- Content Slider ------------------------------ */
 
 function ContentSlider({ children }: { children: React.ReactNode[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -270,8 +270,15 @@ function ContentSlider({ children }: { children: React.ReactNode[] }) {
 
   return (
     <div className="flex flex-col">
-      {/* Sliding area — fixed height to keep total section under 80vh */}
-      <div className="relative overflow-hidden" style={{ height: "min(380px, 48vh)" }}>
+      {/*
+        Mobile : no fixed height — the slide div is position:relative so it
+                 grows naturally with its content. No clipping, no vh cap.
+        Desktop: fixed height capped at 52vh so the whole section stays ≤ 80vh.
+      */}
+      <div
+        className="relative overflow-hidden"
+        style={isMobile ? undefined : { height: "min(460px, 52vh)" }}
+      >
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={currentSlide}
@@ -284,7 +291,11 @@ function ContentSlider({ children }: { children: React.ReactNode[] }) {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
             }}
-            className="absolute inset-0 w-full h-full"
+            /*
+              Mobile : relative — lets the slide push the parent open naturally.
+              Desktop: absolute inset-0 — fills the fixed-height container.
+            */
+            className={isMobile ? "relative w-full" : "absolute inset-0 w-full h-full"}
           >
             {children[currentSlide]}
           </motion.div>
@@ -379,14 +390,14 @@ export default function BuySection() {
           ))}
         </motion.div>
 
-        {/* IMAGE */}
+        {/* IMAGE — bigger on both mobile and desktop */}
         <div className="order-1 flex items-center justify-center md:order-2">
-          <div className="relative w-full max-w-[160px] sm:max-w-[180px] md:max-w-[240px]">
+          <div className="relative w-full max-w-[260px] sm:max-w-[300px] md:max-w-[360px] lg:max-w-[420px]">
             <Image
               src="https://ik.imagekit.io/pratik2002/ALL%20BOOK%20COVER%20MOCKUP.png"
               alt="Logicoland Book"
-              width={240}
-              height={320}
+              width={420}
+              height={560}
               className="h-full w-full object-contain"
               priority
             />
@@ -420,7 +431,7 @@ export default function BuySection() {
     </div>
   );
 
-  // Slide 2: full book cover image
+  // Slide 2: full book cover image — bigger
   const SecondSlideContent = () => {
     const [isMobile, setIsMobile] = useState(false);
 
@@ -437,12 +448,13 @@ export default function BuySection() {
 
     return (
       <div className="h-full flex items-center justify-center w-full py-2">
-        <div className="relative w-full max-w-2xl">
+        {/* Bigger max-w on mobile and desktop */}
+        <div className="relative w-full max-w-[360px] sm:max-w-[520px] md:max-w-3xl lg:max-w-4xl">
           <Image
             src={imageSrc}
             alt="Logicoland All Books Collection"
-            width={900}
-            height={600}
+            width={1200}
+            height={800}
             className="h-auto w-full object-contain"
             priority
           />
@@ -470,7 +482,7 @@ export default function BuySection() {
             ref={containerRef}
             className="rounded-[22px] bg-white px-4 py-4 shadow-soft sm:px-6 sm:py-5 flex flex-col"
           >
-            {/* ── FIXED: Title ── */}
+            {/* Title */}
             <div className="text-center mb-3">
               <h2 className="headingstyle font-heading font-extrabold text-brand-teal">
                 Logicoland Book Series
@@ -480,13 +492,13 @@ export default function BuySection() {
               </p>
             </div>
 
-            {/* ── SLIDING: Middle content only ── */}
+            {/* Slider */}
             <ContentSlider>
               <FirstSlideContent />
               <SecondSlideContent />
             </ContentSlider>
 
-            {/* ── FIXED: Shop Now button ── */}
+            {/* Shop Now */}
             <div className="text-center mt-3 mb-1">
               <ShopNowButton />
             </div>
