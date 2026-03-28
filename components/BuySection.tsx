@@ -252,32 +252,19 @@ function ContentSlider({ children }: { children: React.ReactNode[] }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // ✅ Auto-rotation removed — slides only change on dot click
+
   const slideVariants = {
     enter: (direction: number) => ({ x: direction > 0 ? "100%" : "-100%", opacity: 0 }),
     center: { x: 0, opacity: 1 },
     exit: (direction: number) => ({ x: direction < 0 ? "100%" : "-100%", opacity: 0 }),
   };
 
-  const nextSlide = () => {
-    setDirection(1);
-    setCurrentSlide((prev) => (prev + 1) % children.length);
-  };
-
-  useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="flex flex-col">
-      {/*
-        Mobile : no fixed height — the slide div is position:relative so it
-                 grows naturally with its content. No clipping, no vh cap.
-        Desktop: fixed height capped at 52vh so the whole section stays ≤ 80vh.
-      */}
       <div
         className="relative overflow-hidden"
-        style={isMobile ? undefined : { height: "min(460px, 52vh)" }}
+        style={isMobile ? { minHeight: "520px" } : { height: "min(460px, 52vh)" }}
       >
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
@@ -291,10 +278,6 @@ function ContentSlider({ children }: { children: React.ReactNode[] }) {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
             }}
-            /*
-              Mobile : relative — lets the slide push the parent open naturally.
-              Desktop: absolute inset-0 — fills the fixed-height container.
-            */
             className={isMobile ? "relative w-full" : "absolute inset-0 w-full h-full"}
           >
             {children[currentSlide]}
@@ -390,7 +373,7 @@ export default function BuySection() {
           ))}
         </motion.div>
 
-        {/* IMAGE — bigger on both mobile and desktop */}
+        {/* IMAGE */}
         <div className="order-1 flex items-center justify-center md:order-2">
           <div className="relative w-full max-w-[260px] sm:max-w-[300px] md:max-w-[360px] lg:max-w-[420px]">
             <Image
@@ -431,7 +414,7 @@ export default function BuySection() {
     </div>
   );
 
-  // Slide 2: full book cover image — bigger
+  // Slide 2: full book cover image
   const SecondSlideContent = () => {
     const [isMobile, setIsMobile] = useState(false);
 
@@ -448,7 +431,6 @@ export default function BuySection() {
 
     return (
       <div className="h-full flex items-center justify-center w-full py-2">
-        {/* Bigger max-w on mobile and desktop */}
         <div className="relative w-full max-w-[360px] sm:max-w-[520px] md:max-w-3xl lg:max-w-4xl">
           <Image
             src={imageSrc}
