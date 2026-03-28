@@ -15,7 +15,7 @@ export default function WhyImportant() {
 
   return (
     <section id="why" className="mt-10 w-full bg-[#D8AE4F]" ref={ref}>
-      <div className="mx-auto lg:max-w-[80vw]">
+      <div className="mx-auto lg:max-w-[80vw]  3xl:max-w-[70vw]">
         <div className="overflow-hidden py-12 text-[#3F2F14]">
           <div className="flex flex-col items-center md:flex-row">
             {/* Media (left) */}

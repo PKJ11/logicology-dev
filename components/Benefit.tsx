@@ -12,7 +12,7 @@ export default function Benefit() {
 
   return (
     <section id="benefit" className="w-full bg-brand-coral" ref={ref}>
-      <div className="mx-auto lg:max-w-[80vw]">
+      <div className="mx-auto lg:max-w-[70vw]  3xl:max-w-[65vw]">
         <div className="overflow-hidden py-12 text-white">
           {/* Flex container */}
           <div className="flex flex-col items-center md:flex-row">

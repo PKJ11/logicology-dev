@@ -122,7 +122,7 @@ export default function Hero() {
 
                 {/* Content: centered on desktop, top-aligned on mobile */}
                 <div className="relative z-10 flex min-h-[700px] items-start md:items-center">
-                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
+                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]  3xl:max-w-[70vw]">
                     <div className="flex">
                       <motion.div
                         className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12"

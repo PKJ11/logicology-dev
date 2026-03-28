@@ -10,7 +10,7 @@ export default function Community() {
 
   return (
     <section id="community" className="w-full bg-brand-teal">
-      <div className="mx-auto lg:max-w-[80vw]">
+      <div className="mx-auto lg:max-w-[80vw]  3xl:max-w-[70vw]">
         <div className="overflow-hidden py-12 text-white">
           {/* Flex container replacing grid */}
           <div className="flex flex-col items-center md:flex-row">

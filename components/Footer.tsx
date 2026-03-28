@@ -13,7 +13,7 @@ const SiteFooter = () => {
     <>
       <footer id="footer">
         <div className="bg-brand-tealDark text-white">
-          <div className="mx-auto max-w-[74vw] px-4 py-12 sm:px-6">
+          <div className="mx-auto max-w-[74vw]  3xl:max-w-[70vw] px-4 py-12 sm:px-6">
             <div className="grid items-start gap-10 md:grid-cols-4">
               <div className="relative h-auto w-[200px]">
                 <Image

@@ -512,10 +512,10 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 ============================================================ */
 function PrintablesSection({ isActive }: { isActive: boolean }) {
   return (
-    <section className="w-full overflow-hidden bg-brand-grayBg">
+    <section className="w-full overflow-hidden bg-white">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
         <div
-          className={`rounded-[22px] bg-white p-6 shadow-soft transition-all duration-1000 sm:p-10 ${
+          className={`rounded-[22px] bg-brand-grayBg p-6 shadow-soft transition-all duration-1000 sm:p-10 ${
             isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
@@ -678,7 +678,7 @@ function SymmetryPatternGame() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-coral text-white">
+    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg text-brand-tealDark">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
         <div className="grid items-center gap-12 md:grid-cols-2">
 
@@ -689,11 +689,11 @@ function SymmetryPatternGame() {
             </h3>
 
             <div>
-              <p className="textstyles mt-4 font-sans text-white/90">
+              <p className="textstyles mt-4 font-sans text-brand-teal">
                 Fill in the blank cells to complete the perfectly symmetric colour pattern. The
                 rules you need to follow are:
               </p>
-              <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
+              <ol className="mt-3 list-decimal space-y-2 pl-6 text-brand-teal">
                 <li>The pattern must be symmetric along the vertical axis (left ↔ right).</li>
                 <li>The pattern must be symmetric along the horizontal axis (top ↔ bottom).</li>
                 <li>
@@ -752,7 +752,7 @@ function SymmetryPatternGame() {
           {/* ── RIGHT: Game Grid ── */}
           <div className="rounded-[26px] bg-white p-3 transition-transform duration-500 hover:scale-[1.02]">
             <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
-              <div className="mx-auto w-full max-w-sm">
+              <div className=" w-full">
                 <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-lg">
                   {grid.map((row, i) =>
                     row.map((cell, j) => {
