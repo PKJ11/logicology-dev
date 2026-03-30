@@ -112,10 +112,11 @@ export default function Logicoland1Page() {
         />
       </Head>
 
-      <NavBar />
+      
 
       <main className="bg-brand-grayBg text-brand-tealDark">
         {/* ================= HERO ================= */}
+        <NavBar />
         <section id="hero">
           <HeroVideo isActive={activeSection === "hero"} />
         </section>
