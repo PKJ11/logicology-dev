@@ -19,7 +19,7 @@ export default function Benefit() {
           <div className="flex flex-col items-center md:flex-row">
             {/* Content on left for larger screens, top for mobile */}
             <motion.div
-              className="order-2 flex w-full flex-col justify-end p-8 sm:p-12 md:order-1 md:w-1/2"
+              className="order-2 flex w-full flex-col justify-end p-8 sm:p-12 md:pl-2 md:order-1 md:w-1/2"
               initial={{ x: -50, opacity: 0 }}
               animate={isInView ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}

@@ -408,7 +408,7 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 
   return (
     <section ref={sectionRef} className="w-full overflow-hidden bg-brand-coral text-white">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw]">
         <div
           className={`grid items-center gap-12 transition-all duration-1000 md:grid-cols-2 ${
             isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
@@ -672,22 +672,22 @@ function SymmetryPatternGame() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg text-brand-tealDark">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
+    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg ">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw]">
         <div className="grid items-center gap-12 md:grid-cols-2">
 
           {/* ── LEFT: Text Content ── */}
           <div className="space-y-6 sm:px-4">
-            <h3 className="headingstyle font-heading font-extrabold">
+            <h3 className="headingstyle font-heading font-extrabold text-brand-teal">
               Complete the Symmetric Pattern
             </h3>
 
             <div>
-              <p className="textstyles mt-4 font-sans text-brand-teal">
+              <p className="textstyles mt-4 font-sans text-brand-tealDark/80">
                 Fill in the blank cells to complete the perfectly symmetric colour pattern. The
                 rules you need to follow are:
               </p>
-              <ol className="mt-3 list-decimal space-y-2 pl-6 text-brand-teal">
+              <ol className="mt-3 list-decimal space-y-2 pl-6 text-brand-tealDark/90">
                 <li>The pattern must be symmetric along the vertical axis (left ↔ right).</li>
                 <li>The pattern must be symmetric along the horizontal axis (top ↔ bottom).</li>
                 <li>
@@ -728,16 +728,15 @@ function SymmetryPatternGame() {
               <div className="flex gap-4">
                 <button
                   onClick={handleReset}
-                  className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-brand-coral transition-all duration-300 hover:bg-brand-coral hover:text-white hover:ring-2 hover:ring-white active:scale-95"
-                >
+                  className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 text-[16px] font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]">
                   Reset Pattern
                 </button>
               </div>
             </div>
 
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-brand-tealDark/80">
               Blank cells remaining:{" "}
-              <span className="font-semibold text-white">
+              <span className="font-semibold text-brand-tealDark">
                 {grid.flat().filter((c) => c === BLANK_CELL_COLOR).length}
               </span>
             </p>
