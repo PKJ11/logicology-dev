@@ -377,7 +377,7 @@ function GameDetails() {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
+            className="order-1 flex w-full items-center py-6 md:order-1 md:w-1/2 md:py-0"
           >
             <MediaLayoutRight
               image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"

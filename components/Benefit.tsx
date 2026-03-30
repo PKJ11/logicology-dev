@@ -12,7 +12,8 @@ export default function Benefit() {
 
   return (
     <section id="benefit" className="w-full bg-brand-coral" ref={ref}>
-      <div className="mx-auto lg:max-w-[70vw]  3xl:max-w-[65vw]">
+      {/* ← ALIGNED CONTAINER: identical to NavBar, with xl pixel cap */}
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="overflow-hidden py-12 text-white">
           {/* Flex container */}
           <div className="flex flex-col items-center md:flex-row">

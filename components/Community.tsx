@@ -1,28 +1,31 @@
 "use client";
 import { useState } from "react";
-import CommunitySignupModal from "./CommunitySignupModal"; // Adjust the path as needed
+import CommunitySignupModal from "./CommunitySignupModal";
 import MediaLayout from "./MediaLayout";
 import CTAButton from "./CTAButton";
 
-// --------------------- Community ---------------------
 export default function Community() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section id="community" className="w-full bg-brand-teal">
-      <div className="mx-auto lg:max-w-[80vw]  3xl:max-w-[70vw]">
+      {/*
+        KEY FIX: Match NavBar's exact container:
+        px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
+        Previously this was lg:max-w-[80vw] which caused misalignment.
+      */}
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="overflow-hidden py-12 text-white">
-          {/* Flex container replacing grid */}
           <div className="flex flex-col items-center md:flex-row">
-            {/* MediaLayout on left for larger screens, top for mobile */}
-            <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
+            {/* MediaLayout — left edge aligns with navbar logo */}
+            <div className="order-1 flex w-full items-center py-6 md:order-1 md:w-1/2 md:py-0">
               <MediaLayout
                 image="https://ik.imagekit.io/pratik11/FOLD-4.1-COMMUNITY-IMAGE.png?updatedAt=1757748945765"
                 videoSrc=""
               />
             </div>
 
-            {/* Content on right for larger screens, bottom for mobile */}
+            {/* Content */}
             <div className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2">
               <h2 className="headingstyle font-extrabold">Join the Community</h2>
               <p className="textstyles mt-3 max-w-prose text-white/90">

@@ -99,7 +99,7 @@ const navItems = [
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
   { name: "Shop", href: "/products" },
   { name: "About Us", href: "/about" },
-  { name: "Community", href: "Community" }, // Added Community
+  { name: "Community", href: "Community" },
 ];
 
 /* ================= Utils ================= */
@@ -119,7 +119,6 @@ export default function NavBar() {
   const router = useRouter();
   const { cart } = useCart();
 
-  // Calculate total items in cart
   const cartItemsCount = cart.reduce((total: any, item: any) => total + item.quantity, 0);
 
   const [open, setOpen] = useState(false);
@@ -127,21 +126,17 @@ export default function NavBar() {
   const [gamesDropdownOpen, setGamesDropdownOpen] = useState(false);
   const [booksDropdownOpen, setBooksDropdownOpen] = useState(false);
 
-  // Timeout references for hover delays
   const gamesHoverTimeout = useRef<NodeJS.Timeout | null>(null);
   const booksHoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Refs for desktop hover dropdowns
   const gamesDropdownRef = useRef<HTMLDivElement>(null);
   const booksDropdownRef = useRef<HTMLDivElement>(null);
   const gamesTriggerRef = useRef<HTMLDivElement>(null);
   const booksTriggerRef = useRef<HTMLDivElement>(null);
 
-  // Track mouse position for dropdown checks
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
 
-  // Detect desktop once and on resize
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const set = () => setIsDesktop(mq.matches);
@@ -150,18 +145,15 @@ export default function NavBar() {
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  // Track mouse position
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMouseX(e.clientX);
       setMouseY(e.clientY);
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Clear timeouts on unmount
   useEffect(() => {
     return () => {
       if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
@@ -169,14 +161,10 @@ export default function NavBar() {
     };
   }, []);
 
-  // Desktop hover open with delay
   const handleDropdownHoverEnter = (type: "games" | "books") => {
     if (!isDesktop) return;
-
-    // Clear any existing timeouts
     if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
     if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
-
     if (type === "games") {
       gamesHoverTimeout.current = setTimeout(() => {
         setGamesDropdownOpen(true);
@@ -190,76 +178,52 @@ export default function NavBar() {
     }
   };
 
-  // Desktop hover leave with delay (to allow moving to dropdown)
   const handleDropdownHoverLeave = (type: "games" | "books") => {
     if (!isDesktop) return;
-
     if (type === "games") {
       if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
       gamesHoverTimeout.current = setTimeout(() => {
-        if (!isMouseOverDropdown("games")) {
-          setGamesDropdownOpen(false);
-        }
+        if (!isMouseOverDropdown("games")) setGamesDropdownOpen(false);
       }, 200);
     } else {
       if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
       booksHoverTimeout.current = setTimeout(() => {
-        if (!isMouseOverDropdown("books")) {
-          setBooksDropdownOpen(false);
-        }
+        if (!isMouseOverDropdown("books")) setBooksDropdownOpen(false);
       }, 200);
     }
   };
 
-  // Check if mouse is over dropdown (to prevent premature closing)
   const isMouseOverDropdown = (type: "games" | "books") => {
     const dropdown = type === "games" ? gamesDropdownRef.current : booksDropdownRef.current;
-
     if (!dropdown) return false;
-
     const rect = dropdown.getBoundingClientRect();
-    const isInDropdown =
-      mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
-
-    return isInDropdown;
+    return mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
   };
 
-  // Keep dropdown open when hovering over it
   const handleDropdownHover = () => {
-    // Clear any pending close timeouts
     if (gamesHoverTimeout.current) clearTimeout(gamesHoverTimeout.current);
     if (booksHoverTimeout.current) clearTimeout(booksHoverTimeout.current);
   };
 
-  // Close dropdown when leaving it
   const handleDropdownLeave = (type: "games" | "books") => {
     if (!isDesktop) return;
-
     if (type === "games") {
-      gamesHoverTimeout.current = setTimeout(() => {
-        setGamesDropdownOpen(false);
-      }, 150);
+      gamesHoverTimeout.current = setTimeout(() => setGamesDropdownOpen(false), 150);
     } else {
-      booksHoverTimeout.current = setTimeout(() => {
-        setBooksDropdownOpen(false);
-      }, 150);
+      booksHoverTimeout.current = setTimeout(() => setBooksDropdownOpen(false), 150);
     }
   };
 
-  // Navigate without closing (as requested)
   const goto = (href: string) => {
     router.push(href);
-    // do NOT close menu or dropdowns
   };
 
-  // Close everything (used only for simple links where closing is OK)
   const closeAll = () => {
     setOpen(false);
     setGamesDropdownOpen(false);
     setBooksDropdownOpen(false);
   };
 
-  // Cart icon with count badge component
   const CartIconWithBadge = ({ className = "" }: { className?: string }) => (
     <div className={`relative ${className}`}>
       <FiShoppingCart className="text-xl" />
@@ -273,7 +237,18 @@ export default function NavBar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
+      {/*
+        ─── SITE CONTAINER ───────────────────────────────────────────────
+        This is the single source of truth for horizontal alignment.
+        Every section on the page must use this EXACT class string:
+          px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8 xl:max-w-[1400px]
+
+        xl:max-w-[1400px] is the critical addition: it caps the container
+        at 1400px on screens wider than ~1867px (1400/0.75), preventing
+        vw-based drift on ultra-wide monitors.
+        ─────────────────────────────────────────────────────────────────
+      */}
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8 ">
         <div className="flex justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -436,9 +411,8 @@ export default function NavBar() {
             ))}
           </nav>
 
-          {/* Right actions - Now cart is always visible on mobile */}
+          {/* Right actions */}
           <div className="flex items-center gap-5 text-slate-700">
-            {/* Cart - Always visible on all screen sizes */}
             <Link
               href="/cart"
               aria-label="Cart"
@@ -446,8 +420,6 @@ export default function NavBar() {
             >
               <CartIconWithBadge />
             </Link>
-            
-            {/* Mobile toggle - Only visible on mobile */}
             <button
               onClick={() => setOpen((s) => !s)}
               className="p-2 text-2xl md:hidden"
@@ -463,7 +435,6 @@ export default function NavBar() {
       {open && (
         <div className="border-t border-slate-200 bg-white md:hidden">
           <div className="flex flex-col gap-4 px-4 py-4">
-            {/* Simple links */}
             <Link
               href="/"
               onClick={closeAll}
@@ -472,7 +443,6 @@ export default function NavBar() {
               Home
             </Link>
 
-            {/* Games Accordion (mobile only) */}
             <div className="flex flex-col">
               <button
                 onClick={() => setGamesDropdownOpen((v) => !v)}
@@ -498,10 +468,7 @@ export default function NavBar() {
                         key={g.id}
                         href={href}
                         prefetch={false}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          goto(href);
-                        }}
+                        onClick={(e) => { e.stopPropagation(); goto(href); }}
                         className="block py-2 text-slate-600 hover:text-brand-tealDark"
                       >
                         {g.title}
@@ -511,10 +478,7 @@ export default function NavBar() {
                   <Link
                     href="/games"
                     prefetch={false}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      goto("/games");
-                    }}
+                    onClick={(e) => { e.stopPropagation(); goto("/games"); }}
                     className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Games
@@ -523,7 +487,6 @@ export default function NavBar() {
               )}
             </div>
 
-            {/* Books Accordion (mobile only) */}
             <div className="flex flex-col">
               <button
                 onClick={() => setBooksDropdownOpen((v) => !v)}
@@ -549,10 +512,7 @@ export default function NavBar() {
                         key={b.id}
                         href={href}
                         prefetch={false}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          goto(href);
-                        }}
+                        onClick={(e) => { e.stopPropagation(); goto(href); }}
                         className="block py-2 text-slate-600 hover:text-brand-tealDark"
                       >
                         {b.title}
@@ -562,10 +522,7 @@ export default function NavBar() {
                   <Link
                     href="/books"
                     prefetch={false}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      goto("/books");
-                    }}
+                    onClick={(e) => { e.stopPropagation(); goto("/books"); }}
                     className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Books
@@ -574,26 +531,13 @@ export default function NavBar() {
               )}
             </div>
 
-            {/* Rest simple links */}
-            <Link
-              href="/products"
-              onClick={closeAll}
-              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
-            >
+            <Link href="/products" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
               Shop
             </Link>
-            <Link
-              href="/about"
-              onClick={closeAll}
-              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
-            >
+            <Link href="/about" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
               About Us
             </Link>
-            <Link
-              href="Community"
-              onClick={closeAll}
-              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
-            >
+            <Link href="Community" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
               Community
             </Link>
           </div>

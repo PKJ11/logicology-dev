@@ -15,12 +15,17 @@ export default function WhyImportant() {
 
   return (
     <section id="why" className="mt-10 w-full bg-[#D8AE4F]" ref={ref}>
-      <div className="mx-auto lg:max-w-[80vw]  3xl:max-w-[70vw]">
+      {/*
+        KEY FIX: Match NavBar's exact container:
+        px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
+        Previously this was lg:max-w-[80vw] which caused misalignment.
+      */}
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="overflow-hidden py-12 text-[#3F2F14]">
           <div className="flex flex-col items-center md:flex-row">
-            {/* Media (left) */}
+            {/* Media (left) — left edge aligns with navbar logo */}
             <motion.div
-              className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
+              className="order-1 flex w-full items-center  py-6 md:order-1 md:w-1/2 md:py-0"
               initial={{ x: -50, opacity: 0, scale: 0.9 }}
               animate={
                 isInView ? { x: 0, opacity: 1, scale: 1 } : { x: -50, opacity: 0, scale: 0.9 }
@@ -97,7 +102,6 @@ export default function WhyImportant() {
         </div>
       </div>
 
-      {/* Modal */}
       <VideoModal
         open={open}
         onClose={() => setOpen(false)}

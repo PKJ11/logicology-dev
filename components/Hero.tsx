@@ -17,19 +17,12 @@ export default function Hero() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
-  // Effect to check screen size and set mobile state
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
-    // Initial check
     checkScreenSize();
-
-    // Add event listener for window resize
     window.addEventListener("resize", checkScreenSize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
@@ -120,84 +113,55 @@ export default function Hero() {
                   }}
                 />
 
-                {/* Content: centered on desktop, top-aligned on mobile */}
+                {/* Content: aligned to navbar's 75vw container */}
                 <div className="relative z-10 flex min-h-[700px] items-start md:items-center">
-                  <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]  3xl:max-w-[70vw]">
-                    <div className="flex">
-                      <motion.div
-                        className="p-8 pt-16 sm:p-12 sm:pt-16 md:pt-12"
-                        initial={{ y: 50, opacity: 0 }}
-                        animate={isInView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                      >
-                        {slide.pretitle.length > 0 && (
-                          <motion.h1
-                            className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
-                            initial={{ y: 30, opacity: 0 }}
-                            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                          >
-                            {slide.pretitle}
-                          </motion.h1>
-                        )}
+                  {/*
+                    KEY FIX: Use the exact same container as NavBar:
+                    px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
+                    This ensures the text left edge always aligns with the navbar logo.
+                  */}
+                  <div className="w-full px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
+                    <motion.div
+                      className="pt-16 sm:pt-16 md:pt-12"
+                      initial={{ y: 50, opacity: 0 }}
+                      animate={isInView ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                    >
+                      {slide.pretitle.length > 0 && (
                         <motion.h1
-                          className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                          className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
                           initial={{ y: 30, opacity: 0 }}
                           animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-                          transition={{ duration: 0.6, delay: 0.3 }}
+                          transition={{ duration: 0.6, delay: 0.2 }}
                         >
-                          {slide.title}
-
-                          <motion.span
-                            className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
-                            initial={{ y: 30, opacity: 0 }}
-                            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                          >
-                            {slide.subtitle}
-                          </motion.span>
+                          {slide.pretitle}
                         </motion.h1>
-                        <motion.p
-                          className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                      )}
+                      <motion.h1
+                        className="mt-2 font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                      >
+                        {slide.title}
+                        <motion.span
+                          className="block font-heading text-[41px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
                           initial={{ y: 30, opacity: 0 }}
                           animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-                          transition={{ duration: 0.6, delay: 0.5 }}
+                          transition={{ duration: 0.6, delay: 0.4 }}
                         >
-                          {slide.description}
-                        </motion.p>
-                        {/* <motion.div 
-                          className="mt-6"
-                          initial={{ y: 30, opacity: 0 }}
-                          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-                          transition={{ duration: 0.6, delay: 0.6 }}
-                        >
-                          <CTAButton
-                            text={slide.cta}
-                            href={slide.ctaLink}
-                            bg="#FFFFFF"
-                            color="#0A8A80" // brand teal text
-                            hoverBg="#0A8A80" // brand teal bg on hover
-                            hoverColor="#FFFFFF" // white text on hover
-                            size="md"
-                            rightIcon={
-                              <svg
-                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 5l7 7-7 7"
-                                />
-                              </svg>
-                            }
-                          />
-                        </motion.div> */}
-                      </motion.div>
-                    </div>
+                          {slide.subtitle}
+                        </motion.span>
+                      </motion.h1>
+                      <motion.p
+                        className="mt-6 max-w-md font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                      >
+                        {slide.description}
+                      </motion.p>
+                    </motion.div>
                   </div>
                 </div>
               </SwiperSlide>

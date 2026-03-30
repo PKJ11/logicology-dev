@@ -375,11 +375,11 @@ export default function BuySection() {
 
         {/* IMAGE */}
         <div className="order-1 flex items-center justify-center md:order-2">
-          <div className="relative w-full max-w-[260px] sm:max-w-[300px] md:max-w-[360px] lg:max-w-[420px]">
+          <div className="relative w-full max-w-[260px] sm:max-w-[300px] md:max-w-[360px] lg:max-w-[620px]">
             <Image
               src="https://ik.imagekit.io/pratik2002/ALL%20BOOK%20COVER%20MOCKUP.png"
               alt="Logicoland Book"
-              width={420}
+              width={620}
               height={560}
               className="h-full w-full object-contain"
               priority
@@ -449,7 +449,7 @@ export default function BuySection() {
   if (!isMounted) {
     return (
       <section id="buy" className="w-full bg-brand-gold">
-        <div className="mx-auto px-3 py-4 sm:px-5 sm:py-5 lg:max-w-[80vw]">
+        <div className="mx-auto px-3 py-4 sm:px-5 sm:py-5">
           <div className="h-72 animate-pulse rounded-[22px] bg-white p-4 shadow-soft" />
         </div>
       </section>
@@ -459,10 +459,10 @@ export default function BuySection() {
   return (
     <ScrollAnimationContext.Provider value={scrollDirection}>
       <section id="buy" className="w-full bg-brand-gold">
-        <div className="mx-auto px-3 py-4 sm:px-5 sm:py-5 md:py-6 lg:max-w-[80vw]">
+        <div className="mx-auto px-3 py-4 sm:px-5 sm:py-5 md:py-6">
           <div
             ref={containerRef}
-            className="rounded-[22px] bg-white px-4 py-4 shadow-soft sm:px-6 sm:py-5 flex flex-col"
+            className="rounded-[22px] bg-white px-4 py-4 shadow-soft sm:px-6 sm:py-5 flex flex-col w-[95%] mx-auto"
           >
             {/* Title */}
             <div className="text-center mb-3">
@@ -474,11 +474,13 @@ export default function BuySection() {
               </p>
             </div>
 
-            {/* Slider */}
-            <ContentSlider>
-              <FirstSlideContent />
-              <SecondSlideContent />
-            </ContentSlider>
+            {/* Slider - 75vw width */}
+            <div className="w-[75vw] mx-auto">
+              <ContentSlider>
+                <FirstSlideContent />
+                <SecondSlideContent />
+              </ContentSlider>
+            </div>
 
             {/* Shop Now */}
             <div className="text-center mt-3 mb-1">

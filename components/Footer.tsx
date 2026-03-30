@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiInstagram, FiFacebook, FiTwitter, FiPhone, FiLinkedin, FiYoutube } from "react-icons/fi";
+import { FiInstagram, FiFacebook, FiLinkedin, FiYoutube } from "react-icons/fi";
 import ContactUs from "./ContactUs";
 
 const SiteFooter = () => {
@@ -13,7 +13,12 @@ const SiteFooter = () => {
     <>
       <footer id="footer">
         <div className="bg-brand-tealDark text-white">
-          <div className="mx-auto max-w-[74vw]  3xl:max-w-[70vw] px-4 py-12 sm:px-6">
+          {/*
+            KEY FIX: Match NavBar's exact container:
+            px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
+            Previously this was max-w-[74vw] which caused misalignment.
+          */}
+          <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8 py-12">
             <div className="grid items-start gap-10 md:grid-cols-4">
               <div className="relative h-auto w-[200px]">
                 <Image
@@ -32,7 +37,6 @@ const SiteFooter = () => {
                         Shipping Policy
                       </Link>
                     </li>
-
                     <li>
                       <Link href="/privacy-policy" className="hover:underline">
                         Privacy Policy
@@ -143,7 +147,7 @@ const SiteFooter = () => {
                 +91 8446980747
               </a>
             </p>
-            <p className="mt-4 text-sm text-gray-600">We’re happy to assist you.</p>
+            <p className="mt-4 text-sm text-gray-600">We're happy to assist you.</p>
           </div>
         </div>
       )}
