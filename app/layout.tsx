@@ -7,7 +7,6 @@ import { CartProvider } from "@/components/CartContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import MetaCapiPageView from "@/components/MetaCapiPageView";
-import Analytics from "@/components/Analytics";
 import { EdgeStoreProvider } from "./lib/edgestore";
 import { TiersProvider } from "./contexts/TiersContext";
 import { ToastProvider } from "./contexts/ToastContext";
@@ -52,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <EdgeStoreProvider>
             <TiersProvider>
               <ToastProvider>
-          <Analytics />
           {/* Meta Pixel Script */}
           <Script id="meta-pixel" strategy="afterInteractive">
             {`
