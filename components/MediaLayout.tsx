@@ -2,8 +2,29 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { generateImageSchema, generateVideoSchema, ImageSchemaProps } from "@/lib/seo-schema";
 
-export default function MediaLayout({ videoSrc, image }: { videoSrc: string; image: string }) {
+interface MediaLayoutProps {
+  videoSrc: string;
+  image: string;
+  imageAlt?: string;
+  imageTitle?: string;
+  videoTitle?: string;
+  videoDescription?: string;
+  videoDuration?: string;
+  imageDescription?: string;
+}
+
+export default function MediaLayout({
+  videoSrc,
+  image,
+  imageAlt = "Interactive media content",
+  imageTitle = "Media Gallery",
+  videoTitle = "Educational Video",
+  videoDescription = "Interactive educational video content",
+  videoDuration = "PT2M",
+  imageDescription = "Visual content for learning",
+}: MediaLayoutProps) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -45,25 +66,72 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
 
   const hasVideo = videoSrc && videoSrc.trim() !== "";
 
+  // Generate schema markup for image
+  const imageSchema: ImageSchemaProps = {
+    url: image,
+    alt: imageAlt,
+    title: imageTitle,
+    description: imageDescription,
+    contentUrl: image,
+  };
+
+  // Generate schema markup for video
+  const videoSchema = hasVideo ? 
+    generateVideoSchema({
+      url: videoSrc,
+      title: videoTitle,
+      description: videoDescription,
+      duration: videoDuration,
+      contentUrl: videoSrc,
+    }) : null;
+
   return (
-    <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px]">
-      {/* Image card */}
-      <div className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6">
-        <div className="relative h-full overflow-hidden rounded-[22px]">
-          <div className="relative h-full w-full">
-            <Image
-              src={image}
-              alt="Main visual"
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
-              priority
-            />
+    <>
+      {/* Schema markup for image */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateImageSchema(imageSchema)),
+        }}
+      />
+      
+      {/* Schema markup for video */}
+      {videoSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(videoSchema),
+          }}
+        />
+      )}
+
+      <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px]">
+        {/* Image card with SEO attributes */}
+        <div
+          className="h-full rounded-[28px] bg-white p-4 shadow-lg sm:p-5 md:p-6"
+          role="img"
+          aria-label={imageAlt}
+        >
+          <div className="relative h-full overflow-hidden rounded-[22px]">
+            <figure className="relative h-full w-full">
+              <Image
+                src={image}
+                alt={imageAlt}
+                title={imageTitle}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
+                priority
+                loading="eager"
+              />
+              {imageDescription && (
+                <figcaption className="sr-only">{imageDescription}</figcaption>
+              )}
+            </figure>
           </div>
         </div>
-      </div>
 
-      {/* Video overlay (only if a video exists) */}
+      {/* Video overlay with SEO (only if a video exists) */}
       {hasVideo && (
         <div
           className={`absolute left-0 top-0 z-20 aspect-square cursor-pointer overflow-hidden bg-white p-5 transition-all duration-500 ease-in-out ${
@@ -74,6 +142,8 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
           onClick={handleVideoToggle}
           onMouseEnter={handleVideoHover}
           onMouseLeave={handleVideoLeave}
+          role="region"
+          aria-label={`${videoTitle} - Click to ${isVideoExpanded ? "close" : "play"}`}
         >
           <div
             className={`relative overflow-hidden rounded-[18px] bg-white transition-all duration-500 ease-in-out ${isVideoExpanded ? "h-full w-full" : "w-40 sm:w-56"} aspect-square`}
@@ -85,6 +155,10 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
               loop
               playsInline
               className="h-full w-full object-cover"
+              title={videoTitle}
+              aria-label={videoTitle}
+              data-duration={videoDuration}
+              preload="metadata"
             />
 
             {/* Always show PLAY in the center when collapsed */}
@@ -134,14 +208,15 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
                   e.stopPropagation();
                   setIsMuted((m) => !m);
                 }}
-                aria-label={isMuted ? "Unmute" : "Mute"}
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+                title={isMuted ? "Unmute" : "Mute"}
               >
                 {isMuted ? (
-                  <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M3.63 3.63a.996.996 0 000 1.41L7.29 8.7 7 9H4c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h3l3.29 3.29c.63.63 1.71.18 1.71-.71v-4.17l4.18 4.18c-.49.37-1.02.68-1.6.91-.36.15-.58.53-.58.92 0 .72.73 1.18 1.39.91.8-.33 1.55-.77 2.22-1.31l1.34 1.34a.996.996 0 101.41-1.41L5.05 3.63c-.39-.39-1.02-.39-1.42 0z" />
                   </svg>
                 ) : (
-                  <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M3 10v4c0 .55.45 1 1 1h3l3.29 3.29c.63.63 1.71.18 1.71-.71V6.41c0-.89-1.08-1.34-1.71-.71L7 9H4c-.55 0-1 .45-1 1zm13.5 2A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
                   </svg>
                 )}
@@ -150,6 +225,6 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
