@@ -255,7 +255,7 @@ const CartPage = () => {
         for (const item of data.items) {
           console.log("Fetched item from API:", item);
           details[item.id] = {
-            tax_rate: item.tax_rate??0,
+            tax_rate: item.tax_rate ?? 0,
             hsn_code: item.hsn_code,
           };
         }
@@ -286,8 +286,8 @@ const CartPage = () => {
   const discountAmount = appliedPromo?.discountAmount || 0;
   const finalAmount = appliedPromo?.finalAmount || total;
 
-  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
-  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+  // const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
+  const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
   // Promo code functions
   const validatePromoCode = async () => {
@@ -389,10 +389,30 @@ const CartPage = () => {
     }
   };
 
-  const sendInteraktWhatsAppMessage = async (
-    paymentId: string,
-    orderDescription: string
-  ) => {
+  const BLANK_SHIPPING: ShippingInfo = {
+    name: "",
+    address: "",
+    building: "",
+    street: "",
+    landmark: "",
+    pin: "",
+    city: "",
+    state: "",
+    phone: "",
+    email: "",
+    isGift: false,
+    isDifferentFromBiller: false,
+  };
+
+  const sanitizePhone = (value: string) => value.replace(/\D/g, "").slice(0, 10);
+
+  const [phoneError, setPhoneError] = useState("");
+  const [shippingPhoneError, setShippingPhoneError] = useState("");
+
+  const isBillerPhoneValid = userInfo.phone.replace(/\D/g, "").length === 10;
+  const isShippingPhoneValid = shipping.phone.replace(/\D/g, "").length === 10;
+
+  const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string) => {
     // Always send to userInfo.phone only
     const targetPhone = userInfo.phone;
     console.log("Phone number for WhatsApp:", targetPhone);
@@ -528,7 +548,8 @@ const CartPage = () => {
 
       // Determine recipient details for email
       const recipientName = shipping.isDifferentFromBiller ? shipping.name : userInfo.name;
-      const recipientEmail = shipping.isDifferentFromBiller && shipping.email ? shipping.email : userInfo.email;
+      const recipientEmail =
+        shipping.isDifferentFromBiller && shipping.email ? shipping.email : userInfo.email;
       const recipientPhone = shipping.isDifferentFromBiller ? shipping.phone : userInfo.phone;
 
       // Create email content
@@ -676,7 +697,7 @@ const CartPage = () => {
       }
 
       if (
-        (shipping.isDifferentFromBiller && !shipping.name)||
+        (shipping.isDifferentFromBiller && !shipping.name) ||
         !shipping.address ||
         !shipping.pin ||
         !shipping.city ||
@@ -1009,15 +1030,14 @@ const CartPage = () => {
                             value={userInfo.email}
                             onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
                             onBlur={(e) => {
-                              // Validate email on blur
                               const email = e.target.value;
                               if (email && !/\S+@\S+\.\S+/.test(email)) {
                                 setUserInfo((u) => ({
                                   ...u,
                                   emailError: "Please enter a valid email address",
-                                }));
+                                } as any));
                               } else {
-                                setUserInfo((u) => ({ ...u, emailError: "" }));
+                                setUserInfo((u) => ({ ...u, emailError: "" } as any));
                               }
                             }}
                             className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
@@ -1034,28 +1054,44 @@ const CartPage = () => {
                             </p>
                           )}
                         </div>
+                        {/* Phone — digits only, max 10 */}
                         <div>
                           <input
                             required
                             type="tel"
-                            placeholder="Phone Number"
+                            placeholder="Phone Number (10 digits)"
                             value={userInfo.phone}
-                            onChange={(e) => setUserInfo((u) => ({ ...u, phone: e.target.value }))}
-                            className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            maxLength={10}
+                            onChange={(e) => {
+                              const val = sanitizePhone(e.target.value);
+                              setUserInfo((u) => ({ ...u, phone: val }));
+                              setPhoneError(
+                                val.length > 0 && val.length < 10
+                                  ? "Phone number must be 10 digits"
+                                  : ""
+                              );
+                            }}
+                            className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                              phoneError ? "border-red-500" : "border-gray-300"
+                            }`}
                           />
-                          <p className="mt-2 text-sm text-gray-600">
-                            WhatsApp notifications will be sent to this number
-                          </p>
+                          {phoneError ? (
+                            <p className="mt-2 text-sm text-red-600">{phoneError}</p>
+                          ) : (
+                            <p className="mt-2 text-sm text-gray-600">
+                              WhatsApp notifications will be sent to this number
+                            </p>
+                          )}
                         </div>
                       </div>
-
+ 
                       <button
                         onClick={() => setStep(2)}
                         disabled={
                           !userInfo.name ||
                           !userInfo.email ||
                           !/\S+@\S+\.\S+/.test(userInfo.email) ||
-                          !userInfo.phone
+                          !isBillerPhoneValid
                         }
                         className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                       >
@@ -1063,244 +1099,375 @@ const CartPage = () => {
                       </button>
                     </div>
                   )}
-
-                  {/* Step 2: Shipping Address */}
+                  /// Step 2: Shipping Address
                   {step === 2 && (
-                    <div className="space-y-6">
-                      {/* Saved Addresses */}
-                      {savedAddresses.length > 0 && (
-                        <div className="space-y-3">
-                          <h3 className="font-semibold text-gray-900">Select Saved Address</h3>
-                          {savedAddresses.map((address) => (
-                            <div
-                              key={address.id}
-                              className={`cursor-pointer rounded-lg border p-4 transition-all ${
-                                selectedAddress === address.id
-                                  ? "border-orange-500 bg-orange-50"
-                                  : "border-gray-200 hover:border-gray-300"
-                              }`}
-                              onClick={() => {
-                                setSelectedAddress(address.id);
-                                loadSelectedAddress(address.id);
-                                // Reset shipping info when selecting saved address
-                                setShipping(s => ({
-                                  ...s,
-                                  isDifferentFromBiller: address.isDifferentFromBiller || false,
-                                  isGift: address.isGift || false
-                                }));
-                              }}
-                            >
-                              <div className="flex items-start justify-between">
-                                <div>
-                                  <p className="font-medium text-gray-900">{address.name}</p>
-                                  <p className="mt-1 text-sm text-gray-600">
-                                    {address.address}, {address.building}, {address.street}
-                                  </p>
-                                  <p className="text-sm text-gray-600">
-                                    {address.city}, {address.state} - {address.pin}
-                                  </p>
-                                  <p className="mt-1 text-sm text-gray-600">{address.phone}</p>
-                                  {address.isDifferentFromBiller && (
-                                    <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
-                                      Shipping to someone else
-                                    </span>
-                                  )}
-                                  {address.isGift && (
-                                    <span className="mt-1 ml-2 inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
-                                      🎁 Gift
-                                    </span>
-                                  )}
-                                </div>
-                                {selectedAddress === address.id && (
-                                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500">
-                                    <div className="h-2 w-2 rounded-full bg-white" />
-                                  </div>
-                                )}
+                    <div className="space-y-5">
+                      {/* Tab switcher */}
+                      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-gray-200">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            // Reload saved address if one was selected, otherwise just flip the flag
+                            if (selectedAddress && selectedAddress !== "__new__") {
+                              loadSelectedAddress(selectedAddress);
+                            } else {
+                              setShipping((s) => ({
+                                ...s,
+                                isDifferentFromBiller: false,
+                                name: userInfo.name,
+                                phone: userInfo.phone,
+                                email: userInfo.email,
+                              }));
+                            }
+                            setShipping((s) => ({ ...s, isDifferentFromBiller: false }));
+                            setShippingPhoneError("");
+                          }}
+                          className={`py-3 text-sm font-semibold transition-colors ${
+                            !shipping.isDifferentFromBiller
+                              ? "bg-orange-500 text-white"
+                              : "bg-white text-gray-500 hover:bg-gray-50"
+                          }`}
+                        >
+                          For me
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            // Wipe ALL fields so saved address never bleeds into "For someone else"
+                            setShipping({ ...BLANK_SHIPPING, isDifferentFromBiller: true });
+                            setSelectedAddress("");
+                            setShippingPhoneError("");
+                          }}
+                          className={`border-l border-gray-200 py-3 text-sm font-semibold transition-colors ${
+                            shipping.isDifferentFromBiller
+                              ? "bg-orange-500 text-white"
+                              : "bg-white text-gray-500 hover:bg-gray-50"
+                          }`}
+                        >
+                          For someone else
+                        </button>
+                      </div>
+ 
+                      {/* ── FOR ME ── */}
+                      {!shipping.isDifferentFromBiller && (
+                        <div className="space-y-4">
+                          {savedAddresses.filter((a) => !a.isDifferentFromBiller).length > 0 &&
+                            selectedAddress !== "__new__" && (
+                              <div className="space-y-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                  Saved address
+                                </p>
+                                {savedAddresses
+                                  .filter((a) => !a.isDifferentFromBiller)
+                                  .map((address) => (
+                                    <div
+                                      key={address.id}
+                                      onClick={() => {
+                                        setSelectedAddress(address.id);
+                                        loadSelectedAddress(address.id);
+                                        setShipping((s) => ({
+                                          ...s,
+                                          isDifferentFromBiller: false,
+                                          isGift: address.isGift || false,
+                                        }));
+                                      }}
+                                      className={`cursor-pointer rounded-xl border p-4 transition-all ${
+                                        selectedAddress === address.id
+                                          ? "border-orange-500 bg-orange-50"
+                                          : "border-gray-200 hover:border-gray-300"
+                                      }`}
+                                    >
+                                      <div className="flex items-start justify-between">
+                                        <div>
+                                          <p className="font-medium text-gray-900">{address.name}</p>
+                                          <p className="mt-0.5 text-sm text-gray-500">
+                                            {address.address}, {address.building}, {address.street}
+                                          </p>
+                                          <p className="text-sm text-gray-500">
+                                            {address.city}, {address.state} – {address.pin}
+                                          </p>
+                                          <p className="mt-0.5 text-sm text-gray-500">{address.phone}</p>
+                                          {address.isGift && (
+                                            <span className="mt-1 inline-block rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800">
+                                              🎁 Gift
+                                            </span>
+                                          )}
+                                        </div>
+                                        {selectedAddress === address.id && (
+                                          <span className="ml-2 shrink-0 rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
+                                            Selected
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+ 
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedAddress("__new__");
+                                    setShipping({
+                                      name: userInfo.name,
+                                      address: "",
+                                      building: "",
+                                      street: "",
+                                      landmark: "",
+                                      pin: "",
+                                      city: "",
+                                      state: "",
+                                      phone: userInfo.phone,
+                                      email: "",
+                                      isGift: false,
+                                      isDifferentFromBiller: false,
+                                    });
+                                  }}
+                                  className="w-full rounded-xl border border-dashed border-orange-400 py-3 text-sm font-semibold text-orange-500 transition-colors hover:bg-orange-50"
+                                >
+                                  + Add new address
+                                </button>
                               </div>
+                            )}
+ 
+                          {/* New address form */}
+                          {(savedAddresses.filter((a) => !a.isDifferentFromBiller).length === 0 ||
+                            selectedAddress === "__new__") && (
+                            <div className="space-y-3">
+                              {selectedAddress === "__new__" && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedAddress(
+                                      savedAddresses.find((a) => !a.isDifferentFromBiller)?.id || ""
+                                    );
+                                  }}
+                                  className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-800"
+                                >
+                                  ← Back to saved addresses
+                                </button>
+                              )}
+                              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                New shipping address
+                              </p>
+                              <div className="grid grid-cols-2 gap-3">
+                                <input
+                                  required
+                                  type="text"
+                                  placeholder="Building"
+                                  value={shipping.building}
+                                  onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
+                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                />
+                                <input
+                                  required
+                                  type="text"
+                                  placeholder="Street"
+                                  value={shipping.street}
+                                  onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                />
+                              </div>
+                              <input
+                                required
+                                type="text"
+                                placeholder="Address"
+                                value={shipping.address}
+                                onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Landmark (Optional)"
+                                value={shipping.landmark}
+                                onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                              <div className="grid grid-cols-2 gap-3">
+                                <input
+                                  required
+                                  type="text"
+                                  placeholder="PIN Code"
+                                  value={shipping.pin}
+                                  onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                />
+                                <input
+                                  required
+                                  type="text"
+                                  placeholder="City"
+                                  value={shipping.city}
+                                  onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                />
+                              </div>
+                              <select
+                                required
+                                value={shipping.state}
+                                onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              >
+                                <option value="">Select State / Union Territory</option>
+                                {INDIAN_STATES_AND_UTS.map((state) => (
+                                  <option key={state} value={state}>{state}</option>
+                                ))}
+                              </select>
                             </div>
-                          ))}
-
-                          <div className="text-center">
-                            <button
-                              onClick={() => {
-                                setSelectedAddress("");
-                                // Reset shipping info when adding new address
-                                setShipping({
-                                  name: userInfo.name,
-                                  address: "",
-                                  building: "",
-                                  street: "",
-                                  landmark: "",
-                                  pin: "",
-                                  city: "",
-                                  state: "",
-                                  phone: userInfo.phone,
-                                  email: "",
-                                  isGift: false,
-                                  isDifferentFromBiller: false,
-                                });
-                              }}
-                              className="text-sm font-medium text-orange-500 hover:text-orange-600"
-                            >
-                              + Add New Address
-                            </button>
-                          </div>
-
+                          )}
+ 
+                          {/* Gift checkbox */}
                           <div className="border-t pt-4">
-                            <h3 className="mb-3 font-semibold text-gray-900">
-                              Or Enter New Address
-                            </h3>
+                            <label className="flex cursor-pointer items-center gap-3">
+                              <input
+                                type="checkbox"
+                                id="isGift"
+                                checked={shipping.isGift}
+                                onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
+                                className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                              />
+                              <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
+                            </label>
                           </div>
                         </div>
                       )}
-
-                      {/* Shipping Information Form */}
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-900">
-                          {savedAddresses.length > 0 ? "New Shipping Address" : "Shipping Address"}
-                        </h3>
-                        
-                        {/* Different Recipient Toggle */}
-                        <div className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
-                            id="differentRecipient"
-                            checked={shipping.isDifferentFromBiller}
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              setShipping((s) => ({ 
-                                ...s, 
-                                isDifferentFromBiller: isChecked,
-                                name: isChecked ? "" : userInfo.name,
-                                phone: isChecked ? "" : userInfo.phone,
-                                email: isChecked ? "" : userInfo.email
-                              }));
-                            }}
-                            className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                          />
-                          <label htmlFor="differentRecipient" className="font-medium text-gray-900">
-                            Shipping to someone else?
-                          </label>
-                        </div>
-
-                        {shipping.isDifferentFromBiller && (
-                          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                            <p className="mb-3 text-sm text-blue-800">
-                              Please provide the recipient's details
+ 
+                      {/* ── FOR SOMEONE ELSE ── */}
+                      {shipping.isDifferentFromBiller && (
+                        <div className="space-y-4">
+                          <div className="space-y-3">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                              Recipient details
                             </p>
                             <input
-                              required={shipping.isDifferentFromBiller}
+                              required
                               type="text"
-                              placeholder="Recipient's Full Name"
+                              placeholder="Recipient's full name"
                               value={shipping.name}
                               onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
-                              className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
-                            <input
-                              required={shipping.isDifferentFromBiller}
-                              type="tel"
-                              placeholder="Recipient's Phone Number *"
-                              value={shipping.phone}
-                              onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
-                              className="mb-3 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            />
-                            <p className="mb-2 text-xs text-gray-600">
-                              * Phone number is required for delivery updates
-                            </p>
                             <input
                               type="email"
-                              placeholder="Recipient's Email (Optional)"
+                              placeholder="Recipient's email"
                               value={shipping.email || ""}
                               onChange={(e) => setShipping((s) => ({ ...s, email: e.target.value }))}
                               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
+                            {/* Recipient phone — digits only, max 10 */}
+                            <div>
+                              <input
+                                required
+                                type="tel"
+                                placeholder="Recipient's phone number (10 digits) *"
+                                value={shipping.phone}
+                                maxLength={10}
+                                onChange={(e) => {
+                                  const val = sanitizePhone(e.target.value);
+                                  setShipping((s) => ({ ...s, phone: val }));
+                                  setShippingPhoneError(
+                                    val.length > 0 && val.length < 10
+                                      ? "Phone number must be 10 digits"
+                                      : ""
+                                  );
+                                }}
+                                className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                                  shippingPhoneError ? "border-red-500" : "border-gray-300"
+                                }`}
+                              />
+                              {shippingPhoneError ? (
+                                <p className="mt-1 text-xs text-red-600">{shippingPhoneError}</p>
+                              ) : (
+                                <p className="mt-1 text-xs text-gray-500">
+                                  * Required for delivery updates
+                                </p>
+                              )}
+                            </div>
                           </div>
-                        )}
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <input
-                            required
-                            type="text"
-                            placeholder="Building"
-                            value={shipping.building}
-                            onChange={(e) =>
-                              setShipping((s) => ({ ...s, building: e.target.value }))
-                            }
-                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                          />
-                          <input
-                            required
-                            type="text"
-                            placeholder="Street"
-                            value={shipping.street}
-                            onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
-                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                          />
+ 
+                          <div className="space-y-3">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                              Delivery address
+                            </p>
+                            <div className="grid grid-cols-2 gap-3">
+                              <input
+                                required
+                                type="text"
+                                placeholder="Building"
+                                value={shipping.building}
+                                onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
+                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                              <input
+                                required
+                                type="text"
+                                placeholder="Street"
+                                value={shipping.street}
+                                onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                            </div>
+                            <input
+                              required
+                              type="text"
+                              placeholder="Address"
+                              value={shipping.address}
+                              onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Landmark (Optional)"
+                              value={shipping.landmark}
+                              onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                            <div className="grid grid-cols-2 gap-3">
+                              <input
+                                required
+                                type="text"
+                                placeholder="PIN Code"
+                                value={shipping.pin}
+                                onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                              <input
+                                required
+                                type="text"
+                                placeholder="City"
+                                value={shipping.city}
+                                onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                              />
+                            </div>
+                            <select
+                              required
+                              value={shipping.state}
+                              onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            >
+                              <option value="">Select State / Union Territory</option>
+                              {INDIAN_STATES_AND_UTS.map((state) => (
+                                <option key={state} value={state}>{state}</option>
+                              ))}
+                            </select>
+                          </div>
+ 
+                          {/* Gift checkbox */}
+                          <div className="border-t pt-4">
+                            <label className="flex cursor-pointer items-center gap-3">
+                              <input
+                                type="checkbox"
+                                id="isGiftOthers"
+                                checked={shipping.isGift}
+                                onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
+                                className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                              />
+                              <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
+                            </label>
+                          </div>
                         </div>
-                        <input
-                          required
-                          type="text"
-                          placeholder="Address"
-                          value={shipping.address}
-                          onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-
-                        <input
-                          type="text"
-                          placeholder="Landmark (Optional)"
-                          value={shipping.landmark}
-                          onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                        <div className="grid grid-cols-2 gap-3">
-                          <input
-                            required
-                            type="text"
-                            placeholder="PIN Code"
-                            value={shipping.pin}
-                            onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
-                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                          />
-                          <input
-                            required
-                            type="text"
-                            placeholder="City"
-                            value={shipping.city}
-                            onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
-                            className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                          />
-                        </div>
-                        <select
-                          required
-                          value={shipping.state}
-                          onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        >
-                          <option value="">Select State / Union Territory</option>
-                          {INDIAN_STATES_AND_UTS.map((state) => (
-                            <option key={state} value={state}>
-                              {state}
-                            </option>
-                          ))}
-                        </select>
-
-                        {/* Gift Checkbox */}
-                        <div className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
-                            id="isGift"
-                            checked={shipping.isGift}
-                            onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
-                            className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                          />
-                          <label htmlFor="isGift" className="font-medium text-gray-900">
-                            Is this a gift? 🎁
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="flex space-x-3">
+                      )}
+ 
+                      {/* Navigation buttons */}
+                      <div className="flex space-x-3 pt-2">
                         <button
                           onClick={() => setStep(1)}
                           disabled={isProcessing}
@@ -1311,12 +1478,21 @@ const CartPage = () => {
                         <button
                           onClick={() => setStep(3)}
                           disabled={
-                            (shipping.isDifferentFromBiller && !shipping.name)||
+                            // For someone else: name, valid phone, and full address required
+                            (shipping.isDifferentFromBiller && (
+                              !shipping.name ||
+                              !shipping.phone ||
+                              !isShippingPhoneValid
+                            )) ||
+                            // Address fields always required
                             !shipping.address ||
                             !shipping.pin ||
                             !shipping.city ||
                             !shipping.state ||
-                            (shipping.isDifferentFromBiller && !shipping.phone)
+                            // For me with no saved address: building + street required too
+                            (!shipping.isDifferentFromBiller &&
+                              savedAddresses.filter((a) => !a.isDifferentFromBiller).length === 0 &&
+                              (!shipping.building || !shipping.street))
                           }
                           className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
                         >
