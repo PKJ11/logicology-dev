@@ -1099,7 +1099,6 @@ const CartPage = () => {
                       </button>
                     </div>
                   )}
-                  /// Step 2: Shipping Address
                   {step === 2 && (
                     <div className="space-y-5">
                       {/* Tab switcher */}
