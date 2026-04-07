@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Script from "next/script";
 import Link from "next/link";
 import Image from "next/image";
@@ -37,8 +37,7 @@ const REFERRAL_OPTIONS = [
 ];
 
 const CAMP_FEE = 8999;
-// const RAZORPAY_KEY_ID = "rzp_live_RNIwt54hh7eqmk";
-const RAZORPAY_KEY_ID = "rzp_test_RM7EaWFSnW9Fod";
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
 
 // ── Scroll animation hook ──────────────────────────────────────────────────────
 function useReveal() {
@@ -56,6 +55,21 @@ function useReveal() {
   }, []);
   return { ref, visible };
 }
+
+// ── Load Razorpay Script Dynamically ──────────────────────────────────────────
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
@@ -130,8 +144,11 @@ function HeroSection() {
       display: "flex", alignItems: "center", justifyContent: "center",
       position: "relative", overflow: "hidden", paddingTop: 80,
     }}>
+      {/* Background decorative elements */}
       <div style={{ position: "absolute", top: -120, right: -120, width: 500, height: 500, borderRadius: "50%", background: "rgba(216,174,79,0.12)", filter: "blur(60px)" }} />
       <div style={{ position: "absolute", bottom: -80, left: -80, width: 400, height: 400, borderRadius: "50%", background: "rgba(228,92,72,0.10)", filter: "blur(60px)" }} />
+      
+      {/* Animated floating circles */}
       {[
         { top: "20%", left: "8%", size: 12, color: "#D8AE4F", delay: "0s" },
         { top: "70%", left: "5%", size: 8, color: "#E45C48", delay: "0.4s" },
@@ -146,6 +163,8 @@ function HeroSection() {
           animation: `float 4s ease-in-out ${d.delay} infinite`,
         }} />
       ))}
+      
+      {/* Main Content - This was missing! */}
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "80px 24px", textAlign: "center", position: "relative", zIndex: 1 }}>
         <div style={{
           display: "inline-block", background: "rgba(216,174,79,0.2)",
@@ -154,6 +173,7 @@ function HeroSection() {
           fontFamily: "'Outfit', sans-serif", fontSize: 13, fontWeight: 600,
           color: "#D8AE4F", letterSpacing: "0.08em", textTransform: "uppercase",
         }}>Summer 2025 · Ages 6–14</div>
+        
         <h1 style={{
           fontFamily: "'Outfit', sans-serif", fontWeight: 800,
           fontSize: "clamp(36px, 6vw, 72px)", lineHeight: 1.1,
@@ -163,6 +183,7 @@ function HeroSection() {
           <span style={{ color: "#D8AE4F" }}>Doesn't Just Play —</span><br />
           They Level Up.
         </h1>
+        
         <p style={{
           fontFamily: "'Outfit', sans-serif", fontSize: "clamp(16px, 2vw, 20px)",
           color: "rgba(255,255,255,0.80)", maxWidth: 640, margin: "0 auto 48px", lineHeight: 1.7,
@@ -171,6 +192,7 @@ function HeroSection() {
           for children aged 6–14. Two weeks that spark curiosity, build confidence,
           and plant the seeds of lifelong thinking skills.
         </p>
+        
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a href="#enroll" style={{
             background: "#E45C48", color: "#fff",
@@ -182,6 +204,7 @@ function HeroSection() {
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(228,92,72,0.5)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 32px rgba(228,92,72,0.45)"; }}
           >Enroll Now →</a>
+          
           <a href="#why-camps" style={{
             background: "rgba(255,255,255,0.12)", border: "2px solid rgba(255,255,255,0.3)",
             color: "#fff", padding: "18px 44px", borderRadius: 100,
@@ -193,6 +216,7 @@ function HeroSection() {
             onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
           >Learn More</a>
         </div>
+        
         <div style={{
           display: "flex", gap: 48, justifyContent: "center", flexWrap: "wrap",
           marginTop: 72, paddingTop: 48, borderTop: "1px solid rgba(255,255,255,0.15)",
@@ -536,53 +560,149 @@ function EnrollmentSection() {
     } catch (err) { console.error("WhatsApp error:", err); }
   };
 
-  const handleSubmit = async () => {
-    if (!validate() || isProcessing) return;
-    setIsProcessing(true);
-    try {
-      const res = await fetch("/api/razorpay-order", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: CAMP_FEE, currency: "INR", receipt: `camp_${Date.now()}` }),
-      });
-      const { order } = await res.json();
-      if (!order) { alert("Failed to create order. Please try again."); setIsProcessing(false); return; }
+  const handleSubmit = useCallback(async () => {
+  if (!validate() || isProcessing) return;
+  setIsProcessing(true);
+  
+  try {
+    // Load Razorpay script dynamically
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      alert("Failed to load payment gateway. Please refresh and try again.");
+      setIsProcessing(false);
+      return;
+    }
 
-      const options = {
-        key: RAZORPAY_KEY_ID, amount: order.amount, currency: order.currency,
-        name: "Logicology", description: `Summer Camp Enrollment — ${form.preferredBatch}`, order_id: order.id,
-        handler: async function (response: any) {
-          setIsPaymentProcessing(true);
-          try {
-            await fetch("/api/save-order-info", {
-              method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                userInfo: { name: form.parentName, email: form.email, phone: form.phone },
-                shipping: { name: form.childName, address: "Summer Camp", building: "", street: "", landmark: "", pin: "", city: "", state: "", phone: form.phone, email: form.email, isGift: false, isDifferentFromBiller: false },
-                cart: [{ name: `Logicology Summer Camp — ${form.preferredBatch}`, price: `₹${CAMP_FEE}`, quantity: 1, razorpayItemId: "summer-camp" }],
-                paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id,
-                razorpayDesc: `Summer Camp — ${form.childName}, Batch: ${form.preferredBatch}`,
-                totalAmount: CAMP_FEE, discountAmount: 0, appliedPromo: null,
-                isGift: false, isDifferentFromBiller: false,
-                campDetails: { childName: form.childName, childAge: form.childAge, childGrade: form.childGrade, batch: form.preferredBatch, allergies: form.allergies, referral: form.referral },
-              }),
-            });
-            await sendWhatsApp(response.razorpay_payment_id);
-          } catch (err) { console.error("Post-payment error:", err); }
-          finally {
-            setIsPaymentProcessing(false); setIsProcessing(false);
-            alert(`🎉 Enrollment confirmed! Payment ID: ${response.razorpay_payment_id}. Check your email and WhatsApp for details.`);
-          }
-        },
-        prefill: { name: form.parentName, email: form.email, contact: form.phone },
-        notes: { child_name: form.childName, batch: form.preferredBatch, grade: form.childGrade },
-        theme: { color: "#0A8A80" },
-        modal: { ondismiss: () => setIsProcessing(false) },
-      };
-      if (typeof window !== "undefined" && (window as any).Razorpay) {
-        new (window as any).Razorpay(options).open();
-      } else { alert("Payment gateway not loaded. Please refresh and try again."); setIsProcessing(false); }
-    } catch (err) { console.error("Checkout error:", err); alert("An error occurred. Please try again."); setIsProcessing(false); }
-  };
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Send amount in RUPEES (not paise) - match cart page behavior
+    const res = await fetch("/api/razorpay-order", {
+      method: "POST", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        amount: CAMP_FEE,  // Send in rupees (8999), NOT multiplied by 100
+        currency: "INR", 
+        receipt: `camp_${Date.now()}` 
+      }),
+    });
+    
+    // Check if response is ok
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Failed to create order");
+    }
+    
+    const { order } = await res.json();
+    
+    if (!order) { 
+      alert("Failed to create order. Please try again."); 
+      setIsProcessing(false); 
+      return; 
+    }
+
+    const orderDescription = `Summer Camp Enrollment — ${form.preferredBatch} for ${form.childName}`;
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Logicology",
+      description: orderDescription,
+      order_id: order.id,
+      handler: async function (response: any) {
+        setIsPaymentProcessing(true);
+        try {
+          // Save order info
+          await fetch("/api/save-summer-camp-registration", {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerInfo: {
+                name: form.parentName,
+                email: form.email,
+                phone: form.phone,
+              },
+              items: [{
+                name: `Logicology Summer Camp — ${form.preferredBatch}`,
+                price: CAMP_FEE,
+                quantity: 1,
+                itemId: "summer-camp",
+              }],
+              paymentInfo: {
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id,
+                amount: CAMP_FEE,
+                currency: "INR",
+                status: "completed",
+                description: orderDescription,
+              },
+              totals: {
+                subtotal: CAMP_FEE,
+                discount: 0,
+                total: CAMP_FEE,
+              },
+              discountCode: null,
+              campDetails: {
+                childName: form.childName,
+                childAge: form.childAge,
+                childGrade: form.childGrade,
+                batch: form.preferredBatch,
+                allergies: form.allergies,
+                referral: form.referral,
+              },
+            }),
+          });
+          
+          await sendWhatsApp(response.razorpay_payment_id);
+          
+          alert(`🎉 Enrollment confirmed! Payment ID: ${response.razorpay_payment_id}. Check your email and WhatsApp for details.`);
+          
+          // Reset form
+          setForm({
+            parentName: "", email: "", phone: "", childName: "",
+            childAge: "", childGrade: "", preferredBatch: "",
+            allergies: "", referral: "", consent: false,
+          });
+          
+          // Clear errors
+          setErrors({});
+          
+        } catch (err) { 
+          console.error("Post-payment error:", err);
+          alert("Payment was successful but there was an issue saving your enrollment. Please contact support with your Payment ID: " + response.razorpay_payment_id);
+        } finally {
+          setIsPaymentProcessing(false);
+          setIsProcessing(false);
+        }
+      },
+      prefill: { 
+        name: form.parentName, 
+        email: form.email, 
+        contact: form.phone 
+      },
+      notes: { 
+        child_name: form.childName, 
+        batch: form.preferredBatch, 
+        grade: form.childGrade,
+        child_age: form.childAge
+      },
+      theme: { color: "#0A8A80" },
+      modal: { 
+        ondismiss: () => {
+          setIsProcessing(false);
+        }
+      }
+    };
+    
+    const razorpay = new (window as any).Razorpay(options);
+    razorpay.open();
+    
+  } catch (err) { 
+    console.error("Checkout error:", err); 
+    alert(err instanceof Error ? err.message : "An error occurred. Please try again."); 
+    setIsProcessing(false); 
+  }
+}, [form, isProcessing]);
 
   const inp = (hasError?: boolean): React.CSSProperties => ({
     width: "100%", padding: "14px 18px", borderRadius: 12,
@@ -805,7 +925,7 @@ function DarkOnGoldBtn() {
 export default function SummerCampPage() {
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+      {/* Remove the auto-loading Script tag - we'll load dynamically */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
@@ -821,15 +941,15 @@ export default function SummerCampPage() {
         }
       `}</style>
       <NavBar />
-      <HeroSection />          {/* Dark teal gradient */}
-      <WhyCampsSection />      {/* 🔴 Coral #E45C48 */}
-      <WhyLogicologySection /> {/* 🟡 Gold #D8AE4F */}
-      <CurriculumSection />    {/* ⬜ White */}
-      <HowToEnrollSection />   {/* 🔴 Coral #E45C48 */}
-      <TestimonialsSection />  {/* 🟡 Gold #D8AE4F */}
-      <FAQSection />           {/* 🩶 Light grey */}
-      <EnrollmentSection />    {/* 🟢 Teal gradient */}
-      <Footer />               {/* 🟢 Dark teal */}
+      <HeroSection />
+      <WhyCampsSection />
+      <WhyLogicologySection />
+      <CurriculumSection />
+      <HowToEnrollSection />
+      <TestimonialsSection />
+      <FAQSection />
+      <EnrollmentSection />
+      <Footer />
     </>
   );
 }
