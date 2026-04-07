@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CartProvider>
           <EdgeStoreProvider>
-            <TiersProvider>
+            {/* <TiersProvider> */}
               <ToastProvider>
           {/* Meta Pixel Script */}
           <Script id="meta-pixel" strategy="afterInteractive">
@@ -86,7 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <FeedbackButton />
           <Toaster position="top-right" />
           </ToastProvider>
-          </TiersProvider>
+          {/* </TiersProvider> */}
           </EdgeStoreProvider>
         </CartProvider>
       </body>
