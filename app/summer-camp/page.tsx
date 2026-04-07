@@ -37,7 +37,8 @@ const REFERRAL_OPTIONS = [
 ];
 
 const CAMP_FEE = 8999;
-const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+// const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RM7EaWFSnW9Fod";
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
 
 // ── Scroll animation hook ──────────────────────────────────────────────────────
 function useReveal() {
