@@ -85,90 +85,225 @@ const loadRazorpayScript = (): Promise<boolean> => {
 
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navItems = ["Why Camps", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"];
+
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        background: "rgba(255,255,255,0.97)",
-        boxShadow: "0 2px 20px rgba(10,138,128,0.10)",
-        backdropFilter: "blur(12px)",
-      }}
-    >
-      <div
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: block !important; }
+        }
+        @media (min-width: 769px) {
+          .nav-desktop { display: flex !important; }
+          .nav-mobile-btn { display: none !important; }
+        }
+      `}</style>
+
+      <nav
         style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "0 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 72,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          background: "rgba(255,255,255,0.97)",
+          boxShadow: "0 2px 20px rgba(10,138,128,0.10)",
+          backdropFilter: "blur(12px)",
         }}
       >
-        <Link href="/" className="flex items-center gap-2">
-          <div className="relative h-auto w-[150px]">
-            <Image
-              src="https://ik.imagekit.io/pratik2002/logicology-logo_74-P-ICfG?updatedAt=1756257433107"
-              alt="Logicology Logo"
-              width={150}
-              height={60}
-              className="object-contain"
-            />
+        <div
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            padding: "0 24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: 72,
+          }}
+        >
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative h-auto w-[150px]">
+              <Image
+                src="https://ik.imagekit.io/pratik2002/logicology-logo_74-P-ICfG?updatedAt=1756257433107"
+                alt="Logicology Logo"
+                width={150}
+                height={60}
+                className="object-contain"
+              />
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div
+            className="nav-desktop"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 28,
+            }}
+          >
+            {navItems.map((l) => (
+              <a
+                key={l}
+                href={`#${l.toLowerCase().replace(/\s+/g, "-")}`}
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "#0B3F44",
+                  textDecoration: "none",
+                  opacity: 0.85,
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.85")}
+              >
+                {l}
+              </a>
+            ))}
+            <a
+              href="#enroll"
+              style={{
+                background: "linear-gradient(135deg, #E45C48, #c94836)",
+                color: "#fff",
+                padding: "10px 24px",
+                borderRadius: 100,
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                textDecoration: "none",
+                boxShadow: "0 4px 16px rgba(228,92,72,0.35)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                display: "inline-block",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(228,92,72,0.40)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(228,92,72,0.35)";
+              }}
+            >
+              Enroll Now →
+            </a>
           </div>
-        </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          {["Why Camps", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"].map((l) => (
+
+          {/* Mobile Hamburger Menu Button */}
+          <button
+            className="nav-mobile-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "8px",
+              zIndex: 102,
+            }}
+          >
+            <div
+              style={{
+                width: 26,
+                height: 20,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              }}
+            >
+              <span
+                style={{
+                  height: "2px",
+                  background: "#0B3F44",
+                  width: "100%",
+                  transition: "all 0.3s",
+                  transform: mobileMenuOpen ? "rotate(45deg) translateY(10px)" : "none",
+                }}
+              />
+              <span
+                style={{
+                  height: "2px",
+                  background: "#0B3F44",
+                  width: "100%",
+                  transition: "all 0.3s",
+                  opacity: mobileMenuOpen ? 0 : 1,
+                }}
+              />
+              <span
+                style={{
+                  height: "2px",
+                  background: "#0B3F44",
+                  width: "100%",
+                  transition: "all 0.3s",
+                  transform: mobileMenuOpen ? "rotate(-45deg) translateY(-10px)" : "none",
+                }}
+              />
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 72,
+            left: 0,
+            right: 0,
+            background: "rgba(255,255,255,0.98)",
+            backdropFilter: "blur(12px)",
+            zIndex: 99,
+            padding: "20px 24px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}
+        >
+          {navItems.map((l) => (
             <a
               key={l}
               href={`#${l.toLowerCase().replace(/\s+/g, "-")}`}
+              onClick={() => setMobileMenuOpen(false)}
               style={{
                 fontFamily: "'Outfit', sans-serif",
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: 600,
                 color: "#0B3F44",
                 textDecoration: "none",
-                opacity: 0.85,
-                transition: "opacity 0.2s",
+                padding: "12px 0",
+                borderBottom: "1px solid rgba(10,138,128,0.10)",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.85")}
             >
               {l}
             </a>
           ))}
           <a
             href="#enroll"
+            onClick={() => setMobileMenuOpen(false)}
             style={{
               background: "linear-gradient(135deg, #E45C48, #c94836)",
               color: "#fff",
-              padding: "10px 24px",
+              padding: "12px 24px",
               borderRadius: 100,
               fontFamily: "'Outfit', sans-serif",
               fontWeight: 700,
               fontSize: 14,
               textDecoration: "none",
               boxShadow: "0 4px 16px rgba(228,92,72,0.35)",
-              transition: "transform 0.2s, box-shadow 0.2s",
               display: "inline-block",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(228,92,72,0.40)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 16px rgba(228,92,72,0.35)";
+              textAlign: "center",
+              marginTop: 8,
             }}
           >
             Enroll Now →
           </a>
         </div>
-      </div>
-    </nav>
+      )}
+    </>
   );
 }
 
@@ -286,7 +421,7 @@ function HeroSection() {
             lineHeight: 1.7,
           }}
         >
-          With Logicology Summer Workshops These workshops are designed for holistic development of
+          With Logicology Summer Workshops. These workshops are designed for holistic development of
           your child. If you want something beyond just drawing, painting and art while keeping your
           child engaged, join Logicology. We have a range of fun learning workshops.
         </p>
@@ -503,7 +638,7 @@ function WhyCampsSection() {
             meaningful experiences that shape how a child thinks, connects, and grows.
           </p>
         </div>
-        <div
+        {/* <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
@@ -537,7 +672,7 @@ function WhyCampsSection() {
               </p>
             </CoralCard>
           ))}
-        </div>
+        </div> */}
         <div style={{ textAlign: "center", marginTop: 56 }}>
           <WhiteOnCoralBtn />
         </div>
@@ -1270,6 +1405,7 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
 }
 
 /** Single testimonial card */
+/** Single testimonial card */
 function TestimonialSlideCard({ t }: { t: TestimonialData }) {
   return (
     <div
@@ -1288,6 +1424,7 @@ function TestimonialSlideCard({ t }: { t: TestimonialData }) {
           "transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.35s ease, background 0.25s ease",
         cursor: "default",
         willChange: "transform",
+        height: "100%",
       }}
     >
       {/* Decorative quote mark */}
@@ -1305,7 +1442,7 @@ function TestimonialSlideCard({ t }: { t: TestimonialData }) {
         "
       </div>
 
-      {/* Quote wrapper — KEY FIX: use max-height transition, not display/clamp toggle */}
+      {/* Quote wrapper */}
       <div className="t-card-quote-wrapper">
         <p
           className="t-card-quote"
@@ -1371,21 +1508,21 @@ function TestimonialsSection() {
   return (
     <>
       <style>{`
-        /* ── Quote: clamp to 2 lines with ellipsis by default ── */
+        /* ── Desktop styles (default) ── */
+        /* Quote: clamp to 2 lines with ellipsis by default */
         .t-card-quote-wrapper {
-          /* 2 lines × 1.78 line-height × 15px font = ~53px; add a little buffer */
-          max-height: 54px;
+          max-height: 54px; /* 2 lines × 1.78 line-height × 15px = ~53px */
           overflow: hidden;
           transition: max-height 0.45s ease;
           margin-bottom: 0;
         }
 
-        /* On hover, open to a large max-height so full text is visible */
+        /* On hover, open to show full text */
         .t-card:hover .t-card-quote-wrapper {
-          max-height: 600px; /* large enough for the longest quote */
+          max-height: 600px; /* Large enough for the longest quote */
         }
 
-        /* Ellipsis only when collapsed: applied to the <p> */
+        /* Ellipsis only when collapsed */
         .t-card-quote {
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -1394,7 +1531,7 @@ function TestimonialsSection() {
           transition: -webkit-line-clamp 0s;
         }
 
-        /* Remove clamp on hover so text renders fully inside the expanding wrapper */
+        /* Remove clamp on hover */
         .t-card:hover .t-card-quote {
           display: block;
           -webkit-line-clamp: unset;
@@ -1402,7 +1539,7 @@ function TestimonialsSection() {
           overflow: visible;
         }
 
-        /* ── hover enlarge card ── */
+        /* Hover enlarge effect for desktop */
         .t-card:hover {
           transform: scale(1.048) translateY(-6px) !important;
           box-shadow: 0 28px 60px rgba(11,63,68,0.18) !important;
@@ -1411,17 +1548,37 @@ function TestimonialsSection() {
           position: relative;
         }
 
-        /* ── swiper wrapper padding ── */
-        .t-swiper {
-          padding: 14px 56px 52px !important;
+        /* ── Mobile styles (max-width: 767px) ── */
+        @media (max-width: 767px) {
+          /* On mobile, always show full text */
+          .t-card-quote-wrapper {
+            max-height: none !important;
+            overflow: visible !important;
+          }
+          
+          .t-card-quote {
+            display: block !important;
+            -webkit-line-clamp: unset !important;
+            overflow: visible !important;
+          }
+          
+          /* Keep subtle hover but without text expansion since it's already expanded */
+          .t-card:hover {
+            transform: scale(1.02) translateY(-4px) !important;
+          }
         }
 
-        /* ── slide height (auto so cards can grow on hover) ── */
+        /* ── Swiper wrapper padding ── */
+        .t-swiper {
+          padding: 14px 40px 52px !important;
+        }
+
+        /* ── Slide height (auto so cards can grow on hover) ── */
         .t-swiper .swiper-slide {
           height: auto;
         }
 
-        /* ── nav arrows ── */
+        /* ── Nav arrows ── */
         .t-swiper .swiper-button-prev,
         .t-swiper .swiper-button-next {
           color: #0B3F44;
@@ -1434,20 +1591,31 @@ function TestimonialsSection() {
           top: 46%;
           transition: background 0.2s ease, box-shadow 0.2s ease;
         }
+        
         .t-swiper .swiper-button-prev { left: 4px; }
         .t-swiper .swiper-button-next { right: 4px; }
+        
         .t-swiper .swiper-button-prev:hover,
         .t-swiper .swiper-button-next:hover {
           background: rgba(255,255,255,0.92);
           box-shadow: 0 4px 18px rgba(11,63,68,0.14);
         }
+        
         .t-swiper .swiper-button-prev::after,
         .t-swiper .swiper-button-next::after {
           font-size: 13px;
           font-weight: 900;
         }
 
-        /* ── pagination dots ── */
+        /* Hide navigation arrows on mobile for cleaner look (optional) */
+        @media (max-width: 640px) {
+          .t-swiper .swiper-button-prev,
+          .t-swiper .swiper-button-next {
+            display: none;
+          }
+        }
+
+        /* ── Pagination dots ── */
         .t-swiper .swiper-pagination-bullet {
           background: rgba(11,63,68,0.28);
           opacity: 1;
@@ -1455,6 +1623,7 @@ function TestimonialsSection() {
           height: 8px;
           transition: background 0.2s ease, transform 0.2s ease;
         }
+        
         .t-swiper .swiper-pagination-bullet-active {
           background: #0B3F44;
           transform: scale(1.4);
@@ -1559,13 +1728,18 @@ function TestimonialsSection() {
             navigation={true}
             pagination={{ clickable: true }}
             breakpoints={{
-              640: { slidesPerView: 1 },
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
+              // On screens 640px and above, show 2 cards (tablet)
+              640: { 
+                slidesPerView: 2,
+              },
+              // On screens 1024px and above, show 3 cards (desktop)
+              1024: { 
+                slidesPerView: 3,
+              },
             }}
           >
-            {TESTIMONIALS.map((t) => (
-              <SwiperSlide key={t.name}>
+            {TESTIMONIALS.map((t, index) => (
+              <SwiperSlide key={t.name + index}>
                 <TestimonialSlideCard t={t} />
               </SwiperSlide>
             ))}
