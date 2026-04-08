@@ -486,7 +486,7 @@ function HeroSection() {
           }}
         >
           {[
-            { num: "8+", label: "Years of Summer Workshops" },
+            { num: "10+", label: "Years of Summer Workshops" },
             { num: "1000+", label: "Children Trained" },
             { num: "6", label: "Workshop Options" },
             { num: "1", label: "Community Access to Logicology Online" },
@@ -538,12 +538,12 @@ function WhyCampsSection() {
     {
       icon: "☀️",
       title: "They Get a Healthy Break from Screens",
-      desc: "The average child spends over four hours a day on screens during summer. Camp replaces passive consumption with active engagement — building, experimenting, debating, and creating. Children come home energised, not drained.",
+      desc: "The average child spends over four hours a day on screens during summer. workshop replaces passive consumption with active engagement — building, experimenting, debating, and creating. Children come home energised, not drained.",
     },
     {
       icon: "⭐",
       title: "They Return More Confident",
-      desc: "There's a specific kind of confidence that comes from solving a problem nobody gave you the answer to. Camp gives children repeated opportunities to succeed through their own effort, and that changes how they see themselves.",
+      desc: "There's a specific kind of confidence that comes from solving a problem nobody gave you the answer to. workshop gives children repeated opportunities to succeed through their own effort, and that changes how they see themselves.",
     },
   ];
 
@@ -634,7 +634,7 @@ function WhyCampsSection() {
             }}
           >
             Summer breaks are long. Without structure, children often default to screens and idle
-            hours. A well-designed summer camp fills that gap — not with busy work, but with
+            hours. A well-designed summer workshop fills that gap — not with busy work, but with
             meaningful experiences that shape how a child thinks, connects, and grows.
           </p>
         </div>
@@ -686,17 +686,17 @@ function WhyLogicologySection() {
   const { ref, visible } = useReveal();
   const diffs = [
     {
-      icon: "📚",
+      icon: "/Images/logicology_camps/Why LOGICOLOGY/ORIGINAL CONTENT.svg",
       title: "Original Content",
       desc: "Our programme is a structured learning journey developed by educators with experience in cognitive development, STEM education, and child psychology.",
     },
     {
-      icon: "🏅",
+      icon: "/Images/logicology_camps/Why LOGICOLOGY/QUALIFIED INSTRUCTERS.svg",
       title: "Highly Qualified Instructors",
       desc: "All our Instructors are highly qualified, more than half have already published their books. Our instructors are professionals who are teachers at heart.",
     },
     {
-      icon: "🔒",
+      icon: "/Images/logicology_camps/Why LOGICOLOGY/SECURE PREMISES.svg",
       title: "Comfortable & Secure Environment",
       desc: "We have a fully air-conditioned premises with CCTV-monitored spaces to ensure that your child gets the safe environment she deserves.",
     },
@@ -801,7 +801,7 @@ function WhyLogicologySection() {
         >
           {diffs.map((d, i) => (
             <GoldCard key={d.title} delay={i * 100}>
-              <div style={{ fontSize: 32, marginBottom: 16 }}>{d.icon}</div>
+              <img src={d.icon} alt={d.title} style={{ width: 48, height: 48, marginBottom: 16, objectFit: "contain" }} />
               <h3
                 style={{
                   fontFamily: "'Outfit', sans-serif",
@@ -840,21 +840,21 @@ function CurriculumSection() {
   const { ref, visible } = useReveal();
   const modules = [
     {
-      icon: "🧠",
+      icon: "/Images/logicology_camps/TAKE AWAYS/LOGICAL REASONING.svg",
       tag: "Core Skill",
       title: "Logical Reasoning",
       desc: "Using a Logical approach to solve problems that can not be learned by rote",
       color: "#0A8A80",
     },
     {
-      icon: "🔍",
+      icon: "/Images/logicology_camps/TAKE AWAYS/CRITICAL THINKING.svg",
       tag: "Core Skill",
       title: "Critical Thinking",
       desc: "Using a step-by-step approach, choosing the best option in given context, evaluating options.",
       color: "#E45C48",
     },
     {
-      icon: "🎯",
+      icon: "/Images/logicology_camps/TAKE AWAYS/PROBLEM SOLVING.svg",
       tag: "Core Skill",
       title: "Problem Solving",
       desc: "Learning to solve problems that they haven't seen before, learning to use trial and error approach.",
@@ -864,21 +864,21 @@ function CurriculumSection() {
 
   const bonuses = [
     {
-      icon: "✨",
+      icon: "/Images/logicology_camps/WHAT MORE YOU GET/FREE ACCESS.svg",
       title: "Free Access to Logicology Subscription",
       desc: "Get free 1-month access to Logicology.online subscription where you get printable worksheets, online games and more",
       color: "#0A8A80",
     },
     {
-      icon: "🎮",
+      icon: "/Images/logicology_camps/WHAT MORE YOU GET/ONLINE LEARNING GAMES.svg",
       title: "Logicology Online Learning Games",
       desc: "Channelise screentime of your children on learning based games, exciting and effective these games are designed for skill development",
       color: "#E45C48",
     },
     {
-      icon: "🏷️",
+      icon: "/Images/logicology_camps/WHAT MORE YOU GET/DISCOUNTED OFFER.svg",
       title: "Discounted Pricing for Logicology Products",
-      desc: "Buy our World Class Board Games, Card Games and books with exclusive special summer camp pricing.",
+      desc: "Buy our World Class Board Games, Card Games and books with exclusive special summer workshop pricing.",
       color: "#D8AE4F",
     },
   ];
@@ -984,7 +984,7 @@ function CurriculumSection() {
                     borderRadius: "20px 20px 0 0",
                   }}
                 />
-                <div style={{ fontSize: 36, marginBottom: 12 }}>{m.icon}</div>
+                <img src={m.icon} alt={m.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
                 <div
                   style={{
                     display: "inline-block",
@@ -1088,7 +1088,7 @@ function CurriculumSection() {
                       borderRadius: "20px 20px 0 0",
                     }}
                   />
-                  <div style={{ fontSize: 36, marginBottom: 12 }}>{b.icon}</div>
+                  <img src={b.icon} alt={b.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain", filter: i === 1 ? "brightness(0)" : "none" }} />
                   <h3
                     style={{
                       fontFamily: "'Outfit', sans-serif",
@@ -1130,19 +1130,19 @@ function HowToEnrollSection() {
   const steps = [
     {
       num: "01",
-      icon: "📋",
+      icon: "/Images/logicology_camps/ENROLLMENT/FILL FORM.svg",
       title: "Fill Out the Enrollment Form",
       desc: "Tell us about your child — name, age, and any details we should know. Takes less than three minutes.",
     },
     {
       num: "02",
-      icon: "🗓️",
+      icon: "/Images/logicology_camps/ENROLLMENT/SELECT BATCH.svg",
       title: "Choose Your Batch",
       desc: "Select the dates and batch that work best for your family. We run multiple batches throughout the summer.",
     },
     {
       num: "03",
-      icon: "✅",
+      icon: "/Images/logicology_camps/ENROLLMENT/MAKE PAYMENT.svg",
       title: "Make the Payment & You're In",
       desc: "Complete a secure online payment to confirm your child's spot. Confirmation email and all prep details arrive within minutes.",
     },
@@ -1268,7 +1268,7 @@ function HowToEnrollSection() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                    <span style={{ fontSize: 22 }}>{s.icon}</span>
+                    <img src={s.icon} alt={s.title} style={{ width: 24, height: 24, objectFit: "contain" }} />
                     <h3
                       style={{
                         fontFamily: "'Outfit', sans-serif",
@@ -1317,31 +1317,31 @@ interface TestimonialData {
 const TESTIMONIALS: TestimonialData[] = [
   {
     quote:
-      "As a Computer Science professor, I have always believed that logic and problem-solving should be nurtured from a very early age. When I came across Logicology, it stood out as perhaps the only summer camp that truly focuses on building these foundational skills in a structured and engaging way. My daughter thoroughly enjoyed the experience, and I was equally impressed with the depth of learning. We were both extremely satisfied with the Summer Camp 2025, and I would strongly recommend Logicology to every parent.",
+      "As a Computer Science professor, I have always believed that logic and problem-solving should be nurtured from a very early age. When I came across Logicology, it stood out as perhaps the only summer workshop that truly focuses on building these foundational skills in a structured and engaging way. My daughter thoroughly enjoyed the experience, and I was equally impressed with the depth of learning. We were both extremely satisfied with the Summer workshop 2025, and I would strongly recommend Logicology to every parent.",
     name: "Dr. Swati Jaiswal",
     role: "Computer Science Professor, VNIT",
-    photo: "https://ik.imagekit.io/pratik2002/swati-removebg-preview.png",
+    photo: "https://ik.imagekit.io/pratik2002/swati.jpeg",
   },
   {
     quote:
-      "As a software professional, I strongly believe that logical thinking is one of the most important skills to build early. Logicology Summer Camp was exactly what I was looking for. It's rare to find something that combines fun with deep thinking so effectively. My son Vish absolutely loved it, and I could see his confidence and problem-solving skills grow. It truly felt like a blessing.",
+      "As a software professional, I strongly believe that logical thinking is one of the most important skills to build early. Logicology Summer workshop was exactly what I was looking for. It's rare to find something that combines fun with deep thinking so effectively. My son Vish absolutely loved it, and I could see his confidence and problem-solving skills grow. It truly felt like a blessing.",
     name: "Chinmay Phadke",
     role: "AI Professional",
     photo: "https://ik.imagekit.io/pratik2002/passport-removebg-preview.png",
   },
   {
     quote:
-      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance camps. Logicology Summer Camp stood out immediately. While it may seem more premium than average camps, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
+      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance camps. Logicology Summer workshop stood out immediately. While it may seem more premium than average camps, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
     name: "Dr. Rita Bang",
     role: "Gynaecologist",
-    photo: undefined,
+    photo: "https://ik.imagekit.io/pratik2002/rita.jpeg",
   },
   {
     quote:
-      "What I loved most about Logicology Summer Camp was the incredible mix of skills it covers. It wasn't just learning — it was engaging, hands-on, and thoughtfully designed. Their original games and books are a big differentiator; this is not something you find just anywhere. It made the entire experience unique and memorable for my child.",
+      "What I loved most about Logicology Summer workshop was the incredible mix of skills it covers. It wasn't just learning — it was engaging, hands-on, and thoughtfully designed. Their original games and books are a big differentiator; this is not something you find just anywhere. It made the entire experience unique and memorable for my child.",
     name: "Sayali Bokare",
     role: "Company Secretary",
-    photo: undefined,
+    photo: "https://ik.imagekit.io/pratik2002/syali.jpeg",
   },
   {
     quote:
@@ -1760,20 +1760,20 @@ function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
   const faqs = [
     {
-      q: "What age group is the camp designed for?",
-      a: "Logicology Summer Camp is designed for children aged 6 to 14. Activities and curriculum are tailored to two age groups — Juniors (6–9 years) and Seniors (10–14 years) — so every child gets an experience appropriate to their level.",
+      q: "What age group is the workshop designed for?",
+      a: "Logicology Summer workshop is designed for children aged 6 to 14. Activities and curriculum are tailored to two age groups — Juniors (6–9 years) and Seniors (10–14 years) — so every child gets an experience appropriate to their level.",
     },
     {
-      q: "Where is the camp located?",
+      q: "Where is the workshop located?",
       a: "Humpyard Road, Dhantoli, Near Dinanath High School. The venue is fully air-conditioned, CCTV-monitored, and equipped with dedicated learning and activity spaces. Directions will be shared in your confirmation message. Please note there isn't ample 4-wheeler parking available near the center, you may have to park on the Humpyard road.",
     },
     {
-      q: "What are the camp dates and timings?",
+      q: "What are the workshop dates and timings?",
       a: "We run multiple batches throughout the summer. Each batch runs for 5 or 10 days, the timings are 10 am to 1 pm. You can choose your preferred batch during enrollment. Senior camps are 60/90 minutes and junior camps are for 180 minutes.",
     },
     {
       q: "How much does it cost?",
-      a: "The camp fee ranges from INR 1000–INR 6000 per child based on the programme. This includes GST and accompanying worksheets, material and access to one month of Logicology.online subscription. Sibling discount of 10% is available to both siblings (for fees more than INR 3000). Group discounts are available for groups of 5 or more.",
+      a: "The workshop fee ranges from INR 1000–INR 6000 per child based on the programme. This includes GST and accompanying worksheets, material and access to one month of Logicology.online subscription. Sibling discount of 10% is available to both siblings (for fees more than INR 3000). Group discounts are available for groups of 5 or more.",
     },
     {
       q: "What is the refund and cancellation policy?",
@@ -1801,7 +1801,7 @@ function FAQSection() {
     },
     {
       q: "How can I buy Logicology Games and Books?",
-      a: 'Our games and books are available for sale at our centre and on our website. If your child is attending the summer camp, we recommend you buy our Games and Books at our center itself. Please ask for "Summer Camp Special" pricing when buying at our centre.',
+      a: 'Our games and books are available for sale at our centre and on our website. If your child is attending the summer camp, we recommend you buy our Games and Books at our center itself. Please ask for "Summer workshop Special" pricing when buying at our centre.',
     },
     {
       q: "The age range is 6–9, how do you ensure age-appropriate material?",
@@ -1996,9 +1996,9 @@ function EnrollmentSection() {
             languageCode: "en",
             bodyValues: [
               form.parentName,
-              `Logicology Summer Camp — ${form.preferredBatch}`,
+              `Logicology Summer workshop — ${form.preferredBatch}`,
               CAMP_FEE.toString(),
-              "Logicology Camp Venue",
+              "Logicology workshop Venue",
               paymentId,
             ],
           },
@@ -2035,7 +2035,7 @@ function EnrollmentSection() {
         setIsProcessing(false);
         return;
       }
-      const orderDescription = `Summer Camp Enrollment — ${form.preferredBatch} for ${form.childName}`;
+      const orderDescription = `Summer workshop Enrollment — ${form.preferredBatch} for ${form.childName}`;
       const options = {
         key: RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -2053,7 +2053,7 @@ function EnrollmentSection() {
                 customerInfo: { name: form.parentName, email: form.email, phone: form.phone },
                 items: [
                   {
-                    name: `Logicology Summer Camp — ${form.preferredBatch}`,
+                    name: `Logicology Summer workshop — ${form.preferredBatch}`,
                     price: CAMP_FEE,
                     quantity: 1,
                     itemId: "summer-camp",
@@ -2325,7 +2325,7 @@ function EnrollmentSection() {
                 letterSpacing: "0.07em",
               }}
             >
-              Camp Fee (Full Programme)
+              workshop Fee (Full Programme)
             </div>
             <div
               style={{
@@ -2507,18 +2507,7 @@ function EnrollmentSection() {
               </select>
               {errors.preferredBatch && <div style={err}>{errors.preferredBatch}</div>}
             </div>
-            <div style={{ gridColumn: "1 / -1" }}>
-              <label style={lbl}>Allergies or Medical Conditions</label>
-              <textarea
-                value={form.allergies}
-                onChange={(e) => setForm((f) => ({ ...f, allergies: e.target.value }))}
-                placeholder="Please mention any allergies, medical conditions, or special needs we should be aware of."
-                rows={3}
-                style={{ ...inp(), resize: "vertical" }}
-                onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
-                onBlur={(e) => (e.target.style.borderColor = "rgba(10,138,128,0.2)")}
-              />
-            </div>
+            
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>How Did You Hear About Us?</label>
               <select
