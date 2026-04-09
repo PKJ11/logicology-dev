@@ -86,45 +86,13 @@ const loadRazorpayScript = (): Promise<boolean> => {
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const navItems = ["Why Camps", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"];
 
   return (
-    <>
-      <style>{`
-        @media (max-width: 768px) {
-          .nav-desktop { display: none !important; }
-          .nav-mobile-btn { display: block !important; }
-        }
-        @media (min-width: 769px) {
-          .nav-desktop { display: flex !important; }
-          .nav-mobile-btn { display: none !important; }
-        }
-      `}</style>
-
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          background: "rgba(255,255,255,0.97)",
-          boxShadow: "0 2px 20px rgba(10,138,128,0.10)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            padding: "0 24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: 72,
-          }}
-        >
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
+        <div className="flex justify-between py-3">
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="relative h-auto w-[150px]">
               <Image
@@ -137,36 +105,23 @@ function NavBar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div
-            className="nav-desktop"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 28,
-            }}
-          >
-            {navItems.map((l) => (
+          {/* Desktop Nav */}
+          <nav className="hidden items-center gap-6 font-heading text-sm text-slate-700 md:flex">
+            {navItems.map((item) => (
               <a
-                key={l}
-                href={`#${l.toLowerCase().replace(/\s+/g, "-")}`}
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#0B3F44",
-                  textDecoration: "none",
-                  opacity: 0.85,
-                  transition: "opacity 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.85")}
+                key={item}
+                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+                className="relative flex items-center gap-1 py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
               >
-                {l}
+                {item}
               </a>
             ))}
-            <a
-              href="#enroll"
+          </nav>
+
+          {/* Right actions */}
+          <div className="flex items-center gap-5 text-slate-700">
+            {/* <a
+              href="#how-to-enroll"
               style={{
                 background: "linear-gradient(135deg, #E45C48, #c94836)",
                 color: "#fff",
@@ -190,120 +145,56 @@ function NavBar() {
               }}
             >
               Enroll Now →
-            </a>
-          </div>
-
-          {/* Mobile Hamburger Menu Button */}
-          <button
-            className="nav-mobile-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "8px",
-              zIndex: 102,
-            }}
-          >
-            <div
-              style={{
-                width: 26,
-                height: 20,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-around",
-              }}
+            </a> */}
+            <button
+              onClick={() => setMobileMenuOpen((s) => !s)}
+              className="p-2 text-2xl md:hidden"
+              aria-label="Toggle menu"
             >
-              <span
-                style={{
-                  height: "2px",
-                  background: "#0B3F44",
-                  width: "100%",
-                  transition: "all 0.3s",
-                  transform: mobileMenuOpen ? "rotate(45deg) translateY(10px)" : "none",
-                }}
-              />
-              <span
-                style={{
-                  height: "2px",
-                  background: "#0B3F44",
-                  width: "100%",
-                  transition: "all 0.3s",
-                  opacity: mobileMenuOpen ? 0 : 1,
-                }}
-              />
-              <span
-                style={{
-                  height: "2px",
-                  background: "#0B3F44",
-                  width: "100%",
-                  transition: "all 0.3s",
-                  transform: mobileMenuOpen ? "rotate(-45deg) translateY(-10px)" : "none",
-                }}
-              />
-            </div>
-          </button>
+              {mobileMenuOpen ? "✕" : "☰"}
+            </button>
+          </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Nav */}
       {mobileMenuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 72,
-            left: 0,
-            right: 0,
-            background: "rgba(255,255,255,0.98)",
-            backdropFilter: "blur(12px)",
-            zIndex: 99,
-            padding: "20px 24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 16,
-          }}
-        >
-          {navItems.map((l) => (
+        <div className="border-t border-slate-200 bg-white md:hidden">
+          <div className="flex flex-col gap-4 px-4 py-4">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="relative block py-1 text-[#0B3F44] after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+              >
+                {item}
+              </a>
+            ))}
             <a
-              key={l}
-              href={`#${l.toLowerCase().replace(/\s+/g, "-")}`}
+              href="#how-to-enroll"
               onClick={() => setMobileMenuOpen(false)}
               style={{
+                background: "linear-gradient(135deg, #E45C48, #c94836)",
+                color: "#fff",
+                padding: "12px 24px",
+                borderRadius: 100,
                 fontFamily: "'Outfit', sans-serif",
-                fontSize: 16,
-                fontWeight: 600,
-                color: "#0B3F44",
+                fontWeight: 700,
+                fontSize: 14,
                 textDecoration: "none",
-                padding: "12px 0",
-                borderBottom: "1px solid rgba(10,138,128,0.10)",
+                boxShadow: "0 4px 16px rgba(228,92,72,0.35)",
+                display: "inline-block",
+                textAlign: "center",
+                marginTop: 8,
               }}
             >
-              {l}
+              Enroll Now →
             </a>
-          ))}
-          <a
-            href="#enroll"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              background: "linear-gradient(135deg, #E45C48, #c94836)",
-              color: "#fff",
-              padding: "12px 24px",
-              borderRadius: 100,
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              textDecoration: "none",
-              boxShadow: "0 4px 16px rgba(228,92,72,0.35)",
-              display: "inline-block",
-              textAlign: "center",
-              marginTop: 8,
-            }}
-          >
-            Enroll Now →
-          </a>
+          </div>
         </div>
       )}
-    </>
+    </header>
   );
 }
 
@@ -313,7 +204,7 @@ function HeroSection() {
     <section
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(160deg, #0B3F44 0%, #0A8A80 50%, #0B3F44 100%)",
+        background: "#0A8A80",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -382,7 +273,7 @@ function HeroSection() {
         <div
           style={{
             display: "inline-block",
-            background: "rgba(216,174,79,0.2)",
+            background: "rgba(255,255,255,0.82)",
             border: "1px solid rgba(216,174,79,0.5)",
             borderRadius: 100,
             padding: "6px 20px",
@@ -399,27 +290,27 @@ function HeroSection() {
         </div>
         <h1
           style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(36px, 6vw, 72px)",
-            lineHeight: 1.1,
+            // fontFamily: "'Outfit', sans-serif",
+            // fontWeight: 800,
+            // fontSize: "clamp(36px, 6vw, 72px)",
+            // lineHeight: 1.1,
             color: "#ffffff",
             margin: "0 0 28px",
           }}
+          className="font-heading text-[41px] font-bold leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
         >
           This Summer, Introduce Your Child
           <br />
-          <span style={{ color: "#D8AE4F" }}>To the world of Logic </span>
+          <span style={{ }}>To the world of Logic </span>
         </h1>
         <p
           style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: "clamp(16px, 2vw, 20px)",
             color: "rgba(255,255,255,0.80)",
             maxWidth: 640,
             margin: "0 auto 48px",
             lineHeight: 1.7,
           }}
+          className="font-heading text-[20px] text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
         >
           With Logicology Summer Workshops. These workshops are designed for holistic development of
           your child. If you want something beyond just drawing, painting and art while keeping your
@@ -427,32 +318,12 @@ function HeroSection() {
         </p>
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a
-            href="#enroll"
-            style={{
-              background: "#E45C48",
-              color: "#fff",
-              padding: "18px 44px",
-              borderRadius: 100,
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 700,
-              fontSize: 18,
-              textDecoration: "none",
-              boxShadow: "0 6px 32px rgba(228,92,72,0.45)",
-              transition: "transform 0.2s, box-shadow 0.2s",
-              display: "inline-block",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-3px)";
-              e.currentTarget.style.boxShadow = "0 12px 40px rgba(228,92,72,0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 6px 32px rgba(228,92,72,0.45)";
-            }}
+              href="#enroll"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-white hover:text-brand-teal focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99] mt-2"
           >
             Enroll Now →
           </a>
-          <a
+          {/* <a
             href="#why-camps"
             style={{
               background: "rgba(255,255,255,0.12)",
@@ -472,7 +343,7 @@ function HeroSection() {
             onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
           >
             Learn More
-          </a>
+          </a> */}
         </div>
         <div
           style={{
@@ -601,7 +472,7 @@ function WhyCampsSection() {
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#fff",
               letterSpacing: "0.10em",
@@ -610,15 +481,7 @@ function WhyCampsSection() {
           >
             Why Summer Camps?
           </div>
-          <h2
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(28px, 4vw, 48px)",
-              color: "#fff",
-              margin: 0,
-            }}
-          >
+          <h2 className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
             Why a Summer Camp
             <br />
             Changes Everything
@@ -674,7 +537,29 @@ function WhyCampsSection() {
           ))}
         </div> */}
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <WhiteOnCoralBtn />
+          <div
+            className="mt-6"
+          >
+            <a
+              href="#enroll"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#AB4637] transition-colors hover:bg-[#AB4637] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
+            >
+              Enroll Now
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -756,7 +641,7 @@ function WhyLogicologySection() {
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#5a3c00",
               letterSpacing: "0.10em",
@@ -765,15 +650,7 @@ function WhyLogicologySection() {
           >
             Why Logicology?
           </div>
-          <h2
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(28px, 4vw, 48px)",
-              color: "#2d2200",
-              margin: 0,
-            }}
-          >
+          <h2 className="font-heading text-[#2d2200] text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
             Not All Camps Are
             <br />
             Created Equal.
@@ -828,7 +705,29 @@ function WhyLogicologySection() {
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <DarkOnGoldBtn />
+          <div
+            className="mt-6"
+          >
+            <a
+              href="#enroll"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#7E5C2E] transition-colors hover:bg-[#7E5C2E] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
+            >
+              Enroll Now
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -905,7 +804,7 @@ function CurriculumSection() {
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#0A8A80",
               letterSpacing: "0.10em",
@@ -914,15 +813,7 @@ function CurriculumSection() {
           >
             Take-aways
           </div>
-          <h2
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(28px, 4vw, 48px)",
-              color: "#0B3F44",
-              margin: 0,
-            }}
-          >
+          <h2 className="font-heading text-[#0B3F44] text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
             What Your Child Will Actually
             <br />
             Walk Away With
@@ -1033,15 +924,7 @@ function CurriculumSection() {
           style={{ marginTop: 80, paddingTop: 80, borderTop: "2px solid rgba(10,138,128,0.10)" }}
         >
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <h3
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 800,
-                fontSize: "clamp(24px, 3vw, 36px)",
-                color: "#0B3F44",
-                margin: 0,
-              }}
-            >
+            <h3 className="font-heading text-[#0B3F44] text-[28px] md:text-[32px] font-bold" style={{ margin: 0 }}>
               What's More You Also Get:
             </h3>
           </div>
@@ -1117,7 +1000,29 @@ function CurriculumSection() {
           </div>
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <CoralBtn />
+          <div
+            className="mt-6"
+          >
+            <a
+              href="#enroll"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-brand-teal px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-brand-tealDark hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
+            >
+              Enroll Now
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1190,7 +1095,7 @@ function HowToEnrollSection() {
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#fff",
               letterSpacing: "0.10em",
@@ -1199,15 +1104,7 @@ function HowToEnrollSection() {
           >
             Enrollment
           </div>
-          <h2
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(28px, 4vw, 48px)",
-              color: "#fff",
-              margin: "0 0 12px",
-            }}
-          >
+          <h2 className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: "0 0 12px" }}>
             Getting Started Is Simple
           </h2>
           <p
@@ -1298,7 +1195,29 @@ function HowToEnrollSection() {
           })}
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <WhiteOnCoralBtn />
+          <div
+            className="mt-6"
+          >
+            <a
+              href="#enrol"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#AB4637] transition-colors hover:bg-[#AB4637] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
+            >
+              Enroll Now
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1404,7 +1323,6 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
   );
 }
 
-/** Single testimonial card */
 /** Single testimonial card */
 function TestimonialSlideCard({ t }: { t: TestimonialData }) {
   return (
@@ -1688,7 +1606,7 @@ function TestimonialsSection() {
                 padding: "5px 18px",
                 marginBottom: 20,
                 fontFamily: "'Outfit', sans-serif",
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: 700,
                 color: "#5a3c00",
                 letterSpacing: "0.10em",
@@ -1746,9 +1664,31 @@ function TestimonialsSection() {
           </Swiper>
 
           {/* CTA */}
-          <div style={{ textAlign: "center", marginTop: 48 }}>
-            <DarkOnGoldBtn />
+          <div style={{ textAlign: "center", marginTop: 56 }}>
+          <div
+            className="mt-6"
+          >
+            <a
+              href="#enroll"
+              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#7E5C2E] transition-colors hover:bg-[#7E5C2E] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
+            >
+              Enroll Now
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
           </div>
+        </div>
         </div>
       </section>
     </>
@@ -1831,7 +1771,7 @@ function FAQSection() {
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#0A8A80",
               letterSpacing: "0.10em",
@@ -2158,7 +2098,7 @@ function EnrollmentSection() {
     <section
       id="enroll"
       style={{
-        background: "linear-gradient(160deg, #0B3F44 0%, #0A8A80 100%)",
+        background: "#0A8A80",
         padding: "100px 24px",
         position: "relative",
         overflow: "hidden",
@@ -2262,13 +2202,13 @@ function EnrollmentSection() {
           <div
             style={{
               display: "inline-block",
-              background: "rgba(216,174,79,0.15)",
+              background: "rgba(255,255,255,0.30)",
               border: "1px solid rgba(216,174,79,0.4)",
               borderRadius: 100,
               padding: "5px 18px",
               marginBottom: 20,
               fontFamily: "'Outfit', sans-serif",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: 700,
               color: "#D8AE4F",
               letterSpacing: "0.10em",
@@ -2302,7 +2242,7 @@ function EnrollmentSection() {
 
         <div
           style={{
-            background: "rgba(216,174,79,0.15)",
+            background: "rgba(255,255,255,0.12)",
             border: "2px solid rgba(216,174,79,0.35)",
             borderRadius: 16,
             padding: "20px 28px",
