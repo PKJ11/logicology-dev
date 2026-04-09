@@ -1199,7 +1199,7 @@ function HowToEnrollSection() {
             className="mt-6"
           >
             <a
-              href="#enrol"
+              href="#enroll"
               className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#AB4637] transition-colors hover:bg-[#AB4637] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
             >
               Enroll Now
