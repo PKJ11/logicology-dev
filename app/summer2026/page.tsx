@@ -686,17 +686,17 @@ function WhyLogicologySection() {
   const { ref, visible } = useReveal();
   const diffs = [
     {
-      icon: "/Images/logicology_camps/Why LOGICOLOGY/ORIGINAL CONTENT.svg",
+      icon: "/Images/logicology_camps/WHY LOGICOLOGY/oc.svg",
       title: "Original Content",
       desc: "Our programme is a structured learning journey developed by educators with experience in cognitive development, STEM education, and child psychology.",
     },
     {
-      icon: "/Images/logicology_camps/Why LOGICOLOGY/QUALIFIED INSTRUCTERS.svg",
+      icon: "/Images/logicology_camps/WHY LOGICOLOGY/QUALIFIED INSTRUCTERS.svg",
       title: "Highly Qualified Instructors",
       desc: "All our Instructors are highly qualified, more than half have already published their books. Our instructors are professionals who are teachers at heart.",
     },
     {
-      icon: "/Images/logicology_camps/Why LOGICOLOGY/SECURE PREMISES.svg",
+      icon: "/Images/logicology_camps/WHY LOGICOLOGY/SECURE PREMISES.svg",
       title: "Comfortable & Secure Environment",
       desc: "We have a fully air-conditioned premises with CCTV-monitored spaces to ensure that your child gets the safe environment she deserves.",
     },
