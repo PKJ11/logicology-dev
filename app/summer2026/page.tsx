@@ -1236,7 +1236,7 @@ interface TestimonialData {
 const TESTIMONIALS: TestimonialData[] = [
   {
     quote:
-      "As a Computer Science professor, I have always believed that logic and problem-solving should be nurtured from a very early age. When I came across Logicology, it stood out as perhaps the only summer workshop that truly focuses on building these foundational skills in a structured and engaging way. My daughter thoroughly enjoyed the experience, and I was equally impressed with the depth of learning. We were both extremely satisfied with the Summer workshop 2025, and I would strongly recommend Logicology to every parent.",
+      "As a Computer Science professor, I have always believed that logic and problem-solving should be nurtured from a very early age. When I came across Logicology, it stood out as perhaps the only summer workshop that truly focuses on building these foundational skills in a structured and engaging way. I was extremely satisfied with the Summer workshop 2025 experience for my daughter. I would strongly recommend Logicology to every parent.",
     name: "Dr. Swati Jaiswal",
     role: "Computer Science Professor, VNIT",
     photo: "https://ik.imagekit.io/pratik2002/swati.jpeg",
