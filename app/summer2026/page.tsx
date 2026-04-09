@@ -5,12 +5,6 @@ import Script from "next/script";
 import Link from "next/link";
 import Image from "next/image";
 import SiteFooter from "@/components/Footer";
-// Swiper
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -86,7 +80,7 @@ const loadRazorpayScript = (): Promise<boolean> => {
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navItems = ["Why Camps", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"];
+  const navItems = ["Why Workshops", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
@@ -120,32 +114,6 @@ function NavBar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-5 text-slate-700">
-            {/* <a
-              href="#how-to-enroll"
-              style={{
-                background: "linear-gradient(135deg, #E45C48, #c94836)",
-                color: "#fff",
-                padding: "10px 24px",
-                borderRadius: 100,
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 700,
-                fontSize: 14,
-                textDecoration: "none",
-                boxShadow: "0 4px 16px rgba(228,92,72,0.35)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                display: "inline-block",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(228,92,72,0.40)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 4px 16px rgba(228,92,72,0.35)";
-              }}
-            >
-              Enroll Now →
-            </a> */}
             <button
               onClick={() => setMobileMenuOpen((s) => !s)}
               className="p-2 text-2xl md:hidden"
@@ -290,10 +258,6 @@ function HeroSection() {
         </div>
         <h1
           style={{
-            // fontFamily: "'Outfit', sans-serif",
-            // fontWeight: 800,
-            // fontSize: "clamp(36px, 6vw, 72px)",
-            // lineHeight: 1.1,
             color: "#ffffff",
             margin: "0 0 28px",
           }}
@@ -301,7 +265,7 @@ function HeroSection() {
         >
           This Summer, Introduce Your Child
           <br />
-          <span style={{ }}>To the world of Logic </span>
+          <span style={{}}>To the world of Logic </span>
         </h1>
         <p
           style={{
@@ -318,32 +282,11 @@ function HeroSection() {
         </p>
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a
-              href="#enroll"
-              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-white hover:text-brand-teal focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99] mt-2"
+            href="#enroll"
+            className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-white hover:text-brand-teal focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99] mt-2"
           >
             Enroll Now →
           </a>
-          {/* <a
-            href="#why-camps"
-            style={{
-              background: "rgba(255,255,255,0.12)",
-              border: "2px solid rgba(255,255,255,0.3)",
-              color: "#fff",
-              padding: "18px 44px",
-              borderRadius: 100,
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 600,
-              fontSize: 18,
-              textDecoration: "none",
-              backdropFilter: "blur(8px)",
-              transition: "background 0.2s",
-              display: "inline-block",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.20)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
-          >
-            Learn More
-          </a> */}
         </div>
         <div
           style={{
@@ -399,12 +342,12 @@ function WhyCampsSection() {
     {
       icon: "🧠",
       title: "They Learn How to Think, Not Just What to Think",
-      desc: "Summer camps expose children to challenges that classrooms rarely offer. Problem-solving in real time, working with limited resources, and figuring things out without a textbook — these experiences build the kind of thinking skills that last far beyond the summer.",
+      desc: "Summer workshops expose children to challenges that classrooms rarely offer. Problem-solving in real time, working with limited resources, and figuring things out without a textbook — these experiences build the kind of thinking skills that last far beyond the summer.",
     },
     {
       icon: "🤝",
       title: "They Build Social Skills That Screens Can't Teach",
-      desc: "Camp is one of the few places where children collaborate face-to-face, navigate disagreements, and learn to work with people who think differently from them. These are the skills that matter most in adulthood — and they can only be built through real interaction.",
+      desc: "A workshop is one of the few places where children collaborate face-to-face, navigate disagreements, and learn to work with people who think differently from them. These are the skills that matter most in adulthood — and they can only be built through real interaction.",
     },
     {
       icon: "☀️",
@@ -479,10 +422,10 @@ function WhyCampsSection() {
               textTransform: "uppercase",
             }}
           >
-            Why Summer Camps?
+            Why Summer Workshops?
           </div>
           <h2 className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
-            Why a Summer Camp
+            Why a Summer Workshop
             <br />
             Changes Everything
           </h2>
@@ -501,45 +444,8 @@ function WhyCampsSection() {
             meaningful experiences that shape how a child thinks, connects, and grows.
           </p>
         </div>
-        {/* <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: 24,
-          }}
-        >
-          {benefits.map((b, i) => (
-            <CoralCard key={b.title} delay={i * 120}>
-              <div style={{ fontSize: 32, marginBottom: 16 }}>{b.icon}</div>
-              <h3
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 18,
-                  color: "#fff",
-                  margin: "0 0 12px",
-                }}
-              >
-                {b.title}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontSize: 15,
-                  color: "rgba(255,255,255,0.88)",
-                  lineHeight: 1.7,
-                  margin: 0,
-                }}
-              >
-                {b.desc}
-              </p>
-            </CoralCard>
-          ))}
-        </div> */}
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <div
-            className="mt-6"
-          >
+          <div className="mt-6">
             <a
               href="#enroll"
               className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#AB4637] transition-colors hover:bg-[#AB4637] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
@@ -651,7 +557,7 @@ function WhyLogicologySection() {
             Why Logicology?
           </div>
           <h2 className="font-heading text-[#2d2200] text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
-            Not All Camps Are
+            Not All Workshops Are
             <br />
             Created Equal.
           </h2>
@@ -665,7 +571,7 @@ function WhyLogicologySection() {
               lineHeight: 1.7,
             }}
           >
-            There are hundreds of summer camps out there. Many are fun. A few are transformative.
+            There are hundreds of summer workshops out there. Many are fun. A few are transformative.
             Logicology is designed to be the latter.
           </p>
         </div>
@@ -705,9 +611,7 @@ function WhyLogicologySection() {
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <div
-            className="mt-6"
-          >
+          <div className="mt-6">
             <a
               href="#enroll"
               className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#7E5C2E] transition-colors hover:bg-[#7E5C2E] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
@@ -813,7 +717,7 @@ function CurriculumSection() {
           >
             Take-aways
           </div>
-          <h2 className="font-heading text-[#0B3F44] text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
+          <h2 className="font-heading text-brand-teal text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
             What Your Child Will Actually
             <br />
             Walk Away With
@@ -924,7 +828,7 @@ function CurriculumSection() {
           style={{ marginTop: 80, paddingTop: 80, borderTop: "2px solid rgba(10,138,128,0.10)" }}
         >
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <h3 className="font-heading text-[#0B3F44] text-[28px] md:text-[32px] font-bold" style={{ margin: 0 }}>
+            <h3 className="font-heading text-brand-teal text-[28px] md:text-[32px] font-bold" style={{ margin: 0 }}>
               What's More You Also Get:
             </h3>
           </div>
@@ -1000,9 +904,7 @@ function CurriculumSection() {
           </div>
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <div
-            className="mt-6"
-          >
+          <div className="mt-6">
             <a
               href="#enroll"
               className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-brand-teal px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-brand-tealDark hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
@@ -1195,9 +1097,7 @@ function HowToEnrollSection() {
           })}
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <div
-            className="mt-6"
-          >
+          <div className="mt-6">
             <a
               href="#enroll"
               className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#AB4637] transition-colors hover:bg-[#AB4637] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
@@ -1224,7 +1124,7 @@ function HowToEnrollSection() {
   );
 }
 
-// ── Testimonials — inlined here, no import ────────────────────────────────────
+// ── Testimonials ──────────────────────────────────────────────────────────────
 
 interface TestimonialData {
   quote: string;
@@ -1250,7 +1150,7 @@ const TESTIMONIALS: TestimonialData[] = [
   },
   {
     quote:
-      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance camps. Logicology Summer workshop stood out immediately. While it may seem more premium than average camps, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
+      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance workshops. Logicology Summer workshop stood out immediately. While it may seem more premium than average workshops, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
     name: "Dr. Rita Bang",
     role: "Gynaecologist",
     photo: "https://ik.imagekit.io/pratik2002/rita.jpeg",
@@ -1264,7 +1164,7 @@ const TESTIMONIALS: TestimonialData[] = [
   },
   {
     quote:
-      "I have twins, and I was looking for something truly different to engage them this summer. Most camps for 5–6 year olds focus only on dancing, coloring, and painting. What impressed me about Logicology was how these very activities were used in such an innovative and purposeful way. I was genuinely amazed to see my young sons pick up so much about world geography in such a short span of time. I would strongly recommend Logicology Summer Camps to any parent.",
+      "I have twins, and I was looking for something truly different to engage them this summer. Most workshops for 5–6 year olds focus only on dancing, coloring, and painting. What impressed me about Logicology was how these very activities were used in such an innovative and purposeful way. I was genuinely amazed to see my young sons pick up so much about world geography in such a short span of time. I would strongly recommend Logicology Summer Workshops to any parent.",
     name: "Dr. Chetan Rathi",
     role: "Cardiologist",
     photo: "https://ik.imagekit.io/pratik2002/chetan-removebg-preview.png",
@@ -1278,6 +1178,66 @@ const TESTIMONIALS: TestimonialData[] = [
   },
 ];
 
+// ── Position config (slots: -3 … +3) ─────────────────────────────────────────
+const SLOT_STYLES: Record<string, React.CSSProperties & { background: string; boxShadow: string }> = {
+  "-3": {
+    transform: "translateX(-130%) rotateY(70deg) scale(0.55)",
+    opacity: 0,
+    zIndex: 1,
+    pointerEvents: "none",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+  "-2": {
+    transform: "translateX(-105%) rotateY(60deg) scale(0.68)",
+    opacity: 0.25,
+    zIndex: 2,
+    pointerEvents: "auto",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+  "-1": {
+    transform: "translateX(-62%) rotateY(42deg) scale(0.82)",
+    opacity: 0.55,
+    zIndex: 3,
+    pointerEvents: "auto",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+  "0": {
+    transform: "translateX(0) rotateY(0deg) scale(1)",
+    opacity: 1,
+    zIndex: 5,
+    pointerEvents: "auto",
+    background: "rgba(255,255,255,0.88)",
+    boxShadow: "0 28px 70px rgba(11,63,68,0.22)",
+  },
+  "1": {
+    transform: "translateX(62%) rotateY(-42deg) scale(0.82)",
+    opacity: 0.55,
+    zIndex: 3,
+    pointerEvents: "auto",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+  "2": {
+    transform: "translateX(105%) rotateY(-60deg) scale(0.68)",
+    opacity: 0.25,
+    zIndex: 2,
+    pointerEvents: "auto",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+  "3": {
+    transform: "translateX(130%) rotateY(-70deg) scale(0.55)",
+    opacity: 0,
+    zIndex: 1,
+    pointerEvents: "none",
+    background: "rgba(255,255,255,0.38)",
+    boxShadow: "none",
+  },
+};
+
 /** Avatar: shows photo if available, falls back to teal initial circle */
 function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
   const [err, setErr] = useState(false);
@@ -1288,8 +1248,8 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
         alt={name}
         onError={() => setErr(true)}
         style={{
-          width: 60,
-          height: 60,
+          width: 52,
+          height: 52,
           borderRadius: "50%",
           objectFit: "cover",
           objectPosition: "top center",
@@ -1303,8 +1263,8 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
   return (
     <div
       style={{
-        width: 60,
-        height: 60,
+        width: 52,
+        height: 52,
         borderRadius: "50%",
         background: "#0B3F44",
         display: "flex",
@@ -1312,7 +1272,7 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
         justifyContent: "center",
         color: "#D8AE4F",
         fontWeight: 800,
-        fontSize: 22,
+        fontSize: 20,
         fontFamily: "'Outfit', sans-serif",
         flexShrink: 0,
         border: "2.5px solid rgba(255,255,255,0.50)",
@@ -1323,69 +1283,92 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
   );
 }
 
-/** Single testimonial card */
-function TestimonialSlideCard({ t }: { t: TestimonialData }) {
+/** Single fan card */
+function FanCard({
+  t,
+  slot,
+  onClick,
+}: {
+  t: TestimonialData;
+  slot: number;
+  onClick: () => void;
+}) {
+  const clampedSlot = Math.max(-3, Math.min(3, slot));
+  const style = SLOT_STYLES[String(clampedSlot)];
+  const isActive = slot === 0;
+
   return (
     <div
-      className="t-card"
+      onClick={!isActive ? onClick : undefined}
       style={{
-        background: "rgba(255,255,255,0.38)",
-        border: "1px solid rgba(255,255,255,0.55)",
+        position: "absolute",
+        width: 420,
+        maxWidth: "88vw",
+        top: "50%",
+        left: "50%",
+        marginLeft: 0,
+        marginTop: 0,
+        transform: `translate(-50%, -50%) ${style.transform}`,
+        opacity: style.opacity,
+        zIndex: style.zIndex,
+        pointerEvents: style.pointerEvents as React.CSSProperties["pointerEvents"],
+        background: style.background,
+        boxShadow: style.boxShadow,
+        border: "1px solid rgba(255,255,255,0.60)",
         borderRadius: 20,
-        padding: "32px 28px 28px",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
+        padding: "32px 28px 26px",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
         display: "flex",
         flexDirection: "column",
-        boxSizing: "border-box",
+        cursor: isActive ? "default" : "pointer",
         transition:
-          "transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.35s ease, background 0.25s ease",
-        cursor: "default",
-        willChange: "transform",
-        height: "100%",
+          "transform 0.55s cubic-bezier(.34,1.1,.64,1), opacity 0.45s ease, box-shadow 0.45s ease, background 0.35s ease",
+        willChange: "transform, opacity",
+        boxSizing: "border-box",
       }}
     >
       {/* Decorative quote mark */}
       <div
         style={{
           fontFamily: "Georgia, serif",
-          fontSize: 80,
+          fontSize: 72,
           color: "#0B3F44",
-          lineHeight: 0.75,
-          marginBottom: 18,
-          opacity: 0.15,
+          lineHeight: 0.7,
+          marginBottom: 14,
+          opacity: 0.13,
           userSelect: "none",
         }}
       >
         "
       </div>
 
-      {/* Quote wrapper */}
-      <div className="t-card-quote-wrapper">
-        <p
-          className="t-card-quote"
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: 15,
-            color: "#2d2200",
-            lineHeight: 1.78,
-            margin: 0,
-            fontStyle: "italic",
-          }}
-        >
-          {t.quote}
-        </p>
-      </div>
+      {/* Quote */}
+      <p
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 14.5,
+          color: "#2d2200",
+          lineHeight: 1.82,
+          fontStyle: "italic",
+          margin: 0,
+          display: "-webkit-box",
+          WebkitLineClamp: isActive ? 7 : 5,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
+      >
+        {t.quote}
+      </p>
 
-      {/* Spacer to push author to bottom */}
-      <div style={{ flexGrow: 1, minHeight: 28 }} />
+      <div style={{ flexGrow: 1, minHeight: 14 }} />
 
       {/* Divider */}
       <div
         style={{
           height: 1,
           background: "rgba(11,63,68,0.14)",
-          marginBottom: 20,
+          marginBottom: 16,
         }}
       />
 
@@ -1397,7 +1380,7 @@ function TestimonialSlideCard({ t }: { t: TestimonialData }) {
             style={{
               fontFamily: "'Outfit', sans-serif",
               fontWeight: 700,
-              fontSize: 15,
+              fontSize: 14,
               color: "#2d2200",
               marginBottom: 3,
             }}
@@ -1420,131 +1403,84 @@ function TestimonialSlideCard({ t }: { t: TestimonialData }) {
   );
 }
 
-/** Full testimonials section with Swiper slider */
+/** Full testimonials section — fan/spread carousel */
 function TestimonialsSection() {
   const { ref, visible } = useReveal();
+  const N = TESTIMONIALS.length;
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const goTo = useCallback(
+    (idx: number) => {
+      if (animating) return;
+      const next = ((idx % N) + N) % N;
+      if (next === current) return;
+      setAnimating(true);
+      setCurrent(next);
+      setTimeout(() => setAnimating(false), 580);
+    },
+    [animating, current, N]
+  );
+
+  const startAuto = useCallback(() => {
+    if (autoRef.current) clearInterval(autoRef.current);
+    autoRef.current = setInterval(() => {
+      setCurrent((c) => (c + 1) % N);
+    }, 4500);
+  }, [N]);
+
+  useEffect(() => {
+    startAuto();
+    return () => {
+      if (autoRef.current) clearInterval(autoRef.current);
+    };
+  }, [startAuto]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+    touchStartX.current = null;
+  };
+
+  /** Slot offset for a given card index relative to current */
+  const getSlot = (cardIdx: number) => {
+    let off = cardIdx - current;
+    if (off > N / 2) off -= N;
+    if (off < -N / 2) off += N;
+    return off;
+  };
+
   return (
     <>
       <style>{`
-        /* ── Desktop styles (default) ── */
-        /* Quote: clamp to 2 lines with ellipsis by default */
-        .t-card-quote-wrapper {
-          max-height: 54px; /* 2 lines × 1.78 line-height × 15px = ~53px */
-          overflow: hidden;
-          transition: max-height 0.45s ease;
-          margin-bottom: 0;
-        }
-
-        /* On hover, open to show full text */
-        .t-card:hover .t-card-quote-wrapper {
-          max-height: 600px; /* Large enough for the longest quote */
-        }
-
-        /* Ellipsis only when collapsed */
-        .t-card-quote {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          transition: -webkit-line-clamp 0s;
-        }
-
-        /* Remove clamp on hover */
-        .t-card:hover .t-card-quote {
-          display: block;
-          -webkit-line-clamp: unset;
-          -webkit-box-orient: unset;
-          overflow: visible;
-        }
-
-        /* Hover enlarge effect for desktop */
-        .t-card:hover {
-          transform: scale(1.048) translateY(-6px) !important;
-          box-shadow: 0 28px 60px rgba(11,63,68,0.18) !important;
-          background: rgba(255,255,255,0.62) !important;
-          z-index: 10;
+        .t-fan-stage {
           position: relative;
+          width: 100%;
+          height: 420px;
+          perspective: 1200px;
+          transform-style: preserve-3d;
         }
-
-        /* ── Mobile styles (max-width: 767px) ── */
-        @media (max-width: 767px) {
-          /* On mobile, always show full text */
-          .t-card-quote-wrapper {
-            max-height: none !important;
-            overflow: visible !important;
-          }
-          
-          .t-card-quote {
-            display: block !important;
-            -webkit-line-clamp: unset !important;
-            overflow: visible !important;
-          }
-          
-          /* Keep subtle hover but without text expansion since it's already expanded */
-          .t-card:hover {
-            transform: scale(1.02) translateY(-4px) !important;
-          }
-        }
-
-        /* ── Swiper wrapper padding ── */
-        .t-swiper {
-          padding: 14px 40px 52px !important;
-        }
-
-        /* ── Slide height (auto so cards can grow on hover) ── */
-        .t-swiper .swiper-slide {
-          height: auto;
-        }
-
-        /* ── Nav arrows ── */
-        .t-swiper .swiper-button-prev,
-        .t-swiper .swiper-button-next {
-          color: #0B3F44;
-          background: rgba(255,255,255,0.65);
-          border: 1.5px solid rgba(255,255,255,0.75);
-          border-radius: 50%;
-          width: 46px;
-          height: 46px;
-          backdrop-filter: blur(10px);
-          top: 46%;
-          transition: background 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .t-swiper .swiper-button-prev { left: 4px; }
-        .t-swiper .swiper-button-next { right: 4px; }
-        
-        .t-swiper .swiper-button-prev:hover,
-        .t-swiper .swiper-button-next:hover {
-          background: rgba(255,255,255,0.92);
-          box-shadow: 0 4px 18px rgba(11,63,68,0.14);
-        }
-        
-        .t-swiper .swiper-button-prev::after,
-        .t-swiper .swiper-button-next::after {
-          font-size: 13px;
-          font-weight: 900;
-        }
-
-        /* Hide navigation arrows on mobile for cleaner look (optional) */
         @media (max-width: 640px) {
-          .t-swiper .swiper-button-prev,
-          .t-swiper .swiper-button-next {
-            display: none;
-          }
+          .t-fan-stage { height: 500px; perspective: 800px; }
         }
-
-        /* ── Pagination dots ── */
-        .t-swiper .swiper-pagination-bullet {
-          background: rgba(11,63,68,0.28);
-          opacity: 1;
-          width: 8px;
-          height: 8px;
-          transition: background 0.2s ease, transform 0.2s ease;
+        .t-nav-btn:hover {
+          background: rgba(255,255,255,0.95) !important;
+          box-shadow: 0 4px 16px rgba(11,63,68,0.15) !important;
         }
-        
-        .t-swiper .swiper-pagination-bullet-active {
-          background: #0B3F44;
-          transform: scale(1.4);
+        .t-nav-btn:active { transform: scale(0.95); }
+        .t-cta-btn:hover { background: #7E5C2E !important; color: #fff !important; }
+        .t-cta-btn:hover .t-cta-arrow { transform: translateX(4px); }
+        .t-cta-arrow { display: inline-block; transition: transform 0.2s; }
+        .t-dot-active {
+          background: #0B3F44 !important;
+          transform: scale(1.3) !important;
         }
       `}</style>
 
@@ -1631,69 +1567,142 @@ function TestimonialsSection() {
             </h2>
           </div>
 
-          {/* Slider */}
-          <Swiper
-            className="t-swiper"
-            modules={[Autoplay, Navigation, Pagination]}
-            spaceBetween={24}
-            slidesPerView={1}
-            loop={true}
-            autoplay={{
-              delay: 4500,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            navigation={true}
-            pagination={{ clickable: true }}
-            breakpoints={{
-              // On screens 640px and above, show 2 cards (tablet)
-              640: { 
-                slidesPerView: 2,
-              },
-              // On screens 1024px and above, show 3 cards (desktop)
-              1024: { 
-                slidesPerView: 3,
-              },
+          {/* Fan carousel stage */}
+          <div
+            ref={stageRef}
+            className="t-fan-stage"
+            onMouseEnter={() => { if (autoRef.current) clearInterval(autoRef.current); }}
+            onMouseLeave={startAuto}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {TESTIMONIALS.map((t, i) => (
+              <FanCard
+                key={t.name}
+                t={t}
+                slot={getSlot(i)}
+                onClick={() => goTo(i)}
+              />
+            ))}
+          </div>
+
+          {/* Navigation */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 20,
+              marginTop: 32,
             }}
           >
-            {TESTIMONIALS.map((t, index) => (
-              <SwiperSlide key={t.name + index}>
-                <TestimonialSlideCard t={t} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            {/* Prev */}
+            <button
+              className="t-nav-btn"
+              onClick={() => goTo(current - 1)}
+              aria-label="Previous"
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.65)",
+                border: "1.5px solid rgba(255,255,255,0.75)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 18,
+                color: "#0B3F44",
+                fontWeight: 900,
+                backdropFilter: "blur(8px)",
+                transition: "background 0.2s, box-shadow 0.2s",
+              }}
+            >
+              ←
+            </button>
+
+            {/* Dots */}
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              {TESTIMONIALS.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={i === current ? "t-dot-active" : ""}
+                  style={{
+                    width: 7,
+                    height: 7,
+                    minWidth: 7,
+                    minHeight: 7,
+                    borderRadius: "50%",
+                    background: "rgba(11,63,68,0.28)",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    transition: "background 0.2s, transform 0.2s",
+                    transform: "scale(1)",
+                    WebkitAppearance: "none",
+                    appearance: "none",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Next */}
+            <button
+              className="t-nav-btn"
+              onClick={() => goTo(current + 1)}
+              aria-label="Next"
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.65)",
+                border: "1.5px solid rgba(255,255,255,0.75)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 18,
+                color: "#0B3F44",
+                fontWeight: 900,
+                backdropFilter: "blur(8px)",
+                transition: "background 0.2s, box-shadow 0.2s",
+              }}
+            >
+              →
+            </button>
+          </div>
 
           {/* CTA */}
           <div style={{ textAlign: "center", marginTop: 56 }}>
-          <div
-            className="mt-6"
-          >
-            <a
-              href="#enroll"
-              className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#7E5C2E] transition-colors hover:bg-[#7E5C2E] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
-            >
-              Enroll Now
-              <svg
-                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="mt-6">
+              <a
+                href="#enroll"
+                className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-[16px] font-semibold text-[#7E5C2E] transition-colors hover:bg-[#7E5C2E] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7E5C2E]/40 active:scale-[.99]"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
+                Enroll Now
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
-        </div>
         </div>
       </section>
     </>
   );
 }
+
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 function FAQSection() {
   const { ref, visible } = useReveal();
@@ -1709,7 +1718,7 @@ function FAQSection() {
     },
     {
       q: "What are the workshop dates and timings?",
-      a: "We run multiple batches throughout the summer. Each batch runs for 5 or 10 days, the timings are 10 am to 1 pm. You can choose your preferred batch during enrollment. Senior camps are 60/90 minutes and junior camps are for 180 minutes.",
+      a: "We run multiple batches throughout the summer. Each batch runs for 5 or 10 days, the timings are 10 am to 1 pm. You can choose your preferred batch during enrollment. Senior workshops are 60/90 minutes and junior workshops are for 180 minutes.",
     },
     {
       q: "How much does it cost?",
@@ -1717,7 +1726,7 @@ function FAQSection() {
     },
     {
       q: "What is the refund and cancellation policy?",
-      a: "Full refunds are available if the batch gets cancelled. Cancellation after the first day of the workshop is possible with 80% refund. No refunds are issued after child attends 2nd day of the camp. If you enrol and need to travel before the batch begins, we will make a full refund (after deducting INR 200 as registration charges).",
+      a: "Full refunds are available if the batch gets cancelled. Cancellation after the first day of the workshop is possible with 80% refund. No refunds are issued after child attends 2nd day of the workshop. If you enrol and need to travel before the batch begins, we will make a full refund (after deducting INR 200 as registration charges).",
     },
     {
       q: "What safety measures are in place?",
@@ -1725,15 +1734,15 @@ function FAQSection() {
     },
     {
       q: "Does my child need any specific skills or capabilities?",
-      a: "Your child should be able to read, write and communicate in English, Hindi or Marathi. We DO NOT possess the capabilities to manage children with special needs during our camps. If your child has any specific special needs, please contact us before enrolling.",
+      a: "Your child should be able to read, write and communicate in English, Hindi or Marathi. We DO NOT possess the capabilities to manage children with special needs during our workshops. If your child has any specific special needs, please contact us before enrolling.",
     },
     {
-      q: "What should my child bring to camp?",
+      q: "What should my child bring to a workshop?",
       a: "Children should bring a water bottle, a light snack (if they have specific dietary needs), and comfortable clothing. We DO NOT provide any food items. All learning materials, worksheets, books (wherever applicable) are provided by Logicology.",
     },
     {
-      q: "How will I know what my child is doing at camp?",
-      a: "You can take a look at the worksheets. We have online games and assessments which will provide you a peek into the performance of your child. For summer camps we DO NOT provide personalized written feedback.",
+      q: "How will I know what my child is doing at the workshop?",
+      a: "You can take a look at the worksheets. We have online games and assessments which will provide you a peek into the performance of your child. For summer workshops we DO NOT provide personalized written feedback.",
     },
     {
       q: "How do I contact you if I have more questions?",
@@ -1741,7 +1750,7 @@ function FAQSection() {
     },
     {
       q: "How can I buy Logicology Games and Books?",
-      a: 'Our games and books are available for sale at our centre and on our website. If your child is attending the summer camp, we recommend you buy our Games and Books at our center itself. Please ask for "Summer workshop Special" pricing when buying at our centre.',
+      a: 'Our games and books are available for sale at our centre and on our website. If your child is attending the summer workshop, we recommend you buy our Games and Books at our center itself. Please ask for "Summer workshop Special" pricing when buying at our centre.',
     },
     {
       q: "The age range is 6–9, how do you ensure age-appropriate material?",
@@ -1781,13 +1790,8 @@ function FAQSection() {
             FAQ
           </div>
           <h2
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(28px, 4vw, 44px)",
-              color: "#0B3F44",
-              margin: 0,
-            }}
+            className="font-heading text-brand-teal text-[28px] md:text-[44px] font-bold"
+            style={{ margin: 0 }}
           >
             Got Questions? We've Got Answers.
           </h2>
@@ -2236,7 +2240,7 @@ function EnrollmentSection() {
               margin: 0,
             }}
           >
-            Fill in the details below and secure your child's spot at Logicology Summer Camp.
+            Fill in the details below and secure your child's spot at Logicology Summer Workshop.
           </p>
         </div>
 
@@ -2338,9 +2342,7 @@ function EnrollmentSection() {
                 style={inp(!!errors.email)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.email
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.email ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.email && <div style={err}>{errors.email}</div>}
@@ -2357,9 +2359,7 @@ function EnrollmentSection() {
                 style={inp(!!errors.phone)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.phone
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.phone ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.phone && <div style={err}>{errors.phone}</div>}
@@ -2447,7 +2447,7 @@ function EnrollmentSection() {
               </select>
               {errors.preferredBatch && <div style={err}>{errors.preferredBatch}</div>}
             </div>
-            
+
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>How Did You Hear About Us?</label>
               <select
