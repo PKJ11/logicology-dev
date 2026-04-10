@@ -1990,7 +1990,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             bodyValues: [
               form.parentName,
               `Logicology Summer workshop — ${form.preferredBatch}`,
-              CAMP_FEE.toString(),
+              activeFeeRef.current.toString(),
               "Logicology workshop Venue",
               paymentId,
             ],
