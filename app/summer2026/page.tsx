@@ -1017,34 +1017,56 @@ function EnrollmentSection({
 
   // ── Send WhatsApp ─────────────────────────────────────────────────────────
   const sendWhatsApp = async (paymentId: string, base: number, total: number) => {
-    const cleanedPhone = form.phone.replace(/\D/g, "").slice(-10);
-    const { gstAmount } = calcGST(base);
-    try {
-      await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: { Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=", "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: cleanedPhone, countryCode: "+91", traits: { name: form.parentName, email: form.email, lastPaymentId: paymentId, campBatch: form.preferredBatch } }),
-      });
-      await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: { Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=", "Content-Type": "application/json" },
-        body: JSON.stringify({
-          countryCode: "+91",
-          phoneNumber: cleanedPhone,
-          type: "Template",
-          template: {
-            name: "purchase",
-            languageCode: "en",
-            bodyValues: [
-              `Hello ${form.parentName}, your enrollment for Logicology Summer Workshop — ${form.preferredBatch} is confirmed!\n\nBase Fee: ₹${base.toFixed(2)}\nGST (18%): ₹${gstAmount.toFixed(2)}\nTotal Paid: ₹${total.toFixed(2)}\nPayment ID: ${paymentId}\n\nA GST invoice has been sent to your email. For queries, WhatsApp us on 8446980747.`,
-            ],
-          },
-        }),
-      });
-    } catch (err) {
-      console.error("WhatsApp error:", err);
-    }
-  };
+  const cleanedPhone = form.phone.replace(/\D/g, "").slice(-10);
+  const { gstAmount } = calcGST(base);
+  
+  try {
+    await fetch("https://api.interakt.ai/v1/public/track/users/", {
+      method: "POST",
+      headers: { 
+        Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=", 
+        "Content-Type": "application/json" 
+      },
+      body: JSON.stringify({ 
+        phoneNumber: cleanedPhone, 
+        countryCode: "+91", 
+        traits: { 
+          name: form.parentName, 
+          email: form.email, 
+          lastPaymentId: paymentId, 
+          campBatch: form.preferredBatch 
+        } 
+      }),
+    });
+    
+    // Format as separate values, NOT one long string
+    await fetch("https://api.interakt.ai/v1/public/message/", {
+      method: "POST",
+      headers: { 
+        Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=", 
+        "Content-Type": "application/json" 
+      },
+      body: JSON.stringify({
+        countryCode: "+91",
+        phoneNumber: cleanedPhone,
+        type: "Template",
+        template: {
+          name: "purchase",
+          languageCode: "en",
+          bodyValues: [
+            form.parentName,                    // {{1}} Customer name
+            `Logicology Summer Workshop — ${form.preferredBatch}`, // {{2}} Order items
+            total.toFixed(0),                   // {{3}} Amount
+            `${form.childName}`,                // {{4}} Student name or location
+            paymentId                           // {{5}} Payment ID
+          ],
+        },
+      }),
+    });
+  } catch (err) {
+    console.error("WhatsApp error:", err);
+  }
+};
 
   const handleSubmit = useCallback(async () => {
     if (!validate() || isProcessing) return;
