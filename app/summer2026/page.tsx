@@ -38,7 +38,7 @@ const BATCH_PRICES: Record<string, number> = {
   "Logicoland B — 27 Apr – 1 May (10:00 – 1:00)": 2000,
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
-  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1,
+  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1000,
   "Speed Maths — 4 May – 8 May (9:30 – 11:00)": 2500,
   "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)": 2500,
   "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
