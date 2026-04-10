@@ -2693,30 +2693,11 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               {errors.childAge && <div style={err}>{errors.childAge}</div>}
             </div>
 
-            <div>
-              <label style={lbl}>Child's Grade / Class *</label>
-              <select
-                value={form.childGrade}
-                onChange={(e) => setForm((f) => ({ ...f, childGrade: e.target.value }))}
-                style={inp(!!errors.childGrade)}
-                onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
-                onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childGrade ? "#E45C48" : "rgba(10,138,128,0.2)")
-                }
-              >
-                <option value="">Select grade</option>
-                {Array.from({ length: 9 }, (_, i) => i + 1).map((g) => (
-                  <option key={g} value={`Grade ${g}`}>Grade {g}</option>
-                ))}
-              </select>
-              {errors.childGrade && <div style={err}>{errors.childGrade}</div>}
-            </div>
-
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>Preferred Batch *</label>
               <select
                 value={form.preferredBatch}
-                onChange={(e) => setForm((f) => ({ ...f, preferredBatch: e.target.value }))}
+                onChange={(e) => setForm((f) => ({ ...f, preferredBatch: e.target.value, childGrade: "" }))}
                 style={inp(!!errors.preferredBatch)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
@@ -2740,6 +2721,46 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 </optgroup>
               </select>
               {errors.preferredBatch && <div style={err}>{errors.preferredBatch}</div>}
+            </div>
+
+            <div>
+              <label style={lbl}>Child's Grade / Class *</label>
+              <select
+                value={form.childGrade}
+                onChange={(e) => setForm((f) => ({ ...f, childGrade: e.target.value }))}
+                disabled={!form.preferredBatch}
+                style={{
+                  ...inp(!!errors.childGrade),
+                  opacity: form.preferredBatch ? 1 : 0.6,
+                  cursor: form.preferredBatch ? "pointer" : "not-allowed",
+                  backgroundColor: form.preferredBatch ? "transparent" : "rgba(0,0,0,0.05)",
+                }}
+                onFocus={(e) => {
+                  if (form.preferredBatch) (e.target as HTMLSelectElement).style.borderColor = "#0A8A80";
+                }}
+                onBlur={(e) =>
+                  ((e.target as HTMLSelectElement).style.borderColor = errors.childGrade ? "#E45C48" : "rgba(10,138,128,0.2)")
+                }
+              >
+                <option value="">
+                  {form.preferredBatch ? "Select grade" : "Select a batch first"}
+                </option>
+                {form.preferredBatch && form.preferredBatch.startsWith("Logicoland")
+                  ? Array.from({ length: 4 }, (_, i) => i + 1).map((g) => (
+                      <option key={g} value={`Grade ${g}`}>Grade {g}</option>
+                    ))
+                  : form.preferredBatch
+                  ? Array.from({ length: 5 }, (_, i) => i + 5).map((g) => (
+                      <option key={g} value={`Grade ${g}`}>Grade {g}</option>
+                    ))
+                  : null}
+              </select>
+              {!form.preferredBatch && (
+                <div style={{ fontSize: 12, color: "#888", marginTop: 6, fontFamily: "'Outfit', sans-serif" }}>
+                  Please select a preferred batch above to unlock grade options
+                </div>
+              )}
+              {errors.childGrade && <div style={err}>{errors.childGrade}</div>}
             </div>
 
             <div style={{ gridColumn: "1 / -1" }}>
