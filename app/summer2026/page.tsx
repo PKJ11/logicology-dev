@@ -1920,21 +1920,19 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [showPricingTable, setShowPricingTable] = useState(false);
 
-  // Sync selectedBatch from offerings into form when it changes
   useEffect(() => {
     if (selectedBatch) {
       setForm((f) => ({ ...f, preferredBatch: selectedBatch }));
     }
   }, [selectedBatch]);
 
-  // Compute the active fee: from prop if set, else from form selection, else default 2000
   const activeFee =
     selectedPrice !== null && form.preferredBatch === selectedBatch
       ? selectedPrice
-      : BATCH_PRICES[form.preferredBatch] ?? 2000;
+      : BATCH_PRICES[form.preferredBatch] ?? 1000;
 
-  // Use activeFee ref for handleSubmit
   const activeFeeRef = useRef(activeFee);
   useEffect(() => {
     activeFeeRef.current = activeFee;
@@ -2149,6 +2147,49 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
     marginTop: 4,
   };
 
+  const juniorRows = [
+    { name: "Logicoland A", dates: "20 Apr – 24 Apr", time: "10:00 – 1:00", fee: 2000 },
+    { name: "Logicoland B", dates: "27 Apr – 1 May", time: "10:00 – 1:00", fee: 2000 },
+    { name: "Logicoland A", dates: "11 May – 15 May", time: "9:30 – 12:30", fee: 2000 },
+    { name: "Logicoland B", dates: "18 May – 22 May", time: "9:30 – 12:30", fee: 2000 },
+  ];
+
+  const seniorRows = [
+    { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1000 },
+    { name: "Speed Maths", dates: "4 May – 8 May", time: "9:30 – 11:00", fee: 2500 },
+    { name: "Logical Reasoning", dates: "4 May – 8 May", time: "11:00 – 12:30", fee: 2500 },
+    { name: "Speed Maths", dates: "18 May – 22 May", time: "9:30 – 11:00", fee: 2500 },
+    { name: "Logical Reasoning", dates: "25 May – 29 May", time: "11:00 – 12:30", fee: 2500 },
+  ];
+
+  const categoryRowStyle: React.CSSProperties = {
+    padding: "8px 14px",
+    fontSize: 11,
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.1em",
+    color: "rgba(255,255,255,0.55)",
+  };
+
+  const badgeStyle = (variant: "teal" | "amber"): React.CSSProperties => ({
+    display: "inline-block",
+    borderRadius: 100,
+    padding: "2px 10px",
+    fontSize: 12,
+    fontWeight: 700,
+    ...(variant === "teal"
+      ? {
+          background: "rgba(10,138,128,0.35)",
+          border: "1px solid rgba(127,255,244,0.2)",
+          color: "#7ffff4",
+        }
+      : {
+          background: "rgba(216,174,79,0.2)",
+          border: "1px solid rgba(216,174,79,0.35)",
+          color: "#D8AE4F",
+        }),
+  });
+
   return (
     <section
       id="enroll"
@@ -2243,7 +2284,9 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
           filter: "blur(80px)",
         }}
       />
+
       <div style={{ maxWidth: 720, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* ── Heading ── */}
         <div
           ref={ref}
           style={{
@@ -2295,6 +2338,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
           </p>
         </div>
 
+        {/* ── Fee banner + Pricing table ── */}
         <div
           style={{
             background: "rgba(255,255,255,0.12)",
@@ -2309,6 +2353,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             gap: 16,
           }}
         >
+          {/* Fee display */}
           <div>
             <div
               style={{
@@ -2342,24 +2387,218 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             >
               {form.preferredBatch
                 ? `Selected: ${form.preferredBatch}`
-                : "Select a batch below — starting from ₹1,000"}
+                : "Please select a batch below"}
             </div>
           </div>
-          <div
+
+          {/* Pricing button */}
+          <button
+            onClick={() => setShowPricingTable(true)}
             style={{
-              background: "rgba(255,255,255,0.1)",
+              background: "rgba(216,174,79,0.2)",
+              border: "1.5px solid rgba(216,174,79,0.6)",
               borderRadius: 12,
               padding: "10px 18px",
               fontFamily: "'Outfit', sans-serif",
               fontSize: 13,
-              color: "#fff",
+              color: "#D8AE4F",
               fontWeight: 600,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(216,174,79,0.8)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.2)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(216,174,79,0.6)";
             }}
           >
-            🏷️ Sibling discounts available
-          </div>
+            📊 View Pricing Table
+          </button>
         </div>
 
+        {/* ── Pricing Table Modal ── */}
+        {showPricingTable && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.7)",
+              backdropFilter: "blur(4px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 999,
+              padding: "20px",
+            }}
+            onClick={() => setShowPricingTable(false)}
+          >
+            {/* Modal content */}
+            <div
+              style={{
+                background: "linear-gradient(135deg, #0B3F44 0%, #1A5A5F 100%)",
+                borderRadius: 20,
+                padding: "40px 36px",
+                maxWidth: "900px",
+                width: "100%",
+                maxHeight: "85vh",
+                overflowY: "auto",
+                boxShadow: "0 20px 100px rgba(0,0,0,0.4)",
+                border: "2px solid rgba(216,174,79,0.3)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+                <h3
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontSize: 28,
+                    fontWeight: 800,
+                    color: "#fff",
+                    margin: 0,
+                  }}
+                >
+                  Workshop Pricing Details
+                </h3>
+                <button
+                  onClick={() => setShowPricingTable(false)}
+                  style={{
+                    background: "rgba(216,174,79,0.2)",
+                    border: "1.5px solid rgba(216,174,79,0.5)",
+                    borderRadius: 10,
+                    width: 40,
+                    height: 40,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#D8AE4F",
+                    fontSize: 20,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.2)";
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Pricing table */}
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  fontFamily: "'Outfit', sans-serif",
+                }}
+              >
+                <thead>
+                  <tr>
+                    {["Programme", "Dates", "Timings", "Fee"].map((h) => (
+                      <th
+                        key={h}
+                        style={{
+                          padding: "14px 14px",
+                          background: "rgba(11,63,68,0.6)",
+                          color: "rgba(255,255,255,0.6)",
+                          fontSize: 12,
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.07em",
+                          textAlign: h === "Fee" ? "right" : "left",
+                          whiteSpace: "nowrap",
+                          borderBottom: "1px solid rgba(216,174,79,0.2)",
+                        }}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Juniors category header */}
+                  <tr>
+                    <td
+                      colSpan={4}
+                      style={{
+                        ...categoryRowStyle,
+                        background: "rgba(10,138,128,0.25)",
+                      }}
+                    >
+                      Logicoland — Juniors (Grade 1–4) &amp; Seniors (Grade 5–9)
+                    </td>
+                  </tr>
+                  {juniorRows.map((row, i) => (
+                    <tr
+                      key={i}
+                      style={{
+                        background:
+                          i % 2 === 0 ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.09)",
+                      }}
+                    >
+                      <td style={{ padding: "12px 14px" }}>
+                        <span style={badgeStyle("teal")}>{row.name}</span>
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                        {row.dates}
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                        {row.time}
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 14, fontWeight: 700, color: "#D8AE4F", textAlign: "right", whiteSpace: "nowrap" }}>
+                        ₹{row.fee.toLocaleString("en-IN")}
+                      </td>
+                    </tr>
+                  ))}
+
+                  {/* Seniors category header */}
+                  <tr>
+                    <td
+                      colSpan={4}
+                      style={{
+                        ...categoryRowStyle,
+                        background: "rgba(216,174,79,0.15)",
+                      }}
+                    >
+                      Quizzing / Speed Maths / Logical Reasoning — Seniors (Grade 5–9)
+                    </td>
+                  </tr>
+                  {seniorRows.map((row, i) => (
+                    <tr
+                      key={i}
+                      style={{
+                        background:
+                          i % 2 === 0 ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.09)",
+                      }}
+                    >
+                      <td style={{ padding: "12px 14px" }}>
+                        <span style={badgeStyle("amber")}>{row.name}</span>
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                        {row.dates}
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                        {row.time}
+                      </td>
+                      <td style={{ padding: "12px 14px", fontSize: 14, fontWeight: 700, color: "#D8AE4F", textAlign: "right", whiteSpace: "nowrap" }}>
+                        ₹{row.fee.toLocaleString("en-IN")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ── Form card ── */}
         <div
           style={{
             background: "#fff",
@@ -2379,13 +2618,12 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.parentName)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.parentName
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.parentName ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.parentName && <div style={err}>{errors.parentName}</div>}
             </div>
+
             <div>
               <label style={lbl}>Email Address *</label>
               <input
@@ -2401,6 +2639,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               />
               {errors.email && <div style={err}>{errors.email}</div>}
             </div>
+
             <div>
               <label style={lbl}>Phone Number (WhatsApp) *</label>
               <input
@@ -2418,6 +2657,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               />
               {errors.phone && <div style={err}>{errors.phone}</div>}
             </div>
+
             <div>
               <label style={lbl}>Child's Full Name *</label>
               <input
@@ -2428,13 +2668,12 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.childName)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childName
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.childName ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.childName && <div style={err}>{errors.childName}</div>}
             </div>
+
             <div>
               <label style={lbl}>Child's Age *</label>
               <select
@@ -2443,20 +2682,17 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.childAge)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childAge
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.childAge ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">Select age</option>
                 {Array.from({ length: 9 }, (_, i) => i + 6).map((a) => (
-                  <option key={a} value={a}>
-                    {a} years
-                  </option>
+                  <option key={a} value={a}>{a} years</option>
                 ))}
               </select>
               {errors.childAge && <div style={err}>{errors.childAge}</div>}
             </div>
+
             <div>
               <label style={lbl}>Child's Grade / Class *</label>
               <select
@@ -2465,20 +2701,17 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.childGrade)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childGrade
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.childGrade ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">Select grade</option>
                 {Array.from({ length: 9 }, (_, i) => i + 1).map((g) => (
-                  <option key={g} value={`Grade ${g}`}>
-                    Grade {g}
-                  </option>
+                  <option key={g} value={`Grade ${g}`}>Grade {g}</option>
                 ))}
               </select>
               {errors.childGrade && <div style={err}>{errors.childGrade}</div>}
             </div>
+
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>Preferred Batch *</label>
               <select
@@ -2487,17 +2720,24 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.preferredBatch)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.preferredBatch
-                    ? "#E45C48"
-                    : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.preferredBatch ? "#E45C48" : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">Select your preferred batch</option>
-                {BATCHES.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
-                  </option>
-                ))}
+                <optgroup label="— Juniors: Grade 1–4 —">
+                  {BATCHES.filter((b) => b.startsWith("Logicoland")).map((b) => (
+                    <option key={b} value={b}>
+                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="— Seniors: Grade 5–9 —">
+                  {BATCHES.filter((b) => !b.startsWith("Logicoland")).map((b) => (
+                    <option key={b} value={b}>
+                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
               {errors.preferredBatch && <div style={err}>{errors.preferredBatch}</div>}
             </div>
@@ -2513,27 +2753,18 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               >
                 <option value="">Select an option</option>
                 {REFERRAL_OPTIONS.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
+                  <option key={r} value={r}>{r}</option>
                 ))}
               </select>
             </div>
+
             <div style={{ gridColumn: "1 / -1" }}>
-              <label
-                style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}
-              >
+              <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}>
                 <input
                   type="checkbox"
                   checked={form.consent}
                   onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
-                  style={{
-                    marginTop: 2,
-                    width: 18,
-                    height: 18,
-                    accentColor: "#0A8A80",
-                    flexShrink: 0,
-                  }}
+                  style={{ marginTop: 2, width: 18, height: 18, accentColor: "#0A8A80", flexShrink: 0 }}
                 />
                 <span
                   style={{
@@ -2544,14 +2775,10 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                   }}
                 >
                   I agree to the{" "}
-                  <a href="/terms" style={{ color: "#0A8A80", fontWeight: 600 }}>
-                    Terms & Conditions
-                  </a>{" "}
-                  and{" "}
-                  <a href="/privacy" style={{ color: "#0A8A80", fontWeight: 600 }}>
-                    Privacy Policy
-                  </a>{" "}
-                  and confirm that the information provided above is accurate.
+                  <a href="/terms" style={{ color: "#0A8A80", fontWeight: 600 }}>Terms & Conditions</a>
+                  {" "}and{" "}
+                  <a href="/privacy" style={{ color: "#0A8A80", fontWeight: 600 }}>Privacy Policy</a>
+                  {" "}and confirm that the information provided above is accurate.
                 </span>
               </label>
               {errors.consent && <div style={err}>{errors.consent}</div>}
@@ -2579,19 +2806,15 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             onMouseEnter={(e) => {
               if (!isProcessing) {
                 (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                  "0 10px 36px rgba(228,92,72,0.45)";
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 36px rgba(228,92,72,0.45)";
               }
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                "0 6px 28px rgba(228,92,72,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(228,92,72,0.35)";
             }}
           >
-            {isProcessing
-              ? "Processing..."
-              : `Enroll Now — Pay ₹${activeFee.toLocaleString("en-IN")} →`}
+            {isProcessing ? "Processing..." : `Enroll Now — Pay ₹${activeFee.toLocaleString("en-IN")} →`}
           </button>
 
           <div
