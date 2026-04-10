@@ -22,11 +22,28 @@ interface FormData {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const BATCHES = [
-  "Batch A — May 12–23, 2025 (9 AM – 1 PM)",
-  "Batch B — May 26 – June 6, 2025 (9 AM – 1 PM)",
-  "Batch C — June 9–20, 2025 (2 PM – 6 PM)",
-  "Batch D — June 23 – July 4, 2025 (9 AM – 1 PM)",
+  "Logicoland A — 20 Apr – 24 Apr (10:00 – 1:00)",
+  "Logicoland B — 27 Apr – 1 May (10:00 – 1:00)",
+  "Logicoland A — 11 May – 15 May (9:30 – 12:30)",
+  "Logicoland B — 18 May – 22 May (9:30 – 12:30)",
+  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)",
+  "Speed Maths — 4 May – 8 May (9:30 – 11:00)",
+  "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)",
+  "Speed Maths — 18 May – 22 May (9:30 – 11:00)",
+  "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)",
 ];
+
+const BATCH_PRICES: Record<string, number> = {
+  "Logicoland A — 20 Apr – 24 Apr (10:00 – 1:00)": 2000,
+  "Logicoland B — 27 Apr – 1 May (10:00 – 1:00)": 2000,
+  "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
+  "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
+  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1,
+  "Speed Maths — 4 May – 8 May (9:30 – 11:00)": 2500,
+  "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)": 2500,
+  "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
+  "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)": 2500,
+};
 
 const REFERRAL_OPTIONS = [
   "Social Media",
@@ -80,7 +97,7 @@ const loadRazorpayScript = (): Promise<boolean> => {
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navItems = ["Why Workshops", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs"];
+  const navItems = ["Why Workshops", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs","Offerings"];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
@@ -638,6 +655,151 @@ function WhyLogicologySection() {
   );
 }
 
+// ── Module Card Component ────────────────────────────────────────────────────────
+function ModuleCard({ module, index }: { module: any; index: number }) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      key={module.title}
+      ref={ref}
+      style={{
+        background: "#F5F6F7",
+        borderRadius: 20,
+        padding: 32,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(40px)",
+        transition: `all 0.7s ease ${index * 100}ms`,
+        position: "relative",
+        overflow: "hidden",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 40px ${module.color}22`;
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: module.color,
+          borderRadius: "20px 20px 0 0",
+        }}
+      />
+      <img src={module.icon} alt={module.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
+      <div
+        style={{
+          display: "inline-block",
+          background: module.color + "22",
+          borderRadius: 100,
+          padding: "3px 14px",
+          marginBottom: 12,
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 11,
+          fontWeight: 700,
+          color: module.color,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+        }}
+      >
+        {module.tag}
+      </div>
+      <h3
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontWeight: 700,
+          fontSize: 18,
+          color: "#0B3F44",
+          margin: "0 0 10px",
+        }}
+      >
+        {module.title}
+      </h3>
+      <p
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 15,
+          color: "#666",
+          lineHeight: 1.7,
+          margin: 0,
+        }}
+      >
+        {module.desc}
+      </p>
+    </div>
+  );
+}
+
+// ── Bonus Card Component ──────────────────────────────────────────────────────
+function BonusCard({ bonus, index }: { bonus: any; index: number }) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      key={bonus.title}
+      ref={ref}
+      style={{
+        background: "#F5F6F7",
+        borderRadius: 20,
+        padding: 32,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(40px)",
+        transition: `all 0.7s ease ${index * 100}ms`,
+        position: "relative",
+        overflow: "hidden",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 40px ${bonus.color}22`;
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: bonus.color,
+          borderRadius: "20px 20px 0 0",
+        }}
+      />
+      <img src={bonus.icon} alt={bonus.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
+      <h3
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontWeight: 700,
+          fontSize: 18,
+          color: "#0B3F44",
+          margin: "0 0 10px",
+        }}
+      >
+        {bonus.title}
+      </h3>
+      <p
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 15,
+          color: "#666",
+          lineHeight: 1.7,
+          margin: 0,
+        }}
+      >
+        {bonus.desc}
+      </p>
+    </div>
+  );
+}
+
 // ── Curriculum ────────────────────────────────────────────────────────────────
 function CurriculumSection() {
   const { ref, visible } = useReveal();
@@ -743,85 +905,9 @@ function CurriculumSection() {
             gap: 24,
           }}
         >
-          {modules.map((m, i) => {
-            const { ref: mRef, visible: mVis } = useReveal();
-            return (
-              <div
-                key={m.title}
-                ref={mRef}
-                style={{
-                  background: "#F5F6F7",
-                  borderRadius: 20,
-                  padding: 32,
-                  opacity: mVis ? 1 : 0,
-                  transform: mVis ? "translateY(0)" : "translateY(40px)",
-                  transition: `all 0.7s ease ${i * 100}ms`,
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 40px ${m.color}22`;
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 4,
-                    background: m.color,
-                    borderRadius: "20px 20px 0 0",
-                  }}
-                />
-                <img src={m.icon} alt={m.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
-                <div
-                  style={{
-                    display: "inline-block",
-                    background: m.color + "22",
-                    borderRadius: 100,
-                    padding: "3px 14px",
-                    marginBottom: 12,
-                    fontFamily: "'Outfit', sans-serif",
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: m.color,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {m.tag}
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "'Outfit', sans-serif",
-                    fontWeight: 700,
-                    fontSize: 18,
-                    color: "#0B3F44",
-                    margin: "0 0 10px",
-                  }}
-                >
-                  {m.title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "'Outfit', sans-serif",
-                    fontSize: 15,
-                    color: "#666",
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
-                  {m.desc}
-                </p>
-              </div>
-            );
-          })}
+          {modules.map((m, i) => (
+            <ModuleCard key={m.title} module={m} index={i} />
+          ))}
         </div>
 
         <div
@@ -839,68 +925,9 @@ function CurriculumSection() {
               gap: 24,
             }}
           >
-            {bonuses.map((b, i) => {
-              const { ref: bRef, visible: bVis } = useReveal();
-              return (
-                <div
-                  key={b.title}
-                  ref={bRef}
-                  style={{
-                    background: "#F5F6F7",
-                    borderRadius: 20,
-                    padding: 32,
-                    opacity: bVis ? 1 : 0,
-                    transform: bVis ? "translateY(0)" : "translateY(40px)",
-                    transition: `all 0.7s ease ${i * 100}ms`,
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 40px ${b.color}22`;
-                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 4,
-                      background: b.color,
-                      borderRadius: "20px 20px 0 0",
-                    }}
-                  />
-                  <img src={b.icon} alt={b.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain", filter: i === 1 ? "brightness(0)" : "none" }} />
-                  <h3
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 18,
-                      color: "#0B3F44",
-                      margin: "0 0 10px",
-                    }}
-                  >
-                    {b.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      fontSize: 15,
-                      color: "#666",
-                      lineHeight: 1.7,
-                      margin: 0,
-                    }}
-                  >
-                    {b.desc}
-                  </p>
-                </div>
-              );
-            })}
+            {bonuses.map((b, i) => (
+              <BonusCard key={b.title} bonus={b} index={i} />
+            ))}
           </div>
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
@@ -928,6 +955,83 @@ function CurriculumSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// ── Enrollment Step Component ─────────────────────────────────────────────────
+function EnrollmentStep({ step, index }: { step: any; index: number }) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      key={step.title}
+      ref={ref}
+      style={{
+        background: "rgba(255,255,255,0.18)",
+        border: "1px solid rgba(255,255,255,0.30)",
+        borderRadius: 20,
+        padding: "28px 32px",
+        display: "flex",
+        alignItems: "center",
+        gap: 28,
+        backdropFilter: "blur(8px)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateX(0)" : "translateX(-32px)",
+        transition: `all 0.7s ease ${index * 150}ms`,
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.26)";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateX(6px)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.18)";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateX(0)";
+      }}
+    >
+      <div
+        style={{
+          minWidth: 64,
+          height: 64,
+          borderRadius: 16,
+          background: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "'Outfit', sans-serif",
+          fontWeight: 800,
+          fontSize: 20,
+          color: "#E45C48",
+        }}
+      >
+        {step.num}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+          <img src={step.icon} alt={step.title} style={{ width: 24, height: 24, objectFit: "contain" }} />
+          <h3
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 700,
+              fontSize: 20,
+              color: "#fff",
+              margin: 0,
+            }}
+          >
+            {step.title}
+          </h3>
+        </div>
+        <p
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: 15,
+            color: "rgba(255,255,255,0.88)",
+            margin: 0,
+            lineHeight: 1.6,
+          }}
+        >
+          {step.desc}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -1020,81 +1124,9 @@ function HowToEnrollSection() {
           </p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {steps.map((s, i) => {
-            const { ref: sRef, visible: sVis } = useReveal();
-            return (
-              <div
-                key={s.title}
-                ref={sRef}
-                style={{
-                  background: "rgba(255,255,255,0.18)",
-                  border: "1px solid rgba(255,255,255,0.30)",
-                  borderRadius: 20,
-                  padding: "28px 32px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 28,
-                  backdropFilter: "blur(8px)",
-                  opacity: sVis ? 1 : 0,
-                  transform: sVis ? "translateX(0)" : "translateX(-32px)",
-                  transition: `all 0.7s ease ${i * 150}ms`,
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.26)";
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateX(6px)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.18)";
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateX(0)";
-                }}
-              >
-                <div
-                  style={{
-                    minWidth: 64,
-                    height: 64,
-                    borderRadius: 16,
-                    background: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "'Outfit', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 20,
-                    color: "#E45C48",
-                  }}
-                >
-                  {s.num}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                    <img src={s.icon} alt={s.title} style={{ width: 24, height: 24, objectFit: "contain" }} />
-                    <h3
-                      style={{
-                        fontFamily: "'Outfit', sans-serif",
-                        fontWeight: 700,
-                        fontSize: 20,
-                        color: "#fff",
-                        margin: 0,
-                      }}
-                    >
-                      {s.title}
-                    </h3>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      fontSize: 15,
-                      color: "rgba(255,255,255,0.88)",
-                      margin: 0,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {s.desc}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+          {steps.map((s, i) => (
+            <EnrollmentStep key={s.title} step={s} index={i} />
+          ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 56 }}>
           <div className="mt-6">
@@ -1871,7 +1903,7 @@ function FAQSection() {
 }
 
 // ── Enrollment Form ───────────────────────────────────────────────────────────
-function EnrollmentSection() {
+function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: string; selectedPrice: number | null }) {
   const { ref, visible } = useReveal();
   const [form, setForm] = useState<FormData>({
     parentName: "",
@@ -1888,6 +1920,25 @@ function EnrollmentSection() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+
+  // Sync selectedBatch from offerings into form when it changes
+  useEffect(() => {
+    if (selectedBatch) {
+      setForm((f) => ({ ...f, preferredBatch: selectedBatch }));
+    }
+  }, [selectedBatch]);
+
+  // Compute the active fee: from prop if set, else from form selection, else default 2000
+  const activeFee =
+    selectedPrice !== null && form.preferredBatch === selectedBatch
+      ? selectedPrice
+      : BATCH_PRICES[form.preferredBatch] ?? 2000;
+
+  // Use activeFee ref for handleSubmit
+  const activeFeeRef = useRef(activeFee);
+  useEffect(() => {
+    activeFeeRef.current = activeFee;
+  }, [activeFee]);
 
   const validate = () => {
     const e: Partial<Record<keyof FormData, string>> = {};
@@ -1967,7 +2018,7 @@ function EnrollmentSection() {
       const res = await fetch("/api/razorpay-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: CAMP_FEE, currency: "INR", receipt: `camp_${Date.now()}` }),
+        body: JSON.stringify({ amount: activeFeeRef.current, currency: "INR", receipt: `camp_${Date.now()}` }),
       });
       if (!res.ok) {
         const errorData = await res.json();
@@ -1998,7 +2049,7 @@ function EnrollmentSection() {
                 items: [
                   {
                     name: `Logicology Summer workshop — ${form.preferredBatch}`,
-                    price: CAMP_FEE,
+                    price: activeFeeRef.current,
                     quantity: 1,
                     itemId: "summer-camp",
                   },
@@ -2006,12 +2057,12 @@ function EnrollmentSection() {
                 paymentInfo: {
                   paymentId: response.razorpay_payment_id,
                   orderId: response.razorpay_order_id,
-                  amount: CAMP_FEE,
+                  amount: activeFeeRef.current,
                   currency: "INR",
                   status: "completed",
                   description: orderDescription,
                 },
-                totals: { subtotal: CAMP_FEE, discount: 0, total: CAMP_FEE },
+                totals: { subtotal: activeFeeRef.current, discount: 0, total: activeFeeRef.current },
                 discountCode: null,
                 campDetails: {
                   childName: form.childName,
@@ -2269,7 +2320,7 @@ function EnrollmentSection() {
                 letterSpacing: "0.07em",
               }}
             >
-              workshop Fee (Full Programme)
+              Workshop Fee
             </div>
             <div
               style={{
@@ -2277,9 +2328,10 @@ function EnrollmentSection() {
                 fontWeight: 800,
                 fontSize: 32,
                 color: "#D8AE4F",
+                transition: "all 0.3s ease",
               }}
             >
-              ₹{CAMP_FEE.toLocaleString("en-IN")}
+              ₹{activeFee.toLocaleString("en-IN")}
             </div>
             <div
               style={{
@@ -2288,7 +2340,9 @@ function EnrollmentSection() {
                 color: "rgba(255,255,255,0.6)",
               }}
             >
-              Includes all materials, kits, snacks, t-shirt & certificate
+              {form.preferredBatch
+                ? `Selected: ${form.preferredBatch}`
+                : "Select a batch below — starting from ₹1,000"}
             </div>
           </div>
           <div
@@ -2537,7 +2591,7 @@ function EnrollmentSection() {
           >
             {isProcessing
               ? "Processing..."
-              : `Enroll Now — Pay ₹${CAMP_FEE.toLocaleString("en-IN")} →`}
+              : `Enroll Now — Pay ₹${activeFee.toLocaleString("en-IN")} →`}
           </button>
 
           <div
@@ -2556,6 +2610,373 @@ function EnrollmentSection() {
             🔒 Secure payment via Razorpay · 256-bit SSL encrypted
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+
+
+// ── Offerings Section ──────────────────────────────────────────────────────────
+// ── Offerings Data ─────────────────────────────────────────────────────────────
+const OFFERINGS = [
+  // Junior (6–9 years)
+  {
+    ageGroup: "6–9 years",
+    name: "Logicoland A",
+    dates: "20 Apr – 24 Apr",
+    time: "10:00 – 1:00",
+    price: 2000,
+    tag: "Includes 2 Books",
+    color: "#0A8A80",
+    accentColor: "#0B3F44",
+  },
+  {
+    ageGroup: "6–9 years",
+    name: "Logicoland B",
+    dates: "27 Apr – 1 May",
+    time: "10:00 – 1:00",
+    price: 2000,
+    tag: "Includes 2 Books",
+    color: "#0A8A80",
+    accentColor: "#0B3F44",
+  },
+  {
+    ageGroup: "6–9 years",
+    name: "Logicoland A",
+    dates: "11 May – 15 May",
+    time: "9:30 – 12:30",
+    price: 2000,
+    tag: "Includes 2 Books",
+    color: "#0A8A80",
+    accentColor: "#0B3F44",
+  },
+  {
+    ageGroup: "6–9 years",
+    name: "Logicoland B",
+    dates: "18 May – 22 May",
+    time: "9:30 – 12:30",
+    price: 2000,
+    tag: "Includes 2 Books",
+    color: "#0A8A80",
+    accentColor: "#0B3F44",
+  },
+  // Senior (10–14 years)
+  {
+    ageGroup: "10–14 years",
+    name: "Quizzing",
+    dates: "27 Apr – 1 May",
+    time: "9:30 – 10:30",
+    price: 1000,
+    tag: null,
+    color: "#E45C48",
+    accentColor: "#AB4637",
+  },
+  {
+    ageGroup: "10–14 years",
+    name: "Speed Maths",
+    dates: "4 May – 8 May",
+    time: "9:30 – 11:00",
+    price: 2500,
+    tag: null,
+    color: "#E45C48",
+    accentColor: "#AB4637",
+  },
+  {
+    ageGroup: "10–14 years",
+    name: "Logical Reasoning",
+    dates: "4 May – 8 May",
+    time: "11:00 – 12:30",
+    price: 2500,
+    tag: null,
+    color: "#E45C48",
+    accentColor: "#AB4637",
+  },
+  {
+    ageGroup: "10–14 years",
+    name: "Speed Maths",
+    dates: "18 May – 22 May",
+    time: "9:30 – 11:00",
+    price: 2500,
+    tag: null,
+    color: "#E45C48",
+    accentColor: "#AB4637",
+  },
+  {
+    ageGroup: "10–14 years",
+    name: "Logical Reasoning",
+    dates: "25 May – 29 May",
+    time: "11:00 – 12:30",
+    price: 2500,
+    tag: null,
+    color: "#E45C48",
+    accentColor: "#AB4637",
+  },
+];
+
+// ── Offering Card Component ───────────────────────────────────────────────────
+function OfferingCard({ offering, index, isJunior, onEnroll }: { offering: any; index: number; isJunior: boolean; onEnroll?: (batch: string, price: number) => void }) {
+  const { ref, visible } = useReveal();
+  const batchLabel = `${offering.name} — ${offering.dates} (${offering.time})`;
+  return (
+    <div
+      key={`${offering.name}-${offering.dates}-${index}`}
+      ref={ref}
+      className="bg-brand-tealDark"
+      style={{
+        border: `1px solid ${isJunior ? "rgba(10,138,128,0.35)" : "rgba(228,92,72,0.35)"}`,
+        borderRadius: 20,
+        padding: "28px 24px",
+        position: "relative",
+        overflow: "hidden",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(40px)",
+        transition: `all 0.6s ease ${index * 80}ms`,
+        backdropFilter: "blur(8px)",
+        cursor: "default",
+      }}
+     
+    >
+      {/* Top accent bar */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 3,
+        background: `linear-gradient(90deg, ${offering.color}, transparent)`,
+        borderRadius: "20px 20px 0 0",
+      }} />
+
+      {/* Age badge */}
+      <div style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        background: `${offering.color}22`,
+        border: `1px solid ${offering.color}44`,
+        borderRadius: 100, padding: "4px 12px",
+        marginBottom: 16,
+        fontFamily: "'Outfit', sans-serif", fontSize: 11,
+        fontWeight: 700, color: offering.color,
+        letterSpacing: "0.07em", textTransform: "uppercase",
+      }}>
+        {offering.ageGroup}
+      </div>
+
+      {/* Workshop name */}
+      <h3 style={{
+        fontFamily: "'Outfit', sans-serif", fontWeight: 800,
+        fontSize: 22, color: "#fff", margin: "0 0 20px", lineHeight: 1.2,
+      }}>
+        {offering.name}
+      </h3>
+
+      {/* Details */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "rgba(255,255,255,0.08)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 14, flexShrink: 0,
+          }}>📅</div>
+          <span style={{
+            fontFamily: "'Outfit', sans-serif", fontSize: 14,
+            color: "rgba(255,255,255,0.80)", fontWeight: 500,
+          }}>
+            {offering.dates}
+          </span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "rgba(255,255,255,0.08)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 14, flexShrink: 0,
+          }}>⏰</div>
+          <span style={{
+            fontFamily: "'Outfit', sans-serif", fontSize: 14,
+            color: "rgba(255,255,255,0.80)", fontWeight: 500,
+          }}>
+            {offering.time}
+          </span>
+        </div>
+      </div>
+
+      {/* Book tag */}
+      {offering.tag && (
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          background: "rgba(216,174,79,0.15)",
+          border: "1px solid rgba(216,174,79,0.30)",
+          borderRadius: 8, padding: "6px 12px", marginBottom: 20,
+          fontFamily: "'Outfit', sans-serif", fontSize: 12,
+          fontWeight: 600, color: "#D8AE4F",
+        }}>
+          📚 {offering.tag}
+        </div>
+      )}
+
+      {/* Divider */}
+      <div style={{
+        height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 16,
+      }} />
+
+      {/* Price + Enroll button */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <div style={{
+            fontFamily: "'Outfit', sans-serif", fontSize: 11,
+            color: "rgba(255,255,255,0.4)", fontWeight: 600,
+            textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2,
+          }}>
+            Fee
+          </div>
+          <div style={{
+            fontFamily: "'Outfit', sans-serif", fontWeight: 800,
+            fontSize: 24, color: "#D8AE4F",
+          }}>
+            ₹{offering.price.toLocaleString("en-IN")}
+          </div>
+        </div>
+        {onEnroll && (
+          <button
+            onClick={() => onEnroll(batchLabel, offering.price)}
+            style={{
+              background: offering.color,
+              color: "#fff",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: 100,
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: "pointer",
+              boxShadow: `0 4px 16px ${offering.color}44`,
+              transition: "transform 0.2s, box-shadow 0.2s",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 8px 24px ${offering.color}66`;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 16px ${offering.color}44`;
+            }}
+          >
+            Enroll →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Offerings Section ─────────────────────────────────────────────────────────
+function OfferingsSection({ onEnroll }: { onEnroll?: (batch: string, price: number) => void }) {
+  const { ref, visible } = useReveal();
+  const [activeTab, setActiveTab] = useState<"junior" | "senior">("junior");
+
+  const juniorOfferings = OFFERINGS.filter((o) => o.ageGroup === "6–9 years");
+  const seniorOfferings = OFFERINGS.filter((o) => o.ageGroup === "10–14 years");
+  const displayed = activeTab === "junior" ? juniorOfferings : seniorOfferings;
+
+  return (
+    <section
+      id="offerings"
+      style={{
+        padding: "100px 24px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+      className="bg-brand-teal"
+    >
+      {/* Decorative blobs */}
+      <div style={{
+        position: "absolute", top: -100, right: -100,
+        width: 400, height: 400, borderRadius: "50%",
+        background: "rgba(216,174,79,0.07)", filter: "blur(80px)",
+      }} />
+      <div style={{
+        position: "absolute", bottom: -80, left: -80,
+        width: 320, height: 320, borderRadius: "50%",
+        background: "rgba(228,92,72,0.06)", filter: "blur(60px)",
+      }} />
+
+      <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Header */}
+        <div
+          ref={ref}
+          style={{
+            textAlign: "center",
+            marginBottom: 56,
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(32px)",
+            transition: "all 0.7s ease",
+          }}
+        >
+          <div style={{
+            display: "inline-block",
+            background: "rgba(216,255,255,0.15)",
+            border: "1px solid rgba(216,174,79,0.35)",
+            borderRadius: 100, padding: "5px 18px", marginBottom: 20,
+            fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700,
+            color: "#D8AE4F", letterSpacing: "0.10em", textTransform: "uppercase",
+          }}>
+            Summer 2026 Schedule
+          </div>
+          <h2
+            className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight"
+            style={{ margin: "0 0 16px" }}
+          >
+            Choose Your Workshop
+          </h2>
+          <p style={{
+            fontFamily: "'Outfit', sans-serif", fontSize: 18,
+            color: "rgba(255,255,255,0.65)", maxWidth: 520,
+            margin: "0 auto 40px", lineHeight: 1.7,
+          }}>
+            Multiple workshops across age groups — pick the one that fits your child's schedule and interests.
+          </p>
+
+          {/* Tab switcher */}
+          <div style={{
+            display: "inline-flex",
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: 100, padding: 4, gap: 4,
+          }}>
+            {(["junior", "senior"] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  padding: "10px 28px",
+                  borderRadius: 100, border: "none", cursor: "pointer",
+                  fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 15,
+                  transition: "all 0.3s ease",
+                  background: activeTab === tab
+                    ? (tab === "junior" ? "#0A8A80" : "#E45C48")
+                    : "transparent",
+                  color: activeTab === tab ? "#fff" : "rgba(255,255,255,0.55)",
+                  boxShadow: activeTab === tab ? "0 4px 16px rgba(0,0,0,0.2)" : "none",
+                }}
+              >
+                {tab === "junior" ? " Ages 6–9" : " Ages 10–14"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Cards grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: 20,
+        }}>
+          {displayed.map((offering:any, i:number) => (
+            <OfferingCard key={`${offering.name}-${offering.dates}-${i}`} offering={offering} index={i} isJunior={activeTab === "junior"} onEnroll={onEnroll} />
+          ))}
+        </div>
+
+        {/* Bottom note */}
+        
       </div>
     </section>
   );
@@ -2706,6 +3127,17 @@ function DarkOnGoldBtn() {
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function SummerCampPage() {
+  const [selectedBatch, setSelectedBatch] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+
+  const handleEnroll = (batch: string, price: number) => {
+    setSelectedBatch(batch);
+    setSelectedPrice(price);
+    setTimeout(() => {
+      document.getElementById("enroll")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   return (
     <>
       <style>{`
@@ -2729,8 +3161,10 @@ export default function SummerCampPage() {
       <CurriculumSection />
       <HowToEnrollSection />
       <TestimonialsSection />
+      
+      <OfferingsSection onEnroll={handleEnroll} />
       <FAQSection />
-      <EnrollmentSection />
+      <EnrollmentSection selectedBatch={selectedBatch} selectedPrice={selectedPrice} />
       <SiteFooter />
     </>
   );
