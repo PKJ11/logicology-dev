@@ -38,7 +38,7 @@ const BATCH_PRICES: Record<string, number> = {
   "Logicoland B — 27 Apr – 1 May (10:00 – 1:00)": 2000,
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
-  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1000,
+  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1,//changed
   "Speed Maths — 4 May – 8 May (9:30 – 11:00)": 2500,
   "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)": 2500,
   "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
@@ -266,10 +266,10 @@ function HeroSection() {
             fontFamily: "'Outfit', sans-serif",
             fontSize: 13,
             fontWeight: 600,
-            color: "#D8AE4F",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
           }}
+          className="text-brand-tealDark"
         >
           Summer 2026 · Ages 6–14
         </div>
@@ -2155,7 +2155,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
   ];
 
   const seniorRows = [
-    { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1000 },
+    { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1 },//chnaged
     { name: "Speed Maths", dates: "4 May – 8 May", time: "9:30 – 11:00", fee: 2500 },
     { name: "Logical Reasoning", dates: "4 May – 8 May", time: "11:00 – 12:30", fee: 2500 },
     { name: "Speed Maths", dates: "18 May – 22 May", time: "9:30 – 11:00", fee: 2500 },
@@ -2911,7 +2911,7 @@ const OFFERINGS = [
     name: "Quizzing",
     dates: "27 Apr – 1 May",
     time: "9:30 – 10:30",
-    price: 1000,
+    price: 1000,//chnaged 
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
