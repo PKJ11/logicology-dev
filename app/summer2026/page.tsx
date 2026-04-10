@@ -2911,7 +2911,7 @@ const OFFERINGS = [
     name: "Quizzing",
     dates: "27 Apr – 1 May",
     time: "9:30 – 10:30",
-    price: 1000,//chnaged 
+    price: 1,//chnaged 
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
