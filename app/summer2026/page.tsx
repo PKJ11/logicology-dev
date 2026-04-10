@@ -38,7 +38,7 @@ const BATCH_PRICES: Record<string, number> = {
   "Logicoland B — 27 Apr – 1 May (10:00 – 1:00)": 2000,
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
-  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1,//changed
+  "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1, //changed
   "Speed Maths — 4 May – 8 May (9:30 – 11:00)": 2500,
   "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)": 2500,
   "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
@@ -97,10 +97,17 @@ const loadRazorpayScript = (): Promise<boolean> => {
 // ── NavBar ────────────────────────────────────────────────────────────────────
 function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navItems = ["Why Workshops", "Why Logicology", "Take-Aways", "How to Enroll", "FAQs","Offerings"];
+  const navItems = [
+    "Why Workshops",
+    "Why Logicology",
+    "Take-Aways",
+    "How to Enroll",
+    "FAQs",
+    "Offerings",
+  ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="flex justify-between py-3">
           {/* Logo */}
@@ -300,7 +307,7 @@ function HeroSection() {
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a
             href="#enroll"
-            className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-white hover:text-brand-teal focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99] mt-2"
+            className="group mt-2 inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-6 py-3 text-[16px] font-semibold text-white transition-colors hover:bg-white hover:text-brand-teal focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
           >
             Enroll Now →
           </a>
@@ -441,7 +448,10 @@ function WhyCampsSection() {
           >
             Why Summer Workshops?
           </div>
-          <h2 className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
+          <h2
+            className="font-heading text-[36px] font-bold leading-tight text-white md:text-[44px]"
+            style={{ margin: 0 }}
+          >
             Why a Summer Workshop
             <br />
             Changes Everything
@@ -573,7 +583,10 @@ function WhyLogicologySection() {
           >
             Why Logicology?
           </div>
-          <h2 className="font-heading text-[#2d2200] text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
+          <h2
+            className="font-heading text-[36px] font-bold leading-tight text-[#2d2200] md:text-[44px]"
+            style={{ margin: 0 }}
+          >
             Not All Workshops Are
             <br />
             Created Equal.
@@ -588,8 +601,8 @@ function WhyLogicologySection() {
               lineHeight: 1.7,
             }}
           >
-            There are hundreds of summer workshops out there. Many are fun. A few are transformative.
-            Logicology is designed to be the latter.
+            There are hundreds of summer workshops out there. Many are fun. A few are
+            transformative. Logicology is designed to be the latter.
           </p>
         </div>
         <div
@@ -601,7 +614,11 @@ function WhyLogicologySection() {
         >
           {diffs.map((d, i) => (
             <GoldCard key={d.title} delay={i * 100}>
-              <img src={d.icon} alt={d.title} style={{ width: 48, height: 48, marginBottom: 16, objectFit: "contain" }} />
+              <img
+                src={d.icon}
+                alt={d.title}
+                style={{ width: 48, height: 48, marginBottom: 16, objectFit: "contain" }}
+              />
               <h3
                 style={{
                   fontFamily: "'Outfit', sans-serif",
@@ -692,7 +709,11 @@ function ModuleCard({ module, index }: { module: any; index: number }) {
           borderRadius: "20px 20px 0 0",
         }}
       />
-      <img src={module.icon} alt={module.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
+      <img
+        src={module.icon}
+        alt={module.title}
+        style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }}
+      />
       <div
         style={{
           display: "inline-block",
@@ -773,7 +794,11 @@ function BonusCard({ bonus, index }: { bonus: any; index: number }) {
           borderRadius: "20px 20px 0 0",
         }}
       />
-      <img src={bonus.icon} alt={bonus.title} style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain" }} />
+      <img
+        src={bonus.icon}
+        alt={bonus.title}
+        style={{ width: 48, height: 48, marginBottom: 12, objectFit: "contain", filter: "brightness(0) saturate(100%)" }}
+      />
       <h3
         style={{
           fontFamily: "'Outfit', sans-serif",
@@ -879,7 +904,10 @@ function CurriculumSection() {
           >
             Take-aways
           </div>
-          <h2 className="font-heading text-brand-teal text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: 0 }}>
+          <h2
+            className="font-heading text-[36px] font-bold leading-tight text-brand-teal md:text-[44px]"
+            style={{ margin: 0 }}
+          >
             What Your Child Will Actually
             <br />
             Walk Away With
@@ -914,7 +942,10 @@ function CurriculumSection() {
           style={{ marginTop: 80, paddingTop: 80, borderTop: "2px solid rgba(10,138,128,0.10)" }}
         >
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <h3 className="font-heading text-brand-teal text-[28px] md:text-[32px] font-bold" style={{ margin: 0 }}>
+            <h3
+              className="font-heading text-[28px] font-bold text-brand-teal md:text-[32px]"
+              style={{ margin: 0 }}
+            >
               What's More You Also Get:
             </h3>
           </div>
@@ -1006,7 +1037,11 @@ function EnrollmentStep({ step, index }: { step: any; index: number }) {
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-          <img src={step.icon} alt={step.title} style={{ width: 24, height: 24, objectFit: "contain" }} />
+          <img
+            src={step.icon}
+            alt={step.title}
+            style={{ width: 24, height: 24, objectFit: "contain" }}
+          />
           <h3
             style={{
               fontFamily: "'Outfit', sans-serif",
@@ -1043,13 +1078,13 @@ function HowToEnrollSection() {
       num: "01",
       icon: "/Images/logicology_camps/ENROLLMENT/FILL FORM.svg",
       title: "Fill Out the Enrollment Form",
-      desc: "Tell us about your child — name, age, and any details we should know. Takes less than three minutes.",
+      desc: "Tell us about your child — name, age, and other details we should know. Takes less than two minutes.",
     },
     {
       num: "02",
       icon: "/Images/logicology_camps/ENROLLMENT/SELECT BATCH.svg",
       title: "Choose Your Batch",
-      desc: "Select the dates and batch that work best for your family. We run multiple batches throughout the summer.",
+      desc: "Select the workshop - choose date and time that work the best for you. We run multiple batches of each workshop.",
     },
     {
       num: "03",
@@ -1110,7 +1145,10 @@ function HowToEnrollSection() {
           >
             Enrollment
           </div>
-          <h2 className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight" style={{ margin: "0 0 12px" }}>
+          <h2
+            className="font-heading text-[36px] font-bold leading-tight text-white md:text-[44px]"
+            style={{ margin: "0 0 12px" }}
+          >
             Getting Started Is Simple
           </h2>
           <p
@@ -1211,64 +1249,65 @@ const TESTIMONIALS: TestimonialData[] = [
 ];
 
 // ── Position config (slots: -3 … +3) ─────────────────────────────────────────
-const SLOT_STYLES: Record<string, React.CSSProperties & { background: string; boxShadow: string }> = {
-  "-3": {
-    transform: "translateX(-130%) rotateY(70deg) scale(0.55)",
-    opacity: 0,
-    zIndex: 1,
-    pointerEvents: "none",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-  "-2": {
-    transform: "translateX(-105%) rotateY(60deg) scale(0.68)",
-    opacity: 0.25,
-    zIndex: 2,
-    pointerEvents: "auto",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-  "-1": {
-    transform: "translateX(-62%) rotateY(42deg) scale(0.82)",
-    opacity: 0.55,
-    zIndex: 3,
-    pointerEvents: "auto",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-  "0": {
-    transform: "translateX(0) rotateY(0deg) scale(1)",
-    opacity: 1,
-    zIndex: 5,
-    pointerEvents: "auto",
-    background: "rgba(255,255,255,0.88)",
-    boxShadow: "0 28px 70px rgba(11,63,68,0.22)",
-  },
-  "1": {
-    transform: "translateX(62%) rotateY(-42deg) scale(0.82)",
-    opacity: 0.55,
-    zIndex: 3,
-    pointerEvents: "auto",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-  "2": {
-    transform: "translateX(105%) rotateY(-60deg) scale(0.68)",
-    opacity: 0.25,
-    zIndex: 2,
-    pointerEvents: "auto",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-  "3": {
-    transform: "translateX(130%) rotateY(-70deg) scale(0.55)",
-    opacity: 0,
-    zIndex: 1,
-    pointerEvents: "none",
-    background: "rgba(255,255,255,0.38)",
-    boxShadow: "none",
-  },
-};
+const SLOT_STYLES: Record<string, React.CSSProperties & { background: string; boxShadow: string }> =
+  {
+    "-3": {
+      transform: "translateX(-130%) rotateY(70deg) scale(0.55)",
+      opacity: 0,
+      zIndex: 1,
+      pointerEvents: "none",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+    "-2": {
+      transform: "translateX(-105%) rotateY(60deg) scale(0.68)",
+      opacity: 0.25,
+      zIndex: 2,
+      pointerEvents: "auto",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+    "-1": {
+      transform: "translateX(-62%) rotateY(42deg) scale(0.82)",
+      opacity: 0.55,
+      zIndex: 3,
+      pointerEvents: "auto",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+    "0": {
+      transform: "translateX(0) rotateY(0deg) scale(1)",
+      opacity: 1,
+      zIndex: 5,
+      pointerEvents: "auto",
+      background: "rgba(255,255,255,0.88)",
+      boxShadow: "0 28px 70px rgba(11,63,68,0.22)",
+    },
+    "1": {
+      transform: "translateX(62%) rotateY(-42deg) scale(0.82)",
+      opacity: 0.55,
+      zIndex: 3,
+      pointerEvents: "auto",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+    "2": {
+      transform: "translateX(105%) rotateY(-60deg) scale(0.68)",
+      opacity: 0.25,
+      zIndex: 2,
+      pointerEvents: "auto",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+    "3": {
+      transform: "translateX(130%) rotateY(-70deg) scale(0.55)",
+      opacity: 0,
+      zIndex: 1,
+      pointerEvents: "none",
+      background: "rgba(255,255,255,0.38)",
+      boxShadow: "none",
+    },
+  };
 
 /** Avatar: shows photo if available, falls back to teal initial circle */
 function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
@@ -1316,15 +1355,7 @@ function TestimonialAvatar({ photo, name }: { photo?: string; name: string }) {
 }
 
 /** Single fan card */
-function FanCard({
-  t,
-  slot,
-  onClick,
-}: {
-  t: TestimonialData;
-  slot: number;
-  onClick: () => void;
-}) {
+function FanCard({ t, slot, onClick }: { t: TestimonialData; slot: number; onClick: () => void }) {
   const clampedSlot = Math.max(-3, Math.min(3, slot));
   const style = SLOT_STYLES[String(clampedSlot)];
   const isActive = slot === 0;
@@ -1603,18 +1634,15 @@ function TestimonialsSection() {
           <div
             ref={stageRef}
             className="t-fan-stage"
-            onMouseEnter={() => { if (autoRef.current) clearInterval(autoRef.current); }}
+            onMouseEnter={() => {
+              if (autoRef.current) clearInterval(autoRef.current);
+            }}
             onMouseLeave={startAuto}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
             {TESTIMONIALS.map((t, i) => (
-              <FanCard
-                key={t.name}
-                t={t}
-                slot={getSlot(i)}
-                onClick={() => goTo(i)}
-              />
+              <FanCard key={t.name} t={t} slot={getSlot(i)} onClick={() => goTo(i)} />
             ))}
           </div>
 
@@ -1822,7 +1850,7 @@ function FAQSection() {
             FAQ
           </div>
           <h2
-            className="font-heading text-brand-teal text-[28px] md:text-[44px] font-bold"
+            className="font-heading text-[28px] font-bold text-brand-teal md:text-[44px]"
             style={{ margin: 0 }}
           >
             Got Questions? We've Got Answers.
@@ -1903,7 +1931,13 @@ function FAQSection() {
 }
 
 // ── Enrollment Form ───────────────────────────────────────────────────────────
-function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: string; selectedPrice: number | null }) {
+function EnrollmentSection({
+  selectedBatch,
+  selectedPrice,
+}: {
+  selectedBatch: string;
+  selectedPrice: number | null;
+}) {
   const { ref, visible } = useReveal();
   const [form, setForm] = useState<FormData>({
     parentName: "",
@@ -1931,7 +1965,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
   const activeFee =
     selectedPrice !== null && form.preferredBatch === selectedBatch
       ? selectedPrice
-      : BATCH_PRICES[form.preferredBatch] ?? 1000;
+      : (BATCH_PRICES[form.preferredBatch] ?? 1000);
 
   const activeFeeRef = useRef(activeFee);
   useEffect(() => {
@@ -1988,11 +2022,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             name: "purchase",
             languageCode: "en",
             bodyValues: [
-              form.parentName,
-              `Logicology Summer workshop — ${form.preferredBatch}`,
-              activeFeeRef.current.toString(),
-              "Logicology workshop Venue",
-              paymentId,
+              `Hello ${form.parentName}, your payment for Logicology Summer Camp — ${form.preferredBatch} has been received at our end.\n\nAmount: ₹${activeFeeRef.current}\nPayment ID: ${paymentId}\n\nYou will receive updates about the camp on your registered mobile number. If you have any questions feel free to send us a WhatsApp message on 8446980747.`,
             ],
           },
         }),
@@ -2016,7 +2046,11 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
       const res = await fetch("/api/razorpay-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: activeFeeRef.current, currency: "INR", receipt: `camp_${Date.now()}` }),
+        body: JSON.stringify({
+          amount: activeFeeRef.current,
+          currency: "INR",
+          receipt: `camp_${Date.now()}`,
+        }),
       });
       if (!res.ok) {
         const errorData = await res.json();
@@ -2060,7 +2094,11 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                   status: "completed",
                   description: orderDescription,
                 },
-                totals: { subtotal: activeFeeRef.current, discount: 0, total: activeFeeRef.current },
+                totals: {
+                  subtotal: activeFeeRef.current,
+                  discount: 0,
+                  total: activeFeeRef.current,
+                },
                 discountCode: null,
                 campDetails: {
                   childName: form.childName,
@@ -2155,7 +2193,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
   ];
 
   const seniorRows = [
-    { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1 },//chnaged
+    { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1 }, //chnaged
     { name: "Speed Maths", dates: "4 May – 8 May", time: "9:30 – 11:00", fee: 2500 },
     { name: "Logical Reasoning", dates: "4 May – 8 May", time: "11:00 – 12:30", fee: 2500 },
     { name: "Speed Maths", dates: "18 May – 22 May", time: "9:30 – 11:00", fee: 2500 },
@@ -2401,7 +2439,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               padding: "10px 18px",
               fontFamily: "'Outfit', sans-serif",
               fontSize: 13,
-              color: "#D8AE4F",
+              color: "#FFFFFF",
               fontWeight: 600,
               cursor: "pointer",
               transition: "all 0.2s ease",
@@ -2416,7 +2454,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(216,174,79,0.6)";
             }}
           >
-            📊 View Pricing Table
+            View All Workshops & Prices
           </button>
         </div>
 
@@ -2452,7 +2490,14 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 28,
+                }}
+              >
                 <h3
                   style={{
                     fontFamily: "'Outfit', sans-serif",
@@ -2481,10 +2526,12 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                     transition: "all 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.35)";
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      "rgba(216,174,79,0.35)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(216,174,79,0.2)";
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      "rgba(216,174,79,0.2)";
                   }}
                 >
                   ✕
@@ -2532,7 +2579,7 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                         background: "rgba(10,138,128,0.25)",
                       }}
                     >
-                      Logicoland — Juniors (Grade 1–4) &amp; Seniors (Grade 5–9)
+                      Logicoland — Juniors (Grade 1–4)
                     </td>
                   </tr>
                   {juniorRows.map((row, i) => (
@@ -2546,13 +2593,36 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                       <td style={{ padding: "12px 14px" }}>
                         <span style={badgeStyle("teal")}>{row.name}</span>
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.85)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         {row.dates}
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.85)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         {row.time}
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 14, fontWeight: 700, color: "#D8AE4F", textAlign: "right", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: "#D8AE4F",
+                          textAlign: "right",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         ₹{row.fee.toLocaleString("en-IN")}
                       </td>
                     </tr>
@@ -2581,13 +2651,36 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                       <td style={{ padding: "12px 14px" }}>
                         <span style={badgeStyle("amber")}>{row.name}</span>
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.85)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         {row.dates}
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 13, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.85)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         {row.time}
                       </td>
-                      <td style={{ padding: "12px 14px", fontSize: 14, fontWeight: 700, color: "#D8AE4F", textAlign: "right", whiteSpace: "nowrap" }}>
+                      <td
+                        style={{
+                          padding: "12px 14px",
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: "#D8AE4F",
+                          textAlign: "right",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
                         ₹{row.fee.toLocaleString("en-IN")}
                       </td>
                     </tr>
@@ -2618,7 +2711,9 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.parentName)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.parentName ? "#E45C48" : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.parentName
+                    ? "#E45C48"
+                    : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.parentName && <div style={err}>{errors.parentName}</div>}
@@ -2668,7 +2763,9 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.childName)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childName ? "#E45C48" : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.childName
+                    ? "#E45C48"
+                    : "rgba(10,138,128,0.2)")
                 }
               />
               {errors.childName && <div style={err}>{errors.childName}</div>}
@@ -2682,12 +2779,16 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 style={inp(!!errors.childAge)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.childAge ? "#E45C48" : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.childAge
+                    ? "#E45C48"
+                    : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">Select age</option>
                 {Array.from({ length: 9 }, (_, i) => i + 6).map((a) => (
-                  <option key={a} value={a}>{a} years</option>
+                  <option key={a} value={a}>
+                    {a} years
+                  </option>
                 ))}
               </select>
               {errors.childAge && <div style={err}>{errors.childAge}</div>}
@@ -2697,11 +2798,15 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               <label style={lbl}>Preferred Batch *</label>
               <select
                 value={form.preferredBatch}
-                onChange={(e) => setForm((f) => ({ ...f, preferredBatch: e.target.value, childGrade: "" }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, preferredBatch: e.target.value, childGrade: "" }))
+                }
                 style={inp(!!errors.preferredBatch)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
-                  (e.target.style.borderColor = errors.preferredBatch ? "#E45C48" : "rgba(10,138,128,0.2)")
+                  (e.target.style.borderColor = errors.preferredBatch
+                    ? "#E45C48"
+                    : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">Select your preferred batch</option>
@@ -2736,10 +2841,13 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                   backgroundColor: form.preferredBatch ? "transparent" : "rgba(0,0,0,0.05)",
                 }}
                 onFocus={(e) => {
-                  if (form.preferredBatch) (e.target as HTMLSelectElement).style.borderColor = "#0A8A80";
+                  if (form.preferredBatch)
+                    (e.target as HTMLSelectElement).style.borderColor = "#0A8A80";
                 }}
                 onBlur={(e) =>
-                  ((e.target as HTMLSelectElement).style.borderColor = errors.childGrade ? "#E45C48" : "rgba(10,138,128,0.2)")
+                  ((e.target as HTMLSelectElement).style.borderColor = errors.childGrade
+                    ? "#E45C48"
+                    : "rgba(10,138,128,0.2)")
                 }
               >
                 <option value="">
@@ -2747,16 +2855,27 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                 </option>
                 {form.preferredBatch && form.preferredBatch.startsWith("Logicoland")
                   ? Array.from({ length: 4 }, (_, i) => i + 1).map((g) => (
-                      <option key={g} value={`Grade ${g}`}>Grade {g}</option>
+                      <option key={g} value={`Grade ${g}`}>
+                        Grade {g}
+                      </option>
                     ))
                   : form.preferredBatch
-                  ? Array.from({ length: 5 }, (_, i) => i + 5).map((g) => (
-                      <option key={g} value={`Grade ${g}`}>Grade {g}</option>
-                    ))
-                  : null}
+                    ? Array.from({ length: 5 }, (_, i) => i + 5).map((g) => (
+                        <option key={g} value={`Grade ${g}`}>
+                          Grade {g}
+                        </option>
+                      ))
+                    : null}
               </select>
               {!form.preferredBatch && (
-                <div style={{ fontSize: 12, color: "#888", marginTop: 6, fontFamily: "'Outfit', sans-serif" }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "#888",
+                    marginTop: 6,
+                    fontFamily: "'Outfit', sans-serif",
+                  }}
+                >
                   Please select a preferred batch above to unlock grade options
                 </div>
               )}
@@ -2774,18 +2893,28 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
               >
                 <option value="">Select an option</option>
                 {REFERRAL_OPTIONS.map((r) => (
-                  <option key={r} value={r}>{r}</option>
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div style={{ gridColumn: "1 / -1" }}>
-              <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}>
+              <label
+                style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}
+              >
                 <input
                   type="checkbox"
                   checked={form.consent}
                   onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
-                  style={{ marginTop: 2, width: 18, height: 18, accentColor: "#0A8A80", flexShrink: 0 }}
+                  style={{
+                    marginTop: 2,
+                    width: 18,
+                    height: 18,
+                    accentColor: "#0A8A80",
+                    flexShrink: 0,
+                  }}
                 />
                 <span
                   style={{
@@ -2796,10 +2925,14 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
                   }}
                 >
                   I agree to the{" "}
-                  <a href="/terms" style={{ color: "#0A8A80", fontWeight: 600 }}>Terms & Conditions</a>
-                  {" "}and{" "}
-                  <a href="/privacy" style={{ color: "#0A8A80", fontWeight: 600 }}>Privacy Policy</a>
-                  {" "}and confirm that the information provided above is accurate.
+                  <a href="/terms" style={{ color: "#0A8A80", fontWeight: 600 }}>
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy" style={{ color: "#0A8A80", fontWeight: 600 }}>
+                    Privacy Policy
+                  </a>{" "}
+                  and confirm that the information provided above is accurate.
                 </span>
               </label>
               {errors.consent && <div style={err}>{errors.consent}</div>}
@@ -2827,15 +2960,19 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
             onMouseEnter={(e) => {
               if (!isProcessing) {
                 (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 36px rgba(228,92,72,0.45)";
+                (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                  "0 10px 36px rgba(228,92,72,0.45)";
               }
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(228,92,72,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                "0 6px 28px rgba(228,92,72,0.35)";
             }}
           >
-            {isProcessing ? "Processing..." : `Enroll Now — Pay ₹${activeFee.toLocaleString("en-IN")} →`}
+            {isProcessing
+              ? "Processing..."
+              : `Enroll Now — Pay ₹${activeFee.toLocaleString("en-IN")} →`}
           </button>
 
           <div
@@ -2859,9 +2996,6 @@ function EnrollmentSection({ selectedBatch, selectedPrice }: { selectedBatch: st
   );
 }
 
-
-
-// ── Offerings Section ──────────────────────────────────────────────────────────
 // ── Offerings Data ─────────────────────────────────────────────────────────────
 const OFFERINGS = [
   // Junior (6–9 years)
@@ -2871,6 +3005,7 @@ const OFFERINGS = [
     dates: "20 Apr – 24 Apr",
     time: "10:00 – 1:00",
     price: 2000,
+    desc: "Focuses on Spatial Logic. ",
     tag: "Includes 2 Books",
     color: "#0A8A80",
     accentColor: "#0B3F44",
@@ -2881,6 +3016,7 @@ const OFFERINGS = [
     dates: "27 Apr – 1 May",
     time: "10:00 – 1:00",
     price: 2000,
+    desc: "Focuses on Code Languages. ",
     tag: "Includes 2 Books",
     color: "#0A8A80",
     accentColor: "#0B3F44",
@@ -2891,6 +3027,7 @@ const OFFERINGS = [
     dates: "11 May – 15 May",
     time: "9:30 – 12:30",
     price: 2000,
+    desc: "Focuses on Spatial Logic. ",
     tag: "Includes 2 Books",
     color: "#0A8A80",
     accentColor: "#0B3F44",
@@ -2901,6 +3038,7 @@ const OFFERINGS = [
     dates: "18 May – 22 May",
     time: "9:30 – 12:30",
     price: 2000,
+    desc: "Focuses on Code Languages. ",
     tag: "Includes 2 Books",
     color: "#0A8A80",
     accentColor: "#0B3F44",
@@ -2911,7 +3049,8 @@ const OFFERINGS = [
     name: "Quizzing",
     dates: "27 Apr – 1 May",
     time: "9:30 – 10:30",
-    price: 1,//chnaged 
+    price: 1000,
+    desc: "Improve General Knowledge.",
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
@@ -2922,6 +3061,7 @@ const OFFERINGS = [
     dates: "4 May – 8 May",
     time: "9:30 – 11:00",
     price: 2500,
+    desc: "Focuses on building calculation speed.",
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
@@ -2932,6 +3072,7 @@ const OFFERINGS = [
     dates: "4 May – 8 May",
     time: "11:00 – 12:30",
     price: 2500,
+    desc: "Develop Logical Thinking Capabilities.",
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
@@ -2942,6 +3083,7 @@ const OFFERINGS = [
     dates: "18 May – 22 May",
     time: "9:30 – 11:00",
     price: 2500,
+    desc: "Focuses on building calculation speed — children learn mental math techniques to solve problems faster.",
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
@@ -2952,6 +3094,7 @@ const OFFERINGS = [
     dates: "25 May – 29 May",
     time: "11:00 – 12:30",
     price: 2500,
+    desc: "Develop Logical Thinking Capabilities — structured problem solving using deduction, inference and analysis.",
     tag: null,
     color: "#E45C48",
     accentColor: "#AB4637",
@@ -2959,7 +3102,17 @@ const OFFERINGS = [
 ];
 
 // ── Offering Card Component ───────────────────────────────────────────────────
-function OfferingCard({ offering, index, isJunior, onEnroll }: { offering: any; index: number; isJunior: boolean; onEnroll?: (batch: string, price: number) => void }) {
+function OfferingCard({
+  offering,
+  index,
+  isJunior,
+  onEnroll,
+}: {
+  offering: any;
+  index: number;
+  isJunior: boolean;
+  onEnroll?: (batch: string, price: number) => void;
+}) {
   const { ref, visible } = useReveal();
   const batchLabel = `${offering.name} — ${offering.dates} (${offering.time})`;
   return (
@@ -2979,64 +3132,122 @@ function OfferingCard({ offering, index, isJunior, onEnroll }: { offering: any; 
         backdropFilter: "blur(8px)",
         cursor: "default",
       }}
-     
     >
       {/* Top accent bar */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 3,
-        background: `linear-gradient(90deg, ${offering.color}, transparent)`,
-        borderRadius: "20px 20px 0 0",
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: `linear-gradient(90deg, ${offering.color}, transparent)`,
+          borderRadius: "20px 20px 0 0",
+        }}
+      />
 
       {/* Age badge */}
-      <div style={{
-        display: "inline-flex", alignItems: "center", gap: 6,
-        background: `${offering.color}22`,
-        border: `1px solid ${offering.color}44`,
-        borderRadius: 100, padding: "4px 12px",
-        marginBottom: 16,
-        fontFamily: "'Outfit', sans-serif", fontSize: 11,
-        fontWeight: 700, color: offering.color,
-        letterSpacing: "0.07em", textTransform: "uppercase",
-      }}>
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: `${offering.color}22`,
+          border: `1px solid ${offering.color}44`,
+          borderRadius: 100,
+          padding: "4px 12px",
+          marginBottom: 16,
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 11,
+          fontWeight: 700,
+          color: offering.color,
+          letterSpacing: "0.07em",
+          textTransform: "uppercase",
+        }}
+      >
         {offering.ageGroup}
       </div>
 
       {/* Workshop name */}
-      <h3 style={{
-        fontFamily: "'Outfit', sans-serif", fontWeight: 800,
-        fontSize: 22, color: "#fff", margin: "0 0 20px", lineHeight: 1.2,
-      }}>
+      <h3
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontWeight: 800,
+          fontSize: 22,
+          color: "#fff",
+          margin: "0 0 20px",
+          lineHeight: 1.2,
+        }}
+      >
         {offering.name}
       </h3>
+
+      <p
+        style={{
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: 14,
+          color: "rgba(255,255,255,0.55)",
+          lineHeight: 1.6,
+          margin: "0 0 18px",
+          fontStyle: "italic",
+        }}
+      >
+        {offering.desc}
+      </p>
 
       {/* Details */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "rgba(255,255,255,0.08)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, flexShrink: 0,
-          }}>📅</div>
-          <span style={{
-            fontFamily: "'Outfit', sans-serif", fontSize: 14,
-            color: "rgba(255,255,255,0.80)", fontWeight: 500,
-          }}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              background: "rgba(255,255,255,0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 14,
+              flexShrink: 0,
+            }}
+          >
+            📅
+          </div>
+          <span
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 14,
+              color: "rgba(255,255,255,0.80)",
+              fontWeight: 500,
+            }}
+          >
             {offering.dates}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "rgba(255,255,255,0.08)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, flexShrink: 0,
-          }}>⏰</div>
-          <span style={{
-            fontFamily: "'Outfit', sans-serif", fontSize: 14,
-            color: "rgba(255,255,255,0.80)", fontWeight: 500,
-          }}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              background: "rgba(255,255,255,0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 14,
+              flexShrink: 0,
+            }}
+          >
+            ⏰
+          </div>
+          <span
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 14,
+              color: "rgba(255,255,255,0.80)",
+              fontWeight: 500,
+            }}
+          >
             {offering.time}
           </span>
         </div>
@@ -3044,37 +3255,59 @@ function OfferingCard({ offering, index, isJunior, onEnroll }: { offering: any; 
 
       {/* Book tag */}
       {offering.tag && (
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 6,
-          background: "rgba(216,174,79,0.15)",
-          border: "1px solid rgba(216,174,79,0.30)",
-          borderRadius: 8, padding: "6px 12px", marginBottom: 20,
-          fontFamily: "'Outfit', sans-serif", fontSize: 12,
-          fontWeight: 600, color: "#D8AE4F",
-        }}>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            background: "rgba(216,174,79,0.15)",
+            border: "1px solid rgba(216,174,79,0.30)",
+            borderRadius: 8,
+            padding: "6px 12px",
+            marginBottom: 20,
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#D8AE4F",
+          }}
+        >
           📚 {offering.tag}
         </div>
       )}
 
       {/* Divider */}
-      <div style={{
-        height: 1, background: "rgba(255,255,255,0.08)", marginBottom: 16,
-      }} />
+      <div
+        style={{
+          height: 1,
+          background: "rgba(255,255,255,0.08)",
+          marginBottom: 16,
+        }}
+      />
 
       {/* Price + Enroll button */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <div style={{
-            fontFamily: "'Outfit', sans-serif", fontSize: 11,
-            color: "rgba(255,255,255,0.4)", fontWeight: 600,
-            textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2,
-          }}>
+          <div
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 11,
+              color: "rgba(255,255,255,0.4)",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              marginBottom: 2,
+            }}
+          >
             Fee
           </div>
-          <div style={{
-            fontFamily: "'Outfit', sans-serif", fontWeight: 800,
-            fontSize: 24, color: "#D8AE4F",
-          }}>
+          <div
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 800,
+              fontSize: 24,
+              color: "#D8AE4F",
+            }}
+          >
             ₹{offering.price.toLocaleString("en-IN")}
           </div>
         </div>
@@ -3097,11 +3330,13 @@ function OfferingCard({ offering, index, isJunior, onEnroll }: { offering: any; 
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 8px 24px ${offering.color}66`;
+              (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                `0 8px 24px ${offering.color}66`;
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 16px ${offering.color}44`;
+              (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                `0 4px 16px ${offering.color}44`;
             }}
           >
             Enroll →
@@ -3132,16 +3367,30 @@ function OfferingsSection({ onEnroll }: { onEnroll?: (batch: string, price: numb
       className="bg-brand-teal"
     >
       {/* Decorative blobs */}
-      <div style={{
-        position: "absolute", top: -100, right: -100,
-        width: 400, height: 400, borderRadius: "50%",
-        background: "rgba(216,174,79,0.07)", filter: "blur(80px)",
-      }} />
-      <div style={{
-        position: "absolute", bottom: -80, left: -80,
-        width: 320, height: 320, borderRadius: "50%",
-        background: "rgba(228,92,72,0.06)", filter: "blur(60px)",
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          top: -100,
+          right: -100,
+          width: 400,
+          height: 400,
+          borderRadius: "50%",
+          background: "rgba(216,174,79,0.07)",
+          filter: "blur(80px)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: -80,
+          left: -80,
+          width: 320,
+          height: 320,
+          borderRadius: "50%",
+          background: "rgba(228,92,72,0.06)",
+          filter: "blur(60px)",
+        }}
+      />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
         {/* Header */}
@@ -3155,49 +3404,70 @@ function OfferingsSection({ onEnroll }: { onEnroll?: (batch: string, price: numb
             transition: "all 0.7s ease",
           }}
         >
-          <div style={{
-            display: "inline-block",
-            background: "rgba(216,255,255,0.15)",
-            border: "1px solid rgba(216,174,79,0.35)",
-            borderRadius: 100, padding: "5px 18px", marginBottom: 20,
-            fontFamily: "'Outfit', sans-serif", fontSize: 14, fontWeight: 700,
-            color: "#D8AE4F", letterSpacing: "0.10em", textTransform: "uppercase",
-          }}>
+          <div
+            style={{
+              display: "inline-block",
+              background: "rgba(216,255,255,0.15)",
+              border: "1px solid rgba(216,174,79,0.35)",
+              borderRadius: 100,
+              padding: "5px 18px",
+              marginBottom: 20,
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#D8AE4F",
+              letterSpacing: "0.10em",
+              textTransform: "uppercase",
+            }}
+          >
             Summer 2026 Schedule
           </div>
           <h2
-            className="font-heading text-white text-[36px] md:text-[44px] font-bold leading-tight"
+            className="font-heading text-[36px] font-bold leading-tight text-white md:text-[44px]"
             style={{ margin: "0 0 16px" }}
           >
             Choose Your Workshop
           </h2>
-          <p style={{
-            fontFamily: "'Outfit', sans-serif", fontSize: 18,
-            color: "rgba(255,255,255,0.65)", maxWidth: 520,
-            margin: "0 auto 40px", lineHeight: 1.7,
-          }}>
-            Multiple workshops across age groups — pick the one that fits your child's schedule and interests.
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 18,
+              color: "rgba(255,255,255,0.65)",
+              maxWidth: 520,
+              margin: "0 auto 40px",
+              lineHeight: 1.7,
+            }}
+          >
+            Multiple workshops across age groups — pick the one that fits your child's schedule and
+            interests.
           </p>
 
           {/* Tab switcher */}
-          <div style={{
-            display: "inline-flex",
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            borderRadius: 100, padding: 4, gap: 4,
-          }}>
+          <div
+            style={{
+              display: "inline-flex",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: 100,
+              padding: 4,
+              gap: 4,
+            }}
+          >
             {(["junior", "senior"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 style={{
                   padding: "10px 28px",
-                  borderRadius: 100, border: "none", cursor: "pointer",
-                  fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 15,
+                  borderRadius: 100,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 15,
                   transition: "all 0.3s ease",
-                  background: activeTab === tab
-                    ? (tab === "junior" ? "#0A8A80" : "#E45C48")
-                    : "transparent",
+                  background:
+                    activeTab === tab ? (tab === "junior" ? "#0A8A80" : "#E45C48") : "transparent",
                   color: activeTab === tab ? "#fff" : "rgba(255,255,255,0.55)",
                   boxShadow: activeTab === tab ? "0 4px 16px rgba(0,0,0,0.2)" : "none",
                 }}
@@ -3209,18 +3479,25 @@ function OfferingsSection({ onEnroll }: { onEnroll?: (batch: string, price: numb
         </div>
 
         {/* Cards grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: 20,
-        }}>
-          {displayed.map((offering:any, i:number) => (
-            <OfferingCard key={`${offering.name}-${offering.dates}-${i}`} offering={offering} index={i} isJunior={activeTab === "junior"} onEnroll={onEnroll} />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: 20,
+          }}
+        >
+          {displayed.map((offering: any, i: number) => (
+            <OfferingCard
+              key={`${offering.name}-${offering.dates}-${i}`}
+              offering={offering}
+              index={i}
+              isJunior={activeTab === "junior"}
+              onEnroll={onEnroll}
+            />
           ))}
         </div>
 
         {/* Bottom note */}
-        
       </div>
     </section>
   );
@@ -3405,7 +3682,7 @@ export default function SummerCampPage() {
       <CurriculumSection />
       <HowToEnrollSection />
       <TestimonialsSection />
-      
+
       <OfferingsSection onEnroll={handleEnroll} />
       <FAQSection />
       <EnrollmentSection selectedBatch={selectedBatch} selectedPrice={selectedPrice} />
