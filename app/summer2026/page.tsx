@@ -63,12 +63,14 @@ const REFERRAL_OPTIONS = [
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk";
 
 // ── GST helpers ───────────────────────────────────────────────────────────────
-function calcGST(baseAmount: number) {
-  const gstAmount = Math.round(baseAmount * GST_RATE) / 100;
-  const cgst = gstAmount / 2;
-  const sgst = gstAmount / 2;
-  const total = baseAmount + gstAmount;
-  return { gstAmount, cgst, sgst, total };
+function calcGST(inclusiveAmount: number) {
+  // GST-inclusive: base = total / 1.18
+  const baseAmount = Math.round((inclusiveAmount / (1 + GST_RATE / 100)) * 100) / 100;
+  const gstAmount = Math.round((inclusiveAmount - baseAmount) * 100) / 100;
+  const cgst = Math.round((gstAmount / 2) * 100) / 100;
+  const sgst = Math.round((gstAmount / 2) * 100) / 100;
+  const total = inclusiveAmount; // total IS the inclusive amount
+  return { baseAmount, gstAmount, cgst, sgst, total };
 }
 
 // ── GST Invoice HTML generator ────────────────────────────────────────────────
@@ -2074,22 +2076,23 @@ function EnrollmentSection({
     if (selectedBatch) setForm((f) => ({ ...f, preferredBatch: selectedBatch }));
   }, [selectedBatch]);
 
-  // ── Base price (ex-GST) ──
-  const baseAmount =
-    selectedPrice !== null && form.preferredBatch === selectedBatch
-      ? selectedPrice
-      : (BATCH_PRICES[form.preferredBatch] ?? 1000);
+  // NEW — BATCH_PRICES are now inclusive totals
+const activeFee =
+  selectedPrice !== null && form.preferredBatch === selectedBatch
+    ? selectedPrice
+    : (BATCH_PRICES[form.preferredBatch] ?? 1000);
 
-  // ── GST breakdown ──
-  const { gstAmount, cgst, sgst, total: activeFee } = calcGST(baseAmount);
+const { baseAmount, gstAmount, cgst, sgst } = calcGST(activeFee);
+
 
   // Keep a ref so async callbacks always see latest value
   const baseAmountRef = useRef(baseAmount);
-  const activeFeeRef = useRef(activeFee);
-  useEffect(() => {
-    baseAmountRef.current = baseAmount;
-    activeFeeRef.current = activeFee;
-  }, [baseAmount, activeFee]);
+const activeFeeRef = useRef(activeFee);
+useEffect(() => {
+  baseAmountRef.current = baseAmount;
+  activeFeeRef.current = activeFee;
+}, [baseAmount, activeFee]);
+
 
   const validate = () => {
     const e: Partial<Record<keyof FormData, string>> = {};
@@ -2172,7 +2175,7 @@ function EnrollmentSection({
           phoneNumber: cleanedPhone,
           type: "Template",
           template: {
-            name: "purchase",
+            name: "summer2026camp",
             languageCode: "en",
             bodyValues: [
               form.parentName, // {{1}} Customer name
@@ -2607,8 +2610,9 @@ function EnrollmentSection({
                   marginBottom: 2,
                 }}
               >
-                Base: ₹{baseAmount.toLocaleString("en-IN")} &nbsp;+&nbsp; GST ({GST_RATE}%): ₹
-                {gstAmount.toLocaleString("en-IN")}
+                <div style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", marginBottom: 2 }}>
+  Base: ₹{baseAmount.toLocaleString("en-IN")} + GST ({GST_RATE}%): ₹{gstAmount.toLocaleString("en-IN")} = ₹{activeFee.toLocaleString("en-IN")}
+</div>
               </div>
             )}
             <div
@@ -3042,8 +3046,7 @@ function EnrollmentSection({
                 <optgroup label="— Juniors: Grade 1–4 —">
                   {BATCHES.filter((b) => b.startsWith("Logicoland")).map((b) => (
                     <option key={b} value={b}>
-                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} + GST = ₹
-                      {calcGST(BATCH_PRICES[b]).total.toLocaleString("en-IN")}
+                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} (incl. GST)
                     </option>
                   ))}
                 </optgroup>
@@ -3215,8 +3218,7 @@ function EnrollmentSection({
                 color: "#888",
               }}
             >
-              Base: ₹{baseAmount.toLocaleString("en-IN")} + CGST {GST_RATE / 2}%: ₹
-              {cgst.toLocaleString("en-IN")} + SGST {GST_RATE / 2}%: ₹{sgst.toLocaleString("en-IN")}
+              Incl. CGST {GST_RATE/2}%: ₹{cgst.toLocaleString("en-IN")} + SGST {GST_RATE/2}%: ₹{sgst.toLocaleString("en-IN")}
             </div>
           )}
 
@@ -3542,7 +3544,7 @@ function OfferingCard({
               marginTop: 2,
             }}
           >
-            Base ₹{offering.price} + 18% GST
+            GST incl. · Base ₹{calcGST(offering.price).baseAmount.toLocaleString("en-IN")}
           </div>
         </div>
         {onEnroll && (
@@ -3696,7 +3698,7 @@ function OfferingsSection({ onEnroll }: { onEnroll?: (batch: string, price: numb
                   boxShadow: activeTab === tab ? "0 4px 16px rgba(0,0,0,0.2)" : "none",
                 }}
               >
-                {tab === "junior" ? "Ages 6–9" : "Ages 10–14"}
+                {tab === "junior" ? "Ages 6–10" : "Ages 10–14"}
               </button>
             ))}
           </div>
