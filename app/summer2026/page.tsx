@@ -2317,7 +2317,7 @@ function EnrollmentSection({
             setErrors({});
 
             // 5. Redirect to course detail page
-            router.push(`/summercamp2026/myCourseDetail?id=${registrationId}`);
+            router.push(`/summer2026/myCourseDetail?id=${registrationId}`);
           } catch (err) {
             console.error("Post-payment error:", err);
             alert(
