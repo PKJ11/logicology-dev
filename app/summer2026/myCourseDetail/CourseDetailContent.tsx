@@ -482,7 +482,7 @@ export default function CourseDetailContent() {
         {/* Bottom CTAs */}
         {!loading && !error && (
           <div style={{ maxWidth:1100,margin:"32px auto 0",padding:"0 24px",display:"flex",gap:14,flexWrap:"wrap",justifyContent:"center" }}>
-            <Link href="/summercamp2026"
+            <Link href="/summer2026"
               style={{ display:"inline-flex",alignItems:"center",gap:8,background:"rgba(10,138,128,0.08)",border:"1.5px solid rgba(10,138,128,0.22)",borderRadius:100,padding:"12px 24px",fontFamily:"'Outfit',sans-serif",fontWeight:700,fontSize:14,color:"#0A8A80",textDecoration:"none" }}
               onMouseEnter={e=>(e.currentTarget.style.background="rgba(10,138,128,0.14)")}
               onMouseLeave={e=>(e.currentTarget.style.background="rgba(10,138,128,0.08)")}
