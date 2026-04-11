@@ -1059,7 +1059,7 @@ export default function CourseDetailContent() {
                 </div>
               ))}
             </div>
-            <div
+            {/* <div
               style={{
                 marginTop: 16,
                 background: "rgba(228,92,72,0.06)",
@@ -1074,7 +1074,7 @@ export default function CourseDetailContent() {
             >
               🪪 Our team may ask for ID of the person picking up your child. Please carry a valid
               ID.
-            </div>
+            </div> */}
           </div>
 
           {/* Need Help */}
