@@ -48,7 +48,7 @@ const BATCH_PRICES: Record<string, number> = {
 };
 
 const GST_RATE = 18; // percent
-const COMPANY_GST_NUMBER = "27AAFCL1234F1ZR"; // ← replace with your actual GSTIN
+const COMPANY_GST_NUMBER = "27AADCL3493J1Z6"; // ← replace with your actual GSTIN
 const HSN_CODE = "999293"; // SAC code for educational/coaching services
 
 const REFERRAL_OPTIONS = [
@@ -2295,7 +2295,8 @@ useEffect(() => {
             const registrationId = saveData.registrationId ?? response.razorpay_payment_id;
 
             // 2. Send GST invoice email
-            await sendGSTInvoiceEmail(response.razorpay_payment_id, formSnapshot, base);
+            const inclusiveTotal = activeFeeRef.current; 
+            await sendGSTInvoiceEmail(response.razorpay_payment_id, formSnapshot, inclusiveTotal);
 
             // 3. Send WhatsApp (non-critical)
             try {
