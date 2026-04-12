@@ -95,7 +95,7 @@ function generateCampGSTReceipt(
       <h1 style="color: #0A8A80; margin: 0; font-size: 28px;">TAX INVOICE</h1>
       <h2 style="color: #0A8A80; margin: 5px 0; font-size: 20px;">Logicology Ventures Private Limited</h2>
       <p style="margin: 4px 0; color: #555; font-size: 13px;">GSTIN: ${COMPANY_GST_NUMBER}</p>
-      <p style="margin: 4px 0; color: #555; font-size: 13px;">Humpyard Road, Dhantoli, Nagpur – 440012, Maharashtra</p>
+      <p style="margin: 4px 0; color: #555; font-size: 13px;">Logicology Learning Centre, Dhantoli, Nagpur – 440012, Maharashtra</p>
     </div>
 
     <!-- Invoice meta -->
