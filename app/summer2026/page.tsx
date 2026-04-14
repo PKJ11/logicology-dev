@@ -28,10 +28,10 @@ const BATCHES = [
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)",
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)",
   "Quizzing — 27 Apr – 1 May (9:30 – 10:30)",
-  "Speed Maths — 4 May –15 may (9:30 – 11:00)",
-  "Logical Reasoning — 4 May –15 may (11:00 – 12:30)",
-  "Speed Maths — 18 May – 22 May (9:30 – 11:00)",
-  "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)",
+  "Speed Maths — 4 May –15 May (9:30 – 11:00)",
+  "Logical Reasoning — 4 May –15 May (11:00 – 12:30)",
+  "Speed Maths — 18 May – 29 May (9:30 – 11:00)",
+  "Logical Reasoning — 18 May – 29 May (11:00 – 12:30)",
 ];
 
 // These are BASE prices EXCLUDING 18% GST
@@ -41,10 +41,10 @@ const BATCH_PRICES: Record<string, number> = {
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
   "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1000,
-  "Speed Maths — 4 May –15 may (9:30 – 11:00)": 2500,
-  "Logical Reasoning — 4 May –15 may (11:00 – 12:30)": 2500,
-  "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
-  "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)": 2500,
+  "Speed Maths — 4 May –15 May (9:30 – 11:00)": 2500,
+  "Logical Reasoning — 4 May –15 May (11:00 – 12:30)": 2500,
+  "Speed Maths — 18 May – 29 May (9:30 – 11:00)": 2500,
+  "Logical Reasoning — 18 May – 29 May (11:00 – 12:30)": 2500,
 };
 
 const GST_RATE = 18; // percent
@@ -1397,7 +1397,7 @@ const TESTIMONIALS: TestimonialData[] = [
   },
   {
     quote:
-      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance workshops. Logicology Summer workshop stood out immediately. While it may seem more premium than average workshops, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
+      "As a doctor, my time is extremely limited, and I'm very mindful about how my children spend theirs. I wanted something more meaningful than the usual arts and dance workshops. Logicology Summer workshop stood out immediately. While it May seem more premium than average workshops, the value it delivers is truly unmatched. My child was deeply engaged, and I could see real learning happening every day. Absolutely worth it.",
     name: "Dr. Rita Bang",
     role: "Gynaecologist",
     photo: "https://ik.imagekit.io/pratik2002/rita.jpeg",
@@ -1890,7 +1890,7 @@ function FAQSection() {
     },
     {
       q: "Where is the workshop located?",
-      a: "Humpyard Road, Dhantoli, Near Dinanath High School. The venue is fully air-conditioned, CCTV-monitored, and equipped with dedicated learning and activity spaces. Directions will be shared in your confirmation message. Please note there isn't ample 4-wheeler parking available near the center, you may have to park on the Humpyard road.",
+      a: "Humpyard Road, Dhantoli, Near Dinanath High School. The venue is fully air-conditioned, CCTV-monitored, and equipped with dedicated learning and activity spaces. Directions will be shared in your confirmation message. Please note there isn't ample 4-wheeler parking available near the center, you May have to park on the Humpyard road.",
     },
     {
       q: "What are the workshop dates and timings?",
@@ -1906,7 +1906,7 @@ function FAQSection() {
     },
     {
       q: "What safety measures are in place?",
-      a: "Safety is our top priority: secured premises with controlled entry and exit, CCTV monitoring across all common areas, verified background checks for all instructors. We request you to not drop the children on the ground floor when our team members are not present. Our team members may ask for identity card of the person coming to pick up the child.",
+      a: "Safety is our top priority: secured premises with controlled entry and exit, CCTV monitoring across all common areas, verified background checks for all instructors. We request you to not drop the children on the ground floor when our team members are not present. Our team members May ask for identity card of the person coming to pick up the child.",
     },
     {
       q: "Does my child need any specific skills or capabilities?",
@@ -1930,7 +1930,7 @@ function FAQSection() {
     },
     {
       q: "The age range is 6–9, how do you ensure age-appropriate material?",
-      a: "Our content is based on Logic and does not tie to any specific class in school. In rare cases where some children may not be aware of a specific concept, our instructor will teach that concept and move on. We try to segregate students from one age group in one batch as far as possible.",
+      a: "Our content is based on Logic and does not tie to any specific class in school. In rare cases where some children May not be aware of a specific concept, our instructor will teach that concept and move on. We try to segregate students from one age group in one batch as far as possible.",
     },
   ];
   return (
@@ -2396,10 +2396,10 @@ function EnrollmentSection({
   ];
   const seniorRows = [
     { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1000 },
-    { name: "Speed Maths", dates: "4 May –15 may", time: "9:30 – 11:00", fee: 2500 },
-    { name: "Logical Reasoning", dates: "4 May –15 may", time: "11:00 – 12:30", fee: 2500 },
-    { name: "Speed Maths", dates: "18 May – 22 May", time: "9:30 – 11:00", fee: 2500 },
-    { name: "Logical Reasoning", dates: "25 May – 29 May", time: "11:00 – 12:30", fee: 2500 },
+    { name: "Speed Maths", dates: "4 May –15 May", time: "9:30 – 11:00", fee: 2500 },
+    { name: "Logical Reasoning", dates: "4 May –15 May", time: "11:00 – 12:30", fee: 2500 },
+    { name: "Speed Maths", dates: "18 May – 29 May", time: "9:30 – 11:00", fee: 2500 },
+    { name: "Logical Reasoning", dates: "18 May – 29 May", time: "11:00 – 12:30", fee: 2500 },
   ];
 
   const categoryRowStyle: React.CSSProperties = {
@@ -3337,7 +3337,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Speed Maths",
-    dates: "4 May –15 may",
+    dates: "4 May –15 May",
     time: "9:30 – 11:00",
     price: 2500,
     desc: "Focuses on building calculation speed.",
@@ -3348,7 +3348,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Logical Reasoning",
-    dates: "4 May –15 may",
+    dates: "4 May –15 May",
     time: "11:00 – 12:30",
     price: 2500,
     desc: "Develop Logical Thinking Capabilities.",
@@ -3359,7 +3359,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Speed Maths",
-    dates: "18 May – 22 May",
+    dates: "18 May – 29 May",
     time: "9:30 – 11:00",
     price: 2500,
     desc: "Focuses on building calculation speed — children learn mental math techniques to solve problems faster.",
@@ -3370,7 +3370,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Logical Reasoning",
-    dates: "25 May – 29 May",
+    dates: "18 May – 29 May",
     time: "11:00 – 12:30",
     price: 2500,
     desc: "Develop Logical Thinking Capabilities — structured problem solving using deduction, inference and analysis.",
