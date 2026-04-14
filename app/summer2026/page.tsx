@@ -28,8 +28,8 @@ const BATCHES = [
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)",
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)",
   "Quizzing — 27 Apr – 1 May (9:30 – 10:30)",
-  "Speed Maths — 4 May – 8 May (9:30 – 11:00)",
-  "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)",
+  "Speed Maths — 4 May –15 may (9:30 – 11:00)",
+  "Logical Reasoning — 4 May –15 may (11:00 – 12:30)",
   "Speed Maths — 18 May – 22 May (9:30 – 11:00)",
   "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)",
 ];
@@ -41,8 +41,8 @@ const BATCH_PRICES: Record<string, number> = {
   "Logicoland A — 11 May – 15 May (9:30 – 12:30)": 2000,
   "Logicoland B — 18 May – 22 May (9:30 – 12:30)": 2000,
   "Quizzing — 27 Apr – 1 May (9:30 – 10:30)": 1000,
-  "Speed Maths — 4 May – 8 May (9:30 – 11:00)": 2500,
-  "Logical Reasoning — 4 May – 8 May (11:00 – 12:30)": 2500,
+  "Speed Maths — 4 May –15 may (9:30 – 11:00)": 2500,
+  "Logical Reasoning — 4 May –15 may (11:00 – 12:30)": 2500,
   "Speed Maths — 18 May – 22 May (9:30 – 11:00)": 2500,
   "Logical Reasoning — 25 May – 29 May (11:00 – 12:30)": 2500,
 };
@@ -2077,21 +2077,27 @@ function EnrollmentSection({
   }, [selectedBatch]);
 
   // NEW — BATCH_PRICES are now inclusive totals
-const activeFee =
-  selectedPrice !== null && form.preferredBatch === selectedBatch
-    ? selectedPrice
-    : (BATCH_PRICES[form.preferredBatch] ?? 1000);
+  const activeFee =
+    selectedPrice !== null && form.preferredBatch === selectedBatch
+      ? selectedPrice
+      : (BATCH_PRICES[form.preferredBatch] ?? 1000);
 
-const { baseAmount, gstAmount, cgst, sgst } = calcGST(activeFee);
+  const { baseAmount, gstAmount, cgst, sgst } = calcGST(activeFee);
 
+  // Age-based batch filtering
+  const childAgeNum = Number(form.childAge);
+  const isJunior = form.childAge !== "" && childAgeNum >= 6 && childAgeNum <= 9;
+  const isSenior = form.childAge !== "" && childAgeNum >= 10 && childAgeNum <= 14;
+  const showJunior = !form.childAge || isJunior;
+  const showSenior = !form.childAge || isSenior;
 
   // Keep a ref so async callbacks always see latest value
   const baseAmountRef = useRef(baseAmount);
-const activeFeeRef = useRef(activeFee);
-useEffect(() => {
-  baseAmountRef.current = baseAmount;
-  activeFeeRef.current = activeFee;
-}, [baseAmount, activeFee]);
+  const activeFeeRef = useRef(activeFee);
+  useEffect(() => {
+    baseAmountRef.current = baseAmount;
+    activeFeeRef.current = activeFee;
+  }, [baseAmount, activeFee]);
 
 
   const validate = () => {
@@ -2295,7 +2301,7 @@ useEffect(() => {
             const registrationId = saveData.registrationId ?? response.razorpay_payment_id;
 
             // 2. Send GST invoice email
-            const inclusiveTotal = activeFeeRef.current; 
+            const inclusiveTotal = activeFeeRef.current;
             await sendGSTInvoiceEmail(response.razorpay_payment_id, formSnapshot, inclusiveTotal);
 
             // 3. Send WhatsApp (non-critical)
@@ -2390,8 +2396,8 @@ useEffect(() => {
   ];
   const seniorRows = [
     { name: "Quizzing", dates: "27 Apr – 1 May", time: "9:30 – 10:30", fee: 1000 },
-    { name: "Speed Maths", dates: "4 May – 8 May", time: "9:30 – 11:00", fee: 2500 },
-    { name: "Logical Reasoning", dates: "4 May – 8 May", time: "11:00 – 12:30", fee: 2500 },
+    { name: "Speed Maths", dates: "4 May –15 may", time: "9:30 – 11:00", fee: 2500 },
+    { name: "Logical Reasoning", dates: "4 May –15 may", time: "11:00 – 12:30", fee: 2500 },
     { name: "Speed Maths", dates: "18 May – 22 May", time: "9:30 – 11:00", fee: 2500 },
     { name: "Logical Reasoning", dates: "25 May – 29 May", time: "11:00 – 12:30", fee: 2500 },
   ];
@@ -2612,8 +2618,8 @@ useEffect(() => {
                 }}
               >
                 <div style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", marginBottom: 2 }}>
-  Base: ₹{baseAmount.toLocaleString("en-IN")} + GST ({GST_RATE}%): ₹{gstAmount.toLocaleString("en-IN")} = ₹{activeFee.toLocaleString("en-IN")}
-</div>
+                  Base: ₹{baseAmount.toLocaleString("en-IN")} + GST ({GST_RATE}%): ₹{gstAmount.toLocaleString("en-IN")} = ₹{activeFee.toLocaleString("en-IN")}
+                </div>
               </div>
             )}
             <div
@@ -3006,11 +3012,28 @@ useEffect(() => {
               />
               {errors.childName && <div style={errStyle}>{errors.childName}</div>}
             </div>
+
+            {/* ── Child's Age ── */}
             <div>
               <label style={lbl}>Child's Age *</label>
               <select
                 value={form.childAge}
-                onChange={(e) => setForm((f) => ({ ...f, childAge: e.target.value }))}
+                onChange={(e) => {
+                  const newAge = e.target.value;
+                  const age = Number(newAge);
+                  setForm((f) => {
+                    const batchIsJunior = f.preferredBatch.startsWith("Logicoland");
+                    const batchIsSenior = f.preferredBatch !== "" && !batchIsJunior;
+                    const shouldReset =
+                      (age <= 9 && batchIsSenior) || (age >= 10 && batchIsJunior);
+                    return {
+                      ...f,
+                      childAge: newAge,
+                      preferredBatch: shouldReset ? "" : f.preferredBatch,
+                      childGrade: shouldReset ? "" : f.childGrade,
+                    };
+                  });
+                }}
                 style={inp(!!errors.childAge)}
                 onFocus={(e) => (e.target.style.borderColor = "#0A8A80")}
                 onBlur={(e) =>
@@ -3028,6 +3051,8 @@ useEffect(() => {
               </select>
               {errors.childAge && <div style={errStyle}>{errors.childAge}</div>}
             </div>
+
+            {/* ── Preferred Batch ── */}
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>Preferred Batch *</label>
               <select
@@ -3044,24 +3069,30 @@ useEffect(() => {
                 }
               >
                 <option value="">Select your preferred batch</option>
-                <optgroup label="— Juniors: Grade 1–4 —">
-                  {BATCHES.filter((b) => b.startsWith("Logicoland")).map((b) => (
-                    <option key={b} value={b}>
-                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} (incl. GST)
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="— Seniors: Grade 5–9 —">
-                  {BATCHES.filter((b) => !b.startsWith("Logicoland")).map((b) => (
-                    <option key={b} value={b}>
-                      {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} + GST = ₹
-                      {calcGST(BATCH_PRICES[b]).total.toLocaleString("en-IN")}
-                    </option>
-                  ))}
-                </optgroup>
+                {showJunior && (
+                  <optgroup label="— Juniors: Grade 1–4 (Age 6–9) —">
+                    {BATCHES.filter((b) => b.startsWith("Logicoland")).map((b) => (
+                      <option key={b} value={b}>
+                        {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} (incl. GST)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {showSenior && (
+                  <optgroup label="— Seniors: Grade 5–9 (Age 10–14) —">
+                    {BATCHES.filter((b) => !b.startsWith("Logicoland")).map((b) => (
+                      <option key={b} value={b}>
+                        {b} · ₹{BATCH_PRICES[b].toLocaleString("en-IN")} + GST = ₹
+                        {calcGST(BATCH_PRICES[b]).total.toLocaleString("en-IN")}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
               {errors.preferredBatch && <div style={errStyle}>{errors.preferredBatch}</div>}
             </div>
+
+            {/* ── Child's Grade ── */}
             <div>
               <label style={lbl}>Child's Grade / Class *</label>
               <select
@@ -3115,6 +3146,7 @@ useEffect(() => {
               )}
               {errors.childGrade && <div style={errStyle}>{errors.childGrade}</div>}
             </div>
+
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={lbl}>How Did You Hear About Us?</label>
               <select
@@ -3219,7 +3251,7 @@ useEffect(() => {
                 color: "#888",
               }}
             >
-              Incl. CGST {GST_RATE/2}%: ₹{cgst.toLocaleString("en-IN")} + SGST {GST_RATE/2}%: ₹{sgst.toLocaleString("en-IN")}
+              Incl. CGST {GST_RATE / 2}%: ₹{cgst.toLocaleString("en-IN")} + SGST {GST_RATE / 2}%: ₹{sgst.toLocaleString("en-IN")}
             </div>
           )}
 
@@ -3305,7 +3337,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Speed Maths",
-    dates: "4 May – 8 May",
+    dates: "4 May –15 may",
     time: "9:30 – 11:00",
     price: 2500,
     desc: "Focuses on building calculation speed.",
@@ -3316,7 +3348,7 @@ const OFFERINGS = [
   {
     ageGroup: "10–14 years",
     name: "Logical Reasoning",
-    dates: "4 May – 8 May",
+    dates: "4 May –15 may",
     time: "11:00 – 12:30",
     price: 2500,
     desc: "Develop Logical Thinking Capabilities.",
