@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     `;
 
     // Reuse your existing /api/send-invoice endpoint
-    const emailRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-invoice`, {
+    const emailRes = await fetch("/api/send-invoice", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
