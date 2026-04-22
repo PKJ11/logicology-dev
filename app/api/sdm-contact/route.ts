@@ -7,9 +7,10 @@ export async function POST(req: Request) {
     const allowedOrigins = [
       "https://stellardesignmfg.com",
       "https://www.stellardesignmfg.com",
-      "http://localhost:8080",  // for local dev
+      "https://steller-med.netlify.app",  // ← no trailing slash
+      "http://localhost:5173",
+      "http://localhost:8080",
       "http://localhost:3000",
-      "https://steller-med.netlify.app/"
     ];
     const isAllowed = allowedOrigins.includes(origin);
 
