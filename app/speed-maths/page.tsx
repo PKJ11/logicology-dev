@@ -34,6 +34,10 @@ function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function tableHalf(d: number): number {
+  return Math.floor(d / 2);
+}
+
 function generateQuestion(challenge: Challenge): Question {
   switch (challenge) {
     case "Addition": {
@@ -67,6 +71,29 @@ function generateQuestion(challenge: Challenge): Question {
   }
 }
 
+function generateHalfPracticeNum(): number {
+  return rand(100, 999);
+}
+
+function computeHalfSteps(n: number) {
+  const digits = String(n).split("").map(Number);
+  const step1 = digits.map(d => tableHalf(d));
+  const oddPositions = digits.map(d => d % 2 !== 0);
+
+  const step3 = [...step1];
+  let carry = 0;
+  for (let i = step3.length - 1; i >= 0; i--) {
+    let val = step3[i] + carry;
+    carry = 0;
+    if (oddPositions[i]) val += 5;
+    if (val >= 10) { carry = 1; val -= 10; }
+    step3[i] = val;
+  }
+  const finalDigits = carry > 0 ? [carry, ...step3] : step3;
+  const answer = n / 2;
+  return { digits, step1, oddPositions, step3: finalDigits, answer };
+}
+
 // ─── Color config ─────────────────────────────────────────────────────────────
 const LOGICOLOGY_PURPLE = "#CB6CE6";
 const CHALLENGE_COLORS: Record<Challenge, { bg: string; light: string; emoji: string }> = {
@@ -85,14 +112,12 @@ function Stars({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="absolute rounded-full animate-twinkle-delay"
+          className="absolute rounded-full"
           style={{
             width: `${rand(4,10)}px`, height: `${rand(4,10)}px`,
             background: [LOGICOLOGY_PURPLE,"#FF6B6B","#FFD93D","#54A0FF","#1DD1A1"][i%5],
             top: `${rand(5,90)}%`, left: `${rand(5,90)}%`,
             opacity: 0.4,
-            animationDelay: `${i*0.4}s`,
-            animationDuration: `${3+i*0.3}s`,
           }}
         />
       ))}
@@ -147,9 +172,461 @@ function NumPad({ onDigit, onEnter, onErase, value }: { onDigit:(d:string)=>void
   );
 }
 
+// ─── Interactive Half 3-Step Component ───────────────────────────────────────
+type Half3StepPhase = "step1" | "step2" | "step3" | "done";
+
+interface Half3StepInteractiveProps {
+  practiceNum: number;
+  onComplete: () => void;
+  onNewNumber: () => void;
+  bg: string;
+  light: string;
+}
+
+function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light }: Half3StepInteractiveProps) {
+  const { digits, step1, oddPositions, answer } = computeHalfSteps(practiceNum);
+
+  const [phase, setPhase] = useState<Half3StepPhase>("step1");
+
+  // Step 1
+  const [userStep1, setUserStep1] = useState<(string | null)[]>(digits.map(() => null));
+  const [step1Feedback, setStep1Feedback] = useState<(boolean | null)[]>(digits.map(() => null));
+
+  // Step 2
+  const [userOddSel, setUserOddSel] = useState<boolean[]>(digits.map(() => false));
+  const [step2Checked, setStep2Checked] = useState(false);
+  const [step2Feedback, setStep2Feedback] = useState<string | null>(null);
+
+  // Step 3 — each input corresponds to the final value of that position after adding +5 from left neighbor
+  const [step3UserVals, setStep3UserVals] = useState<Record<number, string>>({});
+  const [step3Feedback, setStep3Feedback] = useState<Record<number, boolean | null>>({});
+  const [step3Done, setStep3Done] = useState(false);
+
+  // ─── STEP 1 HANDLERS ─────────────────────────────────────────────────────
+  function handleStep1Input(idx: number, val: string) {
+    if (phase !== "step1") return;
+    const newVals = [...userStep1];
+    newVals[idx] = val === "" ? null : val;
+    setUserStep1(newVals);
+  }
+
+  function checkStep1() {
+    const fb = userStep1.map((v, i) => v !== null && parseInt(v) === step1[i]);
+    setStep1Feedback(fb);
+    if (fb.every(Boolean)) {
+      setTimeout(() => setPhase("step2"), 600);
+    }
+  }
+
+  // ─── STEP 2 HANDLERS ─────────────────────────────────────────────────────
+  function toggleOddSel(idx: number) {
+    if (phase !== "step2" || step2Checked) return;
+    const ns = [...userOddSel];
+    ns[idx] = !ns[idx];
+    setUserOddSel(ns);
+  }
+
+  function checkStep2() {
+    const correct = oddPositions.every((v, i) => v === userOddSel[i]);
+    setStep2Checked(true);
+    if (correct) {
+      setStep2Feedback("correct");
+      setTimeout(() => setPhase("step3"), 800);
+    } else {
+      setStep2Feedback("wrong");
+      setTimeout(() => {
+        setStep2Checked(false);
+        setStep2Feedback(null);
+        setUserOddSel(digits.map(() => false));
+      }, 1200);
+    }
+  }
+
+  // ─── STEP 3 HANDLERS ─────────────────────────────────────────────────────
+  // Calculate the final value at each position after adding +5 from left neighbor
+  function getFinalValueAtIndex(i: number): number {
+    let val = step1[i];
+    
+    // Add +5 from the cell to the LEFT (if that left cell was odd)
+    if (i > 0 && oddPositions[i - 1]) {
+      val += 5;
+    }
+    
+    // Handle carry (if val >= 10, subtract 10 and add 1 to next position)
+    // For display, we show the digit after carry adjustment
+    if (val >= 10) {
+      val -= 10;
+    }
+    
+    return val;
+  }
+
+  // Check if the final answer needs .5 (if the last digit was odd)
+  function needsHalf(): boolean {
+    return oddPositions[digits.length - 1];
+  }
+
+  function handleStep3Input(idx: number, val: string) {
+    if (phase !== "step3" || step3Done) return;
+    setStep3UserVals(prev => ({ ...prev, [idx]: val }));
+  }
+
+  function checkStep3() {
+    const newFb: Record<number, boolean> = {};
+    let allCorrect = true;
+    
+    digits.forEach((_, i) => {
+      const expected = getFinalValueAtIndex(i);
+      const userVal = step3UserVals[i] !== undefined ? parseInt(step3UserVals[i]) : NaN;
+      const ok = userVal === expected;
+      newFb[i] = ok;
+      if (!ok) allCorrect = true;
+    });
+    
+    setStep3Feedback(newFb);
+    if (allCorrect) {
+      setStep3Done(true);
+      setTimeout(() => setPhase("done"), 600);
+    }
+  }
+
+  const allStep3Filled = digits.every(
+    (_, i) => step3UserVals[i] !== undefined && step3UserVals[i] !== ""
+  );
+
+  const anyStep3Wrong = Object.values(step3Feedback).some(v => v === false);
+
+  // Shared cell styles
+  const baseCell = (borderColor: string, bgColor: string): React.CSSProperties => ({
+    width: "56px",
+    height: "56px",
+    borderRadius: "14px",
+    border: `3px solid ${borderColor}`,
+    background: bgColor,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "22px",
+    fontWeight: 900,
+    color: "#4c1d95",
+    flexShrink: 0,
+  });
+
+  const inputStyle = (feedback: boolean | null): React.CSSProperties => ({
+    width: "56px",
+    height: "56px",
+    borderRadius: "14px",
+    border: `3px solid ${feedback === null ? bg : feedback ? "#22c55e" : "#ef4444"}`,
+    background: feedback === true ? "#f0fdf4" : feedback === false ? "#fef2f2" : "#fff",
+    textAlign: "center",
+    fontSize: "22px",
+    fontWeight: 900,
+    color: "#4c1d95",
+    outline: "none",
+    flexShrink: 0,
+  });
+
+  return (
+    <div className="w-full max-w-sm mx-auto space-y-5">
+
+      {/* Progress bar */}
+      <div className="flex gap-2 mb-2">
+        {(["step1","step2","step3","done"] as Half3StepPhase[]).map((p, i) => (
+          <div key={p} className="flex-1 h-2 rounded-full transition-all duration-500"
+            style={{
+              background: (["step1","step2","step3","done"] as Half3StepPhase[]).indexOf(phase) > i
+                ? bg
+                : phase === p ? `${bg}99` : "#e9d5ff"
+            }} />
+        ))}
+      </div>
+
+      {/* The number being halved */}
+      <div className="text-center">
+        <span className="text-purple-400 font-bold text-base">Find half of</span>
+        <div className="text-5xl font-black mt-1" style={{ color: bg }}>{practiceNum}</div>
+      </div>
+
+      {/* ── STEP 1 ── */}
+      <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
+        style={{ borderColor: phase === "step1" ? bg : "#e9d5ff" }}>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="rounded-full w-8 h-8 flex items-center justify-center text-sm font-black text-white"
+            style={{ background: phase === "step1" ? bg : "#22c55e" }}>
+            {phase === "step1" ? "1" : "✓"}
+          </div>
+          <span className="font-bold text-purple-700">Write table half of each digit</span>
+        </div>
+
+        <div className="flex gap-3 justify-center mb-2">
+          {digits.map((d, i) => (
+            <div key={i} style={{
+              width: "56px", height: "56px", borderRadius: "14px",
+              border: `3px solid ${bg}`, background: light,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "22px", fontWeight: 900, color: bg,
+            }}>{d}</div>
+          ))}
+        </div>
+        <div className="text-center text-purple-400 text-sm font-semibold mb-2">↓ table half ↓</div>
+        <div className="flex gap-3 justify-center">
+          {digits.map((_, i) => (
+            phase === "step1" ? (
+              <input
+                key={i}
+                type="number"
+                min={0} max={4}
+                value={userStep1[i] ?? ""}
+                onChange={e => handleStep1Input(i, e.target.value)}
+                style={inputStyle(step1Feedback[i])}
+                placeholder="?"
+              />
+            ) : (
+              <div key={i} style={{
+                width: "56px", height: "56px", borderRadius: "14px",
+                border: "3px solid #22c55e", background: "#f0fdf4",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "22px", fontWeight: 900, color: "#15803d",
+              }}>{step1[i]}</div>
+            )
+          ))}
+        </div>
+
+        {phase === "step1" && (
+          <button onClick={checkStep1} disabled={!userStep1.every(v => v !== null)}
+            className="mt-4 w-full rounded-2xl py-3 font-bold text-white transition active:scale-95"
+            style={{
+              background: userStep1.every(v => v !== null) ? bg : "#c4b5fd",
+              cursor: userStep1.every(v => v !== null) ? "pointer" : "not-allowed",
+            }}>
+            Check ✓
+          </button>
+        )}
+        {phase === "step1" && step1Feedback.some(f => f === false) && (
+          <div className="text-red-400 text-center font-bold mt-2 text-sm">
+            Some are wrong — try again! (Hint: 0,1→0 | 2,3→1 | 4,5→2 | 6,7→3 | 8,9→4)
+          </div>
+        )}
+      </div>
+
+      {/* ── STEP 2 ── */}
+      {(phase === "step2" || phase === "step3" || phase === "done") && (
+        <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
+          style={{ borderColor: phase === "step2" ? bg : "#e9d5ff" }}>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="rounded-full w-8 h-8 flex items-center justify-center text-sm font-black text-white"
+              style={{ background: phase === "step2" ? bg : "#22c55e" }}>
+              {phase === "step2" ? "2" : "✓"}
+            </div>
+            <span className="font-bold text-purple-700">
+              {phase === "step2" ? "Tap the cells from odd digits 👇" : "Highlighted cells from odd digits"}
+            </span>
+          </div>
+
+          <div className="flex gap-3 justify-center mb-3">
+            {step1.map((v, i) => (
+              <div key={i}
+                onClick={() => toggleOddSel(i)}
+                style={{
+                  width: "56px", height: "56px", borderRadius: "14px",
+                  border: `3px solid ${
+                    phase === "step2"
+                      ? (userOddSel[i] ? "#f59e0b" : bg)
+                      : (oddPositions[i] ? "#f59e0b" : bg)
+                  }`,
+                  background: phase === "step2"
+                    ? (userOddSel[i] ? "#fef3c7" : light)
+                    : (oddPositions[i] ? "#fef3c7" : light),
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "22px", fontWeight: 900,
+                  color: phase === "step2"
+                    ? (userOddSel[i] ? "#b45309" : "#4c1d95")
+                    : (oddPositions[i] ? "#b45309" : "#4c1d95"),
+                  cursor: phase === "step2" && !step2Checked ? "pointer" : "default",
+                  transition: "all 0.2s",
+                  boxShadow: (phase === "step2" ? userOddSel[i] : oddPositions[i])
+                    ? "0 0 0 3px #fbbf24"
+                    : "none",
+                }}>
+                {v}
+              </div>
+            ))}
+          </div>
+
+          {phase === "step2" && (
+            <>
+              <p className="text-purple-400 text-xs text-center mb-3">
+                Tap any cell that was halved from an <strong>odd</strong> digit
+              </p>
+              <button onClick={checkStep2}
+                className="w-full rounded-2xl py-3 font-bold text-white transition active:scale-95"
+                style={{ background: bg }}>
+                Confirm Selection ✓
+              </button>
+              {step2Feedback === "wrong" && (
+                <div className="text-red-400 text-center font-bold mt-2 text-sm">❌ Not quite — try again!</div>
+              )}
+              {step2Feedback === "correct" && (
+                <div className="text-green-500 text-center font-bold mt-2 text-sm">✅ Correct!</div>
+              )}
+            </>
+          )}
+          {phase !== "step2" && (
+            <p className="text-center text-amber-600 font-semibold text-sm">
+              🟡 Highlighted = came from odd digit → add +5 to the cell to the RIGHT!
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* ── STEP 3 ── */}
+      {(phase === "step3" || phase === "done") && (
+        <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
+          style={{ borderColor: phase === "step3" ? bg : "#e9d5ff" }}>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="rounded-full w-8 h-8 flex items-center justify-center text-sm font-black text-white"
+              style={{ background: phase === "step3" ? bg : "#22c55e" }}>
+              {phase === "step3" ? "3" : "✓"}
+            </div>
+            <span className="font-bold text-purple-700">Add +5 from yellow cells to the cell on the RIGHT</span>
+          </div>
+
+          <p className="text-purple-400 text-xs mb-4">
+            For each yellow cell, add 5 to the cell directly to its RIGHT.
+            {oddPositions[digits.length - 1] && (
+              <span> If the rightmost cell is yellow, add .5 to the final answer.</span>
+            )}
+          </p>
+
+          {/* Display: Show step1 values with arrows indicating +5 to the right */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            {step1.map((v, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <div style={{
+                  ...baseCell(
+                    oddPositions[i] ? "#f59e0b" : bg,
+                    oddPositions[i] ? "#fef3c7" : light
+                  ),
+                  color: oddPositions[i] ? "#b45309" : "#4c1d95",
+                  position: "relative",
+                }}>
+                  {v}
+                </div>
+                {oddPositions[i] && i < step1.length - 1 && (
+                  <div className="text-xs text-amber-500 mt-1">+5 →</div>
+                )}
+                {oddPositions[i] && i === step1.length - 1 && (
+                  <div className="text-xs text-amber-500 mt-1">+.5</div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center text-purple-400 text-sm font-semibold mb-2">↓ Result after adding +5 ↓</div>
+
+          {/* Input row for results */}
+          <div className="flex gap-2 justify-center">
+            {digits.map((_, i) => {
+              const expected = getFinalValueAtIndex(i);
+              const fb = step3Feedback[i] ?? null;
+              const userVal = step3UserVals[i] ?? "";
+              const isLast = i === digits.length - 1;
+
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  {phase === "step3" && !step3Done ? (
+                    <>
+                      <input
+                        type="number"
+                        value={userVal}
+                        onChange={e => handleStep3Input(i, e.target.value)}
+                        style={inputStyle(fb)}
+                        className="text-center"
+                        placeholder="?"
+                      />
+                    </>
+                  ) : (
+                    <div style={{
+                      ...baseCell("#22c55e", "#f0fdf4"),
+                      color: "#15803d",
+                    }}>
+                      {expected}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Show .5 suffix if needed */}
+          {needsHalf() && phase === "step3" && !step3Done && (
+            <div className="text-center mt-2">
+              <span className="text-lg font-bold" style={{ color: bg }}>+ .5 at the end</span>
+            </div>
+          )}
+
+          {phase === "step3" && !step3Done && (
+            <>
+              <button
+                onClick={checkStep3}
+                disabled={!allStep3Filled}
+                className="mt-4 w-full rounded-2xl py-3 font-bold text-white transition active:scale-95"
+                style={{
+                  background: allStep3Filled ? bg : "#c4b5fd",
+                  cursor: allStep3Filled ? "pointer" : "not-allowed",
+                }}>
+                Check ✓
+              </button>
+              {anyStep3Wrong && (
+                <div className="text-red-400 text-center font-bold mt-2 text-sm">
+                  ❌ Not right — remember to add +5 from yellow cells to the cell on the RIGHT!
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Show final answer with .5 when done */}
+          {phase === "step3" && step3Done && (
+            <div className="mt-4 text-center">
+              <div className="text-lg font-bold text-green-600">
+                Final number: {digits.map((_, i) => getFinalValueAtIndex(i)).join('')}{needsHalf() ? '.5' : ''}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── DONE ── */}
+      {phase === "done" && (
+        <div className="bg-white rounded-3xl p-6 border-2 shadow-xl text-center"
+          style={{ borderColor: "#22c55e" }}>
+          <div className="text-5xl mb-2">🎉</div>
+          <div className="text-2xl font-black text-green-600 mb-1">
+            ½ of {practiceNum} = <span style={{ color: bg }}>{answer}</span>
+          </div>
+          <div className="text-purple-400 font-semibold mb-4">
+            {Number.isInteger(answer) ? "Great work!" : "Notice the .5 — the last digit was odd!"}
+          </div>
+          <div className="flex gap-3">
+            <button onClick={onNewNumber}
+              className="flex-1 rounded-2xl py-3 font-bold text-white transition active:scale-95"
+              style={{ background: bg }}>
+              🔄 New Number
+            </button>
+            <button onClick={onComplete}
+              className="flex-1 rounded-2xl py-3 font-bold transition active:scale-95 border-2"
+              style={{ borderColor: bg, color: bg, background: light }}>
+              ⚡ Challenge
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function SpeedMathsPage() {
-  // ── All hooks at the top level — never inside conditionals ──
   const [gameState, setGameState] = useState<GameState>("splash");
   const [challenge, setChallenge] = useState<Challenge>("Addition");
   const [answerMode, setAnswerMode] = useState<AnswerMode>("Choose Option");
@@ -166,14 +643,9 @@ export default function SpeedMathsPage() {
   const [questionsLeft, setQuestionsLeft] = useState(10);
   const [totalTime, setTotalTime] = useState(0);
 
-  // Half 3-step example index — lifted from inside the conditional
-  const [halfExampleIndex, setHalfExampleIndex] = useState(0);
+  const [halfPracticeNum, setHalfPracticeNum] = useState<number>(() => generateHalfPracticeNum());
+  const [half3StepKey, setHalf3StepKey] = useState(0);
 
-  // Half table practice
-  const [halfTableStep, setHalfTableStep] = useState(0);
-  const [halfPracticeNum, setHalfPracticeNum] = useState(0);
-
-  // Square step practice — all lifted from inside the conditional
   const [squareNum, setSquareNum] = useState(46);
   const [squareStep, setSquareStep] = useState(0);
   const [squareUserInputs, setSquareUserInputs] = useState<string[]>([]);
@@ -183,7 +655,6 @@ export default function SpeedMathsPage() {
   const timerRef = useRef<ReturnType<typeof setInterval>|null>(null);
   const totalTimerRef = useRef<ReturnType<typeof setInterval>|null>(null);
 
-  // ── Timer logic ──
   const stopTimers = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (totalTimerRef.current) clearInterval(totalTimerRef.current);
@@ -257,7 +728,6 @@ export default function SpeedMathsPage() {
     return () => clearTimeout(t);
   }, []);
 
-  // ── Square step check — defined at top level, safe to call from JSX ──
   const checkSquareStep = useCallback(() => {
     const diff = 50 - squareNum;
     const steps = [
@@ -286,23 +756,21 @@ export default function SpeedMathsPage() {
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 
-  // SPLASH
   if (gameState === "splash") return (
     <div className="min-h-screen flex flex-col items-center justify-center"
       style={{ background: "linear-gradient(135deg,#f9f0ff 0%,#e0d7ff 50%,#ffd6f5 100%)" }}>
       <Stars count={12} />
-      <div className="text-center animate-zoom-in">
-        <div className="text-8xl mb-4 animate-bounce">🧮</div>
+      <div className="text-center">
+        <div className="text-8xl mb-4">🧮</div>
         <h1 className="text-5xl font-black mb-2" style={{ color: LOGICOLOGY_PURPLE, fontFamily:"'Fredoka One',cursive" }}>
           Logicology
         </h1>
         <h2 className="text-3xl font-bold text-purple-400">Speed Maths ⚡</h2>
-        <p className="mt-4 text-lg text-purple-300 animate-pulse">Loading your brain workout…</p>
+        <p className="mt-4 text-lg text-purple-300">Loading your brain workout…</p>
       </div>
     </div>
   );
 
-  // MENU
   if (gameState === "menu") return (
     <div className="min-h-screen flex flex-col items-center justify-start px-4 pb-10 pt-8"
       style={{ background: "linear-gradient(160deg,#f9f0ff 0%,#fff 60%,#ffe8f6 100%)" }}>
@@ -330,7 +798,6 @@ export default function SpeedMathsPage() {
     </div>
   );
 
-  // MODE SELECT
   if (gameState === "mode-select") {
     const { bg, light, emoji } = CHALLENGE_COLORS[challenge];
     return (
@@ -350,7 +817,11 @@ export default function SpeedMathsPage() {
                 style={{ background: light, border:`3px solid ${bg}`, color: bg }}>
                 📋 Table Practice
               </button>
-              <button onClick={() => { setHalfExampleIndex(0); setGameState("half-3step"); }}
+              <button onClick={() => {
+                  setHalfPracticeNum(generateHalfPracticeNum());
+                  setHalf3StepKey(k => k + 1);
+                  setGameState("half-3step");
+                }}
                 className="rounded-3xl py-4 text-xl font-bold shadow-lg transition active:scale-95"
                 style={{ background: light, border:`3px solid ${bg}`, color: bg }}>
                 🪜 3-Step Practice
@@ -408,7 +879,6 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // SETTINGS
   if (gameState === "settings") {
     const { bg, light, emoji } = CHALLENGE_COLORS[challenge];
     return (
@@ -463,7 +933,6 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // HALF TABLE PRACTICE
   if (gameState === "half-table") {
     const table = [
       [0,0],[1,0],[2,1],[3,1],[4,2],[5,2],[6,3],[7,3],[8,4],[9,4]
@@ -493,7 +962,11 @@ export default function SpeedMathsPage() {
             Memorise: 0,1→0 | 2,3→1 | 4,5→2 | 6,7→3 | 8,9→4
           </p>
         </div>
-        <button onClick={() => { setHalfExampleIndex(0); setGameState("half-3step"); }}
+        <button onClick={() => {
+            setHalfPracticeNum(generateHalfPracticeNum());
+            setHalf3StepKey(k => k + 1);
+            setGameState("half-3step");
+          }}
           className="mt-6 w-full max-w-sm rounded-3xl py-4 text-xl font-black shadow-lg transition active:scale-95"
           style={{ background: bg, color: "#fff" }}>
           Next: 3-Step Practice →
@@ -502,61 +975,45 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // HALF 3-STEP PRACTICE
   if (gameState === "half-3step") {
-    const examples = [
-      { n: 768, step1: [3,3,4], step2: [3,3,4], step3: [3,8,4], answer: 384 },
-      { n: 329, step1: [1,1,4], step2: [1,1,4], step3: [1,6,4.5], answer: 164.5 },
-    ];
     const { bg, light } = CHALLENGE_COLORS["Half"];
-    const current = examples[halfExampleIndex];
-
     return (
-      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10"
+      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto"
         style={{ background: "linear-gradient(160deg,#f9f0ff 0%,#fff 60%,#ffe8f6 100%)" }}>
+        <Stars count={5} />
         <button onClick={() => setGameState("mode-select")} className="self-start mb-4 text-purple-400 font-bold text-lg">← Back</button>
         <h2 className="text-3xl font-black mb-1" style={{ color: bg, fontFamily:"'Fredoka One',cursive" }}>Half 3-Step Method</h2>
-        <p className="text-purple-400 mb-4 font-semibold">Find Half of {current.n}</p>
+        <p className="text-purple-400 mb-6 font-semibold text-sm text-center">
+          Follow the steps to find half of the number below!
+        </p>
 
-        <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6 border-2 mb-4" style={{ borderColor: bg }}>
-          <div className="space-y-4">
-            {[
-              { step:"Step 1", label:"Write table half of each digit", value: current.step1.join("") },
-              { step:"Step 2", label:"Underline digit that came from odd number", value: current.step2.join("")+"_" },
-              { step:"Step 3", label:"Resolve underline: add 5, carry if needed", value: current.step3.join("") },
-              { step:"✅ Answer", label:"Final result", value: current.answer },
-            ].map(({ step, label, value }) => (
-              <div key={step} className="flex items-start gap-3">
-                <div className="rounded-full px-3 py-1 text-sm font-black shrink-0" style={{ background: bg, color: "#fff" }}>{step}</div>
-                <div>
-                  <div className="text-purple-500 text-sm">{label}</div>
-                  <div className="text-2xl font-black" style={{ color: bg }}>{value}</div>
-                </div>
+        <Half3StepInteractive
+          key={half3StepKey}
+          practiceNum={halfPracticeNum}
+          bg={bg}
+          light={light}
+          onComplete={() => setGameState("settings")}
+          onNewNumber={() => {
+            setHalfPracticeNum(generateHalfPracticeNum());
+            setHalf3StepKey(k => k + 1);
+          }}
+        />
+
+        {/* Hint reference */}
+        <div className="w-full max-w-sm bg-white rounded-3xl p-4 border-2 border-purple-100 mt-5">
+          <p className="font-bold text-purple-600 mb-2 text-sm text-center">📖 Table Half Reference</p>
+          <div className="grid grid-cols-5 gap-1 text-center text-xs font-bold text-purple-500">
+            {[0,1,2,3,4,5,6,7,8,9].map(d => (
+              <div key={d} className="rounded-lg py-1" style={{ background: "#f3e8ff" }}>
+                {d}→{Math.floor(d/2)}
               </div>
             ))}
           </div>
         </div>
-
-        <div className="flex gap-3 w-full max-w-sm mb-4">
-          {examples.map((e, i) => (
-            <button key={i} onClick={() => setHalfExampleIndex(i)}
-              className="flex-1 rounded-2xl py-3 font-bold transition"
-              style={{ background: halfExampleIndex===i?bg:light, color: halfExampleIndex===i?"#fff":bg, border:`2px solid ${bg}` }}>
-              Example {i+1}: {e.n}
-            </button>
-          ))}
-        </div>
-
-        <button onClick={() => setGameState("settings")}
-          className="w-full max-w-sm rounded-3xl py-4 text-xl font-black shadow-lg transition active:scale-95"
-          style={{ background: bg, color: "#fff" }}>
-          ⚡ Try Challenge Mode
-        </button>
       </div>
     );
   }
 
-  // SQUARE STEP PRACTICE
   if (gameState === "square-step") {
     const { bg, light } = CHALLENGE_COLORS["Squares"];
     const diff = 50 - squareNum;
@@ -635,14 +1092,13 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // RESULT SCREEN
   if (gameState === "result") {
     const { bg } = CHALLENGE_COLORS[challenge];
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4"
         style={{ background: "linear-gradient(160deg,#f9f0ff 0%,#fff 60%,#ffe8f6 100%)" }}>
         <Stars count={12} />
-        <div className="text-7xl mb-4 animate-bounce">🏆</div>
+        <div className="text-7xl mb-4">🏆</div>
         <h2 className="text-4xl font-black mb-2" style={{ color: bg, fontFamily:"'Fredoka One',cursive" }}>Well Done!</h2>
         <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-sm border-2 mb-6" style={{ borderColor: bg }}>
           {[
@@ -674,7 +1130,6 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // PLAYING
   if (gameState === "playing" && question) {
     const { bg, light } = CHALLENGE_COLORS[challenge];
     const timerPct = timeMode==="timed" ? (timeLeft / secondsPerQ) * 100 : 100;
@@ -702,14 +1157,14 @@ export default function SpeedMathsPage() {
 
         <ScoreBar score={score} streak={streak} level={level} />
 
-        <div className="w-full max-w-md rounded-4xl shadow-2xl p-8 mb-6 text-center relative overflow-hidden"
+        <div className="w-full max-w-md rounded-3xl shadow-2xl p-8 mb-6 text-center relative overflow-hidden"
           style={{ background: feedback ? feedbackBg : light, border: `4px solid ${feedback?feedbackBg:bg}` }}>
           {feedback && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-8xl animate-zoom-in">{feedback==="correct"?"🎉":"😅"}</span>
+              <span className="text-8xl">{feedback==="correct"?"🎉":"😅"}</span>
             </div>
           )}
-          <div className={`transition-opacity ${feedback?"opacity-20":"opacity-100"}`}>
+          <div style={{ opacity: feedback ? 0.2 : 1 }}>
             <p className="text-purple-400 font-bold mb-2 text-base">What is</p>
             <div className="text-7xl font-black mb-2" style={{ color: bg, fontFamily:"'Fredoka One',cursive" }}>
               {question.display}
