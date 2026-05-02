@@ -107,15 +107,15 @@ const CHALLENGE_COLORS: Record<Challenge, { bg: string; light: string; emoji: st
 
 // ─── Image paths for challenge cards ─────────────────────────────────────────
 const CHALLENGE_IMAGES: Record<Challenge, string> = {
-  Addition:       "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ADDITION@2x.PNG",
-  Subtraction:    "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SUBTRACTION@2x.PNG",
-  Multiplication: "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/MULTIPLICATION@2X.PNG",
-  Half:           "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/FRACTION@2x.PNG",
-  Squares:        "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/DIVISION@2x.PNG",
+  Addition:       "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ADDITION@2x.png",
+  Subtraction:    "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SUBTRACTION@2x.png",
+  Multiplication: "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/MULTIPLICATION@2X.png",
+  Half:           "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/FRACTION@2x.png",
+  Squares:        "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/DIVISION@2x.png",
 };
 
-const ROCKET_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.PNG";
-const CLOUDS_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CLOUDS.PNG";
+const ROCKET_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.png";
+const CLOUDS_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CLOUDS.png";
 
 // ─── Menu challenge card ──────────────────────────────────────────────────────
 function MenuChallengeCard({ ch, index, visible, onClick }:
@@ -608,7 +608,7 @@ function BottomDecorations({ visible }: { visible: boolean }) {
       {/* Pencil Image */}
       <div style={{ ...base("0.9s"), transform: visible ? "rotate(-20deg)" : "rotate(-20deg) translateY(60px)" }}>
         <img 
-          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/PENCIL@2x.PNG" 
+          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/PENCIL@2x.png" 
           alt="Pencil"
           style={{ width: "auto", height: "100px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.15))" }}
         />
@@ -617,7 +617,7 @@ function BottomDecorations({ visible }: { visible: boolean }) {
       {/* Scale Image */}
       <div style={{ ...base("1.0s"), transform: visible ? "rotate(-8deg)" : "rotate(-8deg) translateY(60px)" }}>
         <img 
-          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SCALE@2x.PNG" 
+          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SCALE@2x.png" 
           alt="Scale"
           style={{ width: "auto", height: "80px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.15))" }}
         />
@@ -626,7 +626,7 @@ function BottomDecorations({ visible }: { visible: boolean }) {
       {/* Books Image */}
       <div style={{ ...base("1.1s"), transform: visible ? "translateY(0)" : "translateY(60px)" }}>
         <img 
-          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/BOOKS@2x.PNG" 
+          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/BOOKS@2x.png" 
           alt="Books"
           style={{ width: "auto", height: "100px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.15))" }}
         />
@@ -637,7 +637,7 @@ function BottomDecorations({ visible }: { visible: boolean }) {
         ...base("1.2s"), transform: visible ? "translateY(0)" : "translateY(60px)",
       }}>
         <img 
-          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CALCULATOR@2x.PNG" 
+          src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CALCULATOR@2x.png" 
           alt="Calculator"
           style={{ width: "auto", height: "90px", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.15))" }}
         />
