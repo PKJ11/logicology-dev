@@ -399,7 +399,12 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
   const [step2Feedback, setStep2Feedback] = useState<string | null>(null);
   const [step3UserVals, setStep3UserVals] = useState<Record<number, string>>({});
   const [step3Feedback, setStep3Feedback] = useState<Record<number, boolean | null>>({});
+  // decimal cell: index = digits.length (extra cell after last)
+  const [decimalVal, setDecimalVal]       = useState("");
+  const [decimalFb,  setDecimalFb]        = useState<boolean | null>(null);
   const [step3Done, setStep3Done] = useState(false);
+
+  const lastIsOdd = oddPositions[digits.length - 1];
 
   const upS1 = (idx: number, val: string) => {
     if (phase !== "step1") return;
@@ -426,23 +431,41 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
     if (v >= 10) v -= 10;
     return v;
   };
-  const needsHalf = () => oddPositions[digits.length - 1];
   const upS3 = (idx: number, val: string) => {
     if (phase !== "step3" || step3Done) return;
     setStep3UserVals(p => ({ ...p, [idx]: val }));
   };
   const chkS3 = () => {
+    // check main digit cells
     const fb: Record<number, boolean> = {};
     digits.forEach((_, i) => {
       const exp = getFV(i);
       const uv = step3UserVals[i] !== undefined ? parseInt(step3UserVals[i]) : NaN;
       fb[i] = uv === exp;
     });
+
+    // check decimal cell if last digit is odd
+    let decOk = true;
+    if (lastIsOdd) {
+      const dv = parseInt(decimalVal);
+      decOk = dv === 5;
+      setDecimalFb(decOk);
+    }
+
     setStep3Feedback(fb);
-    if (Object.values(fb).every(Boolean)) { setStep3Done(true); setTimeout(() => setPhase("done"), 600); }
+
+    if (Object.values(fb).every(Boolean) && decOk) {
+      setStep3Done(true);
+      setTimeout(() => setPhase("done"), 600);
+    }
   };
-  const allS3 = digits.every((_, i) => step3UserVals[i] !== undefined && step3UserVals[i] !== "");
-  const anyS3Wrong = Object.values(step3Feedback).some(v => v === false);
+
+  // all main cells filled + decimal cell filled if needed
+  const allS3 = digits.every((_, i) => step3UserVals[i] !== undefined && step3UserVals[i] !== "")
+    && (!lastIsOdd || decimalVal !== "");
+
+  const anyS3Wrong = Object.values(step3Feedback).some(v => v === false)
+    || (lastIsOdd && decimalFb === false);
 
   const baseCell = (bc: string, bgc: string): React.CSSProperties => ({
     width: 56, height: 56, borderRadius: 14, border: `3px solid ${bc}`, background: bgc,
@@ -562,52 +585,125 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
               style={{ background: phase === "step3" ? bg : "#22c55e", fontFamily: RACING }}>
               {phase === "step3" ? "3" : "✓"}
             </div>
-            <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: BRAND_TEAL_DK }}>Add +5 from yellow cells to cell on the RIGHT</span>
+            <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: BRAND_TEAL_DK }}>
+              Add +5 from yellow cells to cell on the RIGHT
+            </span>
           </div>
           <p className="text-xs mb-4" style={{ color: BRAND_TEAL, fontFamily: OUTFIT }}>
             For each yellow cell, add 5 to the cell to its RIGHT.
-            {oddPositions[digits.length - 1] && <span> Rightmost yellow → add .5 to final answer.</span>}
+            {lastIsOdd && <span> Last digit is odd → the decimal cell gets <strong>5</strong>.</span>}
           </p>
+
+          {/* Reference row: step1 cells with arrows */}
           <div className="flex items-center justify-center gap-2 mb-4">
             {step1.map((v, i) => (
               <div key={i} className="flex flex-col items-center">
-                <div style={{ ...baseCell(oddPositions[i] ? "#f59e0b" : bg, oddPositions[i] ? "#fef3c7" : light), color: oddPositions[i] ? "#b45309" : BRAND_TEAL_DK }}>{v}</div>
-                {oddPositions[i] && i < step1.length - 1 && <div className="text-xs text-amber-500 mt-1" style={{ fontFamily: OUTFIT }}>+5 →</div>}
-                {oddPositions[i] && i === step1.length - 1 && <div className="text-xs text-amber-500 mt-1" style={{ fontFamily: OUTFIT }}>+.5</div>}
+                <div style={{
+                  ...baseCell(oddPositions[i] ? "#f59e0b" : bg, oddPositions[i] ? "#fef3c7" : light),
+                  color: oddPositions[i] ? "#b45309" : BRAND_TEAL_DK,
+                }}>{v}</div>
+                {oddPositions[i] && i < step1.length - 1 && (
+                  <div className="text-xs text-amber-500 mt-1" style={{ fontFamily: OUTFIT }}>+5 →</div>
+                )}
+                {oddPositions[i] && i === step1.length - 1 && (
+                  <div className="text-xs text-amber-500 mt-1" style={{ fontFamily: OUTFIT }}>→ .?</div>
+                )}
               </div>
             ))}
           </div>
+
           <div className="text-center text-sm mb-2" style={{ color: bg, fontFamily: OUTFIT, fontWeight: 600 }}>↓ Result after +5 ↓</div>
-          <div className="flex gap-2 justify-center">
+
+          {/* Answer row: main digit cells + optional decimal cell */}
+          <div className="flex gap-2 justify-center items-center">
             {digits.map((_, i) => {
-              const exp = getFV(i), fb = step3Feedback[i] ?? null, uv = step3UserVals[i] ?? "";
+              const exp = getFV(i);
+              const fb  = step3Feedback[i] ?? null;
+              const uv  = step3UserVals[i] ?? "";
               return (
                 <div key={i} className="flex flex-col items-center">
                   {phase === "step3" && !step3Done
-                    ? <input type="number" value={uv} onChange={e => upS3(i, e.target.value)} style={inpSty(fb)} className="text-center" placeholder="?" />
+                    ? <input
+                        type="number"
+                        value={uv}
+                        onChange={e => upS3(i, e.target.value)}
+                        style={inpSty(fb)}
+                        className="text-center"
+                        placeholder="?"
+                      />
                     : <div style={{ ...baseCell("#22c55e", "#f0fdf4"), color: "#15803d" }}>{exp}</div>
                   }
                 </div>
               );
             })}
-          </div>
-          {needsHalf() && phase === "step3" && !step3Done && (
-            <div className="text-center mt-2" style={{ color: bg, fontFamily: RACING, fontSize: "1.2rem" }}>+ .5 at the end</div>
-          )}
-          {phase === "step3" && !step3Done && <>
-            <button onClick={chkS3} disabled={!allS3} className="mt-4 w-full rounded-2xl py-3 text-white active:scale-95"
-              style={{ background: allS3 ? bg : "#ccc", cursor: allS3 ? "pointer" : "not-allowed", fontFamily: RACING, fontSize: "1rem" }}>
-              Check ✓
-            </button>
-            {anyS3Wrong && (
-              <div className="text-red-400 text-center mt-2 text-sm" style={{ fontFamily: OUTFIT, fontWeight: 700 }}>
-                ❌ Not right — add +5 from yellow to RIGHT!
-              </div>
+
+            {/* Decimal cell — only when last digit is odd */}
+            {lastIsOdd && (
+              <>
+                {/* Decimal point separator */}
+                <div style={{
+                  fontFamily: RACING,
+                  fontSize: 32,
+                  color: bg,
+                  lineHeight: 1,
+                  alignSelf: "flex-end",
+                  marginBottom: 10,
+                  flexShrink: 0,
+                }}>.</div>
+
+                {/* The .5 input cell */}
+                {phase === "step3" && !step3Done
+                  ? <input
+                      type="number"
+                      min={0}
+                      max={9}
+                      value={decimalVal}
+                      onChange={e => setDecimalVal(e.target.value)}
+                      style={{
+                        ...inpSty(decimalFb),
+                        borderStyle: "dashed",
+                      }}
+                      className="text-center"
+                      placeholder="?"
+                    />
+                  : <div style={{ ...baseCell("#22c55e", "#f0fdf4"), color: "#15803d" }}>5</div>
+                }
+              </>
             )}
-          </>}
+          </div>
+
+          {/* Hint label under decimal cell */}
+          {lastIsOdd && phase === "step3" && !step3Done && (
+            <p className="text-center text-xs mt-2 text-amber-600" style={{ fontFamily: OUTFIT, fontWeight: 600 }}>
+              Last digit was odd → decimal cell = ?
+            </p>
+          )}
+
+          {phase === "step3" && !step3Done && (
+            <>
+              <button
+                onClick={chkS3}
+                disabled={!allS3}
+                className="mt-4 w-full rounded-2xl py-3 text-white active:scale-95"
+                style={{
+                  background: allS3 ? bg : "#ccc",
+                  cursor: allS3 ? "pointer" : "not-allowed",
+                  fontFamily: RACING,
+                  fontSize: "1rem",
+                }}>
+                Check ✓
+              </button>
+              {anyS3Wrong && (
+                <div className="text-red-400 text-center mt-2 text-sm" style={{ fontFamily: OUTFIT, fontWeight: 700 }}>
+                  ❌ Not right — check your cells!
+                </div>
+              )}
+            </>
+          )}
+
           {phase === "step3" && step3Done && (
             <div className="mt-4 text-center text-green-600" style={{ fontFamily: RACING, fontSize: "1.1rem" }}>
-              Final: {digits.map((_, i) => getFV(i)).join("")}{needsHalf() ? ".5" : ""}
+              Final: {digits.map((_, i) => getFV(i)).join("")}{lastIsOdd ? ".5" : ""}
             </div>
           )}
         </div>
@@ -667,99 +763,283 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
 }
 
 // ─── Square Step View ─────────────────────────────────────────────────────────
-function SquareStepView({ squareNum, onTryAnother, onGoSettings, bg, light }:
-  { squareNum: number; onTryAnother: () => void; onGoSettings: () => void; bg: string; light: string }) {
-  const diff = 50 - squareNum, absDiff = Math.abs(diff), AB = 25 - absDiff, CD = absDiff * absDiff, finalAnswer = squareNum * squareNum;
-  const CDStr = String(CD).padStart(2, "0"), ABCDStr = String(AB) + CDStr;
-  const [currentStep, setCurrentStep] = useState(0);
-  const [vals, setVals] = useState(["", "", "", ""]);
-  const [feedbacks, setFeedbacks] = useState<("correct" | "wrong" | null)[]>([null, null, null, null]);
-  const [confirmed, setConfirmed] = useState([false, false, false, false]);
-  const correctAnswers = [absDiff, AB, CD, finalAnswer];
+function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, bg, light }:
+  { squareNum: number; onTryAnother: () => void; onRangeSelect: (range: string) => void; onGoSettings: () => void; bg: string; light: string }) {
 
-  const handleChange = (i: number, v: string) => { const n = [...vals]; n[i] = v; setVals(n); };
+  type RangeKey = "26-50" | "51-75" | "76-100" | "101-125";
+
+  const getRange = (n: number): RangeKey => {
+    if (n >= 26  && n <= 50)  return "26-50";
+    if (n >= 51  && n <= 75)  return "51-75";
+    if (n >= 76  && n <= 100) return "76-100";
+    return "101-125";
+  };
+
+  const range = getRange(squareNum);
+
+  const computeValues = (n: number, r: RangeKey) => {
+    switch (r) {
+      case "26-50":   { const x = 50  - n; const AB = 25 - x; const CD = x * x; return { x, AB, CD, base: 50,  dir: "below" as const }; }
+      case "51-75":   { const x = n   - 50; const AB = 25 + x; const CD = x * x; return { x, AB, CD, base: 50,  dir: "above" as const }; }
+      case "76-100":  { const x = 100 - n; const AB = 50 - x; const CD = x * x; return { x, AB, CD, base: 100, dir: "below" as const }; }
+      case "101-125": { const x = n   - 100;const AB = 50 + x; const CD = x * x; return { x, AB, CD, base: 100, dir: "above" as const }; }
+    }
+  };
+
+  const { x, AB, CD, base, dir } = computeValues(squareNum, range);
+  const finalAnswer = AB * 100 + CD;
+  const CDStr       = String(CD).padStart(2, "0");
+  const ABCDStr     = String(finalAnswer);
+
+  const step1Label = dir === "below" ? `${base} − ${squareNum}` : `${squareNum} − ${base}`;
+  const step2Label = (() => {
+    if (range === "26-50")   return `25 − ${x}`;
+    if (range === "51-75")   return `25 + ${x}`;
+    if (range === "76-100")  return `50 − ${x}`;
+    return                          `50 + ${x}`;
+  })();
+
+  const steps = [
+    {
+      label:       "Step 1",
+      sublabel:    `${squareNum} is ${dir} ${base} by  (${step1Label})`,
+      placeholder: "x",
+      wide:        false,
+      displayVal:  x,
+    },
+    {
+      label:       "Step 2",
+      sublabel:    `${step2Label} = AB`,
+      placeholder: "AB",
+      wide:        false,
+      displayVal:  AB,
+    },
+    {
+      label:       "Step 3",
+      sublabel:    `${x}² = CD`,
+      placeholder: "CD",
+      wide:        false,
+      displayVal:  CD,
+    },
+    {
+      label:       "Answer",
+      sublabel:    `AB×100 + CD  =  ${AB}×100 + ${CD}`,
+      placeholder: "Ans",
+      wide:        true,
+      displayVal:  finalAnswer,
+    },
+  ];
+
+  const correctAnswers = [x, AB, CD, finalAnswer];
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const [vals,        setVals]        = useState(["", "", "", ""]);
+  const [feedbacks,   setFeedbacks]   = useState<("correct" | "wrong" | null)[]>([null, null, null, null]);
+  const [confirmed,   setConfirmed]   = useState([false, false, false, false]);
+
+  const handleChange = (i: number, v: string) => {
+    const n = [...vals]; n[i] = v; setVals(n);
+  };
+
   const handleSubmit = (i: number) => {
     const uv = parseFloat(vals[i]), exp = correctAnswers[i];
     if (Math.abs(uv - exp) < 0.01) {
       const nf = [...feedbacks]; nf[i] = "correct"; setFeedbacks(nf);
-      setTimeout(() => { const nc = [...confirmed]; nc[i] = true; setConfirmed([...nc]); if (i < 3) setCurrentStep(i + 1); else setCurrentStep(4); }, 600);
+      setTimeout(() => {
+        const nc = [...confirmed]; nc[i] = true; setConfirmed([...nc]);
+        if (i < 3) setCurrentStep(i + 1); else setCurrentStep(4);
+      }, 600);
     } else {
       const nf = [...feedbacks]; nf[i] = "wrong"; setFeedbacks(nf);
-      setTimeout(() => { const nf2 = [...feedbacks]; nf2[i] = null; setFeedbacks(nf2); }, 1000);
+      setTimeout(() => {
+        const nf2 = [...feedbacks]; nf2[i] = null; setFeedbacks(nf2);
+      }, 1000);
     }
   };
-  const steps = [
-    { label: "Step 1", sublabel: `${squareNum} is ${squareNum > 50 ? "more" : "less"} than 50 by`, placeholder: "x",    wide: false, displayVal: absDiff },
-    { label: "Step 2", sublabel: `Subtract ${absDiff} from 25`,                               placeholder: "AB",  wide: false, displayVal: AB },
-    { label: "Step 3", sublabel: `Square of ${absDiff} is`,                                   placeholder: "CD",  wide: false, displayVal: CDStr },
-    { label: "Answer", sublabel: "Step 2 & 3 combined",                                        placeholder: "ABCD", wide: true, displayVal: ABCDStr },
-  ];
+
   const isDone = currentStep === 4;
+
+  const rangeBadgeColor: Record<RangeKey, string> = {
+    "26-50":   "#26a9e0",
+    "51-75":   "#84c341",
+    "76-100":  "#d93b60",
+    "101-125": "#7784c1",
+  };
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-3">
-      <div className="flex gap-1.5 mb-2">
+
+      {/* Range tabs */}
+      <div className="grid grid-cols-4 gap-1 bg-white rounded-2xl p-1 shadow border-2"
+        style={{ borderColor: `${bg}33` }}>
+        {(["26-50", "51-75", "76-100", "101-125"] as RangeKey[]).map(r => (
+          <button
+            key={r}
+            onClick={() => onRangeSelect(r)}
+            className="rounded-xl py-2 transition-all active:scale-95"
+            style={{
+              background: range === r ? bg : "transparent",
+              color:      range === r ? "#fff" : bg,
+              fontFamily: RACING,
+              fontSize:   "0.7rem",
+              opacity:    range === r ? 1 : 0.55,
+              cursor:     "pointer",
+            }}
+            title={`Practice ${r} range`}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
+
+      {/* Progress bar */}
+      <div className="flex gap-1.5">
         {[0, 1, 2, 3].map(i => (
           <div key={i} className="flex-1 h-2.5 rounded-full transition-all duration-500"
-            style={{ background: i < currentStep ? bg : i === currentStep ? `${bg}88` : "#e0f2f1" }} />
-        ))}
-      </div>
-      <div className="text-center mb-4">
-        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.85rem", color: bg }}>Find Square of</div>
-        <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg }}>{squareNum}</div>
-        <div style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.8rem", color: `${bg}88`, marginTop: 4 }}>(50 − x method)</div>
-      </div>
-      <div className="bg-white rounded-3xl shadow-xl border-2 p-5 space-y-3" style={{ borderColor: isDone ? "#22c55e" : bg }}>
-        {steps.map((s, i) => (
-          <SquareStepRow key={i} label={s.label} sublabel={s.sublabel} placeholder={s.placeholder}
-            value={vals[i]} onChange={v => handleChange(i, v)} onSubmit={() => handleSubmit(i)}
-            feedback={feedbacks[i]} locked={currentStep < i} confirmed={confirmed[i]}
-            confirmedValue={confirmed[i] ? s.displayVal : undefined} wide={s.wide} bg={bg} />
-        ))}
-        {!isDone && currentStep < 4 && (
-          <button onClick={() => handleSubmit(currentStep)} disabled={!vals[currentStep]}
-            className="w-full rounded-2xl py-3 text-white mt-2 active:scale-95"
             style={{
-              background: vals[currentStep] ? `linear-gradient(135deg,${bg},${BRAND_TEAL_DK})` : "#ccc",
-              cursor: vals[currentStep] ? "pointer" : "not-allowed",
-              fontFamily: RACING, fontSize: "1.1rem",
-            }}>
-            Check ✓
-          </button>
-        )}
-        {feedbacks[currentStep] === "wrong" && !isDone && (
-          <div className="text-red-400 text-center text-sm" style={{ fontFamily: OUTFIT, fontWeight: 700 }}>❌ Not quite — try again!</div>
-        )}
+              background: i < currentStep ? bg : i === currentStep ? `${bg}88` : "#e0f2f1",
+            }} />
+        ))}
+      </div>
+
+      {/* Header */}
+      <div className="text-center">
+        <div
+          className="inline-block rounded-full px-3 py-1 text-xs text-white mb-2"
+          style={{ background: rangeBadgeColor[range], fontFamily: OUTFIT, fontWeight: 700 }}>
+          {range} range · {range === "26-50" ? "50−x" : range === "51-75" ? "50+x" : range === "76-100" ? "100−x" : "100+x"} method
+        </div>
+        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.85rem", color: bg }}>
+          Find Square of
+        </div>
+        <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg }}>{squareNum}</div>
+      </div>
+
+      {/* Step cards */}
+      <div className="bg-white rounded-3xl shadow-xl border-2 p-5 space-y-3"
+        style={{ borderColor: isDone ? "#22c55e" : bg }}>
+
+        {steps.map((s, i) => (
+          <div key={i} className="space-y-2">
+
+            <SquareStepRow
+              label={s.label}
+              sublabel={s.sublabel}
+              placeholder={s.placeholder}
+              value={vals[i]}
+              onChange={v => handleChange(i, v)}
+              onSubmit={() => handleSubmit(i)}
+              feedback={feedbacks[i]}
+              locked={currentStep < i}
+              confirmed={confirmed[i]}
+              confirmedValue={confirmed[i] ? s.displayVal : undefined}
+              wide={s.wide}
+              bg={bg}
+            />
+
+            {/* Per-step Check button */}
+            {currentStep === i && !confirmed[i] && !isDone && (
+              <button
+                onClick={() => handleSubmit(i)}
+                disabled={!vals[i]}
+                className="w-full rounded-2xl py-2.5 text-white active:scale-95 transition-all"
+                style={{
+                  background: vals[i]
+                    ? `linear-gradient(135deg,${bg},${BRAND_TEAL_DK})`
+                    : "#ccc",
+                  cursor:     vals[i] ? "pointer" : "not-allowed",
+                  fontFamily: RACING,
+                  fontSize:   "1rem",
+                }}
+              >
+                Check ✓
+              </button>
+            )}
+
+            {/* Per-step wrong feedback */}
+            {feedbacks[i] === "wrong" && !confirmed[i] && (
+              <div className="text-red-400 text-center text-sm"
+                style={{ fontFamily: OUTFIT, fontWeight: 700 }}>
+                ❌ Not quite — try again!
+              </div>
+            )}
+
+          </div>
+        ))}
+
+        {/* Done state */}
         {isDone && (
           <div className="text-center pt-2">
             <div className="text-3xl mb-1">🎉</div>
-            <div style={{ fontFamily: RACING, fontSize: "1.4rem", color: bg }}>{squareNum}² = {finalAnswer}</div>
-            <div className="mt-1 mb-4" style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.85rem", color: BRAND_TEAL }}>
-              {AB} | {CDStr} → {ABCDStr}
+            <div style={{ fontFamily: RACING, fontSize: "1.4rem", color: bg }}>
+              {squareNum}² = {finalAnswer}
+            </div>
+            <div className="mt-1 mb-4"
+              style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.85rem", color: BRAND_TEAL }}>
+              AB={AB} | CD={CD} → {AB}×100 + {CD} = {finalAnswer}
             </div>
             <div className="flex gap-3">
-              <button onClick={onTryAnother} className="flex-1 rounded-2xl py-3 text-white active:scale-95"
-                style={{ background: `linear-gradient(135deg,${bg},${BRAND_TEAL_DK})`, fontFamily: RACING, fontSize: "1rem" }}>🔄 Try Another</button>
-              <button onClick={onGoSettings} className="flex-1 rounded-2xl py-3 active:scale-95 border-2"
-                style={{ borderColor: bg, color: bg, background: light, fontFamily: RACING, fontSize: "1rem" }}>⚡ Challenge</button>
+              <button
+                onClick={onTryAnother}
+                className="flex-1 rounded-2xl py-3 text-white active:scale-95"
+                style={{
+                  background: `linear-gradient(135deg,${bg},${BRAND_TEAL_DK})`,
+                  fontFamily: RACING,
+                  fontSize:   "1rem",
+                }}>
+                🔄 Try Another
+              </button>
+              <button
+                onClick={onGoSettings}
+                className="flex-1 rounded-2xl py-3 active:scale-95 border-2"
+                style={{ borderColor: bg, color: bg, background: light, fontFamily: RACING, fontSize: "1rem" }}>
+                ⚡ Challenge
+              </button>
             </div>
           </div>
         )}
+
       </div>
+
+      {/* Formula reference */}
       <div className="bg-white rounded-3xl p-4 border-2" style={{ borderColor: `${bg}33` }}>
-        <p className="mb-2 text-sm text-center" style={{ color: bg, fontFamily: RACING }}>📐 Formula (50 − x method)</p>
+        <p className="mb-2 text-sm text-center" style={{ color: bg, fontFamily: RACING }}>
+          📐 Formula Reference
+        </p>
         <div className="grid grid-cols-2 gap-2 text-xs">
-          {[["Step 1", "x = |50 − n|"], ["Step 2 (AB)", "25 − x"], ["Step 3 (CD)", "x² (2 digits)"], ["Answer", "AB + CD"]].map(([t, d]) => (
-            <div key={t} className="rounded-xl p-2 text-center" style={{ background: light }}>
-              <div style={{ fontFamily: RACING, color: BRAND_TEAL_DK, fontSize: "0.9rem" }}>{t}</div>
-              <div style={{ fontFamily: OUTFIT, color: BRAND_TEAL, fontWeight: 600 }}>{d}</div>
-            </div>
-          ))}
+          {([
+            ["26–50",   "x=50−n, AB=25−x, CD=x²"],
+            ["51–75",   "x=n−50, AB=25+x, CD=x²"],
+            ["76–100",  "x=100−n, AB=50−x, CD=x²"],
+            ["101–125", "x=n−100, AB=50+x, CD=x²"],
+          ] as [string, string][]).map(([t, d]) => {
+            const active = range === t.replace("–", "-");
+            return (
+              <div key={t} className="rounded-xl p-2 text-center"
+                style={{
+                  background: active ? `${bg}18` : light,
+                  border:     active ? `1.5px solid ${bg}` : "none",
+                }}>
+                <div style={{ fontFamily: RACING, color: BRAND_TEAL_DK, fontSize: "0.85rem" }}>{t}</div>
+                <div style={{ fontFamily: OUTFIT, color: BRAND_TEAL, fontWeight: 600 }}>{d}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 rounded-xl p-2 text-center text-xs"
+          style={{ background: `${bg}10`, border: `1px dashed ${bg}` }}>
+          <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: bg }}>
+            Always: Answer = AB × 100 + CD
+          </span>
         </div>
       </div>
+
     </div>
   );
 }
+
+
+
 
 // ─── Bottom Decorations ───────────────────────────────────────────────────────
 function BottomDecorations({ visible }: { visible: boolean }) {
@@ -1141,23 +1421,48 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // ─── SQUARE STEP ──────────────────────────────────────────────────────────
-  if (gameState === "square-step") {
-    const { bg, light } = CHALLENGE_COLORS["Squares"];
-    return (
-      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{ background: gameBg }}>
-        <style>{GLOBAL_STYLES}</style>
-        <Stars count={5} />
-        <button onClick={() => setGameState("mode-select")} className="self-start mb-4 text-lg"
-          style={{ color: BRAND_TEAL, fontFamily: RACING }}>← Back</button>
-        <div style={{ fontFamily: RACING, fontSize: "2.5rem", color: bg }}>²</div>
-        <h2 className="text-3xl mb-4" style={{ color: bg, fontFamily: RACING }}>Square Steps</h2>
-        <SquareStepView key={squareViewKey} squareNum={squareNum} bg={bg} light={light}
-          onTryAnother={() => { setSquareNum(rand(11, 59)); setSquareViewKey(k => k + 1); }}
-          onGoSettings={() => setGameState("settings")} />
-      </div>
-    );
-  }
+  // ─── SQUARE STEP game state section (inside SpeedMathsPage) ───────────────────
+if (gameState === "square-step") {
+  const { bg, light } = CHALLENGE_COLORS["Squares"];
+
+  const randInRange = (r: string) => {
+    if (r === "26-50")   return rand(26, 50);
+    if (r === "51-75")   return rand(51, 75);
+    if (r === "76-100")  return rand(76, 100);
+    return rand(101, 125);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto"
+      style={{ background: gameBg }}>
+      <style>{GLOBAL_STYLES}</style>
+      <Stars count={5} />
+      <button
+        onClick={() => setGameState("mode-select")}
+        className="self-start mb-4 text-lg"
+        style={{ color: BRAND_TEAL, fontFamily: RACING }}>
+        ← Back
+      </button>
+      <div style={{ fontFamily: RACING, fontSize: "2.5rem", color: bg }}>²</div>
+      <h2 className="text-3xl mb-4" style={{ color: bg, fontFamily: RACING }}>Square Steps</h2>
+      <SquareStepView
+        key={squareViewKey}
+        squareNum={squareNum}
+        bg={bg}
+        light={light}
+        onTryAnother={() => {
+          setSquareNum(rand(26, 125));
+          setSquareViewKey(k => k + 1);
+        }}
+        onRangeSelect={(r) => {
+          setSquareNum(randInRange(r));
+          setSquareViewKey(k => k + 1);
+        }}
+        onGoSettings={() => setGameState("settings")}
+      />
+    </div>
+  );
+}
 
   // ─── RESULT ───────────────────────────────────────────────────────────────
   if (gameState === "result") {
