@@ -1114,7 +1114,7 @@ export default function SpeedMathsPage() {
             </div>
           </div>
           <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none z-10"
-            style={{height:"78%",opacity:cloudsVisible?1:0,transform:cloudsVisible?"translateY(0)":"translateY(60px)",transition:"opacity 0.9s ease 0.7s,transform 0.9s cubic-bezier(.22,1,.36,1) 0.7s"}}>
+            style={{height:"90%",opacity:cloudsVisible?1:0,transform:cloudsVisible?"translateY(0)":"translateY(60px)",transition:"opacity 0.9s ease 0.7s,transform 0.9s cubic-bezier(.22,1,.36,1) 0.7s"}}>
             <img src={CLOUDS_MOBILE_IMG} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center bottom",display:"block"}} />
           </div>
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none select-none flex items-end justify-between px-2 pb-1">
