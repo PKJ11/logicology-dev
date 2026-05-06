@@ -1167,7 +1167,7 @@ export default function SpeedMathsPage() {
           </div>
 
           {/* Cards */}
-          <div className="relative z-30 flex-1 flex items-start justify-center px-3 pt-2 pb-0">
+          {/* <div className="relative z-30 flex-1 flex items-start justify-center px-3 pt-2 pb-0">
             <div className="flex flex-col gap-2 w-[44%]" style={{marginTop:"2%"}}>
               {([CHALLENGES[0],CHALLENGES[2],CHALLENGES[3]] as Challenge[]).map((ch,i)=>(
                 <MenuChallengeCard key={ch} ch={ch} index={i} visible={cardsVisible} compact onClick={()=>{setChallenge(ch);setGameState("mode-select");}} />
@@ -1179,7 +1179,7 @@ export default function SpeedMathsPage() {
                 <MenuChallengeCard key={ch} ch={ch} index={i+3} visible={cardsVisible} compact onClick={()=>{setChallenge(ch);setGameState("mode-select");}} />
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Cloud */}
           <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none z-10"
