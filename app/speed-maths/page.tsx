@@ -137,6 +137,9 @@ function MenuChallengeCard({ ch, index, visible, onClick, compact=false }:
     <button onClick={onClick} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
       className="focus:outline-none w-full"
       style={{
+        maxWidth: '136px', // Apply max-width for all screen sizes
+        width: '100%',
+        margin: '0 auto',
         opacity: visible?1:0,
         transform: visible?(hov?"translateY(-8px) scale(1.04)":"translateY(0) scale(1)"):"translateY(60px) scale(0.9)",
         transition:`opacity 0.55s cubic-bezier(.22,1,.36,1) ${index*0.1+0.3}s,
