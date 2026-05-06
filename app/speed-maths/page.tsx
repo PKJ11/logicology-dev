@@ -16,25 +16,16 @@ function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 
 function rand(min: number, max: number) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function tableHalf(d: number): number { return Math.floor(d / 2); }
 
-// Helper to generate the 4 fixed options: answer, answer-10, answer+10, answer+9
 function generateFixedOptions(answer: number): number[] {
-  // Ensure options are unique and positive (or non-negative as needed)
   let opts = new Set<number>();
   opts.add(answer);
   opts.add(answer - 10);
   opts.add(answer + 10);
   opts.add(answer + 9);
-  
-  // If any option is <= 0 and answer is positive, adjust by adding 5 to keep 4 unique options
   let finalOpts = Array.from(opts);
-  while (finalOpts.length < 4) {
-    finalOpts.push(answer + 5);
-  }
-  // Remove any non-positive options only if answer is positive; for squares (which can be large) we keep as is
+  while (finalOpts.length < 4) { finalOpts.push(answer + 5); }
   finalOpts = finalOpts.filter(opt => opt > 0);
-  while (finalOpts.length < 4) {
-    finalOpts.push(answer + finalOpts.length);
-  }
+  while (finalOpts.length < 4) { finalOpts.push(answer + finalOpts.length); }
   return shuffle(finalOpts);
 }
 
@@ -54,16 +45,10 @@ function generateQuestion(challenge: Challenge): Question {
     }
     case "Half": {
       const a = rand(1,999), ans = a/2;
-      // For half, answer can be .5; ensure options are unique and not duplicate
       let opts = new Set<number>();
-      opts.add(ans);
-      opts.add(ans - 10);
-      opts.add(ans + 10);
-      opts.add(ans + 9);
+      opts.add(ans); opts.add(ans - 10); opts.add(ans + 10); opts.add(ans + 9);
       let final = Array.from(opts);
-      while (final.length < 4) {
-        final.push(ans + 5);
-      }
+      while (final.length < 4) { final.push(ans + 5); }
       return { num1:a, answer:ans, display:`½ of ${a}`, options: shuffle(final) };
     }
     case "Squares": {
@@ -137,9 +122,7 @@ function MenuChallengeCard({ ch, index, visible, onClick, compact=false }:
     <button onClick={onClick} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
       className="focus:outline-none w-full"
       style={{
-        maxWidth: '136px', // Apply max-width for all screen sizes
-        width: '100%',
-        margin: '0 auto',
+        ...(compact ? { maxWidth: 136, width: "100%", margin: "0 auto" } : {}),
         opacity: visible?1:0,
         transform: visible?(hov?"translateY(-8px) scale(1.04)":"translateY(0) scale(1)"):"translateY(60px) scale(0.9)",
         transition:`opacity 0.55s cubic-bezier(.22,1,.36,1) ${index*0.1+0.3}s,
@@ -182,10 +165,11 @@ function Stars({ count=6 }: { count?:number }) {
   );
 }
 
-function ScoreBar({ score, streak, level }:{score:number;streak:number;level:number}) {
+// ScoreBar now accepts bg color for consistent theming
+function ScoreBar({ score, streak, level, bg }:{score:number;streak:number;level:number;bg:string}) {
   return (
     <div className="flex gap-3 justify-center flex-wrap mb-4">
-      {[{label:"Score",value:score,emoji:"⭐",color:"#D8AE4F"},{label:"Streak",value:streak,emoji:"🔥",color:"#E45C48"},{label:"Level",value:level,emoji:"🏆",color:BRAND_TEAL}]
+      {[{label:"Score",value:score,emoji:"⭐",color:"#D8AE4F"},{label:"Streak",value:streak,emoji:"🔥",color:"#E45C48"},{label:"Level",value:level,emoji:"🏆",color:bg}]
         .map(({label,value,emoji,color})=>(
           <div key={label} className="flex items-center gap-2 rounded-2xl px-4 py-2 shadow"
             style={{background:"#fff",border:`2.5px solid ${color}`,color,fontFamily:OUTFIT,fontWeight:700}}>
@@ -198,26 +182,27 @@ function ScoreBar({ score, streak, level }:{score:number;streak:number;level:num
   );
 }
 
-function NumPad({ onDigit, onEnter, onErase, value }:
-  { onDigit:(d:string)=>void; onEnter:()=>void; onErase:()=>void; value:string }) {
+// NumPad now accepts bg color
+function NumPad({ onDigit, onEnter, onErase, value, bg }:
+  { onDigit:(d:string)=>void; onEnter:()=>void; onErase:()=>void; value:string; bg:string }) {
   return (
     <div className="w-full max-w-xs mx-auto">
       <div className="rounded-2xl border-4 bg-white px-4 py-2 text-center mb-3 min-h-[52px]"
-        style={{borderColor:BRAND_TEAL, color:BRAND_TEAL_DK, fontFamily:RACING, fontSize:"1.8rem"}}>
+        style={{borderColor:bg, color:BRAND_TEAL_DK, fontFamily:RACING, fontSize:"1.8rem"}}>
         {value||<span style={{color:"#d1d5db",fontFamily:OUTFIT}}>?</span>}
       </div>
       <div className="grid grid-cols-3 gap-2">
         {["1","2","3","4","5","6","7","8","9","0.5","0","E"].map(d=>(
           <button key={d} onClick={()=>d==="E"?onErase():onDigit(d)}
             className="rounded-2xl py-3 shadow transition active:scale-95"
-            style={{background:d==="E"?"#E45C48":"#e8f9f8", color:d==="E"?"#fff":BRAND_TEAL_DK,
-              border:`2px solid ${BRAND_TEAL}44`, fontFamily:RACING, fontSize:"1.2rem"}}>
+            style={{background:d==="E"?"#E45C48":`${bg}18`, color:d==="E"?"#fff":BRAND_TEAL_DK,
+              border:`2px solid ${bg}44`, fontFamily:RACING, fontSize:"1.2rem"}}>
             {d==="E"?"⌫":d}
           </button>
         ))}
       </div>
       <button onClick={onEnter} className="mt-3 w-full rounded-2xl py-3 shadow-lg transition active:scale-95"
-        style={{background:BRAND_TEAL, color:"#fff", fontFamily:RACING, fontSize:"1.2rem"}}>✓ Enter</button>
+        style={{background:bg, color:"#fff", fontFamily:RACING, fontSize:"1.2rem"}}>✓ Enter</button>
     </div>
   );
 }
@@ -255,7 +240,7 @@ function HalfTableQuiz({ bg, light, onNext }:{bg:string;light:string;onNext:()=>
       <div className="w-full max-w-sm mx-auto bg-white rounded-3xl shadow-xl p-8 border-2 text-center" style={{borderColor:bg}}>
         <div className="text-6xl mb-3">{pct>=90?"🌟":pct>=70?"👍":"💪"}</div>
         <h3 className="text-2xl mb-1" style={{color:bg,fontFamily:RACING}}>Quiz Complete!</h3>
-        <p className="mb-2 font-semibold" style={{color:BRAND_TEAL,fontFamily:OUTFIT}}>{correct}/{TOTAL} correct — {pct}%</p>
+        <p className="mb-2 font-semibold" style={{color:bg,fontFamily:OUTFIT}}>{correct}/{TOTAL} correct — {pct}%</p>
         <div className="flex gap-3 mt-6">
           <button onClick={restart} className="flex-1 rounded-2xl py-3 text-white active:scale-95" style={{background:bg,fontFamily:RACING,fontSize:"1rem"}}>🔄 Retry</button>
           <button onClick={onNext} className="flex-1 rounded-2xl py-3 active:scale-95 border-2" style={{borderColor:bg,color:bg,background:light,fontFamily:RACING,fontSize:"1rem"}}>🪜 3-Step</button>
@@ -274,7 +259,7 @@ function HalfTableQuiz({ bg, light, onNext }:{bg:string;light:string;onNext:()=>
       </div>
       <div className="flex justify-center gap-4">
         <div className="flex items-center gap-2 rounded-2xl px-4 py-2 shadow text-sm" style={{background:"#fff",border:`2.5px solid ${bg}`,color:bg,fontFamily:OUTFIT,fontWeight:700}}>✅ Correct: <span style={{fontFamily:RACING}}>{correct}</span></div>
-        <div className="flex items-center gap-2 rounded-2xl px-4 py-2 shadow text-sm" style={{background:"#fff",border:"2.5px solid #e0f2f1",color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>📝 Left: <span style={{fontFamily:RACING}}>{TOTAL-attempted}</span></div>
+        <div className="flex items-center gap-2 rounded-2xl px-4 py-2 shadow text-sm" style={{background:"#fff",border:`2.5px solid ${bg}`,color:bg,fontFamily:OUTFIT,fontWeight:700}}>📝 Left: <span style={{fontFamily:RACING}}>{TOTAL-attempted}</span></div>
       </div>
       <div className="bg-white rounded-3xl shadow-xl p-6 border-2 text-center"
         style={{borderColor:feedback==="correct"?"#22c55e":feedback==="wrong"?"#ef4444":bg}}>
@@ -303,7 +288,7 @@ function HalfTableQuiz({ bg, light, onNext }:{bg:string;light:string;onNext:()=>
             {refTable.map(([d,h])=>(
               <div key={d} className="rounded-xl py-2 text-center" style={{background:light}}>
                 <div style={{fontFamily:RACING,color:bg,fontSize:"1rem"}}>{d}</div>
-                <div style={{fontFamily:OUTFIT,fontSize:"0.75rem",fontWeight:600,color:BRAND_TEAL}}>→ {h}</div>
+                <div style={{fontFamily:OUTFIT,fontSize:"0.75rem",fontWeight:600,color:bg}}>{h}</div>
               </div>
             ))}
           </div>
@@ -322,33 +307,27 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
   const { digits, step1, oddPositions, answer } = computeHalfSteps(practiceNum);
   const [phase, setPhase] = useState<Half3StepPhase>("step1");
 
-  // Step 1 state
   const [userStep1, setUserStep1] = useState<(string|null)[]>(digits.map(()=>null));
   const [step1Feedback, setStep1Feedback] = useState<(boolean|null)[]>(digits.map(()=>null));
 
   const lastIsOdd = oddPositions[digits.length - 1];
   const totalCells = digits.length + (lastIsOdd ? 1 : 0);
 
-  // Which cell index should be highlighted (RIGHT of each odd digit)
   const isRightHighlight = (i: number): boolean => {
     if (i === 0) return false;
     if (i < digits.length) return oddPositions[i - 1];
     return lastIsOdd;
   };
 
-  // Step 2 state — user taps to color cells
   const [userOddSel, setUserOddSel] = useState<boolean[]>(Array(totalCells).fill(false));
   const [step2Feedback, setStep2Feedback] = useState<string | null>(null);
 
-  // Step 3 state — user types the +5 results for each highlighted cell
-  // keyed by cell index (same indexing as step2Cells)
   const [step3Vals, setStep3Vals] = useState<Record<number, string>>({});
   const [step3Feedback, setStep3Feedback] = useState<Record<number, boolean | null>>({});
   const [step3DecimalVal, setStep3DecimalVal] = useState("");
   const [step3DecimalFb, setStep3DecimalFb] = useState<boolean | null>(null);
   const [step3AnyWrong, setStep3AnyWrong] = useState(false);
 
-  // ── helpers ────────────────────────────────────────────────────────────────
   const getFinalVal = (i: number): number => {
     let v = step1[i];
     if (isRightHighlight(i)) v += 5;
@@ -356,7 +335,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
     return v;
   };
 
-  // step2Cells: step1 values + optional extra decimal placeholder
   const step2Cells: (number | null)[] = lastIsOdd ? [...step1, null] : [...step1];
 
   const baseCell = (bc: string, bgc: string, extra?: React.CSSProperties): React.CSSProperties => ({
@@ -370,7 +348,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
     alignSelf: "flex-end", marginBottom: 8, flexShrink: 0,
   };
 
-  // ── Step 1 handlers ────────────────────────────────────────────────────────
   const upS1 = (idx: number, val: string) => {
     if (phase !== "step1") return;
     const n = [...userStep1]; n[idx] = val === "" ? null : val; setUserStep1(n);
@@ -382,7 +359,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
     if (fb.every(Boolean)) setTimeout(() => setPhase("step2"), 600);
   };
 
-  // ── Step 2 handlers ────────────────────────────────────────────────────────
   const toggleHighlight = (idx: number) => {
     if (phase !== "step2") return;
     const ns = [...userOddSel]; ns[idx] = !ns[idx]; setUserOddSel(ns);
@@ -403,17 +379,13 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
     }
   };
 
-  // ── Step 3 handlers ────────────────────────────────────────────────────────
   const upS3 = (idx: number, val: string) => {
     setStep3Vals(p => ({ ...p, [idx]: val }));
   };
 
-  // For each cell: if highlighted, expected = step1[i] + 5 (with carry handled),
-  // if not highlighted, the cell value doesn't change — it's shown as locked.
   const getExpectedS3 = (i: number): number => getFinalVal(i);
 
   const allS3Filled = (() => {
-    // Only highlighted digit cells need input
     const highlightedDigitIdxs = digits.map((_, i) => i).filter(i => isRightHighlight(i));
     const digitsOk = highlightedDigitIdxs.every(i => (step3Vals[i] ?? "") !== "");
     const decOk = !lastIsOdd || step3DecimalVal !== "";
@@ -423,8 +395,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
   const chkS3 = () => {
     const fb: Record<number, boolean> = {};
     let allOk = true;
-
-    // Only validate highlighted digit cells (user fills those)
     digits.forEach((_, i) => {
       if (isRightHighlight(i)) {
         const exp = getExpectedS3(i);
@@ -434,27 +404,19 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
         if (!ok) allOk = false;
       }
     });
-
     let decOk = true;
     if (lastIsOdd) {
       decOk = parseInt(step3DecimalVal) === 5;
       setStep3DecimalFb(decOk);
       if (!decOk) allOk = false;
     }
-
     setStep3Feedback(fb);
     setStep3AnyWrong(!allOk);
-
-    if (allOk) {
-      setTimeout(() => setPhase("done"), 600);
-    }
+    if (allOk) { setTimeout(() => setPhase("done"), 600); }
   };
 
-  // ── render ─────────────────────────────────────────────────────────────────
   return (
     <div className="w-full max-w-sm mx-auto space-y-4">
-
-      {/* Progress bar */}
       <div className="flex gap-2">
         {(["step1", "step2", "step3", "done"] as Half3StepPhase[]).map((p, i) => {
           const order = ["step1", "step2", "step3", "done"];
@@ -499,12 +461,11 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
             style={{ background: phase === "step1" ? bg : "#22c55e", fontFamily: RACING }}>
             {phase === "step1" ? "1" : "✓"}
           </div>
-          <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: BRAND_TEAL_DK }}>
+          <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: bg }}>
             Write table half of each digit
           </span>
         </div>
 
-        {/* Original digits — NO decimal placeholder */}
         <div className="flex gap-2 justify-center mb-1">
           {digits.map((d, i) => (
             <div key={i} style={{ ...baseCell(bg, light), color: bg }}>{d}</div>
@@ -512,7 +473,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
         </div>
         <div className="text-center text-xs mb-1" style={{ color: bg, fontFamily: OUTFIT, fontWeight: 600 }}>↓ half ↓</div>
 
-        {/* Input row — digits only */}
         <div className="flex gap-2 justify-center">
           {digits.map((_, i) =>
             phase === "step1" ? (
@@ -553,24 +513,22 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
         <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
           style={{ borderColor: phase === "done" ? "#22c55e" : bg }}>
 
-          {/* Box header */}
           <div className="flex items-center gap-2 mb-3">
             <div className="rounded-full w-8 h-8 flex items-center justify-center text-sm text-white"
               style={{ background: phase === "done" ? "#22c55e" : bg, fontFamily: RACING }}>
               {phase === "done" ? "✓" : "2"}
             </div>
-            <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: BRAND_TEAL_DK }}>
+            <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: bg }}>
               {phase === "step2" ? "Tap cells that need +5" : "Add +5 to highlighted cells"}
             </span>
           </div>
 
-          <p className="text-xs mb-3" style={{ color: BRAND_TEAL, fontFamily: OUTFIT }}>
+          <p className="text-xs mb-3" style={{ color: bg, fontFamily: OUTFIT }}>
             {phase === "step2"
               ? "Tap the cell to the RIGHT of each odd digit. If the last digit is odd, also tap the extra decimal cell."
               : "🟡 cells get +5 added — type the result for each highlighted cell."}
           </p>
 
-          {/* Reference row — ORIGINAL digits */}
           <div className="text-center text-xs mb-1" style={{ color: bg, fontFamily: OUTFIT, fontWeight: 600 }}>
             Original number
           </div>
@@ -594,7 +552,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
             })}
           </div>
 
-          {/* Tappable highlight row (step2) / locked highlight row (step3/done) */}
           <div className="text-center text-xs mb-1" style={{ color: bg, fontFamily: OUTFIT, fontWeight: 600 }}>
             {phase === "step2" ? "Tap to highlight (cells that need +5)" : "Highlighted cells (step 1 values)"}
           </div>
@@ -631,7 +588,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
             })}
           </div>
 
-          {/* Step 2 confirm button */}
           {phase === "step2" && (
             <>
               <button onClick={checkStep2}
@@ -652,7 +608,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
             </>
           )}
 
-          {/* ── Step 3 section — appended inside the same box ── */}
           {(phase === "step3" || phase === "done") && (
             <>
               <div className="mt-4 pt-4" style={{ borderTop: `2px dashed ${bg}33` }}>
@@ -661,7 +616,7 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
                     style={{ background: phase === "done" ? "#22c55e" : bg, fontFamily: RACING }}>
                     {phase === "done" ? "✓" : "3"}
                   </div>
-                  <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: BRAND_TEAL_DK }}>
+                  <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: bg }}>
                     Add +5 to each 🟡 cell — type the result
                   </span>
                 </div>
@@ -670,7 +625,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
                   ↓ type result after +5 for each 🟡 cell ↓
                 </div>
 
-                {/* Input / result row */}
                 <div className="flex gap-2 justify-center items-center">
                   {digits.map((_, i) => {
                     const shouldHighlight = isRightHighlight(i);
@@ -710,7 +664,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
                     );
                   })}
 
-                  {/* Decimal cell */}
                   {lastIsOdd && (
                     <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                       <div style={decDot}>.</div>
@@ -756,18 +709,16 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
               </div>
             </>
           )}
-
         </div>
       )}
 
-      {/* ── DONE ── */}
       {phase === "done" && (
         <div className="bg-white rounded-3xl p-6 border-2 shadow-xl text-center" style={{ borderColor: "#22c55e" }}>
           <div className="text-5xl mb-2">🎉</div>
           <div className="text-2xl text-green-600 mb-1" style={{ fontFamily: RACING }}>
             ½ of {practiceNum} = <span style={{ color: bg }}>{answer}</span>
           </div>
-          <div className="mb-4" style={{ color: BRAND_TEAL, fontFamily: OUTFIT, fontWeight: 600 }}>
+          <div className="mb-4" style={{ color: bg, fontFamily: OUTFIT, fontWeight: 600 }}>
             {Number.isInteger(answer) ? "Great work!" : "Notice the .5 — last digit was odd!"}
           </div>
           <div className="flex gap-3">
@@ -782,7 +733,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light 
           </div>
         </div>
       )}
-
     </div>
   );
 }
@@ -952,7 +902,7 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
           <div className="text-center pt-2">
             <div className="text-3xl mb-1">🎉</div>
             <div style={{fontFamily:RACING,fontSize:"1.4rem",color:bg}}>{squareNum}² = {finalAnswer}</div>
-            <div className="mt-1 mb-4" style={{fontFamily:OUTFIT,fontWeight:600,fontSize:"0.85rem",color:BRAND_TEAL}}>
+            <div className="mt-1 mb-4" style={{fontFamily:OUTFIT,fontWeight:600,fontSize:"0.85rem",color:bg}}>
               {hasMultiDigitCD?`CD=${CD} → carry ${cdCarry} → newAB=${newAB}, newCD=${formattedCD} → ${newAB}×100+${formattedCD}=${finalAnswer}`:`AB=${AB} | CD=${CD} → ${AB}×100+${CD}=${finalAnswer}`}
             </div>
             <div className="flex gap-3">
@@ -972,7 +922,7 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
             return(
               <div key={t} className="rounded-xl p-2 text-center" style={{background:active?`${bg}18`:light,border:active?`1.5px solid ${bg}`:"none"}}>
                 <div style={{fontFamily:RACING,color:BRAND_TEAL_DK,fontSize:"0.85rem"}}>{t}</div>
-                <div style={{fontFamily:OUTFIT,color:BRAND_TEAL,fontWeight:600}}>{d}</div>
+                <div style={{fontFamily:OUTFIT,color:bg,fontWeight:600}}>{d}</div>
               </div>
             );
           })}
@@ -1155,21 +1105,15 @@ export default function SpeedMathsPage() {
           {([{t:"4²",s:{top:"6%",left:"4%",fontSize:22}},{t:"√",s:{top:"15%",left:"9%",fontSize:28}},{t:"α²",s:{top:"5%",right:"22%",fontSize:20}},{t:"≈",s:{top:"45%",right:"3%",fontSize:22}}] as {t:string;s:React.CSSProperties}[]).map((sym,i)=>(
             <span key={i} aria-hidden className="absolute select-none pointer-events-none font-bold text-white" style={{...sym.s,opacity:0.18}}>{sym.t}</span>
           ))}
-
-          {/* Rocket */}
           <div className="absolute pointer-events-none z-20"
             style={{top:"8%",right:"4%",opacity:rocketVisible?1:0,animation:rocketVisible?"rocketFlyUp 1.2s cubic-bezier(0.34,1.2,0.55,1) forwards, rocketHover 3s ease-in-out 1.2s infinite":"none",width:"18vw",maxWidth:80}}>
             <img src={ROCKET_IMG} alt="Rocket" style={{width:"100%",height:"auto",filter:"drop-shadow(0 8px 20px rgba(0,0,0,0.38))"}} />
           </div>
-
-          {/* Title */}
           <div className="relative z-10 text-center pt-6 px-4 flex-shrink-0"
             style={{opacity:heroVisible?1:0,transform:heroVisible?"translateY(0)":"translateY(-20px)",transition:"opacity 0.75s ease 0.1s,transform 0.75s ease 0.1s"}}>
             <h1 className="text-white leading-none mb-0.5" style={{fontFamily:RACING,fontSize:"clamp(1.9rem,7vw,2.6rem)",textShadow:"0 4px 18px rgba(0,0,0,0.28)"}}>Speed Maths</h1>
             <p className="text-white/75 text-sm" style={{fontFamily:OUTFIT,fontWeight:600}}>Choose your Challenge!</p>
           </div>
-
-          {/* Cards */}
           <div className="relative z-30 flex-1 flex items-start justify-center px-3 pt-2 pb-0">
             <div className="flex flex-col gap-2 w-[44%]" style={{marginTop:"2%"}}>
               {([CHALLENGES[0],CHALLENGES[2],CHALLENGES[3]] as Challenge[]).map((ch,i)=>(
@@ -1183,14 +1127,10 @@ export default function SpeedMathsPage() {
               ))}
             </div>
           </div>
-
-          {/* Cloud */}
           <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none z-10"
             style={{height:"90%",opacity:cloudsVisible?1:0,transform:cloudsVisible?"translateY(0)":"translateY(60px)",transition:"opacity 0.9s ease 0.7s,transform 0.9s cubic-bezier(.22,1,.36,1) 0.7s"}}>
             <img src={CLOUDS_MOBILE_IMG} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center bottom",display:"block"}} />
           </div>
-
-          {/* Mobile decorations */}
           <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none select-none flex items-end justify-between px-2 pb-1">
             <div style={{opacity:decoVisible?1:0,transform:decoVisible?"rotate(-20deg) translateY(0)":"rotate(-20deg) translateY(40px)",transition:"opacity 0.6s ease 1.0s,transform 0.6s ease 1.0s",transformOrigin:"bottom left"}}>
               <img src="/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/PENCIL@2x.png" alt="Pencil" style={{height:"80px",width:"auto",objectFit:"contain",filter:"drop-shadow(0 4px 8px rgba(0,0,0,0.2))"}} />
@@ -1213,10 +1153,10 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg,fontFamily:OUTFIT}}>
         <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <button onClick={()=>setGameState("menu")} className="self-start mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>← Back</button>
+        <button onClick={()=>setGameState("menu")} className="self-start mb-4 text-lg" style={{color:bg,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-6" style={{color:bg,fontFamily:RACING}}>{challenge}</h2>
         {challenge==="Half"&&(<>
-          <p className="mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
+          <p className="mb-4 text-lg" style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
             <button onClick={()=>setGameState("half-table")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>📋 Table Practice</button>
             <button onClick={()=>{setHalfPracticeNum(generateHalfPracticeNum());setHalf3StepKey(k=>k+1);setGameState("half-3step");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>🪜 3-Step Practice</button>
@@ -1224,14 +1164,14 @@ export default function SpeedMathsPage() {
           </div>
         </>)}
         {challenge==="Squares"&&(<>
-          <p className="mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
+          <p className="mb-4 text-lg" style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
             <button onClick={()=>{setSquareNum(rand(11,59));setSquareViewKey(k=>k+1);setGameState("square-step");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>🪜 Step Practice</button>
             <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Challenge</button>
           </div>
         </>)}
         {challenge!=="Half"&&challenge!=="Squares"&&(<>
-          <p className="mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>How do you want to answer?</p>
+          <p className="mb-4 text-lg" style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>How do you want to answer?</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
             <button onClick={()=>{setAnswerMode("Choose Option");setGameState("settings");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:answerMode==="Choose Option"?bg:light,border:`3px solid ${bg}`,color:answerMode==="Choose Option"?"#fff":bg,fontFamily:RACING}}>🎯 Choose Option</button>
             <button onClick={()=>{setAnswerMode("Type Answer");setGameState("settings");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:answerMode==="Type Answer"?bg:light,border:`3px solid ${bg}`,color:answerMode==="Type Answer"?"#fff":bg,fontFamily:RACING}}>⌨️ Type Answer</button>
@@ -1247,9 +1187,9 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg,fontFamily:OUTFIT}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>← Back</button>
+        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:bg,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>{challenge}</h2>
-        <p className="mb-6" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:600}}>{answerMode}</p>
+        <p className="mb-6" style={{color:bg,fontFamily:OUTFIT,fontWeight:600}}>{answerMode}</p>
         <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6 mb-6 border-2" style={{borderColor:bg}}>
           <p className="text-lg mb-4" style={{color:BRAND_TEAL_DK,fontFamily:RACING}}>⏱ Choose Time Mode</p>
           <div className="flex gap-3 mb-4">
@@ -1257,12 +1197,12 @@ export default function SpeedMathsPage() {
             <button onClick={()=>setTimeMode("fixed-questions")} className="flex-1 rounded-2xl py-3 transition" style={{background:timeMode==="fixed-questions"?bg:light,color:timeMode==="fixed-questions"?"#fff":bg,border:`2px solid ${bg}`,fontFamily:RACING}}>10 Questions</button>
           </div>
           {timeMode==="timed"&&(<>
-            <p className="mb-2" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>Seconds per Question</p>
+            <p className="mb-2" style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>Seconds per Question</p>
             <input type="range" min={2} max={30} value={secondsPerQ} onChange={e=>setSecondsPerQ(Number(e.target.value))} className="w-full mb-1" style={{accentColor:bg}}/>
             <div className="flex justify-between text-sm mb-2" style={{color:`${bg}99`,fontFamily:OUTFIT}}><span>2s</span><span>30s</span></div>
             <div className="text-center" style={{color:bg,fontFamily:RACING,fontSize:"1.6rem"}}>{secondsPerQ} seconds per question</div>
           </>)}
-          {timeMode==="fixed-questions"&&<p className="text-center" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>Solve 10 questions as fast as you can! ⚡</p>}
+          {timeMode==="fixed-questions"&&<p className="text-center" style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>Solve 10 questions as fast as you can! ⚡</p>}
         </div>
         <button onClick={beginGame} className="w-full max-w-sm rounded-3xl py-5 shadow-xl active:scale-95 hover:scale-105" style={{background:`linear-gradient(135deg,${bg},${BRAND_TEAL_DK})`,color:"#fff",fontFamily:RACING,fontSize:"1.6rem"}}>🚀 Start!</button>
       </div>
@@ -1275,10 +1215,10 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>← Back</button>
+        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:bg,fontFamily:RACING}}>← Back</button>
         <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>½</div>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half Table</h2>
-        <p className="mb-6" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:600}}>What is half of each digit?</p>
+        <p className="mb-6" style={{color:bg,fontFamily:OUTFIT,fontWeight:600}}>What is half of each digit?</p>
         <HalfTableQuiz bg={bg} light={light} onNext={()=>{setHalfPracticeNum(generateHalfPracticeNum());setHalf3StepKey(k=>k+1);setGameState("half-3step");}} />
       </div>
     );
@@ -1290,20 +1230,12 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>← Back</button>
+        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:bg,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half 3-Step Method</h2>
-        <p className="mb-6 text-sm text-center" style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:600}}>Follow the steps to find half of the number below!</p>
+        <p className="mb-6 text-sm text-center" style={{color:bg,fontFamily:OUTFIT,fontWeight:600}}>Follow the steps to find half of the number below!</p>
         <Half3StepInteractive key={half3StepKey} practiceNum={halfPracticeNum} bg={bg} light={light}
           onComplete={()=>setGameState("settings")}
           onNewNumber={()=>{setHalfPracticeNum(generateHalfPracticeNum());setHalf3StepKey(k=>k+1);}} />
-        {/* <div className="w-full max-w-sm bg-white rounded-3xl p-4 border-2 mt-5" style={{borderColor:`${bg}33`}}>
-          <p className="mb-2 text-sm text-center" style={{color:bg,fontFamily:RACING}}>📖 Table Half Reference</p>
-          <div className="grid grid-cols-5 gap-1 text-center text-xs">
-            {[0,1,2,3,4,5,6,7,8,9].map(d=>(
-              <div key={d} className="rounded-lg py-1" style={{background:light,color:BRAND_TEAL,fontFamily:RACING}}>{d}→{Math.floor(d/2)}</div>
-            ))}
-          </div>
-        </div> */}
       </div>
     );
   }
@@ -1320,7 +1252,7 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>← Back</button>
+        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:bg,fontFamily:RACING}}>← Back</button>
         <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>²</div>
         <h2 className="text-3xl mb-4" style={{color:bg,fontFamily:RACING}}>Square Steps</h2>
         <SquareStepView key={squareViewKey} squareNum={squareNum} bg={bg} light={light}
@@ -1333,7 +1265,7 @@ export default function SpeedMathsPage() {
 
   // ─── RESULT ───────────────────────────────────────────────────────────────
   if(gameState==="result"){
-    const{bg}=CHALLENGE_COLORS[challenge];
+    const{bg,light}=CHALLENGE_COLORS[challenge];
     return(
       <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={12}/>
@@ -1344,7 +1276,7 @@ export default function SpeedMathsPage() {
             ...(timeMode==="fixed-questions"?[{emoji:"⏱",label:"Total Time",value:`${totalTime}s`}]:[])].map(({emoji,label,value})=>(
             <div key={label} className="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
               <span className="text-2xl">{emoji}</span>
-              <span style={{color:BRAND_TEAL,fontFamily:OUTFIT,fontWeight:700}}>{label}</span>
+              <span style={{color:bg,fontFamily:OUTFIT,fontWeight:700}}>{label}</span>
               <span style={{color:bg,fontFamily:RACING,fontSize:"1.4rem"}}>{value}</span>
             </div>
           ))}
@@ -1367,16 +1299,19 @@ export default function SpeedMathsPage() {
         style={{background:feedback?(feedback==="correct"?"#f0fdf4":"#fef2f2"):gameBg}}>
         <style>{GLOBAL_STYLES}</style>
         <div className="w-full max-w-md flex items-center justify-between mb-4">
-          <button onClick={()=>{stopTimers();setGameState("menu");}} className="text-lg" style={{color:BRAND_TEAL,fontFamily:RACING}}>✕</button>
+          <button onClick={()=>{stopTimers();setGameState("menu");}} className="text-lg" style={{color:bg,fontFamily:RACING}}>✕</button>
           <h3 style={{color:bg,fontFamily:RACING,fontSize:"1.3rem"}}>{challenge}</h3>
-          {timeMode==="fixed-questions"?<span style={{color:BRAND_TEAL,fontFamily:RACING}}>{questionsLeft} left</span>:<span style={{color:BRAND_TEAL,fontFamily:RACING}}>⏱ {timeLeft}s</span>}
+          {timeMode==="fixed-questions"
+            ? <span style={{color:bg,fontFamily:RACING}}>{questionsLeft} left</span>
+            : <span style={{color:bg,fontFamily:RACING}}>⏱ {timeLeft}s</span>
+          }
         </div>
         {timeMode==="timed"&&(
           <div className="w-full max-w-md h-3 rounded-full mb-4 overflow-hidden" style={{background:"#e0f2f1"}}>
             <div className="h-full rounded-full transition-all duration-1000" style={{width:`${timerPct}%`,background:timerPct>50?bg:timerPct>25?"#D8AE4F":"#E45C48"}} />
           </div>
         )}
-        <ScoreBar score={score} streak={streak} level={level}/>
+        <ScoreBar score={score} streak={streak} level={level} bg={bg}/>
         <div className="w-full max-w-md rounded-3xl shadow-2xl p-8 mb-6 text-center relative overflow-hidden"
           style={{background:feedback?feedbackBg:light,border:`4px solid ${feedback?feedbackBg:bg}`}}>
           {feedback&&<div className="absolute inset-0 flex items-center justify-center"><span className="text-8xl">{feedback==="correct"?"🎉":"😅"}</span></div>}
@@ -1396,7 +1331,7 @@ export default function SpeedMathsPage() {
         )}
         {!feedback&&answerMode==="Type Answer"&&(
           <div className="w-full max-w-md">
-            <NumPad value={typedAnswer}
+            <NumPad value={typedAnswer} bg={bg}
               onDigit={d=>setTypedAnswer(v=>v==="0"?d:v.includes(".")&&d==="0.5"?v:v+d)}
               onErase={()=>setTypedAnswer(v=>v.slice(0,-1))}
               onEnter={()=>handleAnswer(typedAnswer)}/>
