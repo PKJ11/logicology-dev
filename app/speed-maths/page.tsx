@@ -3,10 +3,10 @@
 import NavBar from "@/components/NavBar";
 import { useState, useEffect, useCallback, useRef } from "react";
 
-type Challenge = "Addition" | "Subtraction" | "Multiplication" | "Half" | "Squares";
+type Challenge = "Addition" | "Subtraction" | "Multiplication" | "Half" | "Squares" | "Friends";
 type AnswerMode = "Choose Option" | "Type Answer";
 type TimeMode = "timed" | "fixed-questions";
-type GameState = "splash" | "menu" | "mode-select" | "settings" | "playing" | "result" | "half-table" | "half-3step" | "square-step";
+type GameState = "splash" | "menu" | "mode-select" | "settings" | "playing" | "result" | "half-table" | "half-3step" | "square-step" | "friends-practice";
 
 interface Question {
   num1: number; num2?: number; answer: number; options?: number[]; display: string;
@@ -16,7 +16,6 @@ function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 
 function rand(min: number, max: number) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function tableHalf(d: number): number { return Math.floor(d / 2); }
 
-// Change 1: Options are ans+10, ans-10, ans, ans±9 (random ±9), shuffled
 function generateQuestion(challenge: Challenge): Question {
   switch (challenge) {
     case "Addition": {
@@ -48,6 +47,16 @@ function generateQuestion(challenge: Challenge): Question {
       const nineOff = Math.random() > 0.5 ? ans + 9 : ans - 9;
       const wrongs = shuffle([ans + 10, ans - 10, nineOff]).filter(x => x > 0 && x !== ans).slice(0, 3);
       return { num1:a, answer:ans, display:`${a}²`, options:shuffle([ans,...wrongs]) };
+    }
+    case "Friends": {
+      const base = shuffle([9, 10, 100])[0] as 9 | 10 | 100;
+      const a = base === 100 ? rand(11, 89) : rand(1, base - 1);
+      const ans = base - a;
+      const offsets = base === 100
+        ? shuffle([ans + 10, ans - 10, ans + 1, ans - 1, ans + 9, ans - 9])
+        : shuffle([ans + 1, ans - 1, ans + 2, ans - 2]);
+      const wrongs = offsets.filter(v => v > 0 && v !== ans && v < base).slice(0, 3);
+      return { num1:a, answer:ans, display:`${a} + ? = ${base}`, options:shuffle([ans,...wrongs]) };
     }
   }
 }
@@ -81,6 +90,7 @@ const CHALLENGE_COLORS: Record<Challenge,{bg:string;light:string;dark:string}> =
   Multiplication: { bg:"#84c341", light:"#f6fbf1", dark:"#3d6b10" },
   Squares:        { bg:"#c74498", light:"#fbf2f8", dark:"#7a1a5e" },
   Half:           { bg:"#7784c1", light:"#ecedf6", dark:"#2e3875" },
+  Friends:        { bg:"#F5A623", light:"#FFF8EC", dark:"#7A4F00" },
 };
 
 const CHALLENGE_IMAGES: Record<Challenge,string> = {
@@ -89,6 +99,7 @@ const CHALLENGE_IMAGES: Record<Challenge,string> = {
   Multiplication: "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/MULTIPLICATION@2x.png",
   Half:           "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/FRACTION@2x.png",
   Squares:        "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/DIVISION@2x.png",
+  Friends:        "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ADDITION@2x.png",
 };
 
 const ROCKET_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.png";
@@ -159,7 +170,6 @@ function Stars({ count=6 }: { count?:number }) {
   );
 }
 
-// Change 2: ScoreBar uses `dark` color (darker version of challenge color) instead of BRAND_TEAL
 function ScoreBar({ score, streak, level, dark }:{score:number;streak:number;level:number;dark:string}) {
   return (
     <div className="flex gap-3 justify-center flex-wrap mb-4">
@@ -227,6 +237,13 @@ function HalfTableQuiz({ bg, light, dark, onNext }:{bg:string;light:string;dark:
   const restart=()=>{ setAttempted(0); setCorrect(0); setInputVal(""); setFeedback(null); setDone(false); };
   const refTable=[[0,0],[1,0],[2,1],[3,1],[4,2],[5,2],[6,3],[7,3],[8,4],[9,4]];
 
+  function getFriend100Trick(num: number): string {
+  const tens = Math.floor(num / 10);
+  const units = num % 10;
+  const friendOf9 = 9 - tens;
+  const friendOf10 = 10 - units;
+  return `${tens}→${friendOf9} (9's friend), ${units}→${friendOf10} (10's friend) → ${friendOf9}${friendOf10}`;
+} 
   if(done) {
     const pct=Math.round((correct/TOTAL)*100);
     return (
@@ -410,7 +427,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-4">
-      {/* Progress */}
       <div className="flex gap-2">
         {(["step1", "step2", "step3", "done"] as Half3StepPhase[]).map((p, i) => {
           const order = ["step1", "step2", "step3", "done"];
@@ -428,7 +444,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
         <div style={{ fontFamily: RACING, fontSize: "3rem", color: bg, marginTop: 4 }}>{practiceNum}</div>
       </div>
 
-      {/* Reference table */}
       <div className="bg-white rounded-2xl border-2 overflow-hidden shadow-sm" style={{ borderColor: `${bg}44` }}>
         <div className="px-3 py-1.5 text-center text-xs font-bold" style={{ background: bg, color: "#fff", fontFamily: OUTFIT }}>
           📖 Table Half Reference
@@ -447,7 +462,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
         </div>
       </div>
 
-      {/* ── STEP 1 ── */}
       <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
         style={{ borderColor: phase === "step1" ? bg : "#e0f2f1" }}>
         <div className="flex items-center gap-2 mb-3">
@@ -502,7 +516,6 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
         )}
       </div>
 
-      {/* ── STEP 2 + STEP 3 combined box ── */}
       {(phase === "step2" || phase === "step3" || phase === "done") && (
         <div className="bg-white rounded-3xl p-5 border-2 shadow-lg"
           style={{ borderColor: phase === "done" ? "#22c55e" : bg }}>
@@ -739,7 +752,6 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
   const bc=feedback==="correct"?"#22c55e":feedback==="wrong"?"#ef4444":locked?"#d1d5db":bg;
   const bgc=feedback==="correct"?"#f0fdf4":feedback==="wrong"?"#fef2f2":locked?"#f9fafb":"#fff";
   const tc=feedback==="correct"?"#15803d":feedback==="wrong"?"#dc2626":locked?"#9ca3af":bg;
-  // Change 3: No gradient — use flat bg color
   const btnBg=locked?"#aaa":bg;
   return (
     <div className="flex items-center gap-3 w-full">
@@ -765,7 +777,6 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
 }
 
 // ─── Square Step View ─────────────────────────────────────────────────────────
-// ─── Square Step View ─────────────────────────────────────────────────────────
 function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, bg, light, dark }:
   { squareNum:number; onTryAnother:()=>void; onRangeSelect:(r:string)=>void; onGoSettings:()=>void; bg:string; light:string; dark:string }) {
 
@@ -780,35 +791,30 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
   const range=getRange(squareNum);
 
   const computeValues=(n:number,r:RangeKey)=>{
-    // For 26-50 range (50 - x method)
     if(r === "26-50") {
       const x = 50 - n;
       const AB = 25 - x;
       const CD = x * x;
       return { x, AB, CD, base: 50, dir: "below" as const, method: "50-x" };
     }
-    // For 51-75 range (50 + x method)
     if(r === "51-75") {
       const x = n - 50;
       const AB = 25 + x;
       const CD = x * x;
       return { x, AB, CD, base: 50, dir: "above" as const, method: "50+x" };
     }
-    // For 76-100 range (100 - x method with AB = 100 - 2x)
     if(r === "76-100") {
       const x = 100 - n;
-      const AB = 100 - (2 * x);  // Changed from 50 - x to 100 - 2x
+      const AB = 100 - (2 * x);
       const CD = x * x;
       return { x, AB, CD, base: 100, dir: "below" as const, method: "100-2x" };
     }
-    // For 101-125 range (100 + x method with AB = 100 + 2x)
     if(r === "101-125") {
       const x = n - 100;
-      const AB = 100 + (2 * x);  // Changed from 50 + x to 100 + 2x
+      const AB = 100 + (2 * x);
       const CD = x * x;
       return { x, AB, CD, base: 100, dir: "above" as const, method: "100+2x" };
     }
-    // Fallback (should not happen)
     return { x: 0, AB: 0, CD: 0, base: 50, dir: "below" as const, method: "50-x" };
   };
 
@@ -822,7 +828,6 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
 
   const step1Label = dir === "below" ? `${base} − ${squareNum}` : `${squareNum} − ${base}`;
   
-  // Updated step2 label based on method
   const step2Label = (() => {
     if (method === "50-x") return `25 − ${x}`;
     if (method === "50+x") return `25 + ${x}`;
@@ -965,6 +970,520 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
   );
 }
 
+// ─── Friends Practice (Tabbed) ────────────────────────────────────────────────
+type FriendBase = 9 | 10 | 100;
+
+interface FriendPair { a: number; b: number; }
+interface TabScore { score: number; total: number; }
+
+function generateFriendPair(base: FriendBase): FriendPair {
+  if (base === 9)  { const a = rand(1, 8);  return { a, b: 9   - a }; }
+  if (base === 10) { const a = rand(1, 9);  return { a, b: 10  - a }; }
+  // For base 100, keep numbers between 11-89 as before
+  const a = rand(11, 89); return { a, b: 100 - a };
+}
+
+function generateFriendOptions(correct: number, base: FriendBase): number[] {
+  const offsets = base === 100
+    ? shuffle([correct + 10, correct - 10, correct + 1, correct - 1, correct + 9, correct - 9])
+    : shuffle([correct + 1, correct - 1, correct + 2, correct - 2]);
+  const wrongs = offsets.filter(v => v > 0 && v !== correct && v < base).slice(0, 3);
+  return shuffle([correct, ...wrongs]);
+}
+
+// Individual panel for one tab — score owned by parent
+function FriendPanel({
+  base, score, total, onScore, bg, light, dark,
+}: {
+  base: FriendBase; score: number; total: number;
+  onScore: (correct: boolean) => void;
+  bg: string; light: string; dark: string;
+}) {
+  const [pair, setPair] = useState<FriendPair>(() => generateFriendPair(base));
+  const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
+  
+  // For base 100 - separate inputs for tens and units
+  const [tensFriend, setTensFriend] = useState("");
+  const [unitsFriend, setUnitsFriend] = useState("");
+  const [showCombined, setShowCombined] = useState(false);
+  
+  // For other bases - single input
+  const [singleAnswer, setSingleAnswer] = useState("");
+
+  const next = useCallback(() => {
+    const newPair = generateFriendPair(base);
+    setPair(newPair);
+    setFeedback(null);
+    setTensFriend("");
+    setUnitsFriend("");
+    setSingleAnswer("");
+    setShowCombined(false);
+  }, [base]);
+
+  const handleSubmitFor100 = () => {
+    if (feedback) return;
+    
+    const tens = parseInt(tensFriend);
+    const units = parseInt(unitsFriend);
+    const combined = parseInt(`${tens}${units}`);
+    const correct = combined === pair.b;
+    
+    setFeedback(correct ? "correct" : "wrong");
+    setShowCombined(true);
+    onScore(correct);
+    setTimeout(next, 1500);
+  };
+
+  const handleSubmitForOthers = () => {
+    if (feedback) return;
+    const correct = parseInt(singleAnswer) === pair.b;
+    setFeedback(correct ? "correct" : "wrong");
+    onScore(correct);
+    setTimeout(next, 1500);
+  };
+
+  const borderCol =
+    feedback === "correct" ? "#22c55e" :
+    feedback === "wrong"   ? "#ef4444" : bg;
+
+  // For base 100 - show two inputs
+  if (base === 100) {
+    const tensDigit = Math.floor(pair.a / 10);
+    const unitsDigit = pair.a % 10;
+    const expectedTensFriend = 9 - tensDigit;
+    const expectedUnitsFriend = 10 - unitsDigit;
+    const expectedCombined = expectedTensFriend * 10 + expectedUnitsFriend;
+    
+    return (
+      <div style={{
+        background: "#fff",
+        border: `3px solid ${borderCol}`,
+        borderRadius: 24,
+        padding: "20px 20px 16px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 14,
+        transition: "border-color 0.25s ease",
+        maxWidth: 400,
+        margin: "0 auto",
+        width: "100%",
+      }}>
+        {/* Header */}
+        <div style={{
+          background: bg, borderRadius: 14, padding: "10px 14px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <span style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}>
+            Friends of {base}
+          </span>
+          <span style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}>
+            {score}/{total}
+          </span>
+        </div>
+
+        {/* Question */}
+        <div style={{
+          background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
+          borderRadius: 16, padding: "18px 12px", textAlign: "center",
+          transition: "background 0.3s ease",
+        }}>
+          <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.82rem", color: dark, margin: "0 0 4px" }}>
+            What is the friend of
+          </p>
+          <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg, lineHeight: 1 }}>
+            {pair.a}
+          </div>
+          <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.78rem", color: `${bg}99`, marginTop: 2 }}>
+            {pair.a} + ? = {base}
+          </div>
+          
+          {/* Two-input method for 100 */}
+          {!feedback && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ 
+                display: "flex", 
+                gap: 12, 
+                justifyContent: "center",
+                marginBottom: 12,
+                fontFamily: OUTFIT,
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                color: dark
+              }}>
+                <div>Tens digit: {tensDigit}</div>
+                <div>→ Friend of 9</div>
+                <div>Units digit: {unitsDigit}</div>
+                <div>→ Friend of 10</div>
+              </div>
+              
+              <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
+                <input
+                  type="number"
+                  min={0}
+                  max={9}
+                  value={tensFriend}
+                  onChange={e => setTensFriend(e.target.value)}
+                  placeholder="?"
+                  style={{
+                    width: 70,
+                    height: 70,
+                    textAlign: "center",
+                    fontSize: "2rem",
+                    fontFamily: RACING,
+                    border: `3px solid ${bg}`,
+                    borderRadius: 16,
+                    outline: "none",
+                    color: bg
+                  }}
+                />
+                <span style={{ fontSize: "2rem", fontFamily: RACING, color: bg }}>&</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={9}
+                  value={unitsFriend}
+                  onChange={e => setUnitsFriend(e.target.value)}
+                  placeholder="?"
+                  style={{
+                    width: 70,
+                    height: 70,
+                    textAlign: "center",
+                    fontSize: "2rem",
+                    fontFamily: RACING,
+                    border: `3px solid ${bg}`,
+                    borderRadius: 16,
+                    outline: "none",
+                    color: bg
+                  }}
+                />
+              </div>
+              
+              {showCombined && feedback && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{
+                    fontSize: "1.2rem",
+                    fontFamily: RACING,
+                    color: bg,
+                    background: `${bg}15`,
+                    padding: "8px",
+                    borderRadius: 12
+                  }}>
+                    Combined: {tensFriend}{unitsFriend} = {expectedCombined}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {feedback && (
+            <div style={{
+              marginTop: 12,
+              padding: "8px 12px",
+              background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
+              borderRadius: 12,
+              fontFamily: OUTFIT, 
+              fontWeight: 800, 
+              fontSize: "0.9rem",
+              color: feedback === "correct" ? "#16a34a" : "#dc2626",
+            }}>
+              {feedback === "correct"
+                ? `✅ Yes! ${pair.a} + ${expectedCombined} = ${base}`
+                : `❌ It's ${expectedCombined}! (${pair.a} + ${expectedCombined} = ${base})`}
+              <div style={{ fontSize: "0.75rem", marginTop: 4, color: dark }}>
+                {tensDigit}→{expectedTensFriend} (9's friend), {unitsDigit}→{expectedUnitsFriend} (10's friend)
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Submit button */}
+        {!feedback && (
+          <button 
+            onClick={handleSubmitFor100} 
+            disabled={!tensFriend || !unitsFriend}
+            className="active:scale-95"
+            style={{
+              background: (tensFriend && unitsFriend) ? bg : "#ccc",
+              border: "none",
+              borderRadius: 14,
+              padding: "14px",
+              fontFamily: RACING,
+              fontSize: "1.2rem",
+              color: "#fff",
+              cursor: (tensFriend && unitsFriend) ? "pointer" : "not-allowed",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}>
+            Check Answer ✓
+          </button>
+        )}
+
+        {/* Skip button - only show when no feedback */}
+        {!feedback && (
+          <button onClick={next} style={{
+            background: "transparent", 
+            border: `1.5px dashed ${bg}55`, 
+            borderRadius: 12,
+            padding: "7px", 
+            fontFamily: OUTFIT, 
+            fontWeight: 600,
+            fontSize: "0.78rem", 
+            color: `${bg}99`, 
+            cursor: "pointer",
+          }}>
+            Skip →
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  // For bases 9 and 10 - single input (original design)
+  return (
+    <div style={{
+      background: "#fff",
+      border: `3px solid ${borderCol}`,
+      borderRadius: 24,
+      padding: "20px 20px 16px",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+      transition: "border-color 0.25s ease",
+      maxWidth: 400,
+      margin: "0 auto",
+      width: "100%",
+    }}>
+      {/* Header */}
+      <div style={{
+        background: bg, borderRadius: 14, padding: "10px 14px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
+        <span style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}>
+          Friends of {base}
+        </span>
+        <span style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}>
+          {score}/{total}
+        </span>
+      </div>
+
+      {/* Question */}
+      <div style={{
+        background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
+        borderRadius: 16, padding: "18px 12px", textAlign: "center",
+        transition: "background 0.3s ease",
+      }}>
+        <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.82rem", color: dark, margin: "0 0 4px" }}>
+          What is the friend of
+        </p>
+        <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg, lineHeight: 1 }}>
+          {pair.a}
+        </div>
+        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.78rem", color: `${bg}99`, marginTop: 2 }}>
+          {pair.a} + ? = {base}
+        </div>
+        
+        {!feedback && (
+          <input
+            type="number"
+            value={singleAnswer}
+            onChange={e => setSingleAnswer(e.target.value)}
+            onKeyPress={e => e.key === 'Enter' && singleAnswer && handleSubmitForOthers()}
+            placeholder="?"
+            style={{
+              marginTop: 16,
+              width: "100%",
+              maxWidth: 120,
+              padding: "12px",
+              textAlign: "center",
+              fontSize: "1.8rem",
+              fontFamily: RACING,
+              border: `3px solid ${bg}`,
+              borderRadius: 16,
+              outline: "none",
+              color: bg
+            }}
+          />
+        )}
+        
+        {feedback && (
+          <div style={{
+            marginTop: 12,
+            padding: "8px 12px",
+            background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
+            borderRadius: 12,
+            fontFamily: OUTFIT, 
+            fontWeight: 800, 
+            fontSize: "0.9rem",
+            color: feedback === "correct" ? "#16a34a" : "#dc2626",
+          }}>
+            {feedback === "correct"
+              ? `✅ Yes! ${pair.a} + ${pair.b} = ${base}`
+              : `❌ It's ${pair.b}! (${pair.a} + ${pair.b} = ${base})`}
+          </div>
+        )}
+      </div>
+
+      {/* Submit button */}
+      {!feedback && (
+        <button 
+          onClick={handleSubmitForOthers} 
+          disabled={!singleAnswer}
+          className="active:scale-95"
+          style={{
+            background: singleAnswer ? bg : "#ccc",
+            border: "none",
+            borderRadius: 14,
+            padding: "14px",
+            fontFamily: RACING,
+            fontSize: "1.2rem",
+            color: "#fff",
+            cursor: singleAnswer ? "pointer" : "not-allowed",
+            transition: "transform 0.15s, box-shadow 0.15s",
+          }}>
+          Check Answer ✓
+        </button>
+      )}
+
+      {/* Skip button */}
+      {!feedback && (
+        <button onClick={next} style={{
+          background: "transparent", 
+          border: `1.5px dashed ${bg}55`, 
+          borderRadius: 12,
+          padding: "7px", 
+          fontFamily: OUTFIT, 
+          fontWeight: 600,
+          fontSize: "0.78rem", 
+          color: `${bg}99`, 
+          cursor: "pointer",
+        }}>
+          Skip →
+        </button>
+      )}
+    </div>
+  );
+}
+
+function FriendsPractice({ bg, light, dark, onStartChallenge }: {
+  bg: string; light: string; dark: string; onStartChallenge: () => void;
+}) {
+  const bases: FriendBase[] = [9, 10, 100];
+
+  // ── Tab state (active tab + per-tab scores) ──────────────────────────────
+  const [activeTab, setActiveTab] = useState<FriendBase>(9);
+  const [tabScores, setTabScores] = useState<Record<FriendBase, TabScore>>({
+    9:   { score: 0, total: 0 },
+    10:  { score: 0, total: 0 },
+    100: { score: 0, total: 0 },
+  });
+
+  const handleScore = (base: FriendBase, correct: boolean) => {
+    setTabScores(prev => ({
+      ...prev,
+      [base]: {
+        score: prev[base].score + (correct ? 1 : 0),
+        total: prev[base].total + 1,
+      },
+    }));
+  };
+
+  return (
+    <div className="w-full max-w-lg mx-auto space-y-5">
+
+      {/* Reference strip */}
+      <div className="bg-white rounded-2xl border-2 overflow-hidden shadow-sm" style={{ borderColor: `${bg}44` }}>
+  <div className="px-3 py-1.5 text-center text-xs font-bold" style={{ background: bg, color: "#fff", fontFamily: OUTFIT }}>
+    📖 Friends Reference
+  </div>
+  <div className="grid grid-cols-3 divide-x" style={{ borderColor: `${bg}22` }}>
+    {[
+      { base: 9,   pairs: "1+8, 2+7, 3+6, 4+5" },
+      { base: 10,  pairs: "1+9, 2+8, 3+7, 4+6, 5+5" },
+      { base: 100, pairs: "e.g. 37+63, 45+55" },
+    ].map(({ base, pairs }) => (
+      <div key={base} className="py-2 px-2 text-center">
+        <div style={{ fontFamily: RACING, color: bg, fontSize: "1rem" }}>of {base}</div>
+        <div style={{ fontFamily: OUTFIT, fontSize: "0.65rem", fontWeight: 600, color: dark, marginTop: 2 }}>{pairs}</div>
+      </div>
+    ))}
+  </div>
+</div>
+
+      {/* ── Tab pill bar ── */}
+      <div style={{
+        display: "flex",
+        gap: 6,
+        background: light,
+        borderRadius: 99,
+        padding: 5,
+        maxWidth: 380,
+        margin: "0 auto",
+        width: "100%",
+        boxShadow: `0 2px 8px ${bg}22`,
+      }}>
+        {bases.map(base => {
+          const sc = tabScores[base];
+          const isActive = activeTab === base;
+          return (
+            <button
+              key={base}
+              onClick={() => setActiveTab(base)}
+              style={{
+                flex: 1,
+                border: "none",
+                cursor: "pointer",
+                fontFamily: OUTFIT,
+                fontWeight: 700,
+                fontSize: "0.88rem",
+                padding: "10px 4px 6px",
+                borderRadius: 99,
+                transition: "all 0.22s ease",
+                background: isActive ? bg : "transparent",
+                color: isActive ? "#fff" : dark,
+                boxShadow: isActive ? `0 4px 14px ${bg}44` : "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <span>Friends of {base}</span>
+              {/* Per-tab score badge */}
+              <span style={{
+                fontFamily: RACING,
+                fontSize: "0.72rem",
+                color: isActive ? "#fff99c" : `${dark}88`,
+                lineHeight: 1,
+              }}>
+                {sc.score}/{sc.total}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Active panel — key resets question/feedback on tab switch ── */}
+      <FriendPanel
+        key={activeTab}
+        base={activeTab}
+        score={tabScores[activeTab].score}
+        total={tabScores[activeTab].total}
+        onScore={(correct) => handleScore(activeTab, correct)}
+        bg={bg}
+        light={light}
+        dark={dark}
+      />
+
+      {/* CTA */}
+      <button onClick={onStartChallenge} className="w-full rounded-3xl py-4 shadow-xl active:scale-95"
+        style={{ background: bg, color: "#fff", fontFamily: RACING, fontSize: "1.3rem" }}>
+        ⚡ Start Timed Challenge
+      </button>
+    </div>
+  );
+}
+
 function useCloudImage() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(()=>{
@@ -1102,8 +1621,8 @@ export default function SpeedMathsPage() {
             <h1 className="text-white leading-none mb-2" style={{fontFamily:RACING,fontSize:"clamp(2.8rem,7.5vw,5.2rem)",textShadow:"0 4px 18px rgba(0,0,0,0.28)"}}>Speed Maths</h1>
             <p className="text-white/80 text-lg md:text-xl" style={{fontFamily:OUTFIT,fontWeight:600}}>Choose your Challenge!</p>
           </div>
-          <div className="relative z-30 w-full max-w-5xl mx-auto px-4 md:px-8 pb-6 mt-10 md:mt-12">
-            <div className="grid grid-cols-5 gap-5">
+          <div className="relative z-30 w-full max-w-6xl mx-auto px-4 md:px-8 pb-6 mt-10 md:mt-12">
+            <div className="grid grid-cols-6 gap-5">
               {CHALLENGES.map((ch,i)=>(<MenuChallengeCard key={ch} ch={ch} index={i} visible={cardsVisible} onClick={()=>{setChallenge(ch);setGameState("mode-select");}} />))}
             </div>
           </div>
@@ -1143,7 +1662,7 @@ export default function SpeedMathsPage() {
             </div>
             <div className="w-[4%]" />
             <div className="flex flex-col gap-2 w-[44%]" style={{marginTop:"12%"}}>
-              {([CHALLENGES[1],CHALLENGES[4]] as Challenge[]).map((ch,i)=>(
+              {([CHALLENGES[1],CHALLENGES[4],CHALLENGES[5]] as Challenge[]).map((ch,i)=>(
                 <MenuChallengeCard key={ch} ch={ch} index={i+3} visible={cardsVisible} compact onClick={()=>{setChallenge(ch);setGameState("mode-select");}} />
               ))}
             </div>
@@ -1191,7 +1710,14 @@ export default function SpeedMathsPage() {
             <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Challenge</button>
           </div>
         </>)}
-        {challenge!=="Half"&&challenge!=="Squares"&&(<>
+        {challenge==="Friends"&&(<>
+          <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
+          <div className="flex flex-col gap-3 w-full max-w-sm">
+            <button onClick={()=>setGameState("friends-practice")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>🤝 Friends Practice</button>
+            <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Challenge</button>
+          </div>
+        </>)}
+        {challenge!=="Half"&&challenge!=="Squares"&&challenge!=="Friends"&&(<>
           <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>How do you want to answer?</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
             <button onClick={()=>{setAnswerMode("Choose Option");setGameState("settings");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:answerMode==="Choose Option"?bg:light,border:`3px solid ${bg}`,color:answerMode==="Choose Option"?"#fff":bg,fontFamily:RACING}}>🎯 Choose Option</button>
@@ -1225,7 +1751,6 @@ export default function SpeedMathsPage() {
           </>)}
           {timeMode==="fixed-questions"&&<p className="text-center" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>Solve 10 questions as fast as you can! ⚡</p>}
         </div>
-        {/* Change 3: No gradient on Start button */}
         <button onClick={beginGame} className="w-full max-w-sm rounded-3xl py-5 shadow-xl active:scale-95 hover:scale-105" style={{background:bg,color:"#fff",fontFamily:RACING,fontSize:"1.6rem"}}>🚀 Start!</button>
       </div>
     );
@@ -1293,6 +1818,21 @@ export default function SpeedMathsPage() {
     );
   }
 
+  // ─── FRIENDS PRACTICE ─────────────────────────────────────────────────────
+  if(gameState==="friends-practice"){
+    const{bg,light,dark}=CHALLENGE_COLORS["Friends"];
+    return(
+      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
+        <style>{GLOBAL_STYLES}</style><Stars count={6}/>
+        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
+        <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>🤝</div>
+        <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Friends</h2>
+        <p className="mb-6 text-sm text-center" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>Pairs that add up to 9, 10, or 100!</p>
+        <FriendsPractice bg={bg} light={light} dark={dark} onStartChallenge={()=>setGameState("settings")} />
+      </div>
+    );
+  }
+
   // ─── RESULT ───────────────────────────────────────────────────────────────
   if(gameState==="result"){
     const{bg,dark}=CHALLENGE_COLORS[challenge];
@@ -1338,7 +1878,6 @@ export default function SpeedMathsPage() {
             <div className="h-full rounded-full transition-all duration-1000" style={{width:`${timerPct}%`,background:timerPct>50?bg:timerPct>25?"#D8AE4F":"#E45C48"}} />
           </div>
         )}
-        {/* Change 2: Pass dark to ScoreBar so Level badge uses darker color */}
         <ScoreBar score={score} streak={streak} level={level} dark={dark}/>
         <div className="w-full max-w-md rounded-3xl shadow-2xl p-8 mb-6 text-center relative overflow-hidden"
           style={{background:feedback?feedbackBg:light,border:`4px solid ${feedback?feedbackBg:bg}`}}>
