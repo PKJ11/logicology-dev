@@ -765,6 +765,7 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
 }
 
 // ─── Square Step View ─────────────────────────────────────────────────────────
+// ─── Square Step View ─────────────────────────────────────────────────────────
 function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, bg, light, dark }:
   { squareNum:number; onTryAnother:()=>void; onRangeSelect:(r:string)=>void; onGoSettings:()=>void; bg:string; light:string; dark:string }) {
 
@@ -779,150 +780,184 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
   const range=getRange(squareNum);
 
   const computeValues=(n:number,r:RangeKey)=>{
-    switch(r){
-      case "26-50":   {const x=50-n;  const AB=25-x; const CD=x*x; return{x,AB,CD,base:50, dir:"below" as const};}
-      case "51-75":   {const x=n-50;  const AB=25+x; const CD=x*x; return{x,AB,CD,base:50, dir:"above" as const};}
-      case "76-100":  {const x=100-n; const AB=50-x; const CD=x*x; return{x,AB,CD,base:100,dir:"below" as const};}
-      case "101-125": {const x=n-100; const AB=50+x; const CD=x*x; return{x,AB,CD,base:100,dir:"above" as const};}
+    // For 26-50 range (50 - x method)
+    if(r === "26-50") {
+      const x = 50 - n;
+      const AB = 25 - x;
+      const CD = x * x;
+      return { x, AB, CD, base: 50, dir: "below" as const, method: "50-x" };
     }
+    // For 51-75 range (50 + x method)
+    if(r === "51-75") {
+      const x = n - 50;
+      const AB = 25 + x;
+      const CD = x * x;
+      return { x, AB, CD, base: 50, dir: "above" as const, method: "50+x" };
+    }
+    // For 76-100 range (100 - x method with AB = 100 - 2x)
+    if(r === "76-100") {
+      const x = 100 - n;
+      const AB = 100 - (2 * x);  // Changed from 50 - x to 100 - 2x
+      const CD = x * x;
+      return { x, AB, CD, base: 100, dir: "below" as const, method: "100-2x" };
+    }
+    // For 101-125 range (100 + x method with AB = 100 + 2x)
+    if(r === "101-125") {
+      const x = n - 100;
+      const AB = 100 + (2 * x);  // Changed from 50 + x to 100 + 2x
+      const CD = x * x;
+      return { x, AB, CD, base: 100, dir: "above" as const, method: "100+2x" };
+    }
+    // Fallback (should not happen)
+    return { x: 0, AB: 0, CD: 0, base: 50, dir: "below" as const, method: "50-x" };
   };
 
-  const{x,AB,CD,base,dir}=computeValues(squareNum,range);
-  const hasMultiDigitCD=String(CD).length>=3;
-  const cdCarry=hasMultiDigitCD?Math.floor(CD/100):0;
-  const newCD=hasMultiDigitCD?CD%100:CD;
-  const newAB=AB+cdCarry;
-  const finalAnswer=newAB*100+newCD;
-  const formattedCD=String(newCD).padStart(2,"0");
+  const { x, AB, CD, base, dir, method } = computeValues(squareNum, range);
+  const hasMultiDigitCD = String(CD).length >= 3;
+  const cdCarry = hasMultiDigitCD ? Math.floor(CD / 100) : 0;
+  const newCD = hasMultiDigitCD ? CD % 100 : CD;
+  const newAB = AB + cdCarry;
+  const finalAnswer = newAB * 100 + newCD;
+  const formattedCD = String(newCD).padStart(2, "0");
 
-  const step1Label=dir==="below"?`${base} − ${squareNum}`:`${squareNum} − ${base}`;
-  const step2Label=(()=>{
-    if(range==="26-50")   return `25 − ${x}`;
-    if(range==="51-75")   return `25 + ${x}`;
-    if(range==="76-100")  return `50 − ${x}`;
-    return                       `50 + ${x}`;
+  const step1Label = dir === "below" ? `${base} − ${squareNum}` : `${squareNum} − ${base}`;
+  
+  // Updated step2 label based on method
+  const step2Label = (() => {
+    if (method === "50-x") return `25 − ${x}`;
+    if (method === "50+x") return `25 + ${x}`;
+    if (method === "100-2x") return `100 − (2×${x}) = ${AB}`;
+    if (method === "100+2x") return `100 + (2×${x}) = ${AB}`;
+    return "";
   })();
 
-  const getSteps=()=>{
-    const base_=[
-      {id:"step1",label:"Step 1",sublabel:`${squareNum} is ${dir} ${base} by (${step1Label})`,placeholder:"x",  wide:false,displayVal:x},
-      {id:"step2",label:"Step 2",sublabel:`${step2Label} = AB`,                                placeholder:"AB", wide:false,displayVal:AB},
-      {id:"step3",label:"Step 3",sublabel:`${x}² = CD`,                                        placeholder:"CD", wide:false,displayVal:CD},
+  const getSteps = () => {
+    const base_ = [
+      { id: "step1", label: "Step 1", sublabel: `${squareNum} is ${dir} ${base} by (${step1Label})`, placeholder: "x", wide: false, displayVal: x },
+      { id: "step2", label: "Step 2", sublabel: `${step2Label} = AB`, placeholder: "AB", wide: false, displayVal: AB },
+      { id: "step3", label: "Step 3", sublabel: `${x}² = CD`, placeholder: "CD", wide: false, displayVal: CD },
     ];
-    if(hasMultiDigitCD){
-      return[...base_,
-        {id:"step3_1",label:"Step 3.1",sublabel:`Split CD (${CD}) → keep last 2 digits = ${formattedCD}, carry ${cdCarry}`,placeholder:"newCD",wide:false,displayVal:newCD},
-        {id:"step3_2",label:"Step 3.2",sublabel:`AB + carry = ${AB} + ${cdCarry} = ${newAB}`,placeholder:"newAB",wide:false,displayVal:newAB},
-        {id:"answer", label:"Answer",  sublabel:`${newAB} × 100 + ${formattedCD} = ${finalAnswer}`,placeholder:"Ans",wide:true,displayVal:finalAnswer},
+    
+    if (hasMultiDigitCD) {
+      return [
+        ...base_,
+        { id: "step3_1", label: "Step 3.1", sublabel: `Split CD (${CD}) → keep last 2 digits = ${formattedCD}, carry ${cdCarry}`, placeholder: "newCD", wide: false, displayVal: newCD },
+        { id: "step3_2", label: "Step 3.2", sublabel: `AB + carry = ${AB} + ${cdCarry} = ${newAB}`, placeholder: "newAB", wide: false, displayVal: newAB },
+        { id: "answer", label: "Answer", sublabel: `${newAB} × 100 + ${formattedCD} = ${finalAnswer}`, placeholder: "Ans", wide: true, displayVal: finalAnswer },
       ];
     }
-    return[...base_,
-      {id:"answer",label:"Answer",sublabel:`AB × 100 + CD = ${AB} × 100 + ${CD} = ${finalAnswer}`,placeholder:"Ans",wide:true,displayVal:finalAnswer},
+    return [
+      ...base_,
+      { id: "answer", label: "Answer", sublabel: `AB × 100 + CD = ${AB} × 100 + ${CD} = ${finalAnswer}`, placeholder: "Ans", wide: true, displayVal: finalAnswer },
     ];
   };
 
-  const steps=getSteps();
-  const correctAnswers=steps.map(s=>s.displayVal);
+  const steps = getSteps();
+  const correctAnswers = steps.map(s => s.displayVal);
 
-  const[currentStep,setCurrentStep]=useState(0);
-  const[vals,setVals]=useState<string[]>(steps.map(()=>""));
-  const[feedbacks,setFeedbacks]=useState<("correct"|"wrong"|null)[]>(steps.map(()=>null));
-  const[confirmed,setConfirmed]=useState<boolean[]>(steps.map(()=>false));
+  const [currentStep, setCurrentStep] = useState(0);
+  const [vals, setVals] = useState<string[]>(steps.map(() => ""));
+  const [feedbacks, setFeedbacks] = useState<("correct" | "wrong" | null)[]>(steps.map(() => null));
+  const [confirmed, setConfirmed] = useState<boolean[]>(steps.map(() => false));
 
-  const handleChange=(i:number,v:string)=>{const n=[...vals];n[i]=v;setVals(n);};
-  const handleSubmit=(i:number)=>{
-    const uv=parseFloat(vals[i]),exp=correctAnswers[i];
-    if(Math.abs(uv-exp)<0.01){
-      const nf=[...feedbacks];nf[i]="correct";setFeedbacks(nf);
-      setTimeout(()=>{const nc=[...confirmed];nc[i]=true;setConfirmed([...nc]);if(i<steps.length-1)setCurrentStep(i+1);else setCurrentStep(steps.length);},600);
-    }else{
-      const nf=[...feedbacks];nf[i]="wrong";setFeedbacks(nf);
-      setTimeout(()=>{const nf2=[...feedbacks];nf2[i]=null;setFeedbacks(nf2);},1000);
+  const handleChange = (i: number, v: string) => { const n = [...vals]; n[i] = v; setVals(n); };
+  const handleSubmit = (i: number) => {
+    const uv = parseFloat(vals[i]), exp = correctAnswers[i];
+    if (Math.abs(uv - exp) < 0.01) {
+      const nf = [...feedbacks]; nf[i] = "correct"; setFeedbacks(nf);
+      setTimeout(() => { const nc = [...confirmed]; nc[i] = true; setConfirmed([...nc]); if (i < steps.length - 1) setCurrentStep(i + 1); else setCurrentStep(steps.length); }, 600);
+    } else {
+      const nf = [...feedbacks]; nf[i] = "wrong"; setFeedbacks(nf);
+      setTimeout(() => { const nf2 = [...feedbacks]; nf2[i] = null; setFeedbacks(nf2); }, 1000);
     }
   };
 
-  const isDone=currentStep===steps.length;
-  const rangeBadge:Record<RangeKey,string>={"26-50":"#26a9e0","51-75":"#84c341","76-100":"#d93b60","101-125":"#7784c1"};
-  // Change 3: Removed getStepBg gradients — all steps use flat bg
-  const fmtVal=(val:number,id:string)=>id==="step3_1"&&hasMultiDigitCD?String(val).padStart(2,"0"):val;
+  const isDone = currentStep === steps.length;
+  const rangeBadge: Record<RangeKey, string> = { "26-50": "#26a9e0", "51-75": "#84c341", "76-100": "#d93b60", "101-125": "#7784c1" };
+  const fmtVal = (val: number, id: string) => id === "step3_1" && hasMultiDigitCD ? String(val).padStart(2, "0") : val;
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-3">
-      <div className="grid grid-cols-4 gap-1 bg-white rounded-2xl p-1 shadow border-2" style={{borderColor:`${bg}33`}}>
-        {(["26-50","51-75","76-100","101-125"] as RangeKey[]).map(r=>(
-          <button key={r} onClick={()=>onRangeSelect(r)} className="rounded-xl py-2 transition-all active:scale-95"
-            style={{background:range===r?bg:"transparent",color:range===r?"#fff":bg,fontFamily:RACING,fontSize:"0.7rem",opacity:range===r?1:0.55,cursor:"pointer"}}
+      <div className="grid grid-cols-4 gap-1 bg-white rounded-2xl p-1 shadow border-2" style={{ borderColor: `${bg}33` }}>
+        {(["26-50", "51-75", "76-100", "101-125"] as RangeKey[]).map(r => (
+          <button key={r} onClick={() => onRangeSelect(r)} className="rounded-xl py-2 transition-all active:scale-95"
+            style={{ background: range === r ? bg : "transparent", color: range === r ? "#fff" : bg, fontFamily: RACING, fontSize: "0.7rem", opacity: range === r ? 1 : 0.55, cursor: "pointer" }}
             title={`Practice ${r} range`}>{r}</button>
         ))}
       </div>
       <div className="flex gap-1.5">
-        {steps.map((_,i)=>(
+        {steps.map((_, i) => (
           <div key={i} className="flex-1 h-2.5 rounded-full transition-all duration-500"
-            style={{background:i<currentStep?bg:i===currentStep?`${bg}88`:"#e0f2f1"}} />
+            style={{ background: i < currentStep ? bg : i === currentStep ? `${bg}88` : "#e0f2f1" }} />
         ))}
       </div>
       <div className="text-center">
         <div className="inline-block rounded-full px-3 py-1 text-xs text-white mb-2"
-          style={{background:rangeBadge[range],fontFamily:OUTFIT,fontWeight:700}}>
-          {range} range · {range==="26-50"?"50−x":range==="51-75"?"50+x":range==="76-100"?"100−x":"100+x"} method
+          style={{ background: rangeBadge[range], fontFamily: OUTFIT, fontWeight: 700 }}>
+          {range} range · {method === "50-x" ? "50−x" : method === "50+x" ? "50+x" : method === "100-2x" ? "100−2x" : "100+2x"} method
         </div>
-        <div style={{fontFamily:OUTFIT,fontWeight:700,fontSize:"0.85rem",color:dark}}>Find Square of</div>
-        <div style={{fontFamily:RACING,fontSize:"3.5rem",color:bg}}>{squareNum}</div>
+        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.85rem", color: dark }}>Find Square of</div>
+        <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg }}>{squareNum}</div>
       </div>
-      <div className="bg-white rounded-3xl shadow-xl border-2 p-5 space-y-3" style={{borderColor:isDone?"#22c55e":bg}}>
-        {steps.map((s,i)=>(
+      <div className="bg-white rounded-3xl shadow-xl border-2 p-5 space-y-3" style={{ borderColor: isDone ? "#22c55e" : bg }}>
+        {steps.map((s, i) => (
           <div key={s.id} className="space-y-2">
             <SquareStepRow label={s.label} sublabel={s.sublabel} placeholder={s.placeholder} value={vals[i]}
-              onChange={v=>handleChange(i,v)} onSubmit={()=>handleSubmit(i)} feedback={feedbacks[i]}
-              locked={currentStep<i} confirmed={confirmed[i]}
-              confirmedValue={confirmed[i]?fmtVal(s.displayVal as number,s.id):undefined}
+              onChange={v => handleChange(i, v)} onSubmit={() => handleSubmit(i)} feedback={feedbacks[i]}
+              locked={currentStep < i} confirmed={confirmed[i]}
+              confirmedValue={confirmed[i] ? fmtVal(s.displayVal as number, s.id) : undefined}
               wide={s.wide} bg={bg} dark={dark} />
-            {currentStep===i&&!confirmed[i]&&!isDone&&(
-              <button onClick={()=>handleSubmit(i)} disabled={!vals[i]} className="w-full rounded-2xl py-2.5 text-white active:scale-95 transition-all"
-                style={{background:vals[i]?bg:"#ccc",cursor:vals[i]?"pointer":"not-allowed",fontFamily:RACING,fontSize:"1rem"}}>
+            {currentStep === i && !confirmed[i] && !isDone && (
+              <button onClick={() => handleSubmit(i)} disabled={!vals[i]} className="w-full rounded-2xl py-2.5 text-white active:scale-95 transition-all"
+                style={{ background: vals[i] ? bg : "#ccc", cursor: vals[i] ? "pointer" : "not-allowed", fontFamily: RACING, fontSize: "1rem" }}>
                 Check ✓
               </button>
             )}
-            {feedbacks[i]==="wrong"&&!confirmed[i]&&(
-              <div className="text-red-400 text-center text-sm" style={{fontFamily:OUTFIT,fontWeight:700}}>❌ Not quite — try again!</div>
+            {feedbacks[i] === "wrong" && !confirmed[i] && (
+              <div className="text-red-400 text-center text-sm" style={{ fontFamily: OUTFIT, fontWeight: 700 }}>❌ Not quite — try again!</div>
             )}
           </div>
         ))}
-        {isDone&&(
+        {isDone && (
           <div className="text-center pt-2">
             <div className="text-3xl mb-1">🎉</div>
-            <div style={{fontFamily:RACING,fontSize:"1.4rem",color:bg}}>{squareNum}² = {finalAnswer}</div>
-            <div className="mt-1 mb-4" style={{fontFamily:OUTFIT,fontWeight:600,fontSize:"0.85rem",color:dark}}>
-              {hasMultiDigitCD?`CD=${CD} → carry ${cdCarry} → newAB=${newAB}, newCD=${formattedCD} → ${newAB}×100+${formattedCD}=${finalAnswer}`:`AB=${AB} | CD=${CD} → ${AB}×100+${CD}=${finalAnswer}`}
+            <div style={{ fontFamily: RACING, fontSize: "1.4rem", color: bg }}>{squareNum}² = {finalAnswer}</div>
+            <div className="mt-1 mb-4" style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.85rem", color: dark }}>
+              {hasMultiDigitCD ? `CD=${CD} → carry ${cdCarry} → newAB=${newAB}, newCD=${formattedCD} → ${newAB}×100+${formattedCD}=${finalAnswer}` : `AB=${AB} | CD=${CD} → ${AB}×100+${CD}=${finalAnswer}`}
             </div>
             <div className="flex gap-3">
               <button onClick={onTryAnother} className="flex-1 rounded-2xl py-3 text-white active:scale-95"
-                style={{background:bg,fontFamily:RACING,fontSize:"1rem"}}>🔄 Try Another</button>
+                style={{ background: bg, fontFamily: RACING, fontSize: "1rem" }}>🔄 Try Another</button>
               <button onClick={onGoSettings} className="flex-1 rounded-2xl py-3 active:scale-95 border-2"
-                style={{borderColor:bg,color:bg,background:light,fontFamily:RACING,fontSize:"1rem"}}>⚡ Challenge</button>
+                style={{ borderColor: bg, color: bg, background: light, fontFamily: RACING, fontSize: "1rem" }}>⚡ Challenge</button>
             </div>
           </div>
         )}
       </div>
-      <div className="bg-white rounded-3xl p-4 border-2" style={{borderColor:`${bg}33`}}>
-        <p className="mb-2 text-sm text-center" style={{color:bg,fontFamily:RACING}}>📐 Formula Reference</p>
+      <div className="bg-white rounded-3xl p-4 border-2" style={{ borderColor: `${bg}33` }}>
+        <p className="mb-2 text-sm text-center" style={{ color: bg, fontFamily: RACING }}>📐 Formula Reference</p>
         <div className="grid grid-cols-2 gap-2 text-xs">
-          {([["26–50","x=50−n, AB=25−x, CD=x²"],["51–75","x=n−50, AB=25+x, CD=x²"],["76–100","x=100−n, AB=50−x, CD=x²"],["101–125","x=n−100, AB=50+x, CD=x²"]] as [string,string][]).map(([t,d])=>{
-            const active=range===t.replace("–","-");
-            return(
-              <div key={t} className="rounded-xl p-2 text-center" style={{background:active?`${bg}18`:light,border:active?`1.5px solid ${bg}`:"none"}}>
-                <div style={{fontFamily:RACING,color:BRAND_TEAL_DK,fontSize:"0.85rem"}}>{t}</div>
-                <div style={{fontFamily:OUTFIT,color:dark,fontWeight:600}}>{d}</div>
+          {[
+            ["26–50", "x=50−n, AB=25−x, CD=x²"],
+            ["51–75", "x=n−50, AB=25+x, CD=x²"],
+            ["76–100", "x=100−n, AB=100−2x, CD=x²"],
+            ["101–125", "x=n−100, AB=100+2x, CD=x²"]
+          ].map(([t, d]) => {
+            const active = range === t.replace("–", "-");
+            return (
+              <div key={t} className="rounded-xl p-2 text-center" style={{ background: active ? `${bg}18` : light, border: active ? `1.5px solid ${bg}` : "none" }}>
+                <div style={{ fontFamily: RACING, color: BRAND_TEAL_DK, fontSize: "0.85rem" }}>{t}</div>
+                <div style={{ fontFamily: OUTFIT, color: dark, fontWeight: 600 }}>{d}</div>
               </div>
             );
           })}
         </div>
-        <div className="mt-3 rounded-xl p-2 text-center text-xs" style={{background:`${bg}10`,border:`1px dashed ${bg}`}}>
-          <span style={{fontFamily:OUTFIT,fontWeight:700,color:dark}}>Always: Answer = (AB + carry) × 100 + (CD % 100)</span>
+        <div className="mt-3 rounded-xl p-2 text-center text-xs" style={{ background: `${bg}10`, border: `1px dashed ${bg}` }}>
+          <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: dark }}>Always: Answer = (AB + carry) × 100 + (CD % 100)</span>
         </div>
-        {hasMultiDigitCD&&(
-          <div className="mt-2 rounded-xl p-2 text-center text-xs" style={{background:`${bg}10`,border:`1px solid ${bg}`}}>
-            <span style={{fontFamily:OUTFIT,fontWeight:700,color:dark}}>💡 When CD ≥ 100: carry = floor(CD/100), newCD = CD % 100</span>
+        {hasMultiDigitCD && (
+          <div className="mt-2 rounded-xl p-2 text-center text-xs" style={{ background: `${bg}10`, border: `1px solid ${bg}` }}>
+            <span style={{ fontFamily: OUTFIT, fontWeight: 700, color: dark }}>💡 When CD ≥ 100: carry = floor(CD/100), newCD = CD % 100</span>
           </div>
         )}
       </div>
