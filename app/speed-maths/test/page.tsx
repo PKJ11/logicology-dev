@@ -20,6 +20,30 @@ const GLOBAL_STYLES = `
   @keyframes popIn     { 0%{transform:scale(0.85);opacity:0} 100%{transform:scale(1);opacity:1} }
   @keyframes timerPulse{ 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.1);opacity:0.85} }
   @keyframes timerShake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Mobile palette drawer */
+  .palette-drawer {
+    display: none;
+  }
+  .palette-sidebar {
+    display: flex;
+  }
+  .palette-toggle-btn {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .palette-sidebar {
+      display: none !important;
+    }
+    .palette-toggle-btn {
+      display: flex !important;
+    }
+    .palette-drawer {
+      display: block;
+    }
+  }
 `;
 
 function formatTime(s: number) {
@@ -170,8 +194,8 @@ function StatusBar({ statuses, markedReview }: {
   );
 }
 
-// ─── Question Palette ─────────────────────────────────────────────────────────
-function QuestionPalette({
+// ─── Palette Content (shared by sidebar & drawer) ─────────────────────────────
+function PaletteContent({
   currentIdx, statuses, markedReview, onJump,
 }: {
   currentIdx: number;
@@ -179,7 +203,7 @@ function QuestionPalette({
   markedReview: Record<number, boolean>;
   onJump: (idx: number) => void;
 }) {
-  const getBg = (id: number, i: number) => {
+  const getBg = (id: number) => {
     if (markedReview[id]) return "#7c3aed";
     const st = statuses[id] || "not-visited";
     if (st === "answered")     return BRAND_TEAL;
@@ -188,25 +212,12 @@ function QuestionPalette({
   };
 
   return (
-    <div style={{
-      width: 188, background: "#f0fdf9",
-      borderLeft: `2px solid ${BRAND_TEAL}33`,
-      padding: 10, flexShrink: 0,
-    }}>
-      <div style={{
-        background: BRAND_TEAL_DK, color: "#fff",
-        fontFamily: RACING, fontSize: "0.7rem",
-        textAlign: "center", padding: "5px",
-        borderRadius: 6, marginBottom: 8, letterSpacing: "0.5px",
-      }}>
-        QUESTION PALETTE
-      </div>
-
+    <>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 4, marginBottom: 10 }}>
         {QUESTIONS.map((q, i) => (
           <button key={q.id} onClick={() => onJump(i)} style={{
             width: 28, height: 28, border: "none", borderRadius: 5,
-            background: getBg(q.id, i), color: "#fff",
+            background: getBg(q.id), color: "#fff",
             fontFamily: RACING, fontSize: "0.65rem", cursor: "pointer",
             outline: i === currentIdx ? `3px solid ${BRAND_TEAL_DK}` : "none",
             outlineOffset: 2,
@@ -217,17 +228,113 @@ function QuestionPalette({
       </div>
 
       {/* Legend */}
-      {[
-        { color: BRAND_TEAL, label: "Answered" },
-        { color: "#dc2626",  label: "Not Answered" },
-        { color: "#94a3b8",  label: "Not Visited" },
-        { color: "#7c3aed",  label: "For Review" },
-      ].map(({ color, label }) => (
-        <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, fontSize: "0.65rem", color: BRAND_TEAL_DK }}>
-          <div style={{ width: 14, height: 14, borderRadius: 3, background: color, flexShrink: 0 }} />
-          {label}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {[
+          { color: BRAND_TEAL, label: "Answered" },
+          { color: "#dc2626",  label: "Not Answered" },
+          { color: "#94a3b8",  label: "Not Visited" },
+          { color: "#7c3aed",  label: "For Review" },
+        ].map(({ color, label }) => (
+          <div key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.65rem", color: BRAND_TEAL_DK }}>
+            <div style={{ width: 12, height: 12, borderRadius: 3, background: color, flexShrink: 0 }} />
+            {label}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+// ─── Question Palette (desktop sidebar) ───────────────────────────────────────
+function QuestionPalette({
+  currentIdx, statuses, markedReview, onJump,
+}: {
+  currentIdx: number;
+  statuses: Record<number, QuestionStatus>;
+  markedReview: Record<number, boolean>;
+  onJump: (idx: number) => void;
+}) {
+  return (
+    <div className="palette-sidebar" style={{
+      width: 188, background: "#f0fdf9",
+      borderLeft: `2px solid ${BRAND_TEAL}33`,
+      padding: 10, flexShrink: 0, flexDirection: "column",
+    }}>
+      <div style={{
+        background: BRAND_TEAL_DK, color: "#fff",
+        fontFamily: RACING, fontSize: "0.7rem",
+        textAlign: "center", padding: "5px",
+        borderRadius: 6, marginBottom: 8, letterSpacing: "0.5px",
+      }}>
+        QUESTION PALETTE
+      </div>
+      <PaletteContent
+        currentIdx={currentIdx}
+        statuses={statuses}
+        markedReview={markedReview}
+        onJump={onJump}
+      />
+    </div>
+  );
+}
+
+// ─── Mobile Palette Drawer ────────────────────────────────────────────────────
+function MobilePaletteDrawer({
+  open, onClose, currentIdx, statuses, markedReview, onJump,
+}: {
+  open: boolean;
+  onClose: () => void;
+  currentIdx: number;
+  statuses: Record<number, QuestionStatus>;
+  markedReview: Record<number, boolean>;
+  onJump: (idx: number) => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="palette-drawer" style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 100,
+      background: "#f0fdf9",
+      borderBottom: `2px solid ${BRAND_TEAL}`,
+      boxShadow: "0 8px 32px rgba(10,138,128,0.18)",
+      animation: "slideDown 0.25s ease",
+      padding: "10px 14px 14px",
+    }}>
+      {/* Drawer header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        marginBottom: 10,
+      }}>
+        <div style={{
+          background: BRAND_TEAL_DK, color: "#fff",
+          fontFamily: RACING, fontSize: "0.7rem",
+          padding: "5px 14px", borderRadius: 6, letterSpacing: "0.5px",
+        }}>
+          QUESTION PALETTE
         </div>
-      ))}
+        <button
+          onClick={onClose}
+          style={{
+            background: "#dc2626", color: "#fff", border: "none",
+            borderRadius: 8, padding: "5px 12px",
+            fontFamily: RACING, fontSize: "0.7rem", cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 4,
+          }}
+        >
+          ✕ CLOSE
+        </button>
+      </div>
+
+      <PaletteContent
+        currentIdx={currentIdx}
+        statuses={statuses}
+        markedReview={markedReview}
+        onJump={(idx) => { onJump(idx); onClose(); }}
+      />
     </div>
   );
 }
@@ -254,6 +361,7 @@ function TestPage({
   const [isAnimating,  setIsAnimating]  = useState(false);
   const [timeLeft,     setTimeLeft]     = useState(TOTAL_TIME);
   const [timedOut,     setTimedOut]     = useState(false);
+  const [paletteOpen,  setPaletteOpen]  = useState(false);
   const scoreRef = useRef(0);
 
   const q       = QUESTIONS[currentIdx];
@@ -279,6 +387,7 @@ function TestPage({
     if (el) el.focus();
   }, [currentIdx]);
 
+  // Close palette on jump
   const setStatus = (id: number, st: QuestionStatus) =>
     setStatuses(prev => ({ ...prev, [id]: st }));
 
@@ -289,6 +398,7 @@ function TestPage({
     setCurrentIdx(idx);
     setInputValue(answers[QUESTIONS[idx].id] || "");
     setFeedback(null);
+    setPaletteOpen(false);
   };
 
   const handleSubmit = useCallback(() => {
@@ -346,8 +456,18 @@ function TestPage({
   const stageLabel = q.stage === 1 ? "Section A — Addition & Subtraction" : "Section B — Multiply / Divide / Fractions";
   const isMarked = !!markedReview[q.id];
 
+  // Count answered for badge on button
+  const answeredCount = Object.values(statuses).filter(s => s === "answered").length;
+
   return (
-    <div style={{ minHeight: "100vh", background: `linear-gradient(160deg,#f0fdf9 0%,#fff 60%,#e8f9f8 100%)`, fontFamily: OUTFIT, display: "flex", flexDirection: "column" }}>
+    <div style={{
+      minHeight: "100vh",
+      background: `linear-gradient(160deg,#f0fdf9 0%,#fff 60%,#e8f9f8 100%)`,
+      fontFamily: OUTFIT,
+      display: "flex",
+      flexDirection: "column",
+      position: "relative",
+    }}>
       <style>{GLOBAL_STYLES}</style>
 
       {/* ── TOP HEADER ── */}
@@ -380,10 +500,73 @@ function TestPage({
             }} />
           </div>
         </div>
+
+        {/* ── MOBILE PALETTE TOGGLE BUTTON (visible only on mobile) ── */}
+        <div className="palette-toggle-btn" style={{
+          padding: "0 14px 10px",
+          display: "none", // overridden by CSS class
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+        }}>
+          <button
+            onClick={() => setPaletteOpen(o => !o)}
+            style={{
+              background: paletteOpen ? BRAND_TEAL_DK : "rgba(255,255,255,0.2)",
+              color: "#fff",
+              border: `1.5px solid rgba(255,255,255,0.4)`,
+              borderRadius: 10,
+              padding: "6px 14px",
+              fontFamily: RACING,
+              fontSize: "0.7rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              transition: "background 0.2s",
+            }}
+          >
+            {/* Grid icon */}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="0" y="0" width="5" height="5" rx="1.2" fill="white" opacity="0.9"/>
+              <rect x="6.5" y="0" width="5" height="5" rx="1.2" fill="white" opacity="0.9"/>
+              <rect x="0" y="6.5" width="5" height="5" rx="1.2" fill="white" opacity="0.9"/>
+              <rect x="6.5" y="6.5" width="5" height="5" rx="1.2" fill="white" opacity="0.9"/>
+            </svg>
+            {paletteOpen ? "HIDE PALETTE" : "QUESTION PALETTE"}
+            {/* Badge showing answered count */}
+            <span style={{
+              background: answeredCount > 0 ? "#26a9e0" : "rgba(255,255,255,0.3)",
+              borderRadius: 10,
+              padding: "1px 7px",
+              fontSize: "0.65rem",
+              fontFamily: RACING,
+              minWidth: 22,
+              textAlign: "center",
+            }}>
+              {answeredCount}/20
+            </span>
+            <span style={{ fontSize: "0.75rem", transition: "transform 0.2s", transform: paletteOpen ? "rotate(180deg)" : "none" }}>
+              ▼
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* ── STATUS BAR ── */}
       <StatusBar statuses={statuses} markedReview={markedReview} />
+
+      {/* ── MOBILE PALETTE DRAWER (slides from top, inside flow) ── */}
+      <div className="palette-drawer" style={{ position: "relative" }}>
+        <MobilePaletteDrawer
+          open={paletteOpen}
+          onClose={() => setPaletteOpen(false)}
+          currentIdx={currentIdx}
+          statuses={statuses}
+          markedReview={markedReview}
+          onJump={jumpTo}
+        />
+      </div>
 
       {/* ── MAIN ── */}
       <div style={{ display: "flex", flex: 1 }}>
@@ -552,7 +735,7 @@ function TestPage({
           </div>
         </div>
 
-        {/* Palette */}
+        {/* Desktop Palette Sidebar */}
         <QuestionPalette
           currentIdx={currentIdx}
           statuses={statuses}
@@ -811,7 +994,7 @@ function InstructionsPage({ onStart }: { onStart: () => void }) {
           { num: "⏱", text: "You have 5 minutes for the entire test. When time expires, the test ends automatically and your score is calculated from answers given.", numBg: "#dc2626" },
           { num: "2", text: null, isScoring: true },
           { num: "3", text: "Your final score is the sum of all points earned. Negative scores are possible if many answers are wrong." },
-          { num: "4", text: "Use the Question Palette (right panel) to navigate. Mark questions for review using the purple button." },
+          { num: "4", text: "Use the Question Palette (right panel on desktop, button at top on mobile) to navigate. Mark questions for review using the purple button." },
           { num: "5", text: "The timer starts immediately when you click Start. You will see instant feedback after each answer." },
         ].map((item, i) => (
           <div key={i} style={{ display: "flex", gap: 14, marginBottom: 18 }}>
