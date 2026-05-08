@@ -114,6 +114,140 @@ function Splash({ onDone }: { onDone: () => void }) {
   );
 }
 
+// ─── Username Collection Page ────────────────────────────────────────────────
+function UsernamePage({ onSubmit }: { onSubmit: (username: string) => void }) {
+  const [username, setUsername] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!username.trim()) return;
+    
+    setIsLoading(true);
+    // Simulate a small delay for better UX
+    setTimeout(() => {
+      onSubmit(username.trim());
+      setIsLoading(false);
+    }, 500);
+  };
+
+  return (
+    <div style={{
+      minHeight: "100vh",
+      background: `linear-gradient(160deg,#f0fdf9 0%,#fff 60%,#e8f9f8 100%)`,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "32px 16px",
+      fontFamily: OUTFIT,
+    }}>
+      <style>{GLOBAL_STYLES}</style>
+      
+      <div style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(-20px)",
+        transition: "opacity 0.7s, transform 0.7s",
+        textAlign: "center",
+        marginBottom: 28,
+      }}>
+        <div style={{ fontSize: "4rem", animation: "rocketBob 3s ease-in-out infinite" }}>🚀</div>
+        <h1 style={{
+          fontFamily: RACING,
+          fontSize: "clamp(2rem,6vw,3rem)",
+          color: BRAND_TEAL,
+          margin: "8px 0 4px"
+        }}>
+          Logicology Test
+        </h1>
+        <p style={{ color: BRAND_TEAL_DK, fontWeight: 600 }}>
+          Speed Mathematics • Computer Based Test
+        </p>
+      </div>
+
+      <div style={{
+        width: "100%",
+        maxWidth: 450,
+        background: "#fff",
+        borderRadius: 24,
+        border: `3px solid ${BRAND_TEAL}`,
+        boxShadow: `0 8px 40px rgba(10,138,128,0.10)`,
+        padding: "clamp(20px,4vw,36px)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s",
+      }}>
+        <h2 style={{
+          fontFamily: RACING,
+          color: BRAND_TEAL,
+          fontSize: "1.2rem",
+          marginTop: 0,
+          marginBottom: 20,
+          textAlign: "center"
+        }}>
+          Enter Your Name
+        </h2>
+        
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: 20 }}>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your full name"
+              autoFocus
+              disabled={isLoading}
+              style={{
+                width: "100%",
+                padding: "14px 16px",
+                fontSize: "1rem",
+                fontFamily: OUTFIT,
+                border: `2px solid ${BRAND_TEAL}88`,
+                borderRadius: 12,
+                outline: "none",
+                transition: "border-color 0.2s",
+                boxSizing: "border-box",
+                background: isLoading ? "#f5f5f5" : "#fff",
+              }}
+              onFocus={(e) => e.target.style.borderColor = BRAND_TEAL}
+              onBlur={(e) => e.target.style.borderColor = `${BRAND_TEAL}88`}
+            />
+          </div>
+          
+          <button
+            type="submit"
+            disabled={!username.trim() || isLoading}
+            style={{
+              width: "100%",
+              background: username.trim() && !isLoading ? BRAND_TEAL : "#ccc",
+              color: "#fff",
+              fontFamily: RACING,
+              fontSize: "1.2rem",
+              border: "none",
+              borderRadius: 12,
+              padding: "14px",
+              cursor: username.trim() && !isLoading ? "pointer" : "not-allowed",
+              transition: "background 0.2s",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            {isLoading ? "Loading..." : "Continue to Instructions →"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Timer Display ────────────────────────────────────────────────────────────
 function TimerDisplay({ timeLeft }: { timeLeft: number }) {
   const isCritical = timeLeft <= 30;
@@ -379,7 +513,7 @@ function TestPage({
     }
     const id = setInterval(() => setTimeLeft(t => t - 1), 1000);
     return () => clearInterval(id);
-  }, [timeLeft, timedOut]);
+  }, [timeLeft, timedOut, answers, onSubmit]);
 
   // Focus input when question changes
   useEffect(() => {
@@ -749,14 +883,21 @@ function TestPage({
 
 // ─── Results Page ─────────────────────────────────────────────────────────────
 function ResultsPage({
-  result, onRetry, onMenu,
+  result, username, onRetry, onMenu,
 }: {
   result: { score: number; answers: Record<number, string>; questions: typeof QUESTIONS; timeUp: boolean; timeLeft: number };
+  username: string;
   onRetry: () => void;
   onMenu:  () => void;
 }) {
   const [visible, setVisible] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setVisible(true), 80); return () => clearTimeout(t); }, []);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  
+  useEffect(() => { 
+    const t = setTimeout(() => setVisible(true), 80); 
+    return () => clearTimeout(t); 
+  }, []);
 
   const { score, answers, questions, timeUp, timeLeft } = result;
   const timeUsed = TOTAL_TIME - timeLeft;
@@ -771,17 +912,62 @@ function ResultsPage({
     return { ...q, userAnswer, attempted, correct, points };
   });
 
-  const attempted  = detailed.filter(d => d.attempted).length;
-  const correct    = detailed.filter(d => d.correct).length;
-  const wrong      = detailed.filter(d => d.attempted && !d.correct).length;
-  const skipped    = 20 - attempted;
-  const s1pts      = detailed.filter(d => d.stage === 1).reduce((s, d) => s + d.points, 0);
-  const s2pts      = detailed.filter(d => d.stage === 2).reduce((s, d) => s + d.points, 0);
-  const penalty    = detailed.reduce((s, d) => s + (d.attempted && !d.correct ? Math.abs(d.points) : 0), 0);
+  const attemptedCount = detailed.filter(d => d.attempted).length;
+  const correctCount   = detailed.filter(d => d.correct).length;
+  const wrongCount     = detailed.filter(d => d.attempted && !d.correct).length;
+  const skippedCount   = 20 - attemptedCount;
+  const stage1Points   = detailed.filter(d => d.stage === 1).reduce((s, d) => s + d.points, 0);
+  const stage2Points   = detailed.filter(d => d.stage === 2).reduce((s, d) => s + d.points, 0);
+  const penalty        = detailed.reduce((s, d) => s + (d.attempted && !d.correct ? Math.abs(d.points) : 0), 0);
 
   const emoji = score >= 25 ? "🏆" : score >= 15 ? "🎉" : score >= 5 ? "👍" : "💪";
   const grade = score >= 25 ? "Outstanding!" : score >= 15 ? "Great Work!" : score >= 5 ? "Good Effort" : "Keep Practicing!";
   const gradeColor = score >= 25 ? "#059669" : score >= 15 ? BRAND_TEAL : score >= 5 ? "#d97706" : "#dc2626";
+
+  // Auto-save when results load
+  useEffect(() => {
+    const saveToDatabase = async () => {
+      if (saveStatus !== "idle") return;
+      
+      setIsSaving(true);
+      setSaveStatus("saving");
+      
+      try {
+        const response = await fetch("/api/speed-maths-result", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: username,
+            score: score,
+            answers: answers,
+            timeUsed: timeUsed,
+            timeUp: timeUp,
+            attempted: attemptedCount,
+            correct: correctCount,
+            wrong: wrongCount,
+            skipped: skippedCount,
+            stage1Points: stage1Points,
+            stage2Points: stage2Points,
+            penalty: penalty,
+            totalQuestions: 20,
+          }),
+        });
+        
+        if (response.ok) {
+          setSaveStatus("saved");
+        } else {
+          setSaveStatus("error");
+        }
+      } catch (error) {
+        console.error("Error saving results:", error);
+        setSaveStatus("error");
+      } finally {
+        setIsSaving(false);
+      }
+    };
+    
+    saveToDatabase();
+  }, []);
 
   return (
     <div style={{
@@ -797,7 +983,9 @@ function ResultsPage({
           <div style={{ fontSize: "1.6rem" }}>🚀</div>
           <div>
             <div style={{ fontFamily: RACING, fontSize: "1rem" }}>Logicology Test — Result Sheet</div>
-            <div style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.7)" }}>Computer Based Test | Final Scorecard</div>
+            <div style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.7)" }}>
+              {username} | Computer Based Test | Final Scorecard
+            </div>
           </div>
           <div style={{
             marginLeft: "auto",
@@ -810,6 +998,27 @@ function ResultsPage({
           </div>
         </div>
       </div>
+
+      {/* Save Status Indicator */}
+      {saveStatus !== "idle" && (
+        <div style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          background: saveStatus === "saved" ? "#059669" : saveStatus === "error" ? "#dc2626" : "#F5A623",
+          color: "#fff",
+          padding: "8px 16px",
+          borderRadius: 8,
+          fontSize: "0.8rem",
+          fontFamily: RACING,
+          zIndex: 1000,
+          animation: "slideIn 0.3s ease",
+        }}>
+          {saveStatus === "saving" && "💾 Saving results..."}
+          {saveStatus === "saved" && "✅ Results saved!"}
+          {saveStatus === "error" && "⚠️ Auto-save failed"}
+        </div>
+      )}
 
       <div style={{
         maxWidth: 900, margin: "0 auto", padding: "16px 14px 48px",
@@ -846,12 +1055,12 @@ function ResultsPage({
         {/* Summary cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12, marginBottom: 16 }}>
           {[
-            { label: "ATTEMPTED",   val: `${attempted}/20`, color: BRAND_TEAL },
-            { label: "CORRECT",     val: correct,           color: "#059669" },
-            { label: "WRONG",       val: wrong,             color: "#dc2626" },
-            { label: "SKIPPED",     val: skipped,           color: "#94a3b8" },
-            { label: "STAGE 1 PTS", val: s1pts > 0 ? `+${s1pts}` : s1pts, color: "#26a9e0" },
-            { label: "STAGE 2 PTS", val: s2pts > 0 ? `+${s2pts}` : s2pts, color: "#F5A623" },
+            { label: "ATTEMPTED",   val: `${attemptedCount}/20`, color: BRAND_TEAL },
+            { label: "CORRECT",     val: correctCount,           color: "#059669" },
+            { label: "WRONG",       val: wrongCount,             color: "#dc2626" },
+            { label: "SKIPPED",     val: skippedCount,           color: "#94a3b8" },
+            { label: "STAGE 1 PTS", val: stage1Points > 0 ? `+${stage1Points}` : stage1Points, color: "#26a9e0" },
+            { label: "STAGE 2 PTS", val: stage2Points > 0 ? `+${stage2Points}` : stage2Points, color: "#F5A623" },
             { label: "PENALTY",     val: `-${penalty}`,      color: "#dc2626" },
             { label: "TOTAL SCORE", val: score > 0 ? `+${score}` : score, color: gradeColor },
           ].map(({ label, val, color }) => (
@@ -954,7 +1163,7 @@ function ResultsPage({
 }
 
 // ─── Instructions Page ────────────────────────────────────────────────────────
-function InstructionsPage({ onStart }: { onStart: () => void }) {
+function InstructionsPage({ username, onStart }: { username: string; onStart: () => void }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVisible(true), 100); return () => clearTimeout(t); }, []);
 
@@ -974,7 +1183,9 @@ function InstructionsPage({ onStart }: { onStart: () => void }) {
         <h1 style={{ fontFamily: RACING, fontSize: "clamp(2rem,6vw,3rem)", color: BRAND_TEAL, margin: "8px 0 4px" }}>
           Logicology Test
         </h1>
-        <p style={{ color: BRAND_TEAL_DK, fontWeight: 600 }}>Speed Mathematics • Computer Based Test</p>
+        <p style={{ color: BRAND_TEAL_DK, fontWeight: 600 }}>
+          Welcome, {username}! • Speed Mathematics • Computer Based Test
+        </p>
       </div>
 
       <div style={{
@@ -1043,19 +1254,25 @@ function InstructionsPage({ onStart }: { onStart: () => void }) {
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function SpeedMathsTestPage() {
-  const [page,   setPage]   = useState<"splash" | "instructions" | "test" | "results">("splash");
+  const [page, setPage] = useState<"splash" | "username" | "instructions" | "test" | "results">("splash");
   const [result, setResult] = useState<{
     score: number; answers: Record<number, string>;
     questions: typeof QUESTIONS; timeUp: boolean; timeLeft: number;
   } | null>(null);
+  const [username, setUsername] = useState<string>("");
 
   if (page === "splash")
-    return <Splash onDone={() => setPage("instructions")} />;
+    return <Splash onDone={() => setPage("username")} />;
+  if (page === "username")
+    return <UsernamePage onSubmit={(name) => {
+      setUsername(name);
+      setPage("instructions");
+    }} />;
   if (page === "instructions")
-    return <InstructionsPage onStart={() => setPage("test")} />;
+    return <InstructionsPage username={username} onStart={() => setPage("test")} />;
   if (page === "test")
-    return <TestPage onSubmit={res => { setResult(res); setPage("results"); }} />;
+    return <TestPage onSubmit={(res) => { setResult(res); setPage("results"); }} />;
   if (page === "results" && result)
-    return <ResultsPage result={result} onRetry={() => setPage("test")} onMenu={() => setPage("instructions")} />;
+    return <ResultsPage result={result} username={username} onRetry={() => setPage("test")} onMenu={() => setPage("instructions")} />;
   return null;
 }
