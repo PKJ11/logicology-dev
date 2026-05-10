@@ -155,7 +155,7 @@ const QUESTION_SETS: Record<"A" | "B" | "C" | "D", QuestionDef[]> = {
     { display: "20% of 550 − 60% of 150",               answer: 20    },
   ],
   D: [
-    { display: "23 + 23 + 25 + 26 + 27",               answer: 124   },
+    { display: "23 + 24 + 25 + 26 + 27",               answer: 124   },
     { display: "78 + 23 + 14 + 57",                     answer: 172   },
     { display: "456 + 379",                             answer: 835   },
     { display: "13 + 68 + 9 + 37 + 16 + 24 + 62 + 19", answer: 248   },
@@ -1157,9 +1157,11 @@ function ResultsPage({
                 textAlign: "center", fontWeight: 600, fontSize: "0.8rem",
                 color: !item.attempted ? "#999" : item.correct ? "#059669" : "#dc2626",
               }}>
-                {item.attempted ? item.userAnswer : "—"}
+                {item.attempted
+                  ? (isNaN(Number(item.userAnswer)) ? item.userAnswer : Number(item.userAnswer).toFixed(2))
+                  : "—"}
               </div>
-              <div style={{ textAlign: "center", color: "#555", fontSize: "0.8rem" }}>{item.answer}</div>
+              <div style={{ textAlign: "center", color: "#555", fontSize: "0.8rem" }}>{Number(item.answer).toFixed(2)}</div>
               <div style={{
                 textAlign: "center", fontFamily: RACING, fontSize: "0.75rem",
                 color: !item.attempted ? "#999" : item.points > 0 ? "#059669" : "#dc2626",
