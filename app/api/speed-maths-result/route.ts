@@ -18,24 +18,24 @@ async function getClient() {
   return client;
 }
 
+// CHANGE 4: Updated DB structure — questionDetails stores full Q&A breakdown
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      username, 
-      score, 
-      answers, 
-      timeUsed, 
-      timeUp, 
-      attempted, 
-      correct, 
-      wrong, 
+    const {
+      username,
+      score,
+      timeUsed,
+      timeUp,
+      attempted,
+      correct,
+      wrong,
       skipped,
       stage1Points,
       stage2Points,
       penalty,
       totalQuestions,
-      questions
+      questionDetails, // Array of { questionId, questionText, userAnswer, correctAnswer, attempted, isCorrect, points, stage }
     } = body;
 
     // Validate required fields
@@ -46,7 +46,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate that test was completed (has score)
     if (score === undefined) {
       return NextResponse.json(
         { success: false, error: "Test data incomplete" },
@@ -54,31 +53,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = await getClient();
-    const db = client.db(DB_NAME);
+    const mongoClient = await getClient();
+    const db = mongoClient.db(DB_NAME);
     const collection = db.collection(COLLECTION_NAME);
 
-    // Prepare document for insertion
+    // CHANGE 4: New document structure with questionDetails array
     const resultDoc = {
       username: username.trim(),
       score: score,
-      answers: answers || {},
       timeUsed: timeUsed || 0,
       timeUp: timeUp || false,
-      attempted: attempted || 0,
-      correct: correct || 0,
-      wrong: wrong || 0,
-      skipped: skipped || 0,
-      stage1Points: stage1Points || 0,
-      stage2Points: stage2Points || 0,
-      penalty: penalty || 0,
-      totalQuestions: totalQuestions || 20,
-      questions: questions || [],
+      summary: {
+        attempted: attempted || 0,
+        correct: correct || 0,
+        wrong: wrong || 0,
+        skipped: skipped || 0,
+        stage1Points: stage1Points || 0,
+        stage2Points: stage2Points || 0,
+        penalty: penalty || 0,
+        totalQuestions: totalQuestions || 20,
+      },
+      // Each element: { questionId, questionText, userAnswer, correctAnswer, attempted, isCorrect, points, stage }
+      questionDetails: questionDetails || [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
-    // Insert the result
     const result = await collection.insertOne(resultDoc);
 
     return NextResponse.json({
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Optional: GET endpoint to fetch results for a user
+// GET endpoint to fetch results for a user
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -110,8 +110,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const client = await getClient();
-    const db = client.db(DB_NAME);
+    const mongoClient = await getClient();
+    const db = mongoClient.db(DB_NAME);
     const collection = db.collection(COLLECTION_NAME);
 
     const results = await collection
@@ -154,8 +154,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const client = await getClient();
-    const db = client.db(DB_NAME);
+    const mongoClient = await getClient();
+    const db = mongoClient.db(DB_NAME);
     const collection = db.collection(COLLECTION_NAME);
 
     await collection.deleteOne({ _id: new ObjectId(resultId) });
