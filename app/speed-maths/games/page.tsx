@@ -71,7 +71,7 @@ const GLOBAL_STYLES = `
 `;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type FilterCategory = "all" | "addition" | "subtraction" | "multiplication" | "mixed" | "friends";
+type FilterCategory = "all" | "addition" | "subtraction" | "table" | "mixed" | "friends";
 
 interface GameCard {
   id: string;
@@ -87,27 +87,27 @@ interface GameCard {
 const GAME_CARDS: GameCard[] = [
   {
     id: "g1",
-    title: "Speed Addition Challenge",
-    category: "addition",
-    badgeLabel: "Addition",
+    title: "Table Challenge",
+    category: "table",
+    badgeLabel: "Tabble",
     badgeColor: "#26a9e0",
     emoji: "➕",
     iframeSrc: "https://wordwall.net/embed/play/32103/509/199",
   },
   {
     id: "g2",
-    title: "Subtraction Blitz",
-    category: "subtraction",
-    badgeLabel: "Subtraction",
-    badgeColor: "#d93b60",
-    emoji: "➖",
+    title: "Addition Blitz",
+    category: "addition",
+    badgeLabel: "Addition",
+    badgeColor: "#26a9e0",
+    emoji: "➕",
     iframeSrc: "https://wordwall.net/embed/play/31980/661/871",
   },
   {
     id: "g3",
     title: "Times Tables Race",
-    category: "multiplication",
-    badgeLabel: "Multiplication",
+    category: "table",
+    badgeLabel: "Tables",
     badgeColor: "#84c341",
     emoji: "✖️",
     iframeSrc: "https://wordwall.net/embed/play/31980/549/816",
@@ -123,18 +123,18 @@ const GAME_CARDS: GameCard[] = [
   },
   {
     id: "g5",
-    title: "Quick Fire Addition",
-    category: "addition",
-    badgeLabel: "Addition",
-    badgeColor: "#26a9e0",
+    title: "Subtraction Sprint",
+    category: "subtraction",
+    badgeLabel: "Subtraction",
+    badgeColor: "#d93b60",
     emoji: "⚡",
     iframeSrc: "https://wordwall.net/embed/play/31980/303/737",
   },
   {
     id: "g6",
-    title: "Multiply Mayhem",
-    category: "multiplication",
-    badgeLabel: "Multiplication",
+    title: "Table Mayhem",
+    category: "table",
+    badgeLabel: "Tables",
     badgeColor: "#84c341",
     emoji: "🏆",
     iframeSrc: "https://wordwall.net/embed/play/31980/285/313",
@@ -154,7 +154,7 @@ const FILTER_TABS: { label: string; value: FilterCategory; emoji: string }[] = [
   { label: "All Games",       value: "all",            emoji: "🎮" },
   { label: "Addition",        value: "addition",       emoji: "➕" },
   { label: "Subtraction",     value: "subtraction",    emoji: "➖" },
-  { label: "Multiplication",  value: "multiplication", emoji: "✖️" },
+  { label: "Tables",          value: "table",          emoji: "✖️" },
   { label: "Mixed",           value: "mixed",          emoji: "🔀" },
 ];
 
