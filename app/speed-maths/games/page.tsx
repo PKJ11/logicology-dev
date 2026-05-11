@@ -265,7 +265,6 @@ export default function SpeedMathsGamesPage() {
   const [decoVisible,   setDecoVisible]   = useState(false);
   const [cloudsVisible, setCloudsVisible] = useState(false);
   const [isMobile,      setIsMobile]      = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -275,40 +274,19 @@ export default function SpeedMathsGamesPage() {
   }, []);
 
   useEffect(() => {
-    const username = prompt("Enter username:");
-    if (username === "admin") {
-      const password = prompt("Enter password:");
-      if (password === "pass123") {
-        setAuthenticated(true);
-      } else {
-        alert("Incorrect password!");
-        window.location.reload();
-      }
-    } else {
-      alert("Incorrect username!");
-      window.location.reload();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!authenticated) return;
     const t1 = setTimeout(() => setHeroVisible(true),  80);
     const t2 = setTimeout(() => setRocketVisible(true), 180);
     const t3 = setTimeout(() => setCardsVisible(true),  300);
     const t4 = setTimeout(() => setDecoVisible(true),   500);
     const t5 = setTimeout(() => setCloudsVisible(true), 650);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
-  }, [authenticated]);
+  }, []);
 
   const filteredCards = activeFilter === "all"
     ? GAME_CARDS
     : GAME_CARDS.filter((c) => c.category === activeFilter);
 
   const cloudSrc = isMobile ? CLOUDS_MOBILE_IMG : CLOUDS_IMG;
-
-  if (!authenticated) {
-    return null;
-  }
 
   return (
     <>
