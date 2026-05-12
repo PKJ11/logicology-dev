@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import NavBar from "@/components/NavBar";
+import SiteFooter from "@/components/Footer";
 
 // ── Scroll animation hook ──────────────────────────────────────────────────────
 function useReveal() {
@@ -26,60 +28,7 @@ function useReveal() {
   return { ref, visible };
 }
 
-// ── NavBar ────────────────────────────────────────────────────────────────────
-function NavBar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
-        <div className="flex justify-between py-3">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative h-auto w-[150px]">
-              <Image
-                src="https://ik.imagekit.io/pratik2002/logicology-logo_74-P-ICfG?updatedAt=1756257433107"
-                alt="Logicology Logo"
-                width={150}
-                height={60}
-                className="object-contain"
-              />
-            </div>
-          </Link>
-          <nav className="hidden items-center gap-6 font-heading text-sm text-slate-700 md:flex">
-            <Link
-              href="/summer2026"
-              className="relative flex items-center gap-1 py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-[#0A8A80] after:transition-transform after:duration-300 after:content-[''] hover:text-[#0A8A80] hover:after:scale-x-100"
-            >
-              ← Back to Summer 2026
-            </Link>
-          </nav>
-          <div className="flex items-center gap-5 text-slate-700">
-            <button
-              onClick={() => setMobileMenuOpen((s) => !s)}
-              className="p-2 text-2xl md:hidden"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
-      </div>
-      {mobileMenuOpen && (
-        <div className="border-t border-slate-200 bg-white md:hidden">
-          <div className="flex flex-col gap-4 px-4 py-4">
-            <Link
-              href="/summer2026"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1 text-[#0B3F44] hover:text-[#0A8A80]"
-            >
-              ← Back to Summer 2026
-            </Link>
-          </div>
-        </div>
-      )}
-    </header>
-  );
-}
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
@@ -816,6 +765,7 @@ export default function SummerQuizPage() {
       <HeroSection />
       <GamesSection />
       <CTAStrip />
+      <SiteFooter/>
     </>
   );
 }
