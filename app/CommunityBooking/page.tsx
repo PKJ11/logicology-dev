@@ -16,7 +16,7 @@ const firebaseConfig = {
   storageBucket: "logicology-1f4e9.firebasestorage.app",
   messagingSenderId: "459695194150",
   appId: "1:459695194150:web:6005630525769d5d0c26e7",
-  measurementId: "G-QJ8BT8V2YD"
+  measurementId: "G-QJ8BT8V2YD",
 };
 const firebaseApp = getApps().length
   ? getApps()[0]
@@ -25,14 +25,17 @@ const auth = getAuth(firebaseApp);
 
 /* ─── API helpers ───────────────────────────────────────────── */
 const API = "/api/communityoffline";
+
 async function apiFetch(path: string, opts?: RequestInit) {
   const res = await fetch(`${API}${path}`, {
+    // credentials: "include" ensures the httpOnly JWT cookie is always sent
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     ...opts,
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || "Request failed");
+    const e = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(e.error || "Request failed");
   }
   return res.json();
 }
@@ -41,19 +44,18 @@ async function apiFetch(path: string, opts?: RequestInit) {
 interface Session {
   _id: string;
   title: string;
-  date: string;          // ISO
+  date: string;
   time: string;
   venue: string;
   description: string;
   totalSeats: number;
-  bookedSeats: string[]; // array of phone numbers
+  bookedSeats: string[];
   isActive: boolean;
 }
 interface UserDoc {
   phone: string;
   tokens: number;
-  bookings: string[];    // session IDs
-  name?: string;
+  bookings: string[];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -62,12 +64,59 @@ interface UserDoc {
 export default function CommunityBooking() {
   const [user, setUser] = useState<UserDoc | null>(null);
   const [view, setView] = useState<"login" | "home" | "admin">("login");
-  const ADMIN_PHONE = "+919999999999"; // change to real admin phone
+  const [checkingSession, setCheckingSession] = useState(true);
+  const ADMIN_PHONE = "+919999999999";
+
+  // ── On mount: try to restore session from JWT cookie ──────────
+  useEffect(() => {
+    (async () => {
+      try {
+        // GET /api/communityoffline/auth verifies the httpOnly cookie
+        const u = await apiFetch("/auth");
+        setUser(u);
+        setView(u.phone === ADMIN_PHONE ? "admin" : "home");
+      } catch {
+        // No valid cookie → stay on login
+      } finally {
+        setCheckingSession(false);
+      }
+    })();
+  }, []);
 
   const handleLogin = (u: UserDoc) => {
     setUser(u);
     setView(u.phone === ADMIN_PHONE ? "admin" : "home");
   };
+
+  const handleSignOut = async () => {
+    try {
+      // DELETE /api/communityoffline/auth clears the httpOnly cookie server-side
+      await apiFetch("/auth", { method: "DELETE" });
+    } catch {
+      // best-effort
+    }
+    setUser(null);
+    setView("login");
+  };
+
+  // ── Loading screen while checking cookie ──────────────────────
+  if (checkingSession) {
+    return (
+      <div className="lc-root">
+        <style>{STYLES}</style>
+        <div className="lc-splash">
+          <div className="lc-splash-inner">
+            <span className="lc-logo">
+              <span className="lc-logo-dot" />
+              Logicology
+            </span>
+            <Spinner large />
+            <p className="lc-splash-text">Restoring your session…</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="lc-root">
@@ -83,10 +132,7 @@ export default function CommunityBooking() {
           <nav className="lc-nav-links">
             <span className="lc-nav-tag">Offline Community</span>
             {user && (
-              <button
-                className="lc-btn lc-btn-ghost"
-                onClick={() => { setUser(null); setView("login"); }}
-              >
+              <button className="lc-btn lc-btn-ghost" onClick={handleSignOut}>
                 Sign out
               </button>
             )}
@@ -156,13 +202,16 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
     setError("");
     setLoading(true);
     try {
+      // 1. Verify OTP with Firebase
       await confirmRef.current!.confirm(otp);
       const fullPhone = `+91${phone}`;
-      // Upsert user in DB
-      const userData = await apiFetch("/user", {
+
+      // 2. POST /auth — upserts user in MongoDB AND sets the 90-day JWT cookie
+      const { user: userData } = await apiFetch("/auth", {
         method: "POST",
         body: JSON.stringify({ phone: fullPhone }),
       });
+
       onLogin(userData);
     } catch (e: any) {
       setError(e.message || "Invalid OTP");
@@ -191,12 +240,16 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
                 maxLength={10}
                 placeholder="98XXXXXXXX"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/, ""))}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                 onKeyDown={(e) => e.key === "Enter" && sendOtp()}
               />
             </div>
             {error && <p className="lc-error">{error}</p>}
-            <button className="lc-btn lc-btn-primary" onClick={sendOtp} disabled={loading}>
+            <button
+              className="lc-btn lc-btn-primary"
+              onClick={sendOtp}
+              disabled={loading}
+            >
               {loading ? <Spinner /> : "Send OTP →"}
             </button>
           </div>
@@ -209,16 +262,24 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
               maxLength={6}
               placeholder="• • • • • •"
               value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/, ""))}
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
               onKeyDown={(e) => e.key === "Enter" && verifyOtp()}
             />
             {error && <p className="lc-error">{error}</p>}
-            <button className="lc-btn lc-btn-primary" onClick={verifyOtp} disabled={loading}>
+            <button
+              className="lc-btn lc-btn-primary"
+              onClick={verifyOtp}
+              disabled={loading}
+            >
               {loading ? <Spinner /> : "Verify & Enter →"}
             </button>
             <button
               className="lc-btn lc-btn-ghost"
-              onClick={() => { setStep("phone"); setOtp(""); setError(""); }}
+              onClick={() => {
+                setStep("phone");
+                setOtp("");
+                setError("");
+              }}
             >
               ← Change number
             </button>
@@ -229,7 +290,9 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
       {/* Decorative side panel */}
       <div className="lc-login-deco">
         <div className="lc-deco-rings">
-          {[1,2,3].map(i => <span key={i} className={`lc-ring lc-ring-${i}`} />)}
+          {[1, 2, 3].map((i) => (
+            <span key={i} className={`lc-ring lc-ring-${i}`} />
+          ))}
         </div>
         <div className="lc-deco-content">
           <p className="lc-deco-label">Your Token Balance</p>
@@ -239,6 +302,8 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
           <p className="lc-deco-feature">✦ 30 seats per session</p>
           <p className="lc-deco-feature">✦ 1 token per booking</p>
           <p className="lc-deco-feature">✦ Cancel anytime</p>
+          <div className="lc-deco-divider" />
+          <p className="lc-deco-feature">🔒 Session saved for 90 days</p>
         </div>
       </div>
     </div>
@@ -249,7 +314,10 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
    HOME PANEL — Sessions + Bookings
 ═══════════════════════════════════════════════════════════════ */
 function HomePanel({
-  user, setUser, onAdmin, adminPhone,
+  user,
+  setUser,
+  onAdmin,
+  adminPhone,
 }: {
   user: UserDoc;
   setUser: (u: UserDoc) => void;
@@ -277,14 +345,17 @@ function HomePanel({
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchSessions(); }, [fetchSessions]);
+  useEffect(() => {
+    fetchSessions();
+  }, [fetchSessions]);
 
   const book = async (sessionId: string) => {
     setBookingId(sessionId);
     try {
+      // Phone is taken from JWT on server — just pass sessionId
       const { user: updatedUser } = await apiFetch("/book", {
         method: "POST",
-        body: JSON.stringify({ phone: user.phone, sessionId }),
+        body: JSON.stringify({ sessionId }),
       });
       setUser(updatedUser);
       showToast("🎉 Seat booked successfully!");
@@ -298,9 +369,10 @@ function HomePanel({
   const cancel = async (sessionId: string) => {
     setBookingId(sessionId);
     try {
+      // Phone is taken from JWT on server — just pass sessionId
       const { user: updatedUser } = await apiFetch("/cancel", {
         method: "POST",
-        body: JSON.stringify({ phone: user.phone, sessionId }),
+        body: JSON.stringify({ sessionId }),
       });
       setUser(updatedUser);
       showToast("Booking cancelled. Token refunded.");
@@ -312,15 +384,14 @@ function HomePanel({
   };
 
   const upcoming = sessions.filter(
-    (s) => new Date(s.date) >= new Date(new Date().setHours(0,0,0,0))
+    (s) => new Date(s.date) >= new Date(new Date().setHours(0, 0, 0, 0))
   );
   const past = sessions.filter(
-    (s) => new Date(s.date) < new Date(new Date().setHours(0,0,0,0))
+    (s) => new Date(s.date) < new Date(new Date().setHours(0, 0, 0, 0))
   );
 
   return (
     <div className="lc-home">
-      {/* Toast */}
       {toast && <div className="lc-toast">{toast}</div>}
 
       {/* Header row */}
@@ -338,7 +409,10 @@ function HomePanel({
             <p className="lc-wallet-count">{user.tokens}</p>
           </div>
           {user.phone === adminPhone && (
-            <button className="lc-btn lc-btn-outline lc-admin-btn" onClick={onAdmin}>
+            <button
+              className="lc-btn lc-btn-outline lc-admin-btn"
+              onClick={onAdmin}
+            >
               Admin ↗
             </button>
           )}
@@ -346,7 +420,9 @@ function HomePanel({
       </div>
 
       {loading ? (
-        <div className="lc-center"><Spinner large /></div>
+        <div className="lc-center">
+          <Spinner large />
+        </div>
       ) : upcoming.length === 0 ? (
         <div className="lc-empty">
           <p className="lc-empty-icon">◎</p>
@@ -394,7 +470,13 @@ function HomePanel({
 
 /* ─── Session Card ──────────────────────────────────────────── */
 function SessionCard({
-  session, userPhone, tokens, onBook, onCancel, loading, isPast = false,
+  session,
+  userPhone,
+  tokens,
+  onBook,
+  onCancel,
+  loading,
+  isPast = false,
 }: {
   session: Session;
   userPhone: string;
@@ -413,18 +495,29 @@ function SessionCard({
 
   const dateObj = new Date(session.date);
   const dateStr = dateObj.toLocaleDateString("en-IN", {
-    weekday: "short", day: "numeric", month: "long", year: "numeric",
+    weekday: "short",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
-    <div className={`lc-card ${booked ? "lc-card-booked" : ""} ${isPast ? "lc-card-past" : ""}`}>
+    <div
+      className={`lc-card ${booked ? "lc-card-booked" : ""} ${
+        isPast ? "lc-card-past" : ""
+      }`}
+    >
       {booked && <span className="lc-card-badge">✓ Booked</span>}
-      {soldOut && !booked && <span className="lc-card-badge lc-badge-sold">Sold Out</span>}
+      {soldOut && !booked && (
+        <span className="lc-card-badge lc-badge-sold">Sold Out</span>
+      )}
 
       <div className="lc-card-body">
         <p className="lc-card-date">{dateStr}</p>
         <h3 className="lc-card-title">{session.title}</h3>
-        <p className="lc-card-time">🕐 {session.time} &nbsp;·&nbsp; 📍 {session.venue}</p>
+        <p className="lc-card-time">
+          🕐 {session.time} &nbsp;·&nbsp; 📍 {session.venue}
+        </p>
         {session.description && (
           <p className="lc-card-desc">{session.description}</p>
         )}
@@ -434,12 +527,13 @@ function SessionCard({
           <div className="lc-seat-bar">
             <div
               className="lc-seat-fill"
-              style={{ width: `${pct}%`, background: pct > 80 ? "#e45c48" : "#0a8a80" }}
+              style={{
+                width: `${pct}%`,
+                background: pct > 80 ? "#e45c48" : "#0a8a80",
+              }}
             />
           </div>
-          <p className="lc-seat-label">
-            {filled}/{total} seats filled
-          </p>
+          <p className="lc-seat-label">{filled}/{total} seats filled</p>
         </div>
 
         {/* Seat grid */}
@@ -451,8 +545,11 @@ function SessionCard({
               <div
                 key={i}
                 className={`lc-seat ${
-                  !occupant ? "lc-seat-free" :
-                  isMe ? "lc-seat-mine" : "lc-seat-taken"
+                  !occupant
+                    ? "lc-seat-free"
+                    : isMe
+                    ? "lc-seat-mine"
+                    : "lc-seat-taken"
                 }`}
                 title={isMe ? "Your seat" : occupant ? "Taken" : "Available"}
               />
@@ -472,9 +569,13 @@ function SessionCard({
               {loading ? <Spinner /> : "Cancel Booking"}
             </button>
           ) : soldOut ? (
-            <button className="lc-btn lc-btn-disabled" disabled>Fully Booked</button>
+            <button className="lc-btn lc-btn-disabled" disabled>
+              Fully Booked
+            </button>
           ) : noTokens ? (
-            <button className="lc-btn lc-btn-disabled" disabled>No Tokens Left</button>
+            <button className="lc-btn lc-btn-disabled" disabled>
+              No Tokens Left
+            </button>
           ) : (
             <button
               className="lc-btn lc-btn-primary"
@@ -500,17 +601,21 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
   const [toast, setToast] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const blank = {
+    title: "",
+    date: "",
+    time: "",
+    venue: "",
+    description: "",
+    totalSeats: "30",
+  };
+  const [form, setForm] = useState(blank);
+  const [editId, setEditId] = useState<string | null>(null);
+
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(""), 3500);
   };
-
-  // Form state
-  const blank = {
-    title: "", date: "", time: "", venue: "", description: "", totalSeats: "30",
-  };
-  const [form, setForm] = useState(blank);
-  const [editId, setEditId] = useState<string | null>(null);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -527,7 +632,9 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
 
   const saveSession = async () => {
     if (!form.title || !form.date || !form.time || !form.venue) {
@@ -573,11 +680,15 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
   };
 
   const toggleActive = async (s: Session) => {
-    await apiFetch(`/sessions/${s._id}`, {
-      method: "PUT",
-      body: JSON.stringify({ isActive: !s.isActive }),
-    });
-    fetchAll();
+    try {
+      await apiFetch(`/sessions/${s._id}`, {
+        method: "PUT",
+        body: JSON.stringify({ isActive: !s.isActive }),
+      });
+      fetchAll();
+    } catch (e: any) {
+      showToast(e.message);
+    }
   };
 
   const editSession = (s: Session) => {
@@ -594,12 +705,20 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
   };
 
   const addTokens = async (phone: string, amount: number) => {
-    await apiFetch("/user/tokens", {
-      method: "POST",
-      body: JSON.stringify({ phone, amount }),
-    });
-    showToast(`Added ${amount} tokens to ${phone}`);
-    fetchAll();
+    try {
+      await apiFetch("/user/tokens", {
+        method: "POST",
+        body: JSON.stringify({ phone, amount }),
+      });
+      showToast(
+        `${amount > 0 ? "+" : ""}${amount} token${
+          Math.abs(amount) !== 1 ? "s" : ""
+        } for ${phone}`
+      );
+      fetchAll();
+    } catch (e: any) {
+      showToast(e.message);
+    }
   };
 
   return (
@@ -607,7 +726,9 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
       {toast && <div className="lc-toast">{toast}</div>}
 
       <div className="lc-admin-header">
-        <button className="lc-btn lc-btn-ghost" onClick={onBack}>← Back</button>
+        <button className="lc-btn lc-btn-ghost" onClick={onBack}>
+          ← Back
+        </button>
         <h2 className="lc-page-title">Admin Console</h2>
         <div className="lc-admin-stats">
           <div className="lc-stat">
@@ -617,7 +738,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
             <span>{users.length}</span> Members
           </div>
           <div className="lc-stat">
-            <span>{sessions.filter(s => s.isActive).length}</span> Active
+            <span>{sessions.filter((s) => s.isActive).length}</span> Active
           </div>
         </div>
       </div>
@@ -628,9 +749,21 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
           <button
             key={t}
             className={`lc-tab ${tab === t ? "lc-tab-active" : ""}`}
-            onClick={() => { setTab(t); if (t !== "create") { setEditId(null); setForm(blank); } }}
+            onClick={() => {
+              setTab(t);
+              if (t !== "create") {
+                setEditId(null);
+                setForm(blank);
+              }
+            }}
           >
-            {t === "sessions" ? "📅 Sessions" : t === "users" ? "👥 Members" : editId ? "✏️ Edit Session" : "＋ New Session"}
+            {t === "sessions"
+              ? "📅 Sessions"
+              : t === "users"
+              ? "👥 Members"
+              : editId
+              ? "✏️ Edit Session"
+              : "＋ New Session"}
           </button>
         ))}
       </div>
@@ -638,7 +771,11 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
       {/* Sessions Tab */}
       {tab === "sessions" && (
         <div className="lc-admin-list">
-          {loading && <div className="lc-center"><Spinner large /></div>}
+          {loading && (
+            <div className="lc-center">
+              <Spinner large />
+            </div>
+          )}
           {!loading && sessions.length === 0 && (
             <div className="lc-empty">
               <p className="lc-empty-icon">◎</p>
@@ -646,32 +783,57 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
             </div>
           )}
           {sessions.map((s) => (
-            <div key={s._id} className={`lc-admin-row ${!s.isActive ? "lc-admin-row-inactive" : ""}`}>
+            <div
+              key={s._id}
+              className={`lc-admin-row ${
+                !s.isActive ? "lc-admin-row-inactive" : ""
+              }`}
+            >
               <div className="lc-admin-row-info">
                 <p className="lc-admin-row-title">{s.title}</p>
                 <p className="lc-admin-row-meta">
                   {new Date(s.date).toLocaleDateString("en-IN", {
-                    day: "numeric", month: "short", year: "numeric",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
                   })}
                   &nbsp;·&nbsp; {s.time} &nbsp;·&nbsp; {s.venue}
                 </p>
                 <div className="lc-admin-row-seats">
                   <div
                     className="lc-seat-fill-sm"
-                    style={{ width: `${(s.bookedSeats.length / s.totalSeats) * 100}%` }}
+                    style={{
+                      width: `${
+                        (s.bookedSeats.length / s.totalSeats) * 100
+                      }%`,
+                    }}
                   />
-                  <span>{s.bookedSeats.length}/{s.totalSeats} booked</span>
+                  <span>
+                    {s.bookedSeats.length}/{s.totalSeats} booked
+                  </span>
                 </div>
               </div>
               <div className="lc-admin-row-actions">
                 <button
-                  className={`lc-pill ${s.isActive ? "lc-pill-active" : "lc-pill-inactive"}`}
+                  className={`lc-pill ${
+                    s.isActive ? "lc-pill-active" : "lc-pill-inactive"
+                  }`}
                   onClick={() => toggleActive(s)}
                 >
                   {s.isActive ? "Active" : "Inactive"}
                 </button>
-                <button className="lc-btn lc-btn-sm" onClick={() => editSession(s)}>Edit</button>
-                <button className="lc-btn lc-btn-sm lc-btn-danger" onClick={() => deleteSession(s._id)}>Delete</button>
+                <button
+                  className="lc-btn lc-btn-sm"
+                  onClick={() => editSession(s)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="lc-btn lc-btn-sm lc-btn-danger"
+                  onClick={() => deleteSession(s._id)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -681,20 +843,41 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
       {/* Users Tab */}
       {tab === "users" && (
         <div className="lc-admin-list">
-          {loading && <div className="lc-center"><Spinner large /></div>}
+          {loading && (
+            <div className="lc-center">
+              <Spinner large />
+            </div>
+          )}
           {users.map((u) => (
             <div key={u.phone} className="lc-admin-row">
               <div className="lc-admin-row-info">
                 <p className="lc-admin-row-title">{u.phone}</p>
                 <p className="lc-admin-row-meta">
                   {u.bookings?.length || 0} bookings &nbsp;·&nbsp;
-                  <strong style={{ color: "#0a8a80" }}>{u.tokens} tokens</strong>
+                  <strong style={{ color: "#0a8a80" }}>
+                    {u.tokens} tokens
+                  </strong>
                 </p>
               </div>
               <div className="lc-admin-row-actions">
-                <button className="lc-btn lc-btn-sm" onClick={() => addTokens(u.phone, 5)}>+5 Tokens</button>
-                <button className="lc-btn lc-btn-sm" onClick={() => addTokens(u.phone, 10)}>+10 Tokens</button>
-                <button className="lc-btn lc-btn-sm lc-btn-danger" onClick={() => addTokens(u.phone, -1)}>–1 Token</button>
+                <button
+                  className="lc-btn lc-btn-sm"
+                  onClick={() => addTokens(u.phone, 5)}
+                >
+                  +5 Tokens
+                </button>
+                <button
+                  className="lc-btn lc-btn-sm"
+                  onClick={() => addTokens(u.phone, 10)}
+                >
+                  +10 Tokens
+                </button>
+                <button
+                  className="lc-btn lc-btn-sm lc-btn-danger"
+                  onClick={() => addTokens(u.phone, -1)}
+                >
+                  –1 Token
+                </button>
               </div>
             </div>
           ))}
@@ -705,7 +888,9 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
       {tab === "create" && (
         <div className="lc-form-wrap">
           <div className="lc-form">
-            <h3 className="lc-form-title">{editId ? "Edit Session" : "Create New Session"}</h3>
+            <h3 className="lc-form-title">
+              {editId ? "Edit Session" : "Create New Session"}
+            </h3>
 
             <div className="lc-form-grid">
               <div className="lc-field">
@@ -752,7 +937,9 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                   min={1}
                   max={30}
                   value={form.totalSeats}
-                  onChange={(e) => setForm({ ...form, totalSeats: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, totalSeats: e.target.value })
+                  }
                 />
               </div>
               <div className="lc-field lc-field-full">
@@ -761,7 +948,9 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                   className="lc-input lc-textarea"
                   placeholder="Briefly describe this session…"
                   value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -772,12 +961,22 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                 onClick={saveSession}
                 disabled={loading}
               >
-                {loading ? <Spinner /> : editId ? "Update Session" : "Create Session"}
+                {loading ? (
+                  <Spinner />
+                ) : editId ? (
+                  "Update Session"
+                ) : (
+                  "Create Session"
+                )}
               </button>
               {editId && (
                 <button
                   className="lc-btn lc-btn-ghost"
-                  onClick={() => { setEditId(null); setForm(blank); setTab("sessions"); }}
+                  onClick={() => {
+                    setEditId(null);
+                    setForm(blank);
+                    setTab("sessions");
+                  }}
                 >
                   Cancel
                 </button>
@@ -818,6 +1017,19 @@ const STYLES = `
     background: var(--bg);
     min-height: 100vh;
     color: var(--ink);
+  }
+
+  /* ── SPLASH ── */
+  .lc-splash {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+  }
+  .lc-splash-inner {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  .lc-splash-text {
+    font-size: 0.88rem; color: var(--ink-light); font-weight: 500; margin: 0;
   }
 
   /* NAV */
@@ -1011,13 +1223,10 @@ const STYLES = `
   .lc-seat-fill { height: 100%; border-radius: 2px; transition: width 0.6s; }
   .lc-seat-label { font-size: 0.78rem; color: var(--ink-light); font-weight: 500; }
 
-  /* Seat grid */
   .lc-seat-grid {
     display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-bottom: 4px;
   }
-  .lc-seat {
-    aspect-ratio: 1; border-radius: 3px;
-  }
+  .lc-seat { aspect-ratio: 1; border-radius: 3px; }
   .lc-seat-free { background: rgba(10,138,128,0.15); }
   .lc-seat-taken { background: rgba(228,92,72,0.25); }
   .lc-seat-mine { background: var(--teal); }
@@ -1031,7 +1240,6 @@ const STYLES = `
   .lc-section-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 16px; }
 
   /* ADMIN */
-  .lc-admin { }
   .lc-admin-header {
     display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 32px;
   }
@@ -1102,7 +1310,7 @@ const STYLES = `
   }
   @keyframes toastIn {
     from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
   /* SPINNER */
