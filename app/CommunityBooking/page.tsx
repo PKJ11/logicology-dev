@@ -301,7 +301,6 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
           <div className="lc-deco-divider" />
           <p className="lc-deco-feature">✦ 30 seats per session</p>
           <p className="lc-deco-feature">✦ 1 token per booking</p>
-          <p className="lc-deco-feature">✦ Cancel anytime</p>
           <div className="lc-deco-divider" />
           <p className="lc-deco-feature">🔒 Session saved for 90 days</p>
         </div>
@@ -366,22 +365,7 @@ function HomePanel({
     setBookingId(null);
   };
 
-  const cancel = async (sessionId: string) => {
-    setBookingId(sessionId);
-    try {
-      // Phone is taken from JWT on server — just pass sessionId
-      const { user: updatedUser } = await apiFetch("/cancel", {
-        method: "POST",
-        body: JSON.stringify({ sessionId }),
-      });
-      setUser(updatedUser);
-      showToast("Booking cancelled. Token refunded.");
-      fetchSessions();
-    } catch (e: any) {
-      showToast(`✗ ${e.message}`);
-    }
-    setBookingId(null);
-  };
+
 
   const upcoming = sessions.filter(
     (s) => new Date(s.date) >= new Date(new Date().setHours(0, 0, 0, 0))
@@ -438,7 +422,6 @@ function HomePanel({
               userPhone={user.phone}
               tokens={user.tokens}
               onBook={book}
-              onCancel={cancel}
               loading={bookingId === s._id}
             />
           ))}
@@ -456,7 +439,6 @@ function HomePanel({
                 userPhone={user.phone}
                 tokens={user.tokens}
                 onBook={book}
-                onCancel={cancel}
                 loading={bookingId === s._id}
                 isPast
               />
@@ -474,7 +456,6 @@ function SessionCard({
   userPhone,
   tokens,
   onBook,
-  onCancel,
   loading,
   isPast = false,
 }: {
@@ -482,7 +463,6 @@ function SessionCard({
   userPhone: string;
   tokens: number;
   onBook: (id: string) => void;
-  onCancel: (id: string) => void;
   loading: boolean;
   isPast?: boolean;
 }) {
@@ -561,12 +541,8 @@ function SessionCard({
       {!isPast && (
         <div className="lc-card-footer">
           {booked ? (
-            <button
-              className="lc-btn lc-btn-cancel"
-              onClick={() => onCancel(session._id)}
-              disabled={loading}
-            >
-              {loading ? <Spinner /> : "Cancel Booking"}
+            <button className="lc-btn lc-btn-disabled" disabled>
+              ✓ Booked
             </button>
           ) : soldOut ? (
             <button className="lc-btn lc-btn-disabled" disabled>
@@ -1087,10 +1063,7 @@ const STYLES = `
     background: transparent; color: var(--teal); border: 1.5px solid var(--teal);
   }
   .lc-btn-outline:hover { background: rgba(10,138,128,0.06); }
-  .lc-btn-cancel {
-    background: rgba(228,92,72,0.08); color: var(--coral); border: 1.5px solid rgba(228,92,72,0.2);
-  }
-  .lc-btn-cancel:hover { background: rgba(228,92,72,0.16); }
+
   .lc-btn-disabled {
     background: #e0e4e8; color: #9aacb0; cursor: not-allowed;
   }
