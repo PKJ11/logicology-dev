@@ -24,7 +24,7 @@ const firebaseApp = getApps().length
 const auth = getAuth(firebaseApp);
 
 /* ─── API helpers ───────────────────────────────────────────── */
-const API = "/api/community";
+const API = "/api/communityoffline";
 async function apiFetch(path: string, opts?: RequestInit) {
   const res = await fetch(`${API}${path}`, {
     headers: { "Content-Type": "application/json" },
