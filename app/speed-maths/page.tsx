@@ -237,13 +237,6 @@ function HalfTableQuiz({ bg, light, dark, onNext }:{bg:string;light:string;dark:
   const restart=()=>{ setAttempted(0); setCorrect(0); setInputVal(""); setFeedback(null); setDone(false); };
   const refTable=[[0,0],[1,0],[2,1],[3,1],[4,2],[5,2],[6,3],[7,3],[8,4],[9,4]];
 
-  function getFriend100Trick(num: number): string {
-  const tens = Math.floor(num / 10);
-  const units = num % 10;
-  const friendOf9 = 9 - tens;
-  const friendOf10 = 10 - units;
-  return `${tens}→${friendOf9} (9's friend), ${units}→${friendOf10} (10's friend) → ${friendOf9}${friendOf10}`;
-} 
   if(done) {
     const pct=Math.round((correct/TOTAL)*100);
     return (
@@ -1522,10 +1515,19 @@ export default function SpeedMathsPage() {
 
   const timerRef      = useRef<ReturnType<typeof setInterval>|null>(null);
   const totalTimerRef = useRef<ReturnType<typeof setInterval>|null>(null);
-  const stopTimers = useCallback(()=>{
-    if(timerRef.current)      clearInterval(timerRef.current);
-    if(totalTimerRef.current) clearInterval(totalTimerRef.current);
-  },[]);
+  const isTransitioning = useRef(false);
+  
+  // Enhanced stopTimers to ensure complete cleanup
+  const stopTimers = useCallback(() => {
+    if(timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if(totalTimerRef.current) {
+      clearInterval(totalTimerRef.current);
+      totalTimerRef.current = null;
+    }
+  }, []);
 
   const cloudImage = useCloudImage();
 
@@ -1543,44 +1545,178 @@ export default function SpeedMathsPage() {
     }
   },[gameState]);
 
-  const beginGame = useCallback(()=>{
-    const q=generateQuestion(challenge);
-    setQuestion(q);setScore(0);setStreak(0);setLevel(1);
-    setFeedback(null);setTypedAnswer("");setQuestionsLeft(10);setTotalTime(0);
-    setGameState("playing");stopTimers();
-    if(timeMode==="timed"){
+  const beginGame = useCallback(() => {
+    // Clean up any existing timers before starting new game
+    stopTimers();
+    isTransitioning.current = false;
+    setFeedback(null);
+    
+    const q = generateQuestion(challenge);
+    setQuestion(q);
+    setScore(0);
+    setStreak(0);
+    setLevel(1);
+    setTypedAnswer("");
+    setQuestionsLeft(10);
+    setTotalTime(0);
+    setGameState("playing");
+    
+    if(timeMode === "timed") {
       setTimeLeft(secondsPerQ);
-      timerRef.current=setInterval(()=>{
-        setTimeLeft(t=>{
-          if(t<=1){
-            clearInterval(timerRef.current!);setFeedback("incorrect");setStreak(0);
-            setTimeout(()=>{
-              setQuestion(generateQuestion(challenge));setTimeLeft(secondsPerQ);setFeedback(null);setTypedAnswer("");
-              timerRef.current=setInterval(()=>setTimeLeft(tt=>tt-1),1000);
-            },1400);
-            return 0;
+      
+      // Create a recursive function for timer management
+      const startNewTimer = (remainingSeconds: number) => {
+        // Clear any existing timer
+        if(timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        
+        let remaining = remainingSeconds;
+        timerRef.current = setInterval(() => {
+          if(isTransitioning.current) return;
+          
+          remaining--;
+          setTimeLeft(remaining);
+          
+          if(remaining <= 0) {
+            // Clear this timer
+            if(timerRef.current) {
+              clearInterval(timerRef.current);
+              timerRef.current = null;
+            }
+            
+            // Time's up - show incorrect and load next question
+            if(!isTransitioning.current && !feedback) {
+              isTransitioning.current = true;
+              setFeedback("incorrect");
+              setStreak(0);
+              
+              setTimeout(() => {
+                // Reset transitioning flag
+                isTransitioning.current = false;
+                setFeedback(null);
+                
+                // Generate new question
+                const nextQuestion = generateQuestion(challenge);
+                setQuestion(nextQuestion);
+                setTypedAnswer("");
+                
+                // Start timer for new question
+                setTimeLeft(secondsPerQ);
+                startNewTimer(secondsPerQ);
+              }, 1400);
+            }
           }
-          return t-1;
-        });
-      },1000);
-    }else{ totalTimerRef.current=setInterval(()=>setTotalTime(t=>t+1),1000); }
-  },[challenge,timeMode,secondsPerQ,stopTimers]);
+        }, 1000);
+      };
+      
+      // Start the first timer
+      startNewTimer(secondsPerQ);
+    } else {
+      // Fixed questions mode
+      totalTimerRef.current = setInterval(() => {
+        setTotalTime(t => t + 1);
+      }, 1000);
+    }
+  }, [challenge, timeMode, secondsPerQ, stopTimers, feedback]);
 
-  const handleAnswer = useCallback((chosen:number|string)=>{
-    if(!question||feedback) return;
-    const userAns=typeof chosen==="string"?parseFloat(chosen):chosen;
-    const correct=Math.abs(userAns-question.answer)<0.01;
-    setFeedback(correct?"correct":"incorrect");
-    if(correct){setScore(s=>s+10+streak*2);setStreak(s=>{const ns=s+1;if(ns%5===0)setLevel(l=>l+1);return ns;});}
-    else{setStreak(0);}
-    setTimeout(()=>{
-      if(timeMode==="fixed-questions"){const next=questionsLeft-1;if(next<=0){stopTimers();setGameState("result");return;}setQuestionsLeft(next);}
-      setQuestion(generateQuestion(challenge));setFeedback(null);setTypedAnswer("");
-      if(timeMode==="timed")setTimeLeft(secondsPerQ);
-    },1200);
-  },[question,feedback,streak,timeMode,questionsLeft,challenge,secondsPerQ,stopTimers]);
+  const handleAnswer = useCallback((chosen: number | string) => {
+    if (!question || feedback || isTransitioning.current) return;
+    
+    const userAns = typeof chosen === "string" ? parseFloat(chosen) : chosen;
+    const correct = Math.abs(userAns - question.answer) < 0.01;
+    
+    setFeedback(correct ? "correct" : "incorrect");
+    isTransitioning.current = true;
+    
+    if(correct) {
+      setScore(s => s + 10 + streak * 2);
+      setStreak(s => {
+        const ns = s + 1;
+        if(ns % 5 === 0) setLevel(l => l + 1);
+        return ns;
+      });
+    } else {
+      setStreak(0);
+    }
+    
+    // Clear timer immediately when answering
+    if(timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
+    // Create a recursive timer function for next question
+    const startNextQuestionTimer = (remainingSeconds: number) => {
+      if(timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      
+      let remaining = remainingSeconds;
+      timerRef.current = setInterval(() => {
+        if(isTransitioning.current) return;
+        
+        remaining--;
+        setTimeLeft(remaining);
+        
+        if(remaining <= 0) {
+          if(timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          
+          // Time's up for the next question
+          if(!isTransitioning.current && !feedback) {
+            isTransitioning.current = true;
+            setFeedback("incorrect");
+            setStreak(0);
+            
+            setTimeout(() => {
+              isTransitioning.current = false;
+              setFeedback(null);
+              const nextQuestion = generateQuestion(challenge);
+              setQuestion(nextQuestion);
+              setTypedAnswer("");
+              setTimeLeft(secondsPerQ);
+              startNextQuestionTimer(secondsPerQ);
+            }, 1400);
+          }
+        }
+      }, 1000);
+    };
+    
+    setTimeout(() => {
+      if(timeMode === "fixed-questions") {
+        const next = questionsLeft - 1;
+        if(next <= 0) {
+          stopTimers();
+          setGameState("result");
+          return;
+        }
+        setQuestionsLeft(next);
+        const nextQuestion = generateQuestion(challenge);
+        setQuestion(nextQuestion);
+        setFeedback(null);
+        setTypedAnswer("");
+        isTransitioning.current = false;
+      } else {
+        // Timed mode - load next question and start timer
+        const nextQuestion = generateQuestion(challenge);
+        setQuestion(nextQuestion);
+        setFeedback(null);
+        setTypedAnswer("");
+        isTransitioning.current = false;
+        setTimeLeft(secondsPerQ);
+        startNextQuestionTimer(secondsPerQ);
+      }
+    }, 1200);
+  }, [question, feedback, streak, timeMode, questionsLeft, challenge, secondsPerQ, stopTimers]);
 
-  useEffect(()=>()=>stopTimers(),[stopTimers]);
+  useEffect(() => {
+    return () => stopTimers();
+  }, [stopTimers]);
 
   const gameBg="linear-gradient(160deg,#f0fdf9 0%,#fff 60%,#e8f9f8 100%)";
   const CHALLENGES=Object.keys(CHALLENGE_COLORS) as Challenge[];
