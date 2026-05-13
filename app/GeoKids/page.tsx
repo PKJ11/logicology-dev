@@ -79,8 +79,8 @@ function shuffle(arr: string[]): string[] {
   return a;
 }
 
-function Stars({ score, total }: { score: number; total: number }) {
-  const pct = score / total;
+function Stars({ correct, total }: { correct: number; total: number }) {
+  const pct = correct / total;
   const stars = pct >= 0.85 ? 3 : pct >= 0.6 ? 2 : pct >= 0.3 ? 1 : 0;
   return (
     <div style={{ display: "flex", gap: 6, justifyContent: "center", fontSize: 44, marginBottom: 8 }}>
@@ -95,7 +95,10 @@ export default function GeoKids() {
   const [screen, setScreen] = useState<ScreenType>("menu");
   const [countries, setCountries] = useState<string[]>([]);
   const [roundIdx, setRoundIdx] = useState<number>(0);
-  const [score, setScore] = useState<number>(0);
+  // correctAnswers: how many countries correctly identified (max = ROUNDS)
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0);
+  // bonusPoints: extra points earned via streak (for fun display only)
+  const [bonusPoints, setBonusPoints] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(ROUND_TIME);
   const [status, setStatus] = useState<StatusType>("playing");
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
@@ -108,9 +111,9 @@ export default function GeoKids() {
   const currentCountry = countries[roundIdx];
 
   const clearTimer = () => {
-    if (timerRef.current) { 
-      clearInterval(timerRef.current); 
-      timerRef.current = null; 
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
   };
 
@@ -152,7 +155,8 @@ export default function GeoKids() {
     const picked = shuffle(COUNTRY_LIST).slice(0, ROUNDS);
     setCountries(picked);
     setRoundIdx(0);
-    setScore(0);
+    setCorrectAnswers(0);
+    setBonusPoints(0);
     setTimeLeft(ROUND_TIME);
     setStatus("playing");
     setStreak(0);
@@ -168,8 +172,12 @@ export default function GeoKids() {
     if (normalized === currentCountry) {
       clearTimer();
       const newStreak = streak + 1;
-      const bonus = newStreak >= 3 ? 2 : 1;
-      setScore((s) => s + bonus);
+      // correctAnswers always increments by exactly 1 — no bonus inflation
+      setCorrectAnswers((c) => c + 1);
+      // streak bonus tracked separately so score display stays honest
+      if (newStreak >= 3) {
+        setBonusPoints((b) => b + 1); // +1 bonus on top of the correct answer
+      }
       setStreak(newStreak);
       setBestStreak((b) => Math.max(b, newStreak));
       setStatus("correct");
@@ -233,13 +241,13 @@ export default function GeoKids() {
               boxShadow: "0 8px 32px #3b82f655",
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
-            onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => { 
-              e.currentTarget.style.transform = "translateY(-4px) scale(1.04)"; 
-              e.currentTarget.style.boxShadow = "0 16px 48px #3b82f677"; 
+            onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.currentTarget.style.transform = "translateY(-4px) scale(1.04)";
+              e.currentTarget.style.boxShadow = "0 16px 48px #3b82f677";
             }}
-            onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => { 
-              e.currentTarget.style.transform = "none"; 
-              e.currentTarget.style.boxShadow = "0 8px 32px #3b82f655"; 
+            onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.currentTarget.style.transform = "none";
+              e.currentTarget.style.boxShadow = "0 8px 32px #3b82f655";
             }}
           >
             🚀 Let's Play!
@@ -255,8 +263,8 @@ export default function GeoKids() {
 
   // ── RESULT ────────────────────────────────────────────────────────────────────
   if (screen === "result") {
-    const pct = Math.round((score / ROUNDS) * 100);
-    const msg = pct >= 85 ? "Amazing Explorer! 🎉" : pct >= 60 ? "Great job! 🎊" : pct >= 30 ? "Keep exploring! 💪" : "Try again! 🌱";
+    const accuracy = Math.round((correctAnswers / ROUNDS) * 100); // always 0–100%
+    const msg = accuracy >= 85 ? "Amazing Explorer! 🎉" : accuracy >= 60 ? "Great job! 🎊" : accuracy >= 30 ? "Keep exploring! 💪" : "Try again! 🌱";
     return (
       <div style={{
         minHeight: "100vh",
@@ -269,7 +277,7 @@ export default function GeoKids() {
           <h2 style={{ margin: "0 0 8px", fontSize: 44, fontWeight: 900, color: "#1e293b" }}>Game Over!</h2>
           <p style={{ margin: "0 0 20px", color: "#64748b", fontSize: 24, fontWeight: 800 }}>{msg}</p>
 
-          <Stars score={score} total={ROUNDS} />
+          <Stars correct={correctAnswers} total={ROUNDS} />
 
           <div style={{
             background: "white", borderRadius: 28, padding: "28px 36px",
@@ -277,9 +285,33 @@ export default function GeoKids() {
             border: "2px solid #e0f2fe",
           }}>
             {[
-              { label: "Score", value: `${score} / ${ROUNDS}`, icon: "🎯", color: "#3b82f6" },
-              { label: "Accuracy", value: `${pct}%`, icon: "📊", color: "#8b5cf6" },
-              { label: "Best Streak", value: `${bestStreak} 🔥`, icon: "⚡", color: "#f59e0b" },
+              {
+                label: "Score",
+                // correctAnswers out of ROUNDS — never exceeds total
+                value: `${correctAnswers} / ${ROUNDS}`,
+                icon: "🎯",
+                color: "#3b82f6",
+              },
+              {
+                label: "Accuracy",
+                // based on correct answers only, caps at 100%
+                value: `${accuracy}%`,
+                icon: "📊",
+                color: "#8b5cf6",
+              },
+              {
+                label: "Bonus Points",
+                // streak bonuses shown separately so they're transparent
+                value: bonusPoints > 0 ? `+${bonusPoints} 🔥` : "—",
+                icon: "⚡",
+                color: "#f59e0b",
+              },
+              {
+                label: "Best Streak",
+                value: `${bestStreak} 🔥`,
+                icon: "🌟",
+                color: "#ea580c",
+              },
             ].map(({ label, value, icon, color }, idx, arr) => (
               <div key={label} style={{
                 display: "flex", alignItems: "center", gap: 14,
@@ -356,11 +388,12 @@ export default function GeoKids() {
           }}>🔥 ×{streak}</div>
         )}
 
+        {/* Show correct answers / total during gameplay — always honest */}
         <div style={{
           background: "#eff6ff", color: "#3b82f6", fontWeight: 900,
           fontSize: 20, padding: "7px 18px", borderRadius: 99,
           border: "2px solid #bfdbfe",
-        }}>⭐ {score}</div>
+        }}>⭐ {correctAnswers}/{ROUNDS}</div>
       </div>
 
       {/* CHALLENGE BANNER */}
@@ -378,7 +411,7 @@ export default function GeoKids() {
         {status === "correct" ? (
           <div>
             <div style={{ fontSize: 28, fontWeight: 900, color: "#16a34a" }}>
-              ✅ Found it! {streak >= 2 ? `+2 pts 🔥 Streak ×${streak}!` : "+1 point!"}
+              ✅ Found it! {streak >= 3 ? `🔥 Streak ×${streak} — Bonus point!` : ""}
             </div>
             {showFact && (
               <div style={{ fontSize: 17, color: "#166534", marginTop: 6, fontWeight: 700 }}>✨ {fact}</div>
