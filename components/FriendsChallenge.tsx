@@ -44,7 +44,12 @@ function generateFriendPair(base: FriendBase): FriendPair {
     const a = rand(1, 9);
     return { a, b: 10 - a };
   }
-  const a = rand(11, 89);
+  // For base 100: exclude multiples of 10
+  let a = rand(11, 89);
+  // Keep generating until a is not a multiple of 10 AND b is not a multiple of 10
+  while (a % 10 === 0 || (100 - a) % 10 === 0) {
+    a = rand(11, 89);
+  }
   return { a, b: 100 - a };
 }
 
@@ -77,12 +82,14 @@ function FriendPanel({
   const [pair,     setPair]     = useState<FriendPair>(() => generateFriendPair(base));
   const [options,  setOptions]  = useState<number[]>(() => generateOptions(generateFriendPair(base).b, base));
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
+  const [inputValue, setInputValue] = useState<string>("");
 
   const next = useCallback(() => {
     const newPair = generateFriendPair(base);
     setPair(newPair);
     setOptions(generateOptions(newPair.b, base));
     setFeedback(null);
+    setInputValue("");
   }, [base]);
 
   const handleAnswer = (chosen: number) => {
@@ -91,6 +98,30 @@ function FriendPanel({
     setFeedback(correct ? "correct" : "wrong");
     onScore(correct);
     setTimeout(next, 1000);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // maxLength and pattern will handle the restriction on the input level
+    // but we still validate here to be safe
+    if (/^[0-9]?$/.test(value)) {
+      setInputValue(value);
+    }
+  };
+
+  const handleInputSubmit = () => {
+    if (feedback) return;
+    if (!inputValue) return;
+    const chosen = parseInt(inputValue, 10);
+    if (!isNaN(chosen)) {
+      handleAnswer(chosen);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputSubmit();
+    }
   };
 
   const borderCol =
@@ -164,13 +195,73 @@ function FriendPanel({
         )}
       </div>
 
-      {/* Options */}
+      {/* Input Field for Single Digit */}
+      <div style={{
+        display: "flex",
+        gap: 10,
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={1}
+          pattern="[0-9]*"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          disabled={!!feedback}
+          placeholder="?"
+          style={{
+            width: "80px",
+            padding: "12px",
+            fontSize: "1.6rem",
+            fontFamily: RACING,
+            textAlign: "center",
+            border: `2.5px solid ${bg}55`,
+            borderRadius: 14,
+            background: light,
+            color: BRAND_TEAL_DK,
+            outline: "none",
+          }}
+        />
+        <button
+          onClick={handleInputSubmit}
+          disabled={!!feedback || !inputValue}
+          style={{
+            background: bg,
+            border: "none",
+            borderRadius: 14,
+            padding: "12px 24px",
+            fontFamily: OUTFIT,
+            fontWeight: 700,
+            fontSize: "1rem",
+            color: "#fff",
+            cursor: (!feedback && inputValue) ? "pointer" : "not-allowed",
+            opacity: (!feedback && inputValue) ? 1 : 0.5,
+            transition: "transform 0.15s",
+          }}
+          onMouseEnter={e => {
+            if (!feedback && inputValue) {
+              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
+            }
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+          }}
+        >
+          Submit
+        </button>
+      </div>
+
+      {/* Options Buttons */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: 10,
         opacity: feedback ? 0.5 : 1,
         transition: "opacity 0.2s",
+        marginTop: 4,
       }}>
         {options.map(opt => (
           <button

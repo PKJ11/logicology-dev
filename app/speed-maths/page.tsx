@@ -268,7 +268,7 @@ function HalfTableQuiz({ bg, light, dark, onNext }:{bg:string;light:string;dark:
         style={{borderColor:feedback==="correct"?"#22c55e":feedback==="wrong"?"#ef4444":bg}}>
         <p className="font-semibold mb-1 text-sm" style={{color:bg,fontFamily:OUTFIT}}>Table half of</p>
         <div className="text-8xl my-3" style={{color:bg,fontFamily:RACING}}>{currentDigit}</div>
-        <input ref={inputRef} type="number" min={0} max={4} value={inputVal}
+        <input ref={inputRef} type="text" inputMode="numeric" maxLength={2} pattern="[0-9]*" value={inputVal}
           onChange={e=>{if(!feedback) setInputVal(e.target.value);}}
           onKeyDown={handleKey} disabled={!!feedback} placeholder="?"
           className="w-32 text-center rounded-2xl py-3 outline-none transition-all mb-3"
@@ -477,7 +477,7 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
         <div className="flex gap-2 justify-center">
           {digits.map((_, i) =>
             phase === "step1" ? (
-              <input key={i} type="number" min={0} max={4}
+              <input key={i} type="text" inputMode="numeric" maxLength={2} pattern="[0-9]*"
                 value={userStep1[i] ?? ""}
                 onChange={e => upS1(i, e.target.value)}
                 style={{
@@ -669,7 +669,7 @@ function Half3StepInteractive({ practiceNum, onComplete, onNewNumber, bg, light,
                       {phase === "done" ? (
                         <div style={{ ...baseCell("#22c55e", "#f0fdf4"), width: 40, fontSize: 18, color: "#15803d" }}>5</div>
                       ) : (
-                        <input type="number" min={0} max={9}
+                        <input type="text" inputMode="numeric" maxLength={1} pattern="[0-9]*"
                           value={step3DecimalVal}
                           onChange={e => setStep3DecimalVal(e.target.value)}
                           style={{
@@ -759,7 +759,7 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
             style={{border:`3px solid ${bg}`,background:"#f0fdf4",color:"#15803d",minWidth:wide?90:64,fontFamily:RACING,fontSize:"1.3rem"}}>
             {confirmedValue}
           </div>
-          : <input ref={ref} type="number" value={value} onChange={e=>!locked&&onChange(e.target.value)}
+          : <input ref={ref} type="text" inputMode="numeric" maxLength={3} pattern="[0-9]*" value={value} onChange={e=>!locked&&onChange(e.target.value)}
             onKeyDown={e=>e.key==="Enter"&&!locked&&onSubmit()} disabled={locked} placeholder={placeholder}
             className="rounded-2xl h-14 text-center outline-none transition-all w-full"
             style={{border:`3px solid ${bc}`,background:bgc,color:tc,minWidth:wide?90:64,fontFamily:RACING,fontSize:"1.3rem"}} />
@@ -1112,9 +1112,10 @@ function FriendPanel({
               
               <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
                 <input
-                  type="number"
-                  min={0}
-                  max={9}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  pattern="[0-9]*"
                   value={tensFriend}
                   onChange={e => setTensFriend(e.target.value)}
                   placeholder="?"
@@ -1132,9 +1133,10 @@ function FriendPanel({
                 />
                 <span style={{ fontSize: "2rem", fontFamily: RACING, color: bg }}>&</span>
                 <input
-                  type="number"
-                  min={0}
-                  max={9}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  pattern="[0-9]*"
                   value={unitsFriend}
                   onChange={e => setUnitsFriend(e.target.value)}
                   placeholder="?"
@@ -1278,7 +1280,10 @@ function FriendPanel({
         
         {!feedback && (
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            maxLength={3}
+            pattern="[0-9]*"
             value={singleAnswer}
             onChange={e => setSingleAnswer(e.target.value)}
             onKeyPress={e => e.key === 'Enter' && singleAnswer && handleSubmitForOthers()}
