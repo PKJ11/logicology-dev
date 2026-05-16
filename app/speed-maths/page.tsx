@@ -972,19 +972,10 @@ interface TabScore { score: number; total: number; }
 function generateFriendPair(base: FriendBase): FriendPair {
   if (base === 9)  { const a = rand(1, 8);  return { a, b: 9   - a }; }
   if (base === 10) { const a = rand(1, 9);  return { a, b: 10  - a }; }
-  // For base 100, keep numbers between 11-89 as before
   const a = rand(11, 89); return { a, b: 100 - a };
 }
 
-function generateFriendOptions(correct: number, base: FriendBase): number[] {
-  const offsets = base === 100
-    ? shuffle([correct + 10, correct - 10, correct + 1, correct - 1, correct + 9, correct - 9])
-    : shuffle([correct + 1, correct - 1, correct + 2, correct - 2]);
-  const wrongs = offsets.filter(v => v > 0 && v !== correct && v < base).slice(0, 3);
-  return shuffle([correct, ...wrongs]);
-}
-
-// Individual panel for one tab — score owned by parent
+// ─── FriendPanel — compact single-screen layout ───────────────────────────────
 function FriendPanel({
   base, score, total, onScore, bg, light, dark,
 }: {
@@ -994,35 +985,29 @@ function FriendPanel({
 }) {
   const [pair, setPair] = useState<FriendPair>(() => generateFriendPair(base));
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
-  
+
   // For base 100 - separate inputs for tens and units
   const [tensFriend, setTensFriend] = useState("");
   const [unitsFriend, setUnitsFriend] = useState("");
-  const [showCombined, setShowCombined] = useState(false);
-  
+
   // For other bases - single input
   const [singleAnswer, setSingleAnswer] = useState("");
 
   const next = useCallback(() => {
-    const newPair = generateFriendPair(base);
-    setPair(newPair);
+    setPair(generateFriendPair(base));
     setFeedback(null);
     setTensFriend("");
     setUnitsFriend("");
     setSingleAnswer("");
-    setShowCombined(false);
   }, [base]);
 
   const handleSubmitFor100 = () => {
     if (feedback) return;
-    
     const tens = parseInt(tensFriend);
     const units = parseInt(unitsFriend);
     const combined = parseInt(`${tens}${units}`);
     const correct = combined === pair.b;
-    
     setFeedback(correct ? "correct" : "wrong");
-    setShowCombined(true);
     onScore(correct);
     setTimeout(next, 1500);
   };
@@ -1039,336 +1024,200 @@ function FriendPanel({
     feedback === "correct" ? "#22c55e" :
     feedback === "wrong"   ? "#ef4444" : bg;
 
-  // For base 100 - show two inputs
+  // ── Base 100: two-input layout ──────────────────────────────────────────────
   if (base === 100) {
     const tensDigit = Math.floor(pair.a / 10);
     const unitsDigit = pair.a % 10;
     const expectedTensFriend = 9 - tensDigit;
     const expectedUnitsFriend = 10 - unitsDigit;
     const expectedCombined = expectedTensFriend * 10 + expectedUnitsFriend;
-    
+
     return (
       <div style={{
         background: "#fff",
         border: `3px solid ${borderCol}`,
-        borderRadius: 24,
-        padding: "20px 20px 16px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 14,
+        borderRadius: 20,
+        padding: "14px 16px 12px",
         transition: "border-color 0.25s ease",
-        maxWidth: 400,
-        margin: "0 auto",
         width: "100%",
       }}>
-        {/* Header */}
-        <div style={{
-          background: bg, borderRadius: 14, padding: "10px 14px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <span style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}>
-            Friends of {base}
-          </span>
-          <span style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}>
-            {score}/{total}
-          </span>
-        </div>
-
-        {/* Question */}
+        {/* Question row */}
         <div style={{
           background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
-          borderRadius: 16, padding: "18px 12px", textAlign: "center",
-          transition: "background 0.3s ease",
+          borderRadius: 14, padding: "12px 10px 10px", textAlign: "center",
+          transition: "background 0.3s ease", marginBottom: 12,
         }}>
-          <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.82rem", color: dark, margin: "0 0 4px" }}>
-            What is the friend of
+          <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.78rem", color: dark, margin: "0 0 2px" }}>
+            Friend of
           </p>
-          <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg, lineHeight: 1 }}>
-            {pair.a}
-          </div>
-          <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.78rem", color: `${bg}99`, marginTop: 2 }}>
+          <div style={{ fontFamily: RACING, fontSize: "2.8rem", color: bg, lineHeight: 1 }}>{pair.a}</div>
+          <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.72rem", color: `${bg}99`, marginTop: 2 }}>
             {pair.a} + ? = {base}
           </div>
-          
-          {/* Two-input method for 100 */}
-          {!feedback && (
-            <div style={{ marginTop: 16 }}>
-              <div style={{ 
-                display: "flex", 
-                gap: 12, 
-                justifyContent: "center",
-                marginBottom: 12,
-                fontFamily: OUTFIT,
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                color: dark
-              }}>
-                <div>Tens digit: {tensDigit}</div>
-                <div>→ Friend of 9</div>
-                <div>Units digit: {unitsDigit}</div>
-                <div>→ Friend of 10</div>
-              </div>
-              
-              <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  pattern="[0-9]*"
-                  value={tensFriend}
-                  onChange={e => setTensFriend(e.target.value)}
-                  placeholder="?"
-                  style={{
-                    width: 70,
-                    height: 70,
-                    textAlign: "center",
-                    fontSize: "2rem",
-                    fontFamily: RACING,
-                    border: `3px solid ${bg}`,
-                    borderRadius: 16,
-                    outline: "none",
-                    color: bg
-                  }}
-                />
-                <span style={{ fontSize: "2rem", fontFamily: RACING, color: bg }}>&</span>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  pattern="[0-9]*"
-                  value={unitsFriend}
-                  onChange={e => setUnitsFriend(e.target.value)}
-                  placeholder="?"
-                  style={{
-                    width: 70,
-                    height: 70,
-                    textAlign: "center",
-                    fontSize: "2rem",
-                    fontFamily: RACING,
-                    border: `3px solid ${bg}`,
-                    borderRadius: 16,
-                    outline: "none",
-                    color: bg
-                  }}
-                />
-              </div>
-              
-              {showCombined && feedback && (
-                <div style={{ marginTop: 12 }}>
-                  <div style={{
-                    fontSize: "1.2rem",
-                    fontFamily: RACING,
-                    color: bg,
-                    background: `${bg}15`,
-                    padding: "8px",
-                    borderRadius: 12
-                  }}>
-                    Combined: {tensFriend}{unitsFriend} = {expectedCombined}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          
-          {feedback && (
-            <div style={{
-              marginTop: 12,
-              padding: "8px 12px",
-              background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
-              borderRadius: 12,
-              fontFamily: OUTFIT, 
-              fontWeight: 800, 
-              fontSize: "0.9rem",
-              color: feedback === "correct" ? "#16a34a" : "#dc2626",
-            }}>
-              {feedback === "correct"
-                ? `✅ Yes! ${pair.a} + ${expectedCombined} = ${base}`
-                : `❌ It's ${expectedCombined}! (${pair.a} + ${expectedCombined} = ${base})`}
-              <div style={{ fontSize: "0.75rem", marginTop: 4, color: dark }}>
-                {tensDigit}→{expectedTensFriend} (9's friend), {unitsDigit}→{expectedUnitsFriend} (10's friend)
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Submit button */}
-        {!feedback && (
-          <button 
-            onClick={handleSubmitFor100} 
-            disabled={!tensFriend || !unitsFriend}
-            className="active:scale-95"
-            style={{
-              background: (tensFriend && unitsFriend) ? bg : "#ccc",
-              border: "none",
-              borderRadius: 14,
-              padding: "14px",
-              fontFamily: RACING,
-              fontSize: "1.2rem",
-              color: "#fff",
-              cursor: (tensFriend && unitsFriend) ? "pointer" : "not-allowed",
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }}>
-            Check Answer ✓
-          </button>
+        {/* Hint row */}
+        <div style={{
+          display: "flex", gap: 6, justifyContent: "center", marginBottom: 10,
+          fontFamily: OUTFIT, fontSize: "0.7rem", fontWeight: 600, color: dark,
+        }}>
+          <span style={{ background: `${bg}15`, borderRadius: 8, padding: "3px 8px" }}>
+            Tens {tensDigit} → 9's friend
+          </span>
+          <span style={{ background: `${bg}15`, borderRadius: 8, padding: "3px 8px" }}>
+            Units {unitsDigit} → 10's friend
+          </span>
+        </div>
+
+        {/* Two inputs */}
+        {!feedback ? (
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", marginBottom: 12 }}>
+            <input
+              type="text" inputMode="numeric" maxLength={1} pattern="[0-9]*"
+              value={tensFriend} onChange={e => setTensFriend(e.target.value)} placeholder="?"
+              style={{
+                width: 60, height: 60, textAlign: "center", fontSize: "1.8rem",
+                fontFamily: RACING, border: `3px solid ${bg}`, borderRadius: 14,
+                outline: "none", color: bg, background: "#fff",
+              }}
+            />
+            <span style={{ fontSize: "1.6rem", fontFamily: RACING, color: bg }}>&</span>
+            <input
+              type="text" inputMode="numeric" maxLength={1} pattern="[0-9]*"
+              value={unitsFriend} onChange={e => setUnitsFriend(e.target.value)} placeholder="?"
+              style={{
+                width: 60, height: 60, textAlign: "center", fontSize: "1.8rem",
+                fontFamily: RACING, border: `3px solid ${bg}`, borderRadius: 14,
+                outline: "none", color: bg, background: "#fff",
+              }}
+            />
+          </div>
+        ) : (
+          <div style={{
+            padding: "8px 10px", borderRadius: 12, marginBottom: 12, textAlign: "center",
+            background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
+            fontFamily: OUTFIT, fontWeight: 800, fontSize: "0.85rem",
+            color: feedback === "correct" ? "#16a34a" : "#dc2626",
+          }}>
+            {feedback === "correct"
+              ? `✅ ${pair.a} + ${expectedCombined} = ${base}`
+              : `❌ It's ${expectedCombined}! (${tensDigit}→${expectedTensFriend}, ${unitsDigit}→${expectedUnitsFriend})`}
+          </div>
         )}
 
-        {/* Skip button - only show when no feedback */}
-        {!feedback && (
-          <button onClick={next} style={{
-            background: "transparent", 
-            border: `1.5px dashed ${bg}55`, 
-            borderRadius: 12,
-            padding: "7px", 
-            fontFamily: OUTFIT, 
-            fontWeight: 600,
-            fontSize: "0.78rem", 
-            color: `${bg}99`, 
-            cursor: "pointer",
-          }}>
-            Skip →
-          </button>
-        )}
+        {/* Buttons */}
+        <div style={{ display: "flex", gap: 8 }}>
+          {!feedback && (
+            <>
+              <button
+                onClick={handleSubmitFor100}
+                disabled={!tensFriend || !unitsFriend}
+                style={{
+                  flex: 1, background: (tensFriend && unitsFriend) ? bg : "#ccc",
+                  border: "none", borderRadius: 12, padding: "11px",
+                  fontFamily: RACING, fontSize: "1rem", color: "#fff",
+                  cursor: (tensFriend && unitsFriend) ? "pointer" : "not-allowed",
+                }}>
+                Check ✓
+              </button>
+              <button onClick={next} style={{
+                background: "transparent", border: `1.5px dashed ${bg}55`,
+                borderRadius: 12, padding: "11px 14px",
+                fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.78rem",
+                color: `${bg}99`, cursor: "pointer",
+              }}>Skip →</button>
+            </>
+          )}
+        </div>
       </div>
     );
   }
 
-  // For bases 9 and 10 - single input (original design)
+  // ── Base 9 / 10: single-input layout ───────────────────────────────────────
   return (
     <div style={{
       background: "#fff",
       border: `3px solid ${borderCol}`,
-      borderRadius: 24,
-      padding: "20px 20px 16px",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-      display: "flex",
-      flexDirection: "column",
-      gap: 14,
+      borderRadius: 20,
+      padding: "14px 16px 12px",
       transition: "border-color 0.25s ease",
-      maxWidth: 400,
-      margin: "0 auto",
       width: "100%",
     }}>
-      {/* Header */}
-      <div style={{
-        background: bg, borderRadius: 14, padding: "10px 14px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <span style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}>
-          Friends of {base}
-        </span>
-        <span style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}>
-          {score}/{total}
-        </span>
-      </div>
-
       {/* Question */}
       <div style={{
         background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
-        borderRadius: 16, padding: "18px 12px", textAlign: "center",
-        transition: "background 0.3s ease",
+        borderRadius: 14, padding: "12px 10px 10px", textAlign: "center",
+        transition: "background 0.3s ease", marginBottom: 12,
       }}>
-        <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.82rem", color: dark, margin: "0 0 4px" }}>
-          What is the friend of
+        <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.78rem", color: dark, margin: "0 0 2px" }}>
+          Friend of
         </p>
-        <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg, lineHeight: 1 }}>
-          {pair.a}
-        </div>
-        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.78rem", color: `${bg}99`, marginTop: 2 }}>
+        <div style={{ fontFamily: RACING, fontSize: "2.8rem", color: bg, lineHeight: 1 }}>{pair.a}</div>
+        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.72rem", color: `${bg}99`, marginTop: 2 }}>
           {pair.a} + ? = {base}
         </div>
-        
-        {!feedback && (
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={3}
-            pattern="[0-9]*"
-            value={singleAnswer}
-            onChange={e => setSingleAnswer(e.target.value)}
-            onKeyPress={e => e.key === 'Enter' && singleAnswer && handleSubmitForOthers()}
-            placeholder="?"
-            style={{
-              marginTop: 16,
-              width: "100%",
-              maxWidth: 120,
-              padding: "12px",
-              textAlign: "center",
-              fontSize: "1.8rem",
-              fontFamily: RACING,
-              border: `3px solid ${bg}`,
-              borderRadius: 16,
-              outline: "none",
-              color: bg
-            }}
-          />
-        )}
-        
-        {feedback && (
-          <div style={{
-            marginTop: 12,
-            padding: "8px 12px",
-            background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
-            borderRadius: 12,
-            fontFamily: OUTFIT, 
-            fontWeight: 800, 
-            fontSize: "0.9rem",
-            color: feedback === "correct" ? "#16a34a" : "#dc2626",
-          }}>
-            {feedback === "correct"
-              ? `✅ Yes! ${pair.a} + ${pair.b} = ${base}`
-              : `❌ It's ${pair.b}! (${pair.a} + ${pair.b} = ${base})`}
-          </div>
-        )}
       </div>
 
-      {/* Submit button */}
-      {!feedback && (
-        <button 
-          onClick={handleSubmitForOthers} 
-          disabled={!singleAnswer}
-          className="active:scale-95"
+      {/* Input or feedback */}
+      {!feedback ? (
+        <input
+          type="text" inputMode="numeric" maxLength={3} pattern="[0-9]*"
+          value={singleAnswer}
+          onChange={e => setSingleAnswer(e.target.value)}
+          onKeyPress={e => e.key === "Enter" && singleAnswer && handleSubmitForOthers()}
+          placeholder="?"
           style={{
-            background: singleAnswer ? bg : "#ccc",
-            border: "none",
-            borderRadius: 14,
-            padding: "14px",
-            fontFamily: RACING,
-            fontSize: "1.2rem",
-            color: "#fff",
-            cursor: singleAnswer ? "pointer" : "not-allowed",
-            transition: "transform 0.15s, box-shadow 0.15s",
-          }}>
-          Check Answer ✓
-        </button>
+            display: "block", width: "100%", maxWidth: 120, margin: "0 auto 12px",
+            padding: "10px", textAlign: "center", fontSize: "1.8rem",
+            fontFamily: RACING, border: `3px solid ${bg}`, borderRadius: 14,
+            outline: "none", color: bg,
+          }}
+        />
+      ) : (
+        <div style={{
+          padding: "8px 10px", borderRadius: 12, marginBottom: 12, textAlign: "center",
+          background: feedback === "correct" ? "#f0fdf4" : "#fef2f2",
+          fontFamily: OUTFIT, fontWeight: 800, fontSize: "0.85rem",
+          color: feedback === "correct" ? "#16a34a" : "#dc2626",
+        }}>
+          {feedback === "correct"
+            ? `✅ ${pair.a} + ${pair.b} = ${base}`
+            : `❌ It's ${pair.b}! (${pair.a} + ${pair.b} = ${base})`}
+        </div>
       )}
 
-      {/* Skip button */}
+      {/* Buttons */}
       {!feedback && (
-        <button onClick={next} style={{
-          background: "transparent", 
-          border: `1.5px dashed ${bg}55`, 
-          borderRadius: 12,
-          padding: "7px", 
-          fontFamily: OUTFIT, 
-          fontWeight: 600,
-          fontSize: "0.78rem", 
-          color: `${bg}99`, 
-          cursor: "pointer",
-        }}>
-          Skip →
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            onClick={handleSubmitForOthers}
+            disabled={!singleAnswer}
+            style={{
+              flex: 1, background: singleAnswer ? bg : "#ccc",
+              border: "none", borderRadius: 12, padding: "11px",
+              fontFamily: RACING, fontSize: "1rem", color: "#fff",
+              cursor: singleAnswer ? "pointer" : "not-allowed",
+            }}>
+            Check ✓
+          </button>
+          <button onClick={next} style={{
+            background: "transparent", border: `1.5px dashed ${bg}55`,
+            borderRadius: 12, padding: "11px 14px",
+            fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.78rem",
+            color: `${bg}99`, cursor: "pointer",
+          }}>Skip →</button>
+        </div>
       )}
     </div>
   );
 }
 
+// ─── FriendsPractice — full single-screen layout ──────────────────────────────
 function FriendsPractice({ bg, light, dark, onStartChallenge }: {
   bg: string; light: string; dark: string; onStartChallenge: () => void;
 }) {
   const bases: FriendBase[] = [9, 10, 100];
 
-  // ── Tab state (active tab + per-tab scores) ──────────────────────────────
   const [activeTab, setActiveTab] = useState<FriendBase>(9);
   const [tabScores, setTabScores] = useState<Record<FriendBase, TabScore>>({
     9:   { score: 0, total: 0 },
@@ -1387,38 +1236,37 @@ function FriendsPractice({ bg, light, dark, onStartChallenge }: {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto space-y-5">
+    // Use flex-col with height:100% so children can fill the available space
+    <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 420, margin: "0 auto" }}>
 
-      {/* Reference strip */}
-      <div className="bg-white rounded-2xl border-2 overflow-hidden shadow-sm" style={{ borderColor: `${bg}44` }}>
-  <div className="px-3 py-1.5 text-center text-xs font-bold" style={{ background: bg, color: "#fff", fontFamily: OUTFIT }}>
-    📖 Friends Reference
-  </div>
-  <div className="grid grid-cols-3 divide-x" style={{ borderColor: `${bg}22` }}>
-    {[
-      { base: 9,   pairs: "1+8, 2+7, 3+6, 4+5" },
-      { base: 10,  pairs: "1+9, 2+8, 3+7, 4+6, 5+5" },
-      { base: 100, pairs: "e.g. 37+63, 45+55" },
-    ].map(({ base, pairs }) => (
-      <div key={base} className="py-2 px-2 text-center">
-        <div style={{ fontFamily: RACING, color: bg, fontSize: "1rem" }}>of {base}</div>
-        <div style={{ fontFamily: OUTFIT, fontSize: "0.65rem", fontWeight: 600, color: dark, marginTop: 2 }}>{pairs}</div>
-      </div>
-    ))}
-  </div>
-</div>
-
-      {/* ── Tab pill bar ── */}
+      {/* Reference strip — compact single-line */}
       <div style={{
-        display: "flex",
-        gap: 6,
-        background: light,
-        borderRadius: 99,
-        padding: 5,
-        maxWidth: 380,
-        margin: "0 auto",
-        width: "100%",
-        boxShadow: `0 2px 8px ${bg}22`,
+        background: "#fff", borderRadius: 14, overflow: "hidden",
+        border: `2px solid ${bg}33`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        flexShrink: 0,
+      }}>
+        <div style={{ background: bg, padding: "5px 12px", textAlign: "center", fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.72rem", color: "#fff" }}>
+          📖 Friends Reference
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderTop: `1px solid ${bg}22` }}>
+          {[
+            { base: 9,   pairs: "1+8, 2+7, 3+6, 4+5" },
+            { base: 10,  pairs: "1+9, 2+8, 3+7, 4+6, 5+5" },
+            { base: 100, pairs: "e.g. 37+63, 45+55" },
+          ].map(({ base, pairs }) => (
+            <div key={base} style={{ padding: "6px 4px", textAlign: "center", borderRight: `1px solid ${bg}11` }}>
+              <div style={{ fontFamily: RACING, color: bg, fontSize: "0.9rem" }}>of {base}</div>
+              <div style={{ fontFamily: OUTFIT, fontSize: "0.6rem", fontWeight: 600, color: dark, marginTop: 1, lineHeight: 1.3 }}>{pairs}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab pill bar */}
+      <div style={{
+        display: "flex", gap: 5,
+        background: light, borderRadius: 99, padding: 4,
+        boxShadow: `0 2px 8px ${bg}22`, flexShrink: 0,
       }}>
         {bases.map(base => {
           const sc = tabScores[base];
@@ -1428,32 +1276,18 @@ function FriendsPractice({ bg, light, dark, onStartChallenge }: {
               key={base}
               onClick={() => setActiveTab(base)}
               style={{
-                flex: 1,
-                border: "none",
-                cursor: "pointer",
-                fontFamily: OUTFIT,
-                fontWeight: 700,
-                fontSize: "0.88rem",
-                padding: "10px 4px 6px",
-                borderRadius: 99,
+                flex: 1, border: "none", cursor: "pointer",
+                fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.82rem",
+                padding: "8px 4px 5px", borderRadius: 99,
                 transition: "all 0.22s ease",
                 background: isActive ? bg : "transparent",
                 color: isActive ? "#fff" : dark,
                 boxShadow: isActive ? `0 4px 14px ${bg}44` : "none",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
               }}
             >
-              <span>Friends of {base}</span>
-              {/* Per-tab score badge */}
-              <span style={{
-                fontFamily: RACING,
-                fontSize: "0.72rem",
-                color: isActive ? "#fff99c" : `${dark}88`,
-                lineHeight: 1,
-              }}>
+              <span>of {base}</span>
+              <span style={{ fontFamily: RACING, fontSize: "0.65rem", color: isActive ? "#fff99c" : `${dark}88`, lineHeight: 1 }}>
                 {sc.score}/{sc.total}
               </span>
             </button>
@@ -1461,21 +1295,29 @@ function FriendsPractice({ bg, light, dark, onStartChallenge }: {
         })}
       </div>
 
-      {/* ── Active panel — key resets question/feedback on tab switch ── */}
-      <FriendPanel
-        key={activeTab}
-        base={activeTab}
-        score={tabScores[activeTab].score}
-        total={tabScores[activeTab].total}
-        onScore={(correct) => handleScore(activeTab, correct)}
-        bg={bg}
-        light={light}
-        dark={dark}
-      />
+      {/* Active panel — flex-1 so it takes remaining height */}
+      <div style={{ flex: 1, minHeight: 0 }}>
+        <FriendPanel
+          key={activeTab}
+          base={activeTab}
+          score={tabScores[activeTab].score}
+          total={tabScores[activeTab].total}
+          onScore={(correct) => handleScore(activeTab, correct)}
+          bg={bg} light={light} dark={dark}
+        />
+      </div>
 
       {/* CTA */}
-      <button onClick={onStartChallenge} className="w-full rounded-3xl py-4 shadow-xl active:scale-95"
-        style={{ background: bg, color: "#fff", fontFamily: RACING, fontSize: "1.3rem" }}>
+      <button
+        onClick={onStartChallenge}
+        style={{
+          width: "100%", borderRadius: 20, padding: "13px",
+          background: bg, color: "#fff",
+          fontFamily: RACING, fontSize: "1.15rem",
+          border: "none", cursor: "pointer",
+          boxShadow: `0 6px 20px ${bg}44`,
+          flexShrink: 0,
+        }}>
         ⚡ Start Timed Challenge
       </button>
     </div>
@@ -1522,7 +1364,6 @@ export default function SpeedMathsPage() {
   const totalTimerRef = useRef<ReturnType<typeof setInterval>|null>(null);
   const isTransitioning = useRef(false);
   
-  // Enhanced stopTimers to ensure complete cleanup
   const stopTimers = useCallback(() => {
     if(timerRef.current) {
       clearInterval(timerRef.current);
@@ -1551,7 +1392,6 @@ export default function SpeedMathsPage() {
   },[gameState]);
 
   const beginGame = useCallback(() => {
-    // Clean up any existing timers before starting new game
     stopTimers();
     isTransitioning.current = false;
     setFeedback(null);
@@ -1569,9 +1409,7 @@ export default function SpeedMathsPage() {
     if(timeMode === "timed") {
       setTimeLeft(secondsPerQ);
       
-      // Create a recursive function for timer management
       const startNewTimer = (remainingSeconds: number) => {
-        // Clear any existing timer
         if(timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -1585,29 +1423,22 @@ export default function SpeedMathsPage() {
           setTimeLeft(remaining);
           
           if(remaining <= 0) {
-            // Clear this timer
             if(timerRef.current) {
               clearInterval(timerRef.current);
               timerRef.current = null;
             }
             
-            // Time's up - show incorrect and load next question
             if(!isTransitioning.current && !feedback) {
               isTransitioning.current = true;
               setFeedback("incorrect");
               setStreak(0);
               
               setTimeout(() => {
-                // Reset transitioning flag
                 isTransitioning.current = false;
                 setFeedback(null);
-                
-                // Generate new question
                 const nextQuestion = generateQuestion(challenge);
                 setQuestion(nextQuestion);
                 setTypedAnswer("");
-                
-                // Start timer for new question
                 setTimeLeft(secondsPerQ);
                 startNewTimer(secondsPerQ);
               }, 1400);
@@ -1616,10 +1447,8 @@ export default function SpeedMathsPage() {
         }, 1000);
       };
       
-      // Start the first timer
       startNewTimer(secondsPerQ);
     } else {
-      // Fixed questions mode
       totalTimerRef.current = setInterval(() => {
         setTotalTime(t => t + 1);
       }, 1000);
@@ -1646,13 +1475,11 @@ export default function SpeedMathsPage() {
       setStreak(0);
     }
     
-    // Clear timer immediately when answering
     if(timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
     
-    // Create a recursive timer function for next question
     const startNextQuestionTimer = (remainingSeconds: number) => {
       if(timerRef.current) {
         clearInterval(timerRef.current);
@@ -1672,7 +1499,6 @@ export default function SpeedMathsPage() {
             timerRef.current = null;
           }
           
-          // Time's up for the next question
           if(!isTransitioning.current && !feedback) {
             isTransitioning.current = true;
             setFeedback("incorrect");
@@ -1707,7 +1533,6 @@ export default function SpeedMathsPage() {
         setTypedAnswer("");
         isTransitioning.current = false;
       } else {
-        // Timed mode - load next question and start timer
         const nextQuestion = generateQuestion(challenge);
         setQuestion(nextQuestion);
         setFeedback(null);
@@ -1834,7 +1659,6 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg,fontFamily:OUTFIT}}>
         <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <button onClick={()=>setGameState("menu")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-6" style={{color:bg,fontFamily:RACING}}>{challenge}</h2>
         {challenge==="Half"&&(<>
           <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
@@ -1875,7 +1699,6 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg,fontFamily:OUTFIT}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>{challenge}</h2>
         <p className="mb-6" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>{answerMode}</p>
         <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6 mb-6 border-2" style={{borderColor:bg}}>
@@ -1903,7 +1726,6 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
         <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>½</div>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half Table</h2>
         <p className="mb-6" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>What is half of each digit?</p>
@@ -1918,7 +1740,6 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half 3-Step Method</h2>
         <p className="mb-6 text-sm text-center" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>Follow the steps to find half of the number below!</p>
         <Half3StepInteractive key={half3StepKey} practiceNum={halfPracticeNum} bg={bg} light={light} dark={dark}
@@ -1948,7 +1769,6 @@ export default function SpeedMathsPage() {
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
         <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
         <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>²</div>
         <h2 className="text-3xl mb-4" style={{color:bg,fontFamily:RACING}}>Square Steps</h2>
         <SquareStepView key={squareViewKey} squareNum={squareNum} bg={bg} light={light} dark={dark}
@@ -1959,17 +1779,42 @@ export default function SpeedMathsPage() {
     );
   }
 
-  // ─── FRIENDS PRACTICE ─────────────────────────────────────────────────────
+  // ─── FRIENDS PRACTICE — single-screen, no scroll ──────────────────────────
   if(gameState==="friends-practice"){
     const{bg,light,dark}=CHALLENGE_COLORS["Friends"];
     return(
-      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
-        <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <button onClick={()=>setGameState("mode-select")} className="self-start mb-4 text-lg" style={{color:dark,fontFamily:RACING}}>← Back</button>
-        <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>🤝</div>
-        <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Friends</h2>
-        <p className="mb-6 text-sm text-center" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>Pairs that add up to 9, 10, or 100!</p>
-        <FriendsPractice bg={bg} light={light} dark={dark} onStartChallenge={()=>setGameState("settings")} />
+      // Fixed viewport height, no overflow — everything must fit
+      <div style={{
+        height: "100dvh",
+        display: "flex",
+        flexDirection: "column",
+        background: gameBg,
+        overflow: "hidden",
+      }}>
+        <style>{GLOBAL_STYLES}</style>
+        <Stars count={6}/>
+
+        {/* Compact header */}
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center",
+          paddingTop: 16, paddingBottom: 8, flexShrink: 0,
+        }}>
+          <div style={{ fontFamily: RACING, fontSize: "1.8rem", color: bg, lineHeight: 1 }}>🤝</div>
+          <h2 style={{ color: bg, fontFamily: RACING, fontSize: "1.6rem", margin: "2px 0 0" }}>Friends</h2>
+          <p style={{ color: dark, fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.75rem", margin: 0 }}>
+            Pairs that add up to 9, 10, or 100!
+          </p>
+        </div>
+
+        {/* Content area — fills remaining height, no scroll */}
+        <div style={{
+          flex: 1, minHeight: 0,
+          display: "flex", flexDirection: "column",
+          padding: "0 16px 16px",
+          overflow: "hidden",
+        }}>
+          <FriendsPractice bg={bg} light={light} dark={dark} onStartChallenge={()=>setGameState("settings")} />
+        </div>
       </div>
     );
   }
