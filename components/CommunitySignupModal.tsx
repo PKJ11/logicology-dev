@@ -12,13 +12,13 @@ import { useRouter } from "next/navigation";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCAnSPFmz-3ZrXrRcIR8Thdm6CTpbXgbZg",
-  authDomain: "gmc2025-6a9bc.firebaseapp.com",
-  projectId: "gmc2025-6a9bc",
-  storageBucket: "gmc2025-6a9bc.firebasestorage.app",
-  messagingSenderId: "974661554138",
-  appId: "1:974661554138:web:028277d1bfe9a609ed3ae3",
-  measurementId: "G-FSHD9Q8QBY",
+  apiKey: "AIzaSyC71SM0SmwZUIjGw0vNXjdOfxzD7DJjMlA",
+  authDomain: "logicology-1f4e9.firebaseapp.com",
+  projectId: "logicology-1f4e9",
+  storageBucket: "logicology-1f4e9.firebasestorage.app",
+  messagingSenderId: "459695194150",
+  appId: "1:459695194150:web:6005630525769d5d0c26e7",
+  measurementId: "G-QJ8BT8V2YD"
 };
 
 // Initialize Firebase
