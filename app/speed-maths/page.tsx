@@ -759,7 +759,7 @@ function SquareStepRow({ label, sublabel, placeholder, value, onChange, onSubmit
             style={{border:`3px solid ${bg}`,background:"#f0fdf4",color:"#15803d",minWidth:wide?90:64,fontFamily:RACING,fontSize:"1.3rem"}}>
             {confirmedValue}
           </div>
-          : <input ref={ref} type="text" inputMode="numeric" maxLength={3} pattern="[0-9]*" value={value} onChange={e=>!locked&&onChange(e.target.value)}
+          : <input ref={ref} type="text" inputMode="numeric"  pattern="[0-9]*" value={value} onChange={e=>!locked&&onChange(e.target.value)}
             onKeyDown={e=>e.key==="Enter"&&!locked&&onSubmit()} disabled={locked} placeholder={placeholder}
             className="rounded-2xl h-14 text-center outline-none transition-all w-full"
             style={{border:`3px solid ${bc}`,background:bgc,color:tc,minWidth:wide?90:64,fontFamily:RACING,fontSize:"1.3rem"}} />
@@ -963,7 +963,7 @@ function SquareStepView({ squareNum, onTryAnother, onRangeSelect, onGoSettings, 
   );
 }
 
-// ─── Friends Practice (Tabbed) ────────────────────────────────────────────────
+// ─── Friends Practice (Tabbed) ────────────────────────────────────────
 type FriendBase = 9 | 10 | 100;
 
 interface FriendPair { a: number; b: number; }
