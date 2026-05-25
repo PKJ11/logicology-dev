@@ -10,12 +10,35 @@ const COLLECTION = "orders";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    // { name, email, phone, shipping, paymentId, razorpayDesc, razorpayContact }
+
     const client = new MongoClient(MONGO_URI);
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
-    await col.insertOne(data);
+
+    // ── Add timestamp + rzpDeviceId to every order document ──
+    await col.insertOne({
+      ...data,
+      createdAt: new Date(),        // ← NEW: order timestamp
+      rzpDeviceId: data.rzpDeviceId ?? null,  // ← NEW: device link
+    });
+
+    // ── Mark the matching cart_events record as converted ──
+    if (data.rzpDeviceId) {
+      const cartCol = db.collection("cart_events");
+      await cartCol.updateOne(
+        { rzpDeviceId: data.rzpDeviceId },
+        {
+          $set: {
+            convertedToOrder: true,
+            paymentId: data.paymentId ?? null,
+            orderId: data.orderId ?? null,
+            convertedAt: new Date(),
+          },
+        }
+      );
+    }
+
     await client.close();
     return NextResponse.json({ success: true });
   } catch (err: any) {

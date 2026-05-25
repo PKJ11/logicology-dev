@@ -173,7 +173,15 @@ function generateGSTReceipt(
 }
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart();
+  const {
+    cart,
+    removeFromCart,
+    clearCart,
+    increaseQuantity,
+    decreaseQuantity,
+    enrichCartSession, // ← NEW
+    getRzpDeviceId, // ← NEW
+  } = useCart();
   const [itemDetails, setItemDetails] = useState<
     Record<string, { tax_rate?: number; hsn_code?: string }>
   >({});
@@ -803,6 +811,7 @@ const CartPage = () => {
                 appliedPromo: appliedPromo,
                 isGift: shipping.isGift,
                 isDifferentFromBiller: shipping.isDifferentFromBiller,
+                rzpDeviceId: getRzpDeviceId(), // ← NEW: links order → cart_events
               }),
             });
 
@@ -1032,12 +1041,15 @@ const CartPage = () => {
                             onBlur={(e) => {
                               const email = e.target.value;
                               if (email && !/\S+@\S+\.\S+/.test(email)) {
-                                setUserInfo((u) => ({
-                                  ...u,
-                                  emailError: "Please enter a valid email address",
-                                } as any));
+                                setUserInfo(
+                                  (u) =>
+                                    ({
+                                      ...u,
+                                      emailError: "Please enter a valid email address",
+                                    }) as any
+                                );
                               } else {
-                                setUserInfo((u) => ({ ...u, emailError: "" } as any));
+                                setUserInfo((u) => ({ ...u, emailError: "" }) as any);
                               }
                             }}
                             className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
@@ -1084,7 +1096,7 @@ const CartPage = () => {
                           )}
                         </div>
                       </div>
- 
+
                       <button
                         onClick={() => setStep(2)}
                         disabled={
@@ -1146,7 +1158,7 @@ const CartPage = () => {
                           For someone else
                         </button>
                       </div>
- 
+
                       {/* ── FOR ME ── */}
                       {!shipping.isDifferentFromBiller && (
                         <div className="space-y-4">
@@ -1178,14 +1190,18 @@ const CartPage = () => {
                                     >
                                       <div className="flex items-start justify-between">
                                         <div>
-                                          <p className="font-medium text-gray-900">{address.name}</p>
+                                          <p className="font-medium text-gray-900">
+                                            {address.name}
+                                          </p>
                                           <p className="mt-0.5 text-sm text-gray-500">
                                             {address.address}, {address.building}, {address.street}
                                           </p>
                                           <p className="text-sm text-gray-500">
                                             {address.city}, {address.state} – {address.pin}
                                           </p>
-                                          <p className="mt-0.5 text-sm text-gray-500">{address.phone}</p>
+                                          <p className="mt-0.5 text-sm text-gray-500">
+                                            {address.phone}
+                                          </p>
                                           {address.isGift && (
                                             <span className="mt-1 inline-block rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800">
                                               🎁 Gift
@@ -1200,7 +1216,7 @@ const CartPage = () => {
                                       </div>
                                     </div>
                                   ))}
- 
+
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -1226,7 +1242,7 @@ const CartPage = () => {
                                 </button>
                               </div>
                             )}
- 
+
                           {/* New address form */}
                           {(savedAddresses.filter((a) => !a.isDifferentFromBiller).length === 0 ||
                             selectedAddress === "__new__") && (
@@ -1253,7 +1269,9 @@ const CartPage = () => {
                                   type="text"
                                   placeholder="Building"
                                   value={shipping.building}
-                                  onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
+                                  onChange={(e) =>
+                                    setShipping((s) => ({ ...s, building: e.target.value }))
+                                  }
                                   className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 />
                                 <input
@@ -1261,7 +1279,9 @@ const CartPage = () => {
                                   type="text"
                                   placeholder="Street"
                                   value={shipping.street}
-                                  onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                                  onChange={(e) =>
+                                    setShipping((s) => ({ ...s, street: e.target.value }))
+                                  }
                                   className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 />
                               </div>
@@ -1270,14 +1290,18 @@ const CartPage = () => {
                                 type="text"
                                 placeholder="Address"
                                 value={shipping.address}
-                                onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, address: e.target.value }))
+                                }
                                 className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                               <input
                                 type="text"
                                 placeholder="Landmark (Optional)"
                                 value={shipping.landmark}
-                                onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, landmark: e.target.value }))
+                                }
                                 className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                               <div className="grid grid-cols-2 gap-3">
@@ -1286,7 +1310,9 @@ const CartPage = () => {
                                   type="text"
                                   placeholder="PIN Code"
                                   value={shipping.pin}
-                                  onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                                  onChange={(e) =>
+                                    setShipping((s) => ({ ...s, pin: e.target.value }))
+                                  }
                                   className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 />
                                 <input
@@ -1294,24 +1320,30 @@ const CartPage = () => {
                                   type="text"
                                   placeholder="City"
                                   value={shipping.city}
-                                  onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                                  onChange={(e) =>
+                                    setShipping((s) => ({ ...s, city: e.target.value }))
+                                  }
                                   className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 />
                               </div>
                               <select
                                 required
                                 value={shipping.state}
-                                onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, state: e.target.value }))
+                                }
                                 className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               >
                                 <option value="">Select State / Union Territory</option>
                                 {INDIAN_STATES_AND_UTS.map((state) => (
-                                  <option key={state} value={state}>{state}</option>
+                                  <option key={state} value={state}>
+                                    {state}
+                                  </option>
                                 ))}
                               </select>
                             </div>
                           )}
- 
+
                           {/* Gift checkbox */}
                           <div className="border-t pt-4">
                             <label className="flex cursor-pointer items-center gap-3">
@@ -1319,7 +1351,9 @@ const CartPage = () => {
                                 type="checkbox"
                                 id="isGift"
                                 checked={shipping.isGift}
-                                onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, isGift: e.target.checked }))
+                                }
                                 className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                               />
                               <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
@@ -1327,7 +1361,7 @@ const CartPage = () => {
                           </div>
                         </div>
                       )}
- 
+
                       {/* ── FOR SOMEONE ELSE ── */}
                       {shipping.isDifferentFromBiller && (
                         <div className="space-y-4">
@@ -1347,7 +1381,9 @@ const CartPage = () => {
                               type="email"
                               placeholder="Recipient's email"
                               value={shipping.email || ""}
-                              onChange={(e) => setShipping((s) => ({ ...s, email: e.target.value }))}
+                              onChange={(e) =>
+                                setShipping((s) => ({ ...s, email: e.target.value }))
+                              }
                               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
                             {/* Recipient phone — digits only, max 10 */}
@@ -1380,7 +1416,7 @@ const CartPage = () => {
                               )}
                             </div>
                           </div>
- 
+
                           <div className="space-y-3">
                             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                               Delivery address
@@ -1391,7 +1427,9 @@ const CartPage = () => {
                                 type="text"
                                 placeholder="Building"
                                 value={shipping.building}
-                                onChange={(e) => setShipping((s) => ({ ...s, building: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, building: e.target.value }))
+                                }
                                 className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                               <input
@@ -1399,7 +1437,9 @@ const CartPage = () => {
                                 type="text"
                                 placeholder="Street"
                                 value={shipping.street}
-                                onChange={(e) => setShipping((s) => ({ ...s, street: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, street: e.target.value }))
+                                }
                                 className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                             </div>
@@ -1408,14 +1448,18 @@ const CartPage = () => {
                               type="text"
                               placeholder="Address"
                               value={shipping.address}
-                              onChange={(e) => setShipping((s) => ({ ...s, address: e.target.value }))}
+                              onChange={(e) =>
+                                setShipping((s) => ({ ...s, address: e.target.value }))
+                              }
                               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
                             <input
                               type="text"
                               placeholder="Landmark (Optional)"
                               value={shipping.landmark}
-                              onChange={(e) => setShipping((s) => ({ ...s, landmark: e.target.value }))}
+                              onChange={(e) =>
+                                setShipping((s) => ({ ...s, landmark: e.target.value }))
+                              }
                               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             />
                             <div className="grid grid-cols-2 gap-3">
@@ -1424,7 +1468,9 @@ const CartPage = () => {
                                 type="text"
                                 placeholder="PIN Code"
                                 value={shipping.pin}
-                                onChange={(e) => setShipping((s) => ({ ...s, pin: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, pin: e.target.value }))
+                                }
                                 className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                               <input
@@ -1432,23 +1478,29 @@ const CartPage = () => {
                                 type="text"
                                 placeholder="City"
                                 value={shipping.city}
-                                onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, city: e.target.value }))
+                                }
                                 className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                               />
                             </div>
                             <select
                               required
                               value={shipping.state}
-                              onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                              onChange={(e) =>
+                                setShipping((s) => ({ ...s, state: e.target.value }))
+                              }
                               className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
                             >
                               <option value="">Select State / Union Territory</option>
                               {INDIAN_STATES_AND_UTS.map((state) => (
-                                <option key={state} value={state}>{state}</option>
+                                <option key={state} value={state}>
+                                  {state}
+                                </option>
                               ))}
                             </select>
                           </div>
- 
+
                           {/* Gift checkbox */}
                           <div className="border-t pt-4">
                             <label className="flex cursor-pointer items-center gap-3">
@@ -1456,7 +1508,9 @@ const CartPage = () => {
                                 type="checkbox"
                                 id="isGiftOthers"
                                 checked={shipping.isGift}
-                                onChange={(e) => setShipping((s) => ({ ...s, isGift: e.target.checked }))}
+                                onChange={(e) =>
+                                  setShipping((s) => ({ ...s, isGift: e.target.checked }))
+                                }
                                 className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                               />
                               <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
@@ -1464,7 +1518,7 @@ const CartPage = () => {
                           </div>
                         </div>
                       )}
- 
+
                       {/* Navigation buttons */}
                       <div className="flex space-x-3 pt-2">
                         <button
@@ -1478,11 +1532,8 @@ const CartPage = () => {
                           onClick={() => setStep(3)}
                           disabled={
                             // For someone else: name, valid phone, and full address required
-                            (shipping.isDifferentFromBiller && (
-                              !shipping.name ||
-                              !shipping.phone ||
-                              !isShippingPhoneValid
-                            )) ||
+                            (shipping.isDifferentFromBiller &&
+                              (!shipping.name || !shipping.phone || !isShippingPhoneValid)) ||
                             // Address fields always required
                             !shipping.address ||
                             !shipping.pin ||
