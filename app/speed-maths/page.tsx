@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 type Challenge = "Addition" | "Subtraction" | "Multiplication" | "Half" | "Squares" | "Friends";
 type AnswerMode = "Choose Option" | "Type Answer";
 type TimeMode = "timed" | "fixed-questions";
-type GameState = "splash" | "menu" | "mode-select" | "settings" | "playing" | "result" | "half-table" | "half-3step" | "square-step" | "friends-practice";
+type GameState = "splash" | "menu" | "mode-select" | "settings" | "playing" | "result" | "half-table" | "half-3step" | "square-step" | "friends-practice" | "mult-table-select" | "mult-table";
 
 interface Question {
   num1: number; num2?: number; answer: number; options?: number[]; display: string;
@@ -63,6 +63,18 @@ function generateQuestion(challenge: Challenge): Question {
 
 function generateHalfPracticeNum() { return rand(100,999); }
 
+
+
+function generateMultiplicationRangeQuestion(minVal: number, maxVal: number): Question {
+  const mid = Math.floor((minVal + maxVal) / 2);
+  const a = rand(minVal, mid);
+  const b = rand(mid, maxVal);
+  const ans = a * b;
+  const nineOff = Math.random() > 0.5 ? ans + 9 : ans - 9;
+  const wrongs = shuffle([ans + 10, ans - 10, nineOff]).filter(x => x > 0 && x !== ans).slice(0, 3);
+  return { num1: a, num2: b, answer: ans, display: `${a} × ${b}`, options: shuffle([ans, ...wrongs]) };
+}
+
 function computeHalfSteps(n: number) {
   const digits = String(n).split("").map(Number);
   const step1 = digits.map(d=>tableHalf(d));
@@ -105,6 +117,8 @@ const CHALLENGE_IMAGES: Record<Challenge,string> = {
 const ROCKET_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.png";
 const CLOUDS_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CLOUDS.png";
 const CLOUDS_MOBILE_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/cloud_mobile.png";
+const CORRECT_IMG       = "https://ik.imagekit.io/pratik11/corrreect.png";
+const WRONG_IMG         = "https://ik.imagekit.io/pratik11/ohno.png";
 
 const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Outfit:wght@400;600;700;900&display=swap');
@@ -170,10 +184,10 @@ function Stars({ count=6 }: { count?:number }) {
   );
 }
 
-function ScoreBar({ score, streak, level, dark }:{score:number;streak:number;level:number;dark:string}) {
+function ScoreBar({ score, streak, dark }:{score:number;streak:number;dark:string}) {
   return (
     <div className="flex gap-3 justify-center flex-wrap mb-4">
-      {[{label:"Score",value:score,emoji:"⭐",color:"#D8AE4F"},{label:"Streak",value:streak,emoji:"🔥",color:"#E45C48"},{label:"Level",value:level,emoji:"🏆",color:dark}]
+      {[{label:"Score",value:score,emoji:"⭐",color:"#D8AE4F"},{label:"Streak",value:streak,emoji:"🔥",color:"#E45C48"}]
         .map(({label,value,emoji,color})=>(
           <div key={label} className="flex items-center gap-2 rounded-2xl px-4 py-2 shadow"
             style={{background:"#fff",border:`2.5px solid ${color}`,color,fontFamily:OUTFIT,fontWeight:700}}>
@@ -275,6 +289,11 @@ function HalfTableQuiz({ bg, light, dark, onNext }:{bg:string;light:string;dark:
           style={{border:`4px solid ${feedback==="correct"?"#22c55e":feedback==="wrong"?"#ef4444":bg}`,
             background:feedback==="correct"?"#f0fdf4":feedback==="wrong"?"#fef2f2":light,
             color:feedback==="correct"?"#15803d":feedback==="wrong"?"#dc2626":bg,fontFamily:RACING,fontSize:"2rem"}} />
+        {feedback&&(
+          <div className="mb-3">
+            <img src={feedback==="correct"?CORRECT_IMG:WRONG_IMG} alt={feedback} style={{width:"100%",maxWidth:"200px",margin:"0 auto",display:"block"}} />
+          </div>
+        )}
         {feedback==="correct" && <p className="text-green-500 text-lg mb-2" style={{fontFamily:OUTFIT,fontWeight:800}}>✅ Correct!</p>}
         {feedback==="wrong" && <p className="text-red-400 text-base mb-2" style={{fontFamily:OUTFIT,fontWeight:800}}>❌ Table half of {currentDigit} is <span style={{color:"#dc2626",fontFamily:RACING}}>{expectedAnswer}</span></p>}
         {!feedback
@@ -989,6 +1008,7 @@ function FriendPanel({
   // For base 100 - separate inputs for tens and units
   const [tensFriend, setTensFriend] = useState("");
   const [unitsFriend, setUnitsFriend] = useState("");
+  const unitsInputRef = useRef<HTMLInputElement>(null);
 
   // For other bases - single input
   const [singleAnswer, setSingleAnswer] = useState("");
@@ -1075,6 +1095,7 @@ function FriendPanel({
             <input
               type="text" inputMode="numeric" maxLength={1} pattern="[0-9]*"
               value={tensFriend} onChange={e => setTensFriend(e.target.value)} placeholder="?"
+              onKeyDown={e => { if (e.key === "Enter" && tensFriend) unitsInputRef.current?.focus(); }}
               style={{
                 width: 60, height: 60, textAlign: "center", fontSize: "1.8rem",
                 fontFamily: RACING, border: `3px solid ${bg}`, borderRadius: 14,
@@ -1083,8 +1104,10 @@ function FriendPanel({
             />
             <span style={{ fontSize: "1.6rem", fontFamily: RACING, color: bg }}>&</span>
             <input
+              ref={unitsInputRef}
               type="text" inputMode="numeric" maxLength={1} pattern="[0-9]*"
               value={unitsFriend} onChange={e => setUnitsFriend(e.target.value)} placeholder="?"
+              onKeyDown={e => { if (e.key === "Enter" && unitsFriend) handleSubmitFor100(); }}
               style={{
                 width: 60, height: 60, textAlign: "center", fontSize: "1.8rem",
                 fontFamily: RACING, border: `3px solid ${bg}`, borderRadius: 14,
@@ -1344,7 +1367,6 @@ export default function SpeedMathsPage() {
   const [question,        setQuestion]        = useState<Question|null>(null);
   const [score,           setScore]           = useState(0);
   const [streak,          setStreak]          = useState(0);
-  const [level,           setLevel]           = useState(1);
   const [feedback,        setFeedback]        = useState<"correct"|"incorrect"|null>(null);
   const [typedAnswer,     setTypedAnswer]     = useState("");
   const [timeLeft,        setTimeLeft]        = useState(0);
@@ -1354,6 +1376,8 @@ export default function SpeedMathsPage() {
   const [half3StepKey,    setHalf3StepKey]    = useState(0);
   const [squareNum,       setSquareNum]       = useState(()=>rand(11,59));
   const [squareViewKey,   setSquareViewKey]   = useState(0);
+  const [minA,            setMinA]            = useState(0);
+  const [maxA,            setMaxA]            = useState(10);
   const [heroVisible,     setHeroVisible]     = useState(false);
   const [cardsVisible,    setCardsVisible]    = useState(false);
   const [decoVisible,     setDecoVisible]     = useState(false);
@@ -1396,11 +1420,12 @@ export default function SpeedMathsPage() {
     isTransitioning.current = false;
     setFeedback(null);
     
-    const q = generateQuestion(challenge);
+    const q = challenge === "Multiplication" && maxA > 0
+      ? generateMultiplicationRangeQuestion(minA, maxA)
+      : generateQuestion(challenge);
     setQuestion(q);
     setScore(0);
     setStreak(0);
-    setLevel(1);
     setTypedAnswer("");
     setQuestionsLeft(10);
     setTotalTime(0);
@@ -1436,7 +1461,9 @@ export default function SpeedMathsPage() {
               setTimeout(() => {
                 isTransitioning.current = false;
                 setFeedback(null);
-                const nextQuestion = generateQuestion(challenge);
+                const nextQuestion = challenge === "Multiplication" && maxA > 0
+                  ? generateMultiplicationRangeQuestion(minA, maxA)
+                  : generateQuestion(challenge);
                 setQuestion(nextQuestion);
                 setTypedAnswer("");
                 setTimeLeft(secondsPerQ);
@@ -1453,7 +1480,7 @@ export default function SpeedMathsPage() {
         setTotalTime(t => t + 1);
       }, 1000);
     }
-  }, [challenge, timeMode, secondsPerQ, stopTimers, feedback]);
+  }, [challenge, timeMode, secondsPerQ, stopTimers, feedback, minA, maxA]);
 
   const handleAnswer = useCallback((chosen: number | string) => {
     if (!question || feedback || isTransitioning.current) return;
@@ -1466,11 +1493,7 @@ export default function SpeedMathsPage() {
     
     if(correct) {
       setScore(s => s + 10 + streak * 2);
-      setStreak(s => {
-        const ns = s + 1;
-        if(ns % 5 === 0) setLevel(l => l + 1);
-        return ns;
-      });
+      setStreak(s => s + 1);
     } else {
       setStreak(0);
     }
@@ -1507,7 +1530,9 @@ export default function SpeedMathsPage() {
             setTimeout(() => {
               isTransitioning.current = false;
               setFeedback(null);
-              const nextQuestion = generateQuestion(challenge);
+              const nextQuestion = challenge === "Multiplication" && maxA > 0
+                ? generateMultiplicationRangeQuestion(minA, maxA)
+                : generateQuestion(challenge);
               setQuestion(nextQuestion);
               setTypedAnswer("");
               setTimeLeft(secondsPerQ);
@@ -1527,13 +1552,17 @@ export default function SpeedMathsPage() {
           return;
         }
         setQuestionsLeft(next);
-        const nextQuestion = generateQuestion(challenge);
+        const nextQuestion = challenge === "Multiplication" && maxA > 0
+          ? generateMultiplicationRangeQuestion(minA, maxA)
+          : generateQuestion(challenge);
         setQuestion(nextQuestion);
         setFeedback(null);
         setTypedAnswer("");
         isTransitioning.current = false;
       } else {
-        const nextQuestion = generateQuestion(challenge);
+        const nextQuestion = challenge === "Multiplication" && maxA > 0
+          ? generateMultiplicationRangeQuestion(minA, maxA)
+          : generateQuestion(challenge);
         setQuestion(nextQuestion);
         setFeedback(null);
         setTypedAnswer("");
@@ -1542,7 +1571,7 @@ export default function SpeedMathsPage() {
         startNextQuestionTimer(secondsPerQ);
       }
     }, 1200);
-  }, [question, feedback, streak, timeMode, questionsLeft, challenge, secondsPerQ, stopTimers]);
+  }, [question, feedback, streak, timeMode, questionsLeft, challenge, secondsPerQ, stopTimers, minA, maxA]);
 
   useEffect(() => {
     return () => stopTimers();
@@ -1682,7 +1711,14 @@ export default function SpeedMathsPage() {
             <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Challenge</button>
           </div>
         </>)}
-        {challenge!=="Half"&&challenge!=="Squares"&&challenge!=="Friends"&&(<>
+        {challenge==="Multiplication"&&(<>
+          <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
+          <div className="flex flex-col gap-3 w-full max-w-sm">
+            <button onClick={()=>setGameState("mult-table-select")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>📊 Table Challenge</button>
+            <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Quick Mix</button>
+          </div>
+        </>)}
+        {challenge!=="Half"&&challenge!=="Squares"&&challenge!=="Friends"&&challenge!=="Multiplication"&&(<>
           <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>How do you want to answer?</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
             <button onClick={()=>{setAnswerMode("Choose Option");setGameState("settings");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:answerMode==="Choose Option"?bg:light,border:`3px solid ${bg}`,color:answerMode==="Choose Option"?"#fff":bg,fontFamily:RACING}}>🎯 Choose Option</button>
@@ -1725,9 +1761,12 @@ export default function SpeedMathsPage() {
     const{bg,light,dark}=CHALLENGE_COLORS["Half"];
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg}}>
-        <style>{GLOBAL_STYLES}</style><Stars count={6}/>
-        <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>½</div>
-        <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half Table</h2>
+  <style>{GLOBAL_STYLES}</style><Stars count={6}/>
+  <div className="w-full max-w-sm flex justify-start mb-2">
+    <button onClick={()=>setGameState("mode-select")} style={{color:dark,fontFamily:RACING,fontSize:"1.1rem",background:"none",border:"none",cursor:"pointer"}}>✕ Exit</button>
+  </div>
+  <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>½</div>
+  <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half Table</h2>
         <p className="mb-6" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>What is half of each digit?</p>
         <HalfTableQuiz bg={bg} light={light} dark={dark} onNext={()=>{setHalfPracticeNum(generateHalfPracticeNum());setHalf3StepKey(k=>k+1);setGameState("half-3step");}} />
       </div>
@@ -1739,7 +1778,10 @@ export default function SpeedMathsPage() {
     const{bg,light,dark}=CHALLENGE_COLORS["Half"];
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
-        <style>{GLOBAL_STYLES}</style><Stars count={5}/>
+  <style>{GLOBAL_STYLES}</style><Stars count={5}/>
+  <div className="w-full max-w-sm flex justify-start mb-2">
+    <button onClick={()=>setGameState("mode-select")} style={{color:dark,fontFamily:RACING,fontSize:"1.1rem",background:"none",border:"none",cursor:"pointer"}}>✕ Exit</button>
+  </div>
         <h2 className="text-3xl mb-1" style={{color:bg,fontFamily:RACING}}>Half 3-Step Method</h2>
         <p className="mb-6 text-sm text-center" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>Follow the steps to find half of the number below!</p>
         <Half3StepInteractive key={half3StepKey} practiceNum={halfPracticeNum} bg={bg} light={light} dark={dark}
@@ -1768,8 +1810,11 @@ export default function SpeedMathsPage() {
     };
     return(
       <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10 overflow-y-auto" style={{background:gameBg}}>
-        <style>{GLOBAL_STYLES}</style><Stars count={5}/>
-        <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>²</div>
+  <style>{GLOBAL_STYLES}</style><Stars count={5}/>
+  <div className="w-full max-w-sm flex justify-start mb-2">
+    <button onClick={()=>setGameState("mode-select")} style={{color:dark,fontFamily:RACING,fontSize:"1.1rem",background:"none",border:"none",cursor:"pointer"}}>✕ Exit</button>
+  </div>
+  <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>²</div>
         <h2 className="text-3xl mb-4" style={{color:bg,fontFamily:RACING}}>Square Steps</h2>
         <SquareStepView key={squareViewKey} squareNum={squareNum} bg={bg} light={light} dark={dark}
           onTryAnother={()=>{setSquareNum(rand(26,125));setSquareViewKey(k=>k+1);}}
@@ -1795,11 +1840,15 @@ export default function SpeedMathsPage() {
         <Stars count={6}/>
 
         {/* Compact header */}
-        <div style={{
-          display: "flex", flexDirection: "column", alignItems: "center",
-          paddingTop: 16, paddingBottom: 8, flexShrink: 0,
-        }}>
-          <div style={{ fontFamily: RACING, fontSize: "1.8rem", color: bg, lineHeight: 1 }}>🤝</div>
+<div style={{
+  display: "flex", flexDirection: "column", alignItems: "center",
+  paddingTop: 16, paddingBottom: 8, flexShrink: 0, position: "relative", width: "100%",
+}}>
+  <button onClick={()=>setGameState("mode-select")}
+    style={{position:"absolute",left:16,top:16,color:dark,fontFamily:RACING,fontSize:"1.1rem",background:"none",border:"none",cursor:"pointer"}}>
+    ✕ Exit
+  </button>
+  <div style={{ fontFamily: RACING, fontSize: "1.8rem", color: bg, lineHeight: 1 }}>🤝</div>
           <h2 style={{ color: bg, fontFamily: RACING, fontSize: "1.6rem", margin: "2px 0 0" }}>Friends</h2>
           <p style={{ color: dark, fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.75rem", margin: 0 }}>
             Pairs that add up to 9, 10, or 100!
@@ -1819,6 +1868,66 @@ export default function SpeedMathsPage() {
     );
   }
 
+  // ─── MULTIPLICATION TABLE SELECT ───────────────────────────────────────────
+  if(gameState==="mult-table-select"){
+    const{bg,light,dark}=CHALLENGE_COLORS["Multiplication"];
+    const mid = Math.floor((minA + maxA) / 2);
+    return(
+      <div className="min-h-screen flex flex-col items-center px-4 pt-8 pb-10" style={{background:gameBg,fontFamily:OUTFIT}}>
+        <style>{GLOBAL_STYLES}</style><Stars count={6}/>
+        <h2 className="text-3xl mb-2" style={{color:bg,fontFamily:RACING}}>Multiplication Challenge</h2>
+        <p className="mb-6 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:600}}>Set your number range</p>
+        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-6 mb-6 border-2" style={{borderColor:bg}}>
+          <p style={{color:bg,fontFamily:RACING,fontSize:"1.2rem",marginBottom:"8px"}}>Range (0 – 29)</p>
+          <div className="flex gap-2 mb-3">
+            <input type="number" min={0} max={29} value={minA}
+              onChange={e=>setMinA(Math.min(maxA - 1, Math.max(0, Number(e.target.value))))}
+              className="flex-1 px-3 py-2 rounded-lg border-2 text-center"
+              style={{borderColor:bg, fontFamily:RACING, fontSize:"1.2rem", color:bg}} />
+            <span style={{fontFamily:RACING,fontSize:"1.4rem",color:bg,display:"flex",alignItems:"center"}}>–</span>
+            <input type="number" min={0} max={29} value={maxA}
+              onChange={e=>setMaxA(Math.max(minA + 1, Math.min(29, Number(e.target.value))))}
+              className="flex-1 px-3 py-2 rounded-lg border-2 text-center"
+              style={{borderColor:bg, fontFamily:RACING, fontSize:"1.2rem", color:bg}} />
+          </div>
+          <input type="range" min={0} max={29} value={minA}
+            onChange={e=>setMinA(Math.min(maxA - 1, Number(e.target.value)))}
+            className="w-full mb-2" style={{accentColor:bg}}/>
+          <input type="range" min={0} max={29} value={maxA}
+            onChange={e=>setMaxA(Math.max(minA + 1, Number(e.target.value)))}
+            className="w-full mb-4" style={{accentColor:bg}}/>
+
+          {/* Visual split preview */}
+          <div className="rounded-2xl p-4 text-center" style={{background:light, border:`2px dashed ${bg}55`}}>
+            <p style={{fontFamily:OUTFIT, fontWeight:700, color:dark, fontSize:"0.85rem", marginBottom:6}}>
+              How A × B will be picked:
+            </p>
+            <div className="flex gap-3 justify-center items-center">
+              <div className="rounded-xl px-4 py-2" style={{background:bg, color:"#fff"}}>
+                <div style={{fontFamily:OUTFIT, fontSize:"0.7rem", fontWeight:600, opacity:0.85}}>A (lower half)</div>
+                <div style={{fontFamily:RACING, fontSize:"1.1rem"}}>{minA} – {mid}</div>
+              </div>
+              <span style={{fontFamily:RACING, fontSize:"1.4rem", color:bg}}>×</span>
+              <div className="rounded-xl px-4 py-2" style={{background:bg, color:"#fff"}}>
+                <div style={{fontFamily:OUTFIT, fontSize:"0.7rem", fontWeight:600, opacity:0.85}}>B (upper half)</div>
+                <div style={{fontFamily:RACING, fontSize:"1.1rem"}}>{mid} – {maxA}</div>
+              </div>
+            </div>
+          </div>
+
+          <p style={{color:dark,fontFamily:OUTFIT,fontSize:"0.85rem",marginTop:"12px",textAlign:"center"}}>
+            ✓ 10 questions with A from the lower half, B from the upper half
+          </p>
+        </div>
+        <button onClick={()=>setGameState("settings")}
+          className="w-full max-w-sm rounded-3xl py-5 shadow-xl active:scale-95 hover:scale-105"
+          style={{background:bg,color:"#fff",fontFamily:RACING,fontSize:"1.6rem"}}>
+          🚀 Start Challenge!
+        </button>
+      </div>
+    );
+  }
+
   // ─── RESULT ───────────────────────────────────────────────────────────────
   if(gameState==="result"){
     const{bg,dark}=CHALLENGE_COLORS[challenge];
@@ -1828,7 +1937,7 @@ export default function SpeedMathsPage() {
         <div className="text-7xl mb-4">🏆</div>
         <h2 className="text-4xl mb-2" style={{color:bg,fontFamily:RACING}}>Well Done!</h2>
         <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-sm border-2 mb-6" style={{borderColor:bg}}>
-          {[{emoji:"⭐",label:"Score",value:score},{emoji:"🔥",label:"Best Streak",value:streak},{emoji:"🏆",label:"Level Reached",value:level},
+          {[{emoji:"⭐",label:"Score",value:score},{emoji:"🔥",label:"Best Streak",value:streak},
             ...(timeMode==="fixed-questions"?[{emoji:"⏱",label:"Total Time",value:`${totalTime}s`}]:[])].map(({emoji,label,value})=>(
             <div key={label} className="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
               <span className="text-2xl">{emoji}</span>
@@ -1857,17 +1966,24 @@ export default function SpeedMathsPage() {
         <div className="w-full max-w-md flex items-center justify-between mb-4">
           <button onClick={()=>{stopTimers();setGameState("menu");}} className="text-lg" style={{color:dark,fontFamily:RACING}}>✕</button>
           <h3 style={{color:bg,fontFamily:RACING,fontSize:"1.3rem"}}>{challenge}</h3>
-          {timeMode==="fixed-questions"?<span style={{color:dark,fontFamily:RACING}}>{questionsLeft} left</span>:<span style={{color:dark,fontFamily:RACING}}>⏱ {timeLeft}s</span>}
+          <div className="flex gap-4">
+            {timeMode==="fixed-questions"&&<span style={{color:dark,fontFamily:RACING}}>⏱ {totalTime}s</span>}
+            {timeMode==="timed"?<span style={{color:dark,fontFamily:RACING}}>⏱ {timeLeft}s</span>:<span style={{color:dark,fontFamily:RACING}}>{questionsLeft} left</span>}
+          </div>
         </div>
         {timeMode==="timed"&&(
           <div className="w-full max-w-md h-3 rounded-full mb-4 overflow-hidden" style={{background:"#e0f2f1"}}>
             <div className="h-full rounded-full transition-all duration-1000" style={{width:`${timerPct}%`,background:timerPct>50?bg:timerPct>25?"#D8AE4F":"#E45C48"}} />
           </div>
         )}
-        <ScoreBar score={score} streak={streak} level={level} dark={dark}/>
+        <ScoreBar score={score} streak={streak} dark={dark}/>
         <div className="w-full max-w-md rounded-3xl shadow-2xl p-8 mb-6 text-center relative overflow-hidden"
           style={{background:feedback?feedbackBg:light,border:`4px solid ${feedback?feedbackBg:bg}`}}>
-          {feedback&&<div className="absolute inset-0 flex items-center justify-center"><span className="text-8xl">{feedback==="correct"?"🎉":"😅"}</span></div>}
+          {feedback&&(
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img src={feedback==="correct"?CORRECT_IMG:WRONG_IMG} alt={feedback} style={{width:"80%",maxWidth:"300px",height:"auto",objectFit:"contain"}} />
+            </div>
+          )}
           <div style={{opacity:feedback?0.18:1}}>
             <p className="mb-2 text-base" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>What is</p>
             <div style={{color:bg,fontFamily:RACING,fontSize:"clamp(3rem,12vw,5rem)",lineHeight:1.1}}>{question.display}</div>

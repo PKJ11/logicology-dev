@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import SiteFooter from "@/components/Footer";
 import Community from "@/components/Community";
 import Image from "next/image";
+import Head from "next/head";
 
 interface UserData {
   id: string;
@@ -24,17 +25,14 @@ interface Worksheet {
   difficulty: string;
 }
 
-// Jio Interakt API configuration
 const INTERAKT_API_KEY = "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=";
 const INTERAKT_BASE_URL = "https://api.interakt.ai/v1/public";
 
-// WhatsApp template names - create these templates in Interakt under "Utility" category
 const WHATSAPP_TEMPLATES = {
-  COMMUNITY_INVITE: "community_invite", // Create this template in Interakt
-  WELCOME: "community_welcome", // Optional: for welcoming new users
+  COMMUNITY_INVITE: "community_invite",
+  WELCOME: "community_welcome",
 };
 
-// Worksheets data with Worksheet001 to Worksheet005
 const WORKSHEETS: Worksheet[] = [
   {
     id: 1,
@@ -88,6 +86,204 @@ const WORKSHEETS: Worksheet[] = [
   },
 ];
 
+/* ============================================================
+   SHARED HEAD / SEO COMPONENT
+============================================================ */
+function CommunityPageHead() {
+  return (
+    <Head>
+      <title>PlayThinkers Community – Free Worksheets & Learning Activities | Logicology</title>
+      <meta
+        name="description"
+        content="Join the PlayThinkers Community by Logicology to access exclusive printable worksheets, logic puzzles, maze games, word searches, and creative activities for kids. Free to join!"
+      />
+      <meta
+        name="keywords"
+        content="PlayThinkers community, free worksheets for kids, printable puzzles, maze games, word search, colouring activities, logic puzzles, Logicology, educational activities, kids learning, critical thinking worksheets"
+      />
+      <meta
+        name="robots"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      />
+      <meta name="author" content="Logicology" />
+      <meta name="publisher" content="Logicology" />
+      <link rel="canonical" href="https://www.logicology.in/Community" />
+
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://www.logicology.in/Community" />
+      <meta property="og:site_name" content="Logicology" />
+      <meta
+        property="og:title"
+        content="PlayThinkers Community – Free Worksheets & Kids Activities"
+      />
+      <meta
+        property="og:description"
+        content="Join thousands of families in the PlayThinkers Community. Get free printable worksheets, logic puzzles, and creative activities for kids of all ages."
+      />
+      <meta
+        property="og:image"
+        content="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?tr=w-1200,h-630,c-at_max"
+      />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta
+        property="og:image:alt"
+        content="PlayThinkers Community by Logicology – free educational worksheets for kids"
+      />
+      <meta property="og:locale" content="en_IN" />
+
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content="https://www.logicology.in/Community" />
+      <meta name="twitter:title" content="PlayThinkers Community – Free Worksheets for Kids" />
+      <meta
+        name="twitter:description"
+        content="Access exclusive printable worksheets, logic puzzles, and creative activities. Join the PlayThinkers Community today!"
+      />
+      <meta
+        name="twitter:image"
+        content="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?tr=w-1200,h-630,c-at_max"
+      />
+      <meta
+        name="twitter:image:alt"
+        content="PlayThinkers Community by Logicology – educational worksheets for kids"
+      />
+
+      {/* Schema.org — WebPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "PlayThinkers Community",
+            url: "https://www.logicology.in/Community",
+            description:
+              "Join the PlayThinkers Community to access exclusive printable worksheets, logic puzzles, maze games, and creative activities for kids.",
+            publisher: {
+              "@type": "Organization",
+              name: "Logicology",
+              url: "https://www.logicology.in",
+              logo: "https://ik.imagekit.io/pratik11/logicology-logo.png",
+            },
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://www.logicology.in",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Community",
+                  item: "https://www.logicology.in/Community",
+                },
+              ],
+            },
+          }),
+        }}
+      />
+
+      {/* Schema.org — ItemList of worksheets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "PlayThinkers Community Worksheets",
+            description:
+              "Free printable worksheets for kids including maze games, word searches, colouring activities, and logic puzzles.",
+            url: "https://www.logicology.in/Community",
+            itemListElement: WORKSHEETS.map((ws, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "CreativeWork",
+                name: `${ws.title} Worksheet`,
+                description: ws.description,
+                educationalUse: "Practice",
+                learningResourceType: "Worksheet",
+                publisher: { "@type": "Organization", name: "Logicology" },
+              },
+            })),
+          }),
+        }}
+      />
+    </Head>
+  );
+}
+
+/* ============================================================
+   SHARED HEADER COMPONENT
+============================================================ */
+function CommunityHeader({
+  userData,
+  onLogout,
+}: {
+  userData: UserData | null;
+  onLogout?: () => void;
+}) {
+  const router = useRouter();
+
+  return (
+    <header className="border-b border-gray-200 bg-gradient-to-r from-brand-teal to-brand-tealDark shadow-lg">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
+          <div className="flex flex-col items-center gap-4 sm:flex-row">
+            <Link href="/" aria-label="Go to Logicology homepage">
+              <div className="relative h-12 w-48">
+                <Image
+                  src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
+                  alt="PlayThinkers by Logicology – community logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+                PlayThinkers Community
+              </span>
+              <button
+                onClick={() => router.push("/")}
+                aria-label="Back to Logicology homepage"
+                className="ml-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/30"
+              >
+                ← Back to Homepage
+              </button>
+            </div>
+          </div>
+
+          {userData && onLogout && (
+            <div className="flex items-center space-x-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-white">{userData.name}</p>
+                <p className="text-xs text-white/80">{userData.email}</p>
+              </div>
+              <button
+                onClick={onLogout}
+                aria-label="Log out of PlayThinkers Community"
+                className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ============================================================
+   MAIN PAGE COMPONENT
+============================================================ */
 export default function CommunityPage() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -106,17 +302,14 @@ export default function CommunityPage() {
   useEffect(() => {
     const checkAuth = () => {
       if (typeof window === "undefined") return;
-
       const token = localStorage.getItem("communityToken");
-      const userData = localStorage.getItem("userData");
-
-      if (!token || !userData) {
+      const storedUserData = localStorage.getItem("userData");
+      if (!token || !storedUserData) {
         setIsLoading(false);
         return;
       }
-
       try {
-        setUserData(JSON.parse(userData));
+        setUserData(JSON.parse(storedUserData));
       } catch (error) {
         console.error("Error parsing user data:", error);
         localStorage.removeItem("communityToken");
@@ -125,7 +318,6 @@ export default function CommunityPage() {
         setIsLoading(false);
       }
     };
-
     checkAuth();
   }, [router]);
 
@@ -144,33 +336,22 @@ export default function CommunityPage() {
     setTimeout(() => setCopySuccess(false), 3000);
   };
 
-  // Function to validate and clean phone number
-  const cleanPhoneNumber = (phoneNumber: string): string => {
-    return phoneNumber.replace(/\D/g, "");
-  };
+  const cleanPhoneNumber = (phoneNumber: string): string =>
+    phoneNumber.replace(/\D/g, "");
 
-  // Function to extract country code (defaulting to +91 for India)
   const extractCountryCode = (
     phoneNumber: string
   ): { countryCode: string; cleanedNumber: string } => {
     const cleaned = cleanPhoneNumber(phoneNumber);
-
-    // Check if number starts with country code
     if (cleaned.startsWith("91") && cleaned.length >= 12) {
-      return {
-        countryCode: "+91",
-        cleanedNumber: cleaned.substring(2), // Remove country code
-      };
+      return { countryCode: "+91", cleanedNumber: cleaned.substring(2) };
     }
-
-    // Default to Indian number without country code
     return {
       countryCode: "+91",
-      cleanedNumber: cleaned.length > 10 ? cleaned.slice(-10) : cleaned, // Take last 10 digits
+      cleanedNumber: cleaned.length > 10 ? cleaned.slice(-10) : cleaned,
     };
   };
 
-  // Function to send WhatsApp message via Jio Interakt
   const sendInteraktMessage = async (
     phoneNumber: string,
     templateName: string,
@@ -178,13 +359,10 @@ export default function CommunityPage() {
   ): Promise<{ success: boolean; messageId?: string; error?: string }> => {
     try {
       const { countryCode, cleanedNumber } = extractCountryCode(phoneNumber);
-
-      // Validate phone number
       if (cleanedNumber.length !== 10) {
         throw new Error("Invalid phone number. Please enter a 10-digit Indian mobile number.");
       }
 
-      // Step 1: Track/Update user in Interakt
       const trackUserResponse = await fetch(`${INTERAKT_BASE_URL}/track/users/`, {
         method: "POST",
         headers: {
@@ -193,7 +371,7 @@ export default function CommunityPage() {
         },
         body: JSON.stringify({
           phoneNumber: cleanedNumber,
-          countryCode: countryCode,
+          countryCode,
           traits: {
             name: friendName,
             source: "community_invite",
@@ -203,11 +381,8 @@ export default function CommunityPage() {
           },
         }),
       });
+      console.log("Track user result:", await trackUserResponse.json());
 
-      const trackUserResult = await trackUserResponse.json();
-      console.log("Track user result:", trackUserResult);
-
-      // Step 2: Send WhatsApp message
       const messageResponse = await fetch(`${INTERAKT_BASE_URL}/message/`, {
         method: "POST",
         headers: {
@@ -215,78 +390,54 @@ export default function CommunityPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          countryCode: countryCode,
+          countryCode,
           phoneNumber: cleanedNumber,
           type: "Template",
           template: {
             name: templateName,
             languageCode: "en",
-            bodyValues: bodyValues,
+            bodyValues,
           },
         }),
       });
-
       const messageResult = await messageResponse.json();
       console.log("Message result:", messageResult);
 
       if (!messageResult.id) {
         throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
       }
-
-      return {
-        success: true,
-        messageId: messageResult.id,
-      };
+      return { success: true, messageId: messageResult.id };
     } catch (error: any) {
       console.error("Error sending Interakt message:", error);
-      return {
-        success: false,
-        error: error.message || "Failed to send WhatsApp message",
-      };
+      return { success: false, error: error.message || "Failed to send WhatsApp message" };
     }
   };
 
   const handleWhatsappInvite = async () => {
     if (!friendName.trim() || !friendNumber.trim()) {
-      setInviteStatus({
-        success: false,
-        message: "Please enter both name and phone number",
-      });
+      setInviteStatus({ success: false, message: "Please enter both name and phone number" });
       setTimeout(() => setInviteStatus(null), 3000);
       return;
     }
-
     setSendingInvite(true);
     setInviteStatus(null);
-
     try {
-      // Prepare template variables
       const bodyValues = [
-        friendName, // {{1}} - Friend's name
-        userData?.name || "A friend", // {{2}} - Inviter's name
-        "PlayThinkers Community", // {{3}} - Community name
-        "https://www.logicology.in/Community", // {{4}} - Community link
+        friendName,
+        userData?.name || "A friend",
+        "PlayThinkers Community",
+        "https://www.logicology.in/Community",
       ];
-
-      // Send message via Jio Interakt
       const result = await sendInteraktMessage(
         friendNumber,
         WHATSAPP_TEMPLATES.COMMUNITY_INVITE,
         bodyValues
       );
-
       if (result.success) {
-        setInviteStatus({
-          success: true,
-          message: `Invitation sent successfully to ${friendName}!`,
-        });
-
-        // Reset form
+        setInviteStatus({ success: true, message: `Invitation sent successfully to ${friendName}!` });
         setShowWhatsappForm(false);
         setFriendName("");
         setFriendNumber("");
-
-        // Clear success message after 5 seconds
         setTimeout(() => setInviteStatus(null), 5000);
       } else {
         setInviteStatus({
@@ -307,7 +458,6 @@ export default function CommunityPage() {
   const downloadPDF = (pdfPath: string, title: string) => {
     const link = document.createElement("a");
     link.href = pdfPath;
-    // Extract filename from path for download
     const filename = pdfPath.split("/").pop() || `${title.replace(/\s+/g, "_")}.pdf`;
     link.download = filename;
     document.body.appendChild(link);
@@ -315,109 +465,95 @@ export default function CommunityPage() {
     document.body.removeChild(link);
   };
 
-  const openPreview = (pdfPath: string) => {
-    setPreviewPdf(pdfPath);
+  const openPreview = (pdfPath: string) => setPreviewPdf(pdfPath);
+  const closePreview = () => setPreviewPdf(null);
+
+  const getPreviewTitle = (pdfPath: string) => {
+    const filename = pdfPath.split("/").pop() || "Worksheet";
+    return filename.replace(".pdf", "").replace(/Worksheet(\d+)/, "Worksheet $1");
   };
 
-  const closePreview = () => {
-    setPreviewPdf(null);
-  };
-
+  /* ── Loading ── */
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-brand-grayBg">
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 animate-spin rounded-full border-b-2 border-brand-teal"></div>
-          <p className="mt-4 text-brand-tealDark">Loading PlayThinkers Community...</p>
+      <>
+        <CommunityPageHead />
+        <div className="flex min-h-screen items-center justify-center bg-brand-grayBg">
+          <div className="text-center">
+            <div
+              className="mx-auto h-16 w-16 animate-spin rounded-full border-b-2 border-brand-teal"
+              role="status"
+              aria-label="Loading PlayThinkers Community"
+            />
+            <p className="mt-4 text-brand-tealDark">Loading PlayThinkers Community...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
-  // If user is not logged in, show the Community component
+  /* ── Logged-out view ── */
   if (!userData) {
     return (
       <div className="min-h-screen bg-brand-grayBg">
-        {/* Header */}
-        <header className="border-b border-gray-200 bg-gradient-to-r from-brand-teal to-brand-tealDark shadow-lg">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
-              <div className="flex flex-col items-center gap-4 sm:flex-row">
-                <Link href="/" className="flex items-center">
-                  <div className="relative h-12 w-48">
-                    <Image
-                      src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
-                      alt="PlayThinkers Logo"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                </Link>
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-                    PlayThinkers Community
-                  </span>
-                  <button
-                    onClick={() => router.push("/")}
-                    className="ml-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/30"
-                  >
-                    ← Back to Homepage
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Show the Community component below the header */}
+        <CommunityPageHead />
+        <CommunityHeader userData={null} />
         <Community />
 
-        {/* Add some spacing and additional info */}
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-lg">
-            <h2 className="mb-6 text-center text-2xl font-bold text-brand-tealDark">
+          <section
+            aria-labelledby="benefits-heading"
+            className="rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-lg"
+          >
+            <h2
+              id="benefits-heading"
+              className="mb-6 text-center text-2xl font-bold text-brand-tealDark"
+            >
               What You'll Get as a Community Member
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-xl bg-brand-grayBg p-6 text-center">
-                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-teal/10 text-2xl">
-                  📚
+              {[
+                {
+                  emoji: "📚",
+                  bg: "bg-brand-teal/10",
+                  title: "Exclusive Worksheets",
+                  desc: "Monthly printable puzzles and activities",
+                },
+                {
+                  emoji: "🧩",
+                  bg: "bg-brand-coral/10",
+                  title: "Learning Games",
+                  desc: "Interactive games to develop critical thinking",
+                },
+                {
+                  emoji: "🎯",
+                  bg: "bg-brand-gold/10",
+                  title: "Progress Tracking",
+                  desc: "Track your child's learning journey",
+                },
+                {
+                  emoji: "🏆",
+                  bg: "bg-brand-pink/10",
+                  title: "Achievements",
+                  desc: "Earn badges and certificates",
+                },
+              ].map(({ emoji, bg, title, desc }) => (
+                <div key={title} className="rounded-xl bg-brand-grayBg p-6 text-center">
+                  <div
+                    className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${bg} text-2xl`}
+                    aria-hidden="true"
+                  >
+                    {emoji}
+                  </div>
+                  <h3 className="mb-2 font-semibold text-brand-tealDark">{title}</h3>
+                  <p className="text-sm text-gray-600">{desc}</p>
                 </div>
-                <h3 className="mb-2 font-semibold text-brand-tealDark">Exclusive Worksheets</h3>
-                <p className="text-sm text-gray-600">Monthly printable puzzles and activities</p>
-              </div>
-              <div className="rounded-xl bg-brand-grayBg p-6 text-center">
-                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-coral/10 text-2xl">
-                  🧩
-                </div>
-                <h3 className="mb-2 font-semibold text-brand-tealDark">Learning Games</h3>
-                <p className="text-sm text-gray-600">
-                  Interactive games to develop critical thinking
-                </p>
-              </div>
-              <div className="rounded-xl bg-brand-grayBg p-6 text-center">
-                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-gold/10 text-2xl">
-                  🎯
-                </div>
-                <h3 className="mb-2 font-semibold text-brand-tealDark">Progress Tracking</h3>
-                <p className="text-sm text-gray-600">Track your child's learning journey</p>
-              </div>
-              <div className="rounded-xl bg-brand-grayBg p-6 text-center">
-                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-pink/10 text-2xl">
-                  🏆
-                </div>
-                <h3 className="mb-2 font-semibold text-brand-tealDark">Achievements</h3>
-                <p className="text-sm text-gray-600">Earn badges and certificates</p>
-              </div>
+              ))}
             </div>
-
-            <div className="mt-8 text-center">
-              <p className="text-gray-600">
-                Join the community to unlock all these benefits and more!
-              </p>
-            </div>
-          </div>
+            <p className="mt-8 text-center text-gray-600">
+              Join the community to unlock all these benefits and more!
+            </p>
+          </section>
         </div>
 
         <SiteFooter />
@@ -425,74 +561,45 @@ export default function CommunityPage() {
     );
   }
 
+  /* ── Logged-in view ── */
   return (
     <div className="min-h-screen bg-brand-grayBg">
-      {/* Header */}
-      <header className="border-b border-gray-200 bg-gradient-to-r from-brand-teal to-brand-tealDark shadow-lg">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
-            <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <Link href="/" className="flex items-center">
-                <div className="relative h-12 w-48">
-                  <Image
-                    src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
-                    alt="PlayThinkers Logo"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-              </Link>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-                  PlayThinkers Community
-                </span>
-                <button
-                  onClick={() => router.push("/")}
-                  className="ml-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/30"
-                >
-                  ← Back to Homepage
-                </button>
-              </div>
-            </div>
+      <CommunityPageHead />
+      <CommunityHeader userData={userData} onLogout={handleLogout} />
 
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-white">{userData?.name}</p>
-                <p className="text-xs text-white/80">{userData?.email}</p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content - Show only when logged in */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Welcome Section */}
-        <section className="mb-12 text-center">
+
+        {/* Welcome */}
+        <section className="mb-12 text-center" aria-labelledby="welcome-heading">
           <div className="mx-auto max-w-3xl">
-            <h1 className="mb-6 bg-gradient-to-r from-brand-teal to-brand-coral bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
+            <h1
+              id="welcome-heading"
+              className="mb-6 bg-gradient-to-r from-brand-teal to-brand-coral bg-clip-text text-4xl font-bold text-transparent md:text-5xl"
+            >
               Welcome to the PlayThinkers Community
             </h1>
             <p className="mb-8 text-xl text-brand-tealDark">
-              We're thrilled to have you on board, {userData?.name}! Get ready for exclusive content
+              We're thrilled to have you on board, {userData.name}! Get ready for exclusive content
               and premium worksheets.
             </p>
-            <div className="mx-auto h-1 w-24 bg-gradient-to-r from-brand-teal to-brand-coral"></div>
+            <div className="mx-auto h-1 w-24 bg-gradient-to-r from-brand-teal to-brand-coral" />
           </div>
         </section>
 
-        {/* Worksheet Section - Updated with Worksheet001 to Worksheet005 */}
-        <section className="mb-12 rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl">
+        {/* Worksheets */}
+        <section
+          aria-labelledby="worksheets-heading"
+          className="mb-12 rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl"
+        >
           <div className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-teal to-brand-teal px-6 py-3 text-sm font-medium text-white shadow-md">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -502,7 +609,11 @@ export default function CommunityPage() {
               </svg>
               Exclusive Worksheets Available!
             </div>
-            <h2 className="mb-4 text-3xl font-bold text-brand-tealDark">
+
+            <h2
+              id="worksheets-heading"
+              className="mb-4 text-3xl font-bold text-brand-tealDark"
+            >
               Download Your Premium Worksheets
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
@@ -510,7 +621,6 @@ export default function CommunityPage() {
               critical thinking and problem-solving skills for kids of all ages.
             </p>
 
-            {/* Worksheets Grid - 3 per row */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {WORKSHEETS.slice(0, 3).map((worksheet) => (
                 <WorksheetCard
@@ -521,9 +631,7 @@ export default function CommunityPage() {
                 />
               ))}
             </div>
-
-            {/* Row for worksheets 4 and 5 - centered with 2 per row */}
-            <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
+            <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
               {WORKSHEETS.slice(3, 5).map((worksheet) => (
                 <WorksheetCard
                   key={worksheet.id}
@@ -537,48 +645,55 @@ export default function CommunityPage() {
         </section>
 
         {/* Community Guidelines */}
-        <section className="rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl">
+        <section
+          aria-labelledby="guidelines-heading"
+          className="rounded-3xl border border-brand-teal/10 bg-white p-8 shadow-xl"
+        >
           <div className="mx-auto max-w-4xl">
-            <h2 className="mb-8 text-center text-3xl font-bold text-brand-tealDark">
+            <h2
+              id="guidelines-heading"
+              className="mb-8 text-center text-3xl font-bold text-brand-tealDark"
+            >
               PlayThinkers Community Guidelines
             </h2>
-
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <GuidelineItem
-                title="Be Creative"
-                description="Share unique ideas and creative solutions to puzzles."
-              />
-              <GuidelineItem
-                title="Share Learning"
-                description="Help fellow PlayThinkers learn and grow together."
-              />
-              <GuidelineItem
-                title="Play Fair"
-                description="Respect all community members in discussions and activities."
-              />
-              <GuidelineItem
-                title="Keep it Fun"
-                description="Maintain a positive and engaging learning environment."
-              />
+              <GuidelineItem title="Be Creative" description="Share unique ideas and creative solutions to puzzles." />
+              <GuidelineItem title="Share Learning" description="Help fellow PlayThinkers learn and grow together." />
+              <GuidelineItem title="Play Fair" description="Respect all community members in discussions and activities." />
+              <GuidelineItem title="Keep it Fun" description="Maintain a positive and engaging learning environment." />
             </div>
           </div>
         </section>
 
-        {/* Sharing Section */}
-        <section className="mb-8 mt-16 text-center">
+        {/* Sharing */}
+        <section
+          aria-labelledby="sharing-heading"
+          className="mb-8 mt-16 text-center"
+        >
           <div className="rounded-3xl bg-gradient-to-r from-brand-teal to-brand-tealDark p-8 text-white shadow-xl">
-            <h3 className="mb-4 text-2xl font-bold">Loving the PlayThinkers Experience?</h3>
+            <h3
+              id="sharing-heading"
+              className="mb-4 text-2xl font-bold"
+            >
+              Loving the PlayThinkers Experience?
+            </h3>
             <p className="mb-6 text-lg opacity-90">
               Keep visiting this page for more printable worksheets and exciting content.
             </p>
 
-            {/* Copy Link Option */}
             <div className="mb-8">
               <button
                 onClick={copyCommunityLink}
+                aria-label="Copy community link to share with friends"
                 className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-6 py-3 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  aria-hidden="true"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -589,26 +704,25 @@ export default function CommunityPage() {
                 Share with your friends
               </button>
               {copySuccess && (
-                <p className="text-sm text-green-200">
+                <p role="status" className="text-sm text-green-200">
                   ✓ Community link copied! Share through WhatsApp or other platforms.
                 </p>
               )}
             </div>
 
-            {/* OR Divider */}
             <div className="mb-6 flex items-center justify-center">
-              <div className="h-px w-16 bg-white/30"></div>
+              <div className="h-px w-16 bg-white/30" />
               <span className="mx-4 text-sm text-white/70">OR</span>
-              <div className="h-px w-16 bg-white/30"></div>
+              <div className="h-px w-16 bg-white/30" />
             </div>
 
-            {/* WhatsApp Invite Option */}
             {!showWhatsappForm ? (
               <button
                 onClick={() => setShowWhatsappForm(true)}
+                aria-label="Invite a friend to PlayThinkers Community via WhatsApp"
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                 </svg>
                 Invite via WhatsApp
@@ -617,9 +731,9 @@ export default function CommunityPage() {
               <div className="mx-auto max-w-md rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
                 <h4 className="mb-4 text-lg font-semibold">Invite Friend via WhatsApp</h4>
 
-                {/* Status Message */}
                 {inviteStatus && (
                   <div
+                    role="status"
                     className={`mb-4 rounded-lg p-3 text-sm ${
                       inviteStatus.success
                         ? "bg-green-500/20 text-green-100"
@@ -636,26 +750,32 @@ export default function CommunityPage() {
                     placeholder="Friend's Name"
                     value={friendName}
                     onChange={(e) => setFriendName(e.target.value)}
-                    className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    aria-label="Friend's name"
                     disabled={sendingInvite}
+                    className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
                   <input
                     type="tel"
                     placeholder="Friend's 10-digit Phone Number"
                     value={friendNumber}
                     onChange={(e) => setFriendNumber(e.target.value)}
-                    className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    aria-label="Friend's 10-digit phone number"
                     disabled={sendingInvite}
+                    className="w-full rounded-full border border-white/30 bg-white/20 px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
                   <div className="flex gap-3">
                     <button
                       onClick={handleWhatsappInvite}
                       disabled={sendingInvite}
+                      aria-label="Send WhatsApp invitation"
                       className="flex-1 rounded-full bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-white shadow-lg hover:scale-105 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {sendingInvite ? (
                         <span className="flex items-center justify-center gap-2">
-                          <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
+                          <div
+                            className="h-4 w-4 animate-spin rounded-full border-b-2 border-white"
+                            aria-hidden="true"
+                          />
                           Sending...
                         </span>
                       ) : (
@@ -668,12 +788,12 @@ export default function CommunityPage() {
                         setInviteStatus(null);
                       }}
                       disabled={sendingInvite}
+                      aria-label="Cancel WhatsApp invite"
                       className="flex-1 rounded-full border border-white/30 bg-white/20 px-6 py-3 text-white backdrop-blur-sm hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       Cancel
                     </button>
                   </div>
-
                   <p className="mt-4 text-center text-xs text-white/60">
                     Using Jio Interakt for reliable WhatsApp message delivery
                   </p>
@@ -683,7 +803,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* More Coming Soon */}
+        {/* Coming Soon */}
         <section className="rounded-3xl border border-brand-teal/10 bg-white p-8 text-center shadow-xl">
           <h3 className="mb-4 text-2xl font-bold text-brand-tealDark">
             More Exciting Content Coming Soon!
@@ -696,13 +816,20 @@ export default function CommunityPage() {
 
       {/* PDF Preview Modal */}
       {previewPdf && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`PDF preview: ${getPreviewTitle(previewPdf)}`}
+        >
           <div className="relative w-full max-w-4xl rounded-lg bg-white p-4">
             <button
               onClick={closePreview}
+              aria-label="Close PDF preview"
               className="absolute right-4 top-4 z-10 rounded-full bg-white p-2 shadow-lg hover:bg-gray-100"
             >
               <svg
+                aria-hidden="true"
                 className="h-6 w-6 text-gray-600"
                 fill="none"
                 stroke="currentColor"
@@ -717,22 +844,23 @@ export default function CommunityPage() {
               </svg>
             </button>
             <div className="h-[80vh]">
-              <iframe src={previewPdf} className="h-full w-full rounded-md" title="PDF Preview" />
+              <iframe
+                src={previewPdf}
+                className="h-full w-full rounded-md"
+                title={`Preview of ${getPreviewTitle(previewPdf)}`}
+              />
             </div>
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex justify-center gap-3">
               <button
-                onClick={() =>
-                  downloadPDF(
-                    previewPdf,
-                    previewPdf.split("/").pop()?.replace(".pdf", "") || "Worksheet"
-                  )
-                }
-                className="mr-3 rounded-lg bg-brand-teal px-6 py-2 text-white hover:bg-brand-tealDark"
+                onClick={() => downloadPDF(previewPdf, getPreviewTitle(previewPdf))}
+                aria-label={`Download ${getPreviewTitle(previewPdf)}`}
+                className="rounded-lg bg-brand-teal px-6 py-2 text-white hover:bg-brand-tealDark"
               >
                 Download
               </button>
               <button
                 onClick={closePreview}
+                aria-label="Close PDF preview"
                 className="rounded-lg border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50"
               >
                 Close Preview
@@ -742,13 +870,14 @@ export default function CommunityPage() {
         </div>
       )}
 
-      {/* Footer */}
       <SiteFooter />
     </div>
   );
 }
 
-// Worksheet Card Component
+/* ============================================================
+   WORKSHEET CARD COMPONENT
+============================================================ */
 function WorksheetCard({
   worksheet,
   onDownload,
@@ -758,7 +887,6 @@ function WorksheetCard({
   onDownload: (pdfPath: string, title: string) => void;
   onPreview: (pdfPath: string) => void;
 }) {
-  // Function to get worksheet number from filename
   const getWorksheetNumber = (pdfPath: string) => {
     const filename = pdfPath.split("/").pop() || "";
     const match = filename.match(/Worksheet(\d+)/);
@@ -768,12 +896,18 @@ function WorksheetCard({
   const worksheetNumber = getWorksheetNumber(worksheet.pdfPath);
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
-      {/* Worksheet Header with Number */}
+    <article
+      aria-label={`Worksheet ${worksheetNumber}: ${worksheet.title}`}
+      className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+    >
+      {/* Card Header */}
       <div className="border-b border-gray-100 bg-gradient-to-r from-brand-teal/5 to-brand-coral/5 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-brand-teal to-brand-teal">
+            <div
+              aria-hidden="true"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-brand-teal to-brand-teal"
+            >
               <span className="text-sm font-bold text-white">WS</span>
             </div>
             <div>
@@ -781,33 +915,43 @@ function WorksheetCard({
               <div className="text-lg font-bold text-brand-tealDark">#{worksheetNumber}</div>
             </div>
           </div>
-          <div
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              worksheet.difficulty === "Beginner"
-                ? "bg-green-100 text-green-800"
-                : worksheet.difficulty === "Intermediate"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-red-100 text-red-800"
-            }`}
-          >
-            {worksheet.difficulty}
-          </div>
+          {worksheet.difficulty && (
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                worksheet.difficulty === "Beginner"
+                  ? "bg-green-100 text-green-800"
+                  : worksheet.difficulty === "Intermediate"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-red-100 text-red-800"
+              }`}
+            >
+              {worksheet.difficulty}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Worksheet Content */}
+      {/* Card Body */}
       <div className="flex flex-1 flex-col p-6">
         <h3 className="mb-3 text-xl font-bold text-brand-tealDark">{worksheet.title}</h3>
-        <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">{worksheet.description}</p>
+        <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">
+          {worksheet.description}
+        </p>
 
-        {/* Action Buttons */}
         <div className="flex gap-3">
           <button
             onClick={() => onPreview(worksheet.pdfPath)}
+            aria-label={`Preview ${worksheet.title} worksheet`}
             className="flex-1 rounded-lg border border-brand-teal bg-white px-4 py-3 text-sm font-medium text-brand-teal transition-all hover:bg-brand-teal/5 hover:shadow-sm"
           >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="flex items-center justify-center gap-2">
+              <svg
+                aria-hidden="true"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -822,14 +966,21 @@ function WorksheetCard({
                 />
               </svg>
               Preview
-            </div>
+            </span>
           </button>
           <button
             onClick={() => onDownload(worksheet.pdfPath, worksheet.title)}
+            aria-label={`Download ${worksheet.title} worksheet as PDF`}
             className="flex-1 rounded-lg bg-gradient-to-r from-brand-teal to-brand-teal px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:scale-105 hover:shadow-md"
           >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="flex items-center justify-center gap-2">
+              <svg
+                aria-hidden="true"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -838,19 +989,24 @@ function WorksheetCard({
                 />
               </svg>
               Download
-            </div>
+            </span>
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
-// Guideline Item Component
+/* ============================================================
+   GUIDELINE ITEM COMPONENT
+============================================================ */
 function GuidelineItem({ title, description }: { title: string; description: string }) {
   return (
     <div className="flex items-start space-x-4 rounded-xl bg-brand-grayBg p-4 shadow-sm">
-      <div className="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-teal">
+      <div
+        aria-hidden="true"
+        className="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-teal"
+      >
         <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
           <path
             fillRule="evenodd"
@@ -865,4 +1021,4 @@ function GuidelineItem({ title, description }: { title: string; description: str
       </div>
     </div>
   );
-}
+} 

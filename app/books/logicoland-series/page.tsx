@@ -44,75 +44,184 @@ export default function Logicoland1Page() {
   return (
     <>
       <Head>
-        <title>Logicoland Volume 1 - STEM Logic & Puzzles for Kids | Logicology</title>
-        <meta name="description" content="Logicoland Volume 1 is an interactive logic-based learning book that makes STEM fun! Solve colorful Sudoku puzzles, play anagram games, complete symmetry patterns, and develop critical thinking skills through play." />
-        <meta name="keywords" content="logicoland, logic puzzles for kids, STEM learning, educational games, sudoku for kids, anagram games, symmetry patterns, logical reasoning, brain teasers for children, printable worksheets, math puzzles, critical thinking" />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/logicoland" />
-        <meta property="og:title" content="Logicoland Volume 1 - Empowering Minds Through STEM Play" />
-        <meta property="og:description" content="Interactive logic puzzles, anagram games, symmetry patterns, and printable worksheets for kids aged 6-12. Learn while having fun!" />
-        <meta property="og:image" content="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495" />
-        
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://yourdomain.com/logicoland" />
-        <meta property="twitter:title" content="Logicoland Volume 1 - Logic Puzzles for Kids" />
-        <meta property="twitter:description" content="Make learning fun with Logicoland! Interactive puzzles, games, and printables that develop logical thinking." />
-        <meta property="twitter:image" content="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495" />
-        
-        {/* Additional SEO meta tags */}
-        <meta name="robots" content="index, follow" />
+        <title>Logicoland Volume 1 – STEM Logic & Puzzles for Kids | Logicology</title>
+        <meta
+          name="description"
+          content="Logicoland Volume 1 is an interactive logic-based learning book for kids ages 6–12. Solve colorful Sudoku puzzles, play anagram games, complete symmetry patterns, and develop critical thinking skills through play."
+        />
+        <meta
+          name="keywords"
+          content="logicoland volume 1, logic puzzles for kids, STEM learning book, sudoku for kids, anagram games, symmetry patterns, logical reasoning, brain teasers for children, printable worksheets, math puzzles, critical thinking, educational book India, Logicology"
+        />
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
         <meta name="author" content="Logicology" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="publisher" content="Logicology" />
         <meta name="theme-color" content="#0A8A80" />
-        <link rel="canonical" href="https://yourdomain.com/logicoland" />
-        
-        {/* Schema.org markup for Google */}
+        <link rel="canonical" href="https://www.logicology.in/books/logicoland-volume-1" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="book" />
+        <meta property="og:url" content="https://www.logicology.in/books/logicoland-volume-1" />
+        <meta property="og:site_name" content="Logicology" />
+        <meta
+          property="og:title"
+          content="Logicoland Volume 1 – Empowering Minds Through STEM Play"
+        />
+        <meta
+          property="og:description"
+          content="Interactive logic puzzles, anagram games, symmetry patterns, and printable worksheets for kids aged 6–12. Learn while having fun with Logicoland!"
+        />
+        <meta
+          property="og:image"
+          content="https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Logicoland Volume 1 book cover – educational logic puzzles for kids"
+        />
+        <meta property="og:locale" content="en_IN" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.logicology.in/books/logicoland-volume-1" />
+        <meta name="twitter:title" content="Logicoland Volume 1 – Logic Puzzles for Kids" />
+        <meta
+          name="twitter:description"
+          content="Make learning fun with Logicoland! Interactive puzzles, games, and printables that develop logical thinking in kids aged 6–12."
+        />
+        <meta
+          name="twitter:image"
+          content="https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max"
+        />
+        <meta
+          name="twitter:image:alt"
+          content="Logicoland Volume 1 – educational STEM book for kids"
+        />
+
+        {/* Schema.org — Book */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Book",
-              "name": "Logicoland Volume 1",
-              "description": "Interactive logic-based learning book with puzzles and games for kids",
-              "author": {
+              name: "Logicoland Volume 1",
+              url: "https://www.logicology.in/books/logicoland-volume-1",
+              description:
+                "Interactive logic-based learning book with colorful Sudoku puzzles, anagram games, symmetry patterns, and printable worksheets for kids aged 6–12.",
+              image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png",
+              author: {
                 "@type": "Organization",
-                "name": "Logicology"
+                name: "Logicology",
+                url: "https://www.logicology.in",
               },
-              "educationalAlignment": {
+              publisher: {
+                "@type": "Organization",
+                name: "Logicology",
+                url: "https://www.logicology.in",
+                logo: "https://ik.imagekit.io/pratik11/logicology-logo.png",
+              },
+              inLanguage: "en",
+              audience: {
+                "@type": "PeopleAudience",
+                suggestedMinAge: 6,
+                suggestedMaxAge: 12,
+              },
+              educationalAlignment: {
                 "@type": "AlignmentObject",
-                "educationalFramework": "STEM",
-                "targetName": "Logical Reasoning, Pattern Recognition, Problem Solving"
+                educationalFramework: "STEM",
+                targetName: "Logical Reasoning, Pattern Recognition, Problem Solving",
               },
-              "audience": {
-                "@type": "Audience",
-                "suggestedMinAge": 6,
-                "suggestedMaxAge": 12
-              },
-              "offers": {
+              offers: {
                 "@type": "Offer",
-                "price": "19.99",
-                "priceCurrency": "USD",
-                "availability": "https://schema.org/InStock"
+                url: "https://www.logicology.in/products",
+                priceCurrency: "INR",
+                availability: "https://schema.org/InStock",
               },
-              "aggregateRating": {
+              aggregateRating: {
                 "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "150"
+                ratingValue: "4.8",
+                ratingCount: "150",
+                bestRating: "5",
+                worstRating: "1",
               },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Logicology"
-              }
-            })
+            }),
+          }}
+        />
+
+        {/* Schema.org — BreadcrumbList */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://www.logicology.in",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Books",
+                  item: "https://www.logicology.in/books",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: "Logicoland Volume 1",
+                  item: "https://www.logicology.in/books/logicoland-volume-1",
+                },
+              ],
+            }),
+          }}
+        />
+
+        {/* Schema.org — FAQPage */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What age is Logicoland Volume 1 suitable for?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Logicoland Volume 1 is designed for children aged 6 to 12 years. It uses colorful, visual puzzles that are easy for beginners while still challenging enough to keep older kids engaged.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What kind of puzzles are in Logicoland Volume 1?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "The book includes 4×4 color Sudoku puzzles, anagram games, symmetry pattern challenges, and downloadable printable worksheets — all designed to build logical thinking and problem-solving skills.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Does Logicoland Volume 1 come with printable worksheets?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes! Logicoland Volume 1 includes free downloadable PDF worksheets for extra practice, available directly on the product page.",
+                  },
+                },
+              ],
+            }),
           }}
         />
       </Head>
-
-      
 
       <main className="bg-brand-grayBg text-brand-tealDark">
         {/* ================= HERO ================= */}
@@ -409,7 +518,7 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 
   return (
     <section ref={sectionRef} className="w-full overflow-hidden bg-brand-coral text-white">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw]">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:max-w-[75vw] md:py-20 lg:mx-auto lg:max-w-[75vw]">
         <div
           className={`grid items-center gap-12 transition-all duration-1000 md:grid-cols-2 ${
             isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
@@ -482,7 +591,7 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 
       {/* ---- Modal ---- */}
       {isOpen && (
-        <div className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+        <div className="fixed inset-0 z-50 flex animate-fade-in items-center justify-center bg-black/70 p-4">
           <div className="animate-scale-in relative w-full max-w-lg rounded-lg bg-white p-4">
             <button
               className="absolute right-3 top-3 text-gray-600 transition-colors duration-200 hover:scale-110 hover:text-black"
@@ -492,7 +601,7 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
             </button>
             <img
               src="https://res.cloudinary.com/deunonql5/image/upload/v1758625737/Untitled_design_2_hldysm.gif"
-              alt="Puzzle Demo"
+              alt="Logicoland Volume 1 – animated demo showing how to solve the 4×4 color Sudoku puzzle"
               className="w-full rounded-lg"
             />
           </div>
@@ -589,14 +698,7 @@ function SymmetryPatternGame() {
   const gridSize = 6;
   const BLANK_CELL_COLOR = "#f5deb3";
 
-  const colors = [
-    "#e74c3c",
-    "#f1c40f",
-    "#2ecc71",
-    "#3498db",
-    "#9b59b6",
-    "#ff8c00",
-  ];
+  const colors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#ff8c00"];
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [isSymmetric, setIsSymmetric] = useState(false);
@@ -616,7 +718,14 @@ function SymmetryPatternGame() {
     ["#f1c40f", "#3498db", "#9b59b6", "#9b59b6", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
     [BLANK_CELL_COLOR, "#9b59b6", "#ff8c00", BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#2ecc71"],
     ["#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, "#9b59b6", BLANK_CELL_COLOR],
-    ["#f1c40f", BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR, BLANK_CELL_COLOR],
+    [
+      "#f1c40f",
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+      BLANK_CELL_COLOR,
+    ],
     [BLANK_CELL_COLOR, "#f1c40f", "#2ecc71", "#2ecc71", BLANK_CELL_COLOR, BLANK_CELL_COLOR],
   ];
 
@@ -627,8 +736,7 @@ function SymmetryPatternGame() {
 
   const checkSolution = (currentGrid: string[][]) => {
     for (let i = 0; i < gridSize; i++)
-      for (let j = 0; j < gridSize; j++)
-        if (currentGrid[i][j] !== solutionGrid[i][j]) return false;
+      for (let j = 0; j < gridSize; j++) if (currentGrid[i][j] !== solutionGrid[i][j]) return false;
     return true;
   };
 
@@ -673,10 +781,9 @@ function SymmetryPatternGame() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg ">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw]">
+    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg">
+      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:max-w-[75vw] md:py-20 lg:mx-auto lg:max-w-[75vw]">
         <div className="grid items-center gap-12 md:grid-cols-2">
-
           {/* ── LEFT: Text Content ── */}
           <div className="space-y-6 sm:px-4">
             <h3 className="headingstyle font-heading font-extrabold text-brand-teal">
@@ -729,7 +836,8 @@ function SymmetryPatternGame() {
               <div className="flex gap-4">
                 <button
                   onClick={handleReset}
-                  className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 text-[16px] font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]">
+                  className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 text-[16px] font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
+                >
                   Reset Pattern
                 </button>
               </div>
@@ -746,7 +854,7 @@ function SymmetryPatternGame() {
           {/* ── RIGHT: Game Grid ── */}
           <div className="rounded-[26px] bg-white p-3 transition-transform duration-500 hover:scale-[1.02]">
             <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
-              <div className=" w-full">
+              <div className="w-full">
                 <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-lg">
                   {grid.map((row, i) =>
                     row.map((cell, j) => {
@@ -806,7 +914,6 @@ function SymmetryPatternGame() {
               )}
             </div>
           </div>
-
         </div>
       </div>
     </section>

@@ -77,11 +77,120 @@ export default function BooksPage() {
 
   return (
     <>
+      <Head>
+        <title>Books Collection | Logicology – Educational Books for Kids</title>
+        <meta
+          name="description"
+          content="Explore Logicology's collection of educational books for kids — Logicoland Series, Speed Maths, and Hidden in the Jungle. Fun, engaging, and designed to build logical thinking and math skills."
+        />
+        <meta
+          name="keywords"
+          content="educational books for kids, Logicoland series, Speed Maths book, Hidden in the Jungle, logic books for children, kids puzzle books, math books for kids, Logicology books, learning books India"
+        />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="Logicology" />
+        <meta name="publisher" content="Logicology" />
+        <link rel="canonical" href="https://www.logicology.in/books" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.logicology.in/books" />
+        <meta property="og:site_name" content="Logicology" />
+        <meta property="og:title" content="Books Collection | Logicology – Educational Books for Kids" />
+        <meta
+          property="og:description"
+          content="Discover Logicology's educational books — Logicoland Series, Speed Maths, and Hidden in the Jungle. Designed to make learning fun for children."
+        />
+        <meta
+          property="og:image"
+          content="https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_IN" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.logicology.in/books" />
+        <meta name="twitter:title" content="Books Collection | Logicology – Educational Books for Kids" />
+        <meta
+          name="twitter:description"
+          content="Explore Logicology's educational books for kids. Fun, engaging, and designed to build logical thinking and math skills."
+        />
+        <meta
+          name="twitter:image"
+          content="https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max"
+        />
+
+        {/* Schema.org — ItemList of Books */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              "name": "Logicology Books Collection",
+              "url": "https://www.logicology.in/books",
+              "description": "Educational books for kids by Logicology covering logic, math, and observation skills.",
+              "itemListElement": books.map((book, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                  "@type": "Book",
+                  "name": book.title,
+                  "author": {
+                    "@type": "Organization",
+                    "name": book.author,
+                  },
+                  "description": book.description,
+                  "image": book.imageUrl,
+                  "url": `https://www.logicology.in/books/${toSlug(book.title)}`,
+                  "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": book.rating,
+                    "bestRating": "5",
+                    "worstRating": "1",
+                    "ratingCount": "50",
+                  },
+                  "publisher": {
+                    "@type": "Organization",
+                    "name": "Logicology",
+                    "url": "https://www.logicology.in",
+                  },
+                },
+              })),
+            }),
+          }}
+        />
+
+        {/* Schema.org — BreadcrumbList */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://www.logicology.in",
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Books",
+                  "item": "https://www.logicology.in/books",
+                },
+              ],
+            }),
+          }}
+        />
+      </Head>
+
       <NavBar />
       <div className="min-h-screen bg-brand-hero p-6 text-brand-tealDark sm:p-8 md:p-10">
-        <Head>
-          <title>Books Collection</title>
-        </Head>
 
         <header className="mb-6 sm:mb-8">
           <h1 className="text-center text-3xl font-extrabold tracking-tight text-brand-teal sm:text-4xl md:text-5xl">
@@ -94,7 +203,8 @@ export default function BooksPage() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-7 lg:grid-cols-3 xl:grid-cols-4">
           {books.map((book) => {
-            const isComingSoon = book.title === "Speed Maths" || book.title === "Hidden in the Jungle";
+            const isComingSoon =
+              book.title === "Speed Maths" || book.title === "Hidden in the Jungle";
             return (
               <div
                 key={book.id}
@@ -107,13 +217,15 @@ export default function BooksPage() {
                   <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
                     <Image
                       src={book.imageUrl}
-                      alt={book.title}
+                      alt={`${book.title} by ${book.author} – educational book cover`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {isComingSoon && (
-                      <span className="absolute left-2 top-2 z-10 rounded-full bg-brand-coral px-3 py-1 text-xs font-bold text-white shadow">Coming Soon</span>
+                      <span className="absolute left-2 top-2 z-10 rounded-full bg-brand-coral px-3 py-1 text-xs font-bold text-white shadow">
+                        Coming Soon
+                      </span>
                     )}
                   </div>
 
@@ -126,16 +238,19 @@ export default function BooksPage() {
                         ★ {book.rating}
                       </span>
                       <button
-                        className={`text-xs font-semibold transition-colors ${isComingSoon ? 'text-gray-400 cursor-not-allowed' : 'text-brand-teal hover:text-brand-coral'}`}
+                        className={`text-xs font-semibold transition-colors ${
+                          isComingSoon
+                            ? "cursor-not-allowed text-gray-400"
+                            : "text-brand-teal hover:text-brand-coral"
+                        }`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (!isComingSoon) {
-                            openModal(book);
-                          }
+                          if (!isComingSoon) openModal(book);
                         }}
                         disabled={isComingSoon}
+                        aria-label={isComingSoon ? `${book.title} coming soon` : `View details for ${book.title}`}
                       >
-                        {isComingSoon ? 'Coming Soon' : 'View details →'}
+                        {isComingSoon ? "Coming Soon" : "View details →"}
                       </button>
                     </div>
                   </div>
@@ -149,11 +264,17 @@ export default function BooksPage() {
 
         {/* Book Modal */}
         {isModalOpen && selectedBook && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-            <div className="maxh-[92vh] w-full max-w-5xl overflow-y-auto rounded-4xl bg-white text-brand-tealDark shadow-brand">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+          >
+            <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-4xl bg-white text-brand-tealDark shadow-brand">
               <div className="relative">
                 <button
                   onClick={closeModal}
+                  aria-label="Close book details"
                   className="absolute right-4 top-4 z-10 rounded-full bg-brand-teal p-2 text-white transition-colors hover:bg-brand-coral"
                 >
                   <svg
@@ -176,20 +297,23 @@ export default function BooksPage() {
                   <div className="relative h-72 md:h-full">
                     <Image
                       src={selectedBook.imageUrl}
-                      alt={selectedBook.title}
+                      alt={`${selectedBook.title} by ${selectedBook.author} – full book cover`}
                       fill
                       className="rounded-t-4xl object-cover md:rounded-l-4xl md:rounded-tr-none"
                     />
                   </div>
 
                   <div className="p-6 sm:p-8">
-                    <h2 className="mb-1 text-3xl font-extrabold text-brand-teal">
+                    <h2
+                      id="modal-title"
+                      className="mb-1 text-3xl font-extrabold text-brand-teal"
+                    >
                       {selectedBook.title}
                     </h2>
                     <p className="mb-4 text-brand-tealDark/75">by {selectedBook.author}</p>
 
                     <div className="mb-6 flex items-center">
-                      <div className="flex text-brand-gold">
+                      <div className="flex text-brand-gold" aria-label={`Rating: ${selectedBook.rating} out of 5`}>
                         {[...Array(5)].map((_, i) => (
                           <svg
                             key={i}
@@ -217,15 +341,16 @@ export default function BooksPage() {
                       <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-brand-tealDark/60">
                         About this book
                       </h3>
-                      <p className="text-brand-tealDark/85 leading-relaxed">
+                      <p className="leading-relaxed text-brand-tealDark/85">
                         {selectedBook.description}
                       </p>
                     </div>
 
-                    {['Speed Maths', 'Hidden in the Jungle'].includes(selectedBook.title) ? (
+                    {["Speed Maths", "Hidden in the Jungle"].includes(selectedBook.title) ? (
                       <button
-                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-gray-400 bg-gray-200 px-6 py-3 font-semibold text-gray-400 cursor-not-allowed"
+                        className="group inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border-2 border-gray-400 bg-gray-200 px-6 py-3 font-semibold text-gray-400"
                         disabled
+                        aria-disabled="true"
                       >
                         Coming Soon
                       </button>
@@ -233,6 +358,7 @@ export default function BooksPage() {
                       <button
                         className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-coral bg-transparent px-6 py-3 font-semibold text-brand-coral transition-colors hover:bg-brand-coral hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
                         onClick={handleLearnMore}
+                        aria-label={`Learn more about ${selectedBook.title}`}
                       >
                         Know More about {selectedBook.title}
                       </button>

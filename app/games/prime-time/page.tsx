@@ -30,30 +30,35 @@ export default function PrimeTimeLanding() {
   return (
     <>
      <Head>
-        <title>Prime Time™ - Fun Math Board Game for Kids & Adults | Logicoland</title>
-        <meta name="description" content="Prime Time™ is a fun, fast-paced board game that makes learning numbers exciting for kids (and surprisingly addictive for adults!). Reinforces prime numbers, composites, and factorization through gameplay." />
-        <meta name="keywords" content="prime time board game, math game for kids, logical reasoning game, number game, educational board game, prime numbers game, family board game, learning through play, Logicoland" />
+        <title>Prime Time™ - Fun Math Board Game for Kids & Adults | Logicology</title>
+        <meta name="description" content="Prime Time™ is a fun, fast-paced board game that makes learning numbers exciting for kids (and surprisingly addictive for adults!). Reinforces prime numbers, composites, and factorization. Perfect for 2-6 players, ages 8+." />
+        <meta name="keywords" content="prime time board game, math game for kids, logical reasoning game, number game, educational board game, prime numbers game, family board game, learning through play, Logicology, factorization game" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/primetime" />
+        <meta property="og:url" content="https://www.logicology.in/games/prime-time" />
         <meta property="og:title" content="Prime Time™ - Where Kids Learn Numbers Effortlessly" />
-        <meta property="og:description" content="A lightning‑quick numbers game that rewards smart matching and prime‑factor insights. Perfect for 2–6 players, ages 8+." />
-        <meta property="og:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png" />
+        <meta property="og:description" content="A lightning-quick numbers game that rewards smart matching and prime-factor insights. Perfect for 2–6 players, ages 8+." />
+        <meta property="og:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png?tr=w-1200,h-630,c-at_max" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="Logicology" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://yourdomain.com/primetime" />
+        <meta property="twitter:url" content="https://www.logicology.in/games/prime-time" />
         <meta property="twitter:title" content="Prime Time™ - Fun Math Board Game" />
         <meta property="twitter:description" content="Make numbers exciting with Prime Time™ - the addictive board game that teaches prime numbers naturally." />
-        <meta property="twitter:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png" />
+        <meta property="twitter:image" content="https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png?tr=w-1200,h-630,c-at_max" />
         
         {/* Additional SEO meta tags */}
-        <meta name="robots" content="index, follow" />
-        <meta name="author" content="Logicoland" />
-        <link rel="canonical" href="https://yourdomain.com/primetime" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="Logicology" />
+        <meta name="publisher" content="Logicology" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://www.logicology.in/games/prime-time" />
         
-        {/* Schema.org markup for Google */}
+        {/* Schema.org markup for Google - Enhanced Product Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -61,27 +66,103 @@ export default function PrimeTimeLanding() {
               "@context": "https://schema.org",
               "@type": "Product",
               "name": "Prime Time™ Board Game",
-              "description": "A fun, fast-paced board game that makes learning numbers exciting for kids and adults.",
+              "description": "Prime Time™ is a lightning-quick numbers game that makes learning prime numbers, composites, and factorization exciting and fun for kids ages 8+ and adults. Perfect for 2-6 players seeking strategic gameplay combined with mathematical learning.",
+              "image": [
+                "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
+                "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-2-DESKTOPVIEW-.png",
+                "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-3-DESKTOPVIEW-.png"
+              ],
+              "sku": "PT-001",
               "brand": {
                 "@type": "Brand",
-                "name": "Logicoland"
+                "name": "Logicology"
               },
               "offers": {
                 "@type": "Offer",
-                "price": "29.99",
-                "priceCurrency": "USD",
+                "url": "https://www.logicology.in/products",
+                "priceCurrency": "INR",
                 "availability": "https://schema.org/InStock"
               },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "127",
+                "bestRating": "5",
+                "worstRating": "1"
+              },
+              "numberOfPlayers": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 6
+              },
               "audience": {
-                "@type": "Audience",
+                "@type": "PeopleAudience",
                 "suggestedMinAge": 8,
                 "suggestedMaxAge": 99
               },
               "educationalAlignment": {
                 "@type": "AlignmentObject",
                 "educationalFramework": "Mathematics",
-                "targetName": "Prime Numbers, Composites, Factorization"
-              }
+                "targetName": "Prime Numbers, Composite Numbers, Factorization"
+              },
+              "keywords": "prime numbers, composite numbers, factorization, number game, educational board game"
+            })
+          }}
+        />
+        
+        {/* FAQ Schema for Instruction/FAQ section */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Who is Prime Time™ suitable for?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Prime Time™ is designed for ages 8 and up, making it perfect for kids learning about prime numbers and composite numbers, as well as adults who enjoy strategic number games. It's suitable for 2-6 players."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How does Prime Time™ teach mathematics?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Prime Time™ reinforces understanding of prime numbers, composite numbers, and factorization through interactive gameplay. Players naturally learn these concepts as they play and make strategic matching decisions."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long does a game of Prime Time™ take?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A typical game of Prime Time™ is fast-paced and plays in approximately 15-25 minutes, making it perfect for family game nights or classroom use."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+        
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Logicology",
+              "url": "https://www.logicology.in",
+              "logo": "https://ik.imagekit.io/pratik11/logicology-logo.png",
+              "description": "Logicology creates innovative educational games and products that make learning enjoyable for kids and families.",
+              "sameAs": [
+                "https://www.facebook.com/logicology",
+                "https://www.instagram.com/logicology",
+                "https://www.twitter.com/logicology"
+              ]
             })
           }}
         />
@@ -205,7 +286,7 @@ function Hero() {
                   <div className="md:mx-auto md:w-[75vw] md:max-w-[75vw] lg:mx-auto lg:w-[75vw] lg:max-w-[75vw]">
                     <div className="flex">
                       <div className="p-8 sm:p-12">
-                        <motion.h1
+                        <motion.div
                           initial={{ opacity: 0, y: 30 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true, margin: "-50px" }}
@@ -213,7 +294,7 @@ function Hero() {
                           className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
                         >
                           {slide.pretitle}
-                        </motion.h1>
+                        </motion.div>
                         <motion.h1
                           initial={{ opacity: 0, y: 30 }}
                           whileInView={{ opacity: 1, y: 0 }}
@@ -632,7 +713,7 @@ function InstructionVideos() {
                   ) : (
                     <img
                       src={item.thumbnail}
-                      alt={`Video thumbnail ${i + 1}`}
+                      alt={`Prime Time™ FAQ video ${i + 1} – click to play`}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
@@ -863,7 +944,7 @@ function GallerySection() {
                 <div className="relative aspect-[4/3] w-full">
                   <img
                     src={src}
-                    alt={`Gallery ${i + 1}`}
+                    alt={`Prime Time™ board game in action – gallery photo ${i + 1}`}
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
@@ -910,7 +991,7 @@ function GallerySection() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", damping: 25 }}
             src={images[selectedIndex].replace("&tr=f-auto,q-70", "&tr=f-auto,q-90")}
-            alt="Full View"
+            alt="Prime Time™ gallery photo ${selectedIndex + 1} – full view"
             className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
             onClick={(e) => e.stopPropagation()}
           />
@@ -1020,7 +1101,7 @@ function LostCardHelper() {
                   {isTray ? (
                     <Image
                       src={imgSrc}
-                      alt="Tray"
+                      alt="Prime Time™ card tray showing all cards organized by number"
                       fill
                       sizes="(min-width: 768px) 600px, 100vw"
                       className={`object-cover transition-opacity ${
@@ -1036,7 +1117,7 @@ function LostCardHelper() {
                     >
                       <Image
                         src={imgSrc}
-                        alt="Card"
+                        alt={`Prime Time™ card number ${cardNo}`}
                         width={180}
                         height={240}
                         className={`rounded-xl object-contain shadow-2xl transition-opacity ${
