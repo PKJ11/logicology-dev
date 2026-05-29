@@ -307,11 +307,7 @@ function HeroSection() {
           }}
         >
           <div style={{ marginBottom: 28 }}>
-            <img
-              src="https://ik.imagekit.io/pratik2002/Mathology_Logo.png"
-              alt="Mathology"
-              style={{ width: 160, height: 64, objectFit: "contain" }}
-            />
+            
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {[
