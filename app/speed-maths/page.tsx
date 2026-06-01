@@ -1374,7 +1374,7 @@ export default function SpeedMathsPage() {
   const [totalTime,       setTotalTime]       = useState(0);
   const [halfPracticeNum, setHalfPracticeNum] = useState(()=>generateHalfPracticeNum());
   const [half3StepKey,    setHalf3StepKey]    = useState(0);
-  const [squareNum,       setSquareNum]       = useState(()=>rand(11,59));
+  const [squareNum,       setSquareNum]       = useState(()=>rand(26,50));
   const [squareViewKey,   setSquareViewKey]   = useState(0);
   const [minA,            setMinA]            = useState(0);
   const [maxA,            setMaxA]            = useState(10);
@@ -1700,7 +1700,7 @@ export default function SpeedMathsPage() {
         {challenge==="Squares"&&(<>
           <p className="mb-4 text-lg" style={{color:dark,fontFamily:OUTFIT,fontWeight:700}}>Choose Mode</p>
           <div className="flex flex-col gap-3 w-full max-w-sm">
-            <button onClick={()=>{setSquareNum(rand(11,59));setSquareViewKey(k=>k+1);setGameState("square-step");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>🪜 Step Practice</button>
+            <button onClick={()=>{setSquareNum(rand(26,50));setSquareViewKey(k=>k+1);setGameState("square-step");}} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:light,border:`3px solid ${bg}`,color:bg,fontFamily:RACING}}>🪜 Step Practice</button>
             <button onClick={()=>setGameState("settings")} className="rounded-3xl py-4 text-xl shadow-lg active:scale-95" style={{background:bg,color:"#fff",fontFamily:RACING}}>⚡ Challenge</button>
           </div>
         </>)}
@@ -1817,7 +1817,7 @@ export default function SpeedMathsPage() {
   <div style={{fontFamily:RACING,fontSize:"2.5rem",color:bg}}>²</div>
         <h2 className="text-3xl mb-4" style={{color:bg,fontFamily:RACING}}>Square Steps</h2>
         <SquareStepView key={squareViewKey} squareNum={squareNum} bg={bg} light={light} dark={dark}
-          onTryAnother={()=>{setSquareNum(rand(26,125));setSquareViewKey(k=>k+1);}}
+          onTryAnother={()=>{setSquareNum(rand(26,50));setSquareViewKey(k=>k+1);}}
           onRangeSelect={r=>{setSquareNum(randInRange(r));setSquareViewKey(k=>k+1);}}
           onGoSettings={()=>setGameState("settings")} />
       </div>
