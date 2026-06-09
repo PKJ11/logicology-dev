@@ -14,30 +14,53 @@ import ProductShowcase from "@/components/ProductShowcase";
 export const metadata: Metadata = {
   // ── Core ──────────────────────────────────
   title: {
-    default: "Logicoland – Educational Board Games That Make Learning Fun",
-    template: "%s | Logicoland",
+    default: "Logicology – Research-Backed Learning Games & Books for Kids",
+    template: "%s | Logicology",
   },
+
+  // ~158 chars ✅
   description:
-    "Logicoland creates fun, research-backed board games that build logical thinking, number sense, and problem-solving skills in kids aged 6–16. Explore Prime Time™ and more.",
+    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
+
   keywords: [
-    "educational board games",
-    "math games for kids",
-    "logical reasoning games",
-    "prime numbers game",
-    "board games for learning",
-    "kids board games India",
-    "STEM toys",
-    "family board games",
+    // ── Brand & Products ──
+    "Logicology",
     "Logicoland",
     "Prime Time board game",
+    "Turn the Tables game",
+
+    // ── Phrase bank as long-tail keywords ──
+    "learning disguised as fun",
+    "fun in disguise",
+    "researched not rebranded",
+    "skills that outlast the screen",
+    "designed by educators loved by kids",
+    "research-driven child-tested",
+    "small wins stacked",
+    "selling thinking skills through fun",
+    "what if learning is exciting for kids",
+    "the best learning doesn't feel like learning",
+
+    // ── Intent keywords ──
+    "educational games India",
+    "thinking skills for kids",
+    "logical reasoning for kids",
+    "math games for kids",
+    "STEM learning India",
+    "family learning games India",
+    "fun learning for children",
+    "research-backed learning games",
+    "number sense games for kids",
+    "problem solving games for children",
   ],
-  authors: [{ name: "Logicoland", url: "https://logicoland.in" }],
-  creator: "Logicoland",
-  publisher: "Logicoland",
+
+  authors: [{ name: "Logicology", url: "https://logicology.in" }],
+  creator: "Logicology",
+  publisher: "Logicology",
 
   // ── Canonical & Indexing ──────────────────
   alternates: {
-    canonical: "https://logicoland.in",
+    canonical: "https://logicology.in",
   },
   robots: {
     index: true,
@@ -51,36 +74,35 @@ export const metadata: Metadata = {
     },
   },
 
-  // ── Open Graph ────────────────────────────
+  // ── Open Graph (~200 chars) ───────────────
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://logicoland.in",
-    siteName: "Logicoland",
-    title: "Logicoland – Educational Board Games That Make Learning Fun",
+    url: "https://logicology.in",
+    siteName: "Logicology",
+    title: "Logicology – Research-Backed Learning Games & Books for Kids",
     description:
-      "Research-backed board games that build logical thinking, number sense, and problem-solving in kids. Discover Prime Time™ — the addictive numbers game for ages 8+.",
+      "Researched, not rebranded. At Logicology, kids play, think, and outsmart — while building skills that outlast the screen. Shop Prime Time, Logicoland and more. Join the fun-learning revolution.",
     images: [
       {
         url: "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
         width: 1200,
         height: 630,
-        alt: "Logicoland – Prime Time educational board game for kids",
+        alt: "Logicology – Research-backed games and books. Designed by educators, loved by kids.",
         type: "image/png",
       },
     ],
   },
 
-  // ── Twitter / X ───────────────────────────
+  // ── Twitter / X (~200 chars) ──────────────
   twitter: {
     card: "summary_large_image",
-    title: "Logicoland – Educational Board Games That Make Learning Fun",
+    title: "Logicology – Research-Backed Learning Games & Books for Kids",
     description:
-      "Research-backed board games that build logical thinking and number sense in kids. Discover Prime Time™ – the addictive math game for ages 8+.",
+      "We're not selling games. We're stacking small wins into lifelong thinking skills. Designed by educators, loved by kids. Fun in disguise — research-driven. Child-tested. Ages 5–16.",
     images: [
       "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
     ],
-    // creator: "@logicoland",   // ← add your Twitter handle when ready
   },
 
   // ── Icons ─────────────────────────────────
@@ -89,11 +111,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-
-  // ── Verification (add tokens when ready) ──
-  // verification: {
-  //   google: "YOUR_GOOGLE_SEARCH_CONSOLE_TOKEN",
-  // },
 };
 
 // ─────────────────────────────────────────────
