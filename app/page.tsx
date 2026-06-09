@@ -82,7 +82,7 @@ export const metadata: Metadata = {
     siteName: "Logicology",
     title: "Logicology – Research-Backed Learning Games & Books for Kids",
     description:
-      "Researched, not rebranded. At Logicology, kids play, think, and outsmart — while building skills that outlast the screen. Shop Prime Time, Logicoland and more. Join the fun-learning revolution.",
+    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
     images: [
       {
         url: "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
@@ -98,8 +98,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Logicology – Research-Backed Learning Games & Books for Kids",
-    description:
-      "We're not selling games. We're stacking small wins into lifelong thinking skills. Designed by educators, loved by kids. Fun in disguise — research-driven. Child-tested. Ages 5–16.",
+   description:
+    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
     images: [
       "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
     ],
