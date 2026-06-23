@@ -374,9 +374,7 @@ function WhyWeExist() {
                   hoverBg="#fa9e15"
                   hoverColor="#3d3b40"
                   size="md"
-                  showShadow
-                  showScaleOnHover
-                  showScaleOnActive
+                  
                 />
               </motion.div>
             </motion.div>
@@ -800,9 +798,7 @@ function CloseSection() {
               hoverBg="#fa9e15"
               hoverColor="#3d3b40"
               size="md"
-              showShadow
-              showScaleOnHover
-              showScaleOnActive
+              
               rightIcon={
                 <svg
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -827,8 +823,7 @@ function CloseSection() {
               hoverBg="#fbb041"
               hoverColor="#3d3b40"
               size="md"
-              showScaleOnHover
-              showScaleOnActive
+              
               className="border-2 border-white/60"
               rightIcon={
                 <svg
