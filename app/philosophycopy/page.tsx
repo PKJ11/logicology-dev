@@ -597,7 +597,7 @@ function TrustCard({
   );
 }
 
-export function HowWeDesign() {
+ function HowWeDesign() {
   const sectionRef = useRef<HTMLElement>(null);
   const [triggered, setTriggered] = useState(false);
 
