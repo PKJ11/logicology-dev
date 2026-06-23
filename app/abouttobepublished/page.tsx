@@ -1,0 +1,796 @@
+"use client";
+import React, { useEffect, useState, useRef } from "react";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import CTAButton from "@/components/CTAButton";
+import MediaLayout from "@/components/MediaLayout";
+import Tribe from "@/components/Tribe";
+import VideoLayout from "@/components/VideoLayout";
+import Head from "next/head";
+import Community from "@/components/Community";
+
+export default function AboutUs() {
+  return (
+    <>
+      <Head>
+        <title>About Logicology - Our Story, Team & Vision | Educational Games for Kids</title>
+        <meta
+          name="description"
+          content="Learn about Logicology's mission to create engaging gamified educational content for children. Meet our passionate team of designers, developers, and educators dedicated to making learning fun through innovative games and books."
+        />
+        <meta
+          name="keywords"
+          content="about logicology, educational games company, kids learning games, STEM education company, game-based learning, educational content creators, childrens educational books, logic games for kids, learning through play, educational startup"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/about" />
+        <meta property="og:title" content="About Logicology - Empowering Minds Through Play" />
+        <meta
+          property="og:description"
+          content="Discover the story behind Logicology. We create innovative gamified content to help children develop 21st century skills through fun learning."
+        />
+        <meta
+          property="og:image"
+          content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+        />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://yourdomain.com/about" />
+        <meta property="twitter:title" content="About Logicology - Our Story & Team" />
+        <meta
+          property="twitter:description"
+          content="Meet the team behind Logicology - passionate creators making learning fun through games."
+        />
+        <meta
+          property="twitter:image"
+          content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+        />
+
+        {/* Additional SEO meta tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Logicology Team" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#0A8A80" />
+        <link rel="canonical" href="https://yourdomain.com/about" />
+
+        {/* Schema.org markup for Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Logicology",
+              url: "https://yourdomain.com",
+              logo: "https://ik.imagekit.io/pratik11/logo.png",
+              description:
+                "We create engaging gamified educational content for children to develop 21st century skills through fun learning.",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Ameya Towers, 25, Humpyard Road, Dhantoli",
+                addressLocality: "Nagpur",
+                addressRegion: "Maharashtra",
+                postalCode: "440012",
+                addressCountry: "IN",
+              },
+              contactPoint: [
+                {
+                  "@type": "ContactPoint",
+                  telephone: "+91-8446980747",
+                  contactType: "customer service",
+                  email: "learn@logicology.in",
+                },
+              ],
+              sameAs: [
+                "https://www.facebook.com/logicology",
+                "https://www.instagram.com/logicology",
+                "https://www.linkedin.com/company/logicology",
+              ],
+              founders: [
+                {
+                  "@type": "Person",
+                  name: "Gayatri Phadnis",
+                  jobTitle: "Co-Founder",
+                },
+                {
+                  "@type": "Person",
+                  name: "Kartik Girish Vyas",
+                  jobTitle: "Co-Founder",
+                },
+              ],
+              foundingDate: "2020",
+              foundingLocation: "Nagpur, India",
+              areaServed: "Worldwide",
+              knowsAbout: [
+                "Educational Games",
+                "STEM Education",
+                "Child Development",
+                "Game-Based Learning",
+              ],
+            }),
+          }}
+        />
+
+        {/* Schema.org for Team Members */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              itemListElement: [
+                {
+                  "@type": "Person",
+                  name: "Gayatri Phadnis",
+                  jobTitle: "Co-Founder",
+                  worksFor: {
+                    "@type": "Organization",
+                    name: "Logicology",
+                  },
+                },
+                {
+                  "@type": "Person",
+                  name: "Kartik Girish Vyas",
+                  jobTitle: "Co-Founder",
+                  worksFor: {
+                    "@type": "Organization",
+                    name: "Logicology",
+                  },
+                },
+                {
+                  "@type": "Person",
+                  name: "Jasneet Singh Babra",
+                  jobTitle: "Head of Design",
+                  worksFor: {
+                    "@type": "Organization",
+                    name: "Logicology",
+                  },
+                },
+                {
+                  "@type": "Person",
+                  name: "Pratik Kumar Jha",
+                  jobTitle: "Head of Technology",
+                  worksFor: {
+                    "@type": "Organization",
+                    name: "Logicology",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </Head>
+      <main className="min-h-screen bg-brand-hero">
+        <NavBar />
+        <HeroVideo />
+        <OurStory />
+        <OurVision />
+
+        <OurTeam />
+        <ContactUs />
+        <Community />
+        <Footer />
+      </main>
+    </>
+  );
+}
+
+/* --------------------- Hero (Video instead of Swiper) --------------------- */
+// Extend the type definitions for cross-browser support
+interface ExtendedHTMLVideoElement extends HTMLVideoElement {
+  webkitEnterFullscreen?: () => void;
+  webkitRequestFullscreen?: () => Promise<void>;
+}
+
+interface ExtendedDocument extends Document {
+  webkitExitFullscreen?: () => Promise<void>;
+  webkitFullscreenElement?: Element;
+}
+
+function HeroVideo() {
+  const videoRef = useRef<ExtendedHTMLVideoElement | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    // Detect iOS devices
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(isIOSDevice);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!videoRef.current) return;
+
+    try {
+      if (isIOS) {
+        // Remove playsInline and enable controls for iOS fullscreen
+        videoRef.current.removeAttribute("playsInline");
+        videoRef.current.setAttribute("controls", "true");
+        if (videoRef.current.webkitEnterFullscreen) {
+          videoRef.current.webkitEnterFullscreen();
+          setIsFullscreen(true);
+        }
+      } else {
+        // Standard fullscreen for other devices
+        const doc = document as ExtendedDocument;
+        if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+          if (videoRef.current.requestFullscreen) {
+            await videoRef.current.requestFullscreen();
+          } else if (videoRef.current.webkitRequestFullscreen) {
+            await videoRef.current.webkitRequestFullscreen();
+          }
+          setIsFullscreen(true);
+        } else {
+          if (doc.exitFullscreen) {
+            await doc.exitFullscreen();
+          } else if (doc.webkitExitFullscreen) {
+            await doc.webkitExitFullscreen();
+          }
+          setIsFullscreen(false);
+        }
+      }
+    } catch (error) {
+      console.error("Fullscreen error:", error);
+    }
+  };
+
+  // Add fullscreen change listeners for all browsers
+  useEffect(() => {
+    const doc = document as ExtendedDocument;
+
+    const handleFullscreenChange = () => {
+      setIsFullscreen(
+        !!(doc.fullscreenElement || doc.webkitFullscreenElement || (doc as any).msFullscreenElement)
+      );
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("msfullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  return (
+    <section className="w-full bg-white">
+      <div className="px-3 py-10 sm:px-5">
+        <div className="relative rounded-[28px] bg-white px-2">
+          <div className="relative flex items-center justify-center overflow-hidden rounded-[22px]">
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              muted={isMuted}
+              playsInline={!isIOS || !isFullscreen}
+              controls={isIOS && isFullscreen}
+              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
+            >
+              <source
+                src="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+                type="video/mp4"
+              />
+            </video>
+
+            {/* gradient under text */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+
+            {/* centered overlay content */}
+            <div className="absolute left-10 top-10 z-20 flex items-start">
+              <div className="px-6 py-8 text-white sm:px-10 sm:py-12">
+                <h2 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                  About Us
+                </h2>
+                <h1 className="headingstyle font-extrabold leading-tight">
+                  Learn to Play. Play to Learn.
+                </h1>
+                <p className="textstyles mt-4 max-w-md text-white/90">
+                  A small team with a simple belief: children learn best when they're genuinely
+                  having fun.
+                </p>
+              </div>
+            </div>
+
+            {/* Controls group (bottom-right) */}
+            <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
+              {/* Mute/Unmute */}
+              <button
+                onClick={toggleMute}
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  // Muted icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
+                    />
+                  </svg>
+                ) : (
+                  // Unmuted icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11 5L6 9H3v6h3l5 4V5z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* Fullscreen */}
+              <button
+                onClick={toggleFullscreen}
+                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              >
+                {!isFullscreen ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+/* --------------------- Our Story (Gold) --------------------- */
+function OurStory() {
+  return (
+    <section id="story" className="w-full bg-brand-gold">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="flex flex-col items-center md:flex-row">
+          <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
+            <VideoLayout videoSrc="https://res.cloudinary.com/deunonql5/video/upload/v1759543919/Logicology_JourneyVideo_Compressed_1_iwbg1f.mp4" />
+          </div>
+
+          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
+            <h2 className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]">
+              Our Story
+            </h2>
+
+            <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
+              Logicology began with a simple observation: children learn more when they're engaged,
+              curious and eager to keep going.
+              <br />
+              That belief led us to create games and books that develop real skills through play.
+              Whether it's logic, problem-solving, mathematical thinking or creativity, our goal has
+              always been the same—to make big ideas approachable, meaningful and enjoyable.
+              <br />
+              What started as a single idea has grown into a family of products finding homes in
+              classrooms, living rooms and everywhere in between.
+            </p>
+
+            {/* <div className="mt-6">
+              <CTAButton
+                text="View our journey"
+                href="#story"
+                bg="#FFFFFF"
+                color="#7E5C2E"
+                hoverBg="#7E5C2E"
+                hoverColor="#FFFFFF"
+                size="md"
+                rightIcon={
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
+            </div> */}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------- Our Team (Coral) --------------------- */
+function OurTeam() {
+  const teamMembers = [
+    {
+      name: "Gayatri Phadnis",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+      bio: "Creative force behind Logicology’s content. Leads innovation, strategy, and development with a parent’s perspective.",
+    },
+    {
+      name: "Kartik Girish Vyas",
+      role: "Co-Founder",
+      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
+      bio: "Marketing and partnerships lead. A teacher at heart who refines ideas and drives community growth.",
+    },
+    {
+      name: "Jasneet Singh Babra",
+      role: "Head of Design",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      bio: "Owns all design projects at Logicology. Brings sleek, modern visuals across books, games, and digital media.",
+    },
+    {
+      name: "Pratik Kumar Jha",
+      role: "Head of Technology",
+      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
+    },
+
+    {
+      name: "Gauri Bhople",
+      role: "Designer",
+      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+      bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
+    },
+    {
+      name: "You could be the next!",
+      role: "",
+      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
+      bio: "",
+    },
+  ];
+
+  const [active, setActive] = useState<number | null>(null);
+
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
+    if (active !== null) {
+      document.addEventListener("keydown", onEsc);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", onEsc);
+      document.body.style.overflow = "unset";
+    };
+  }, [active]);
+
+  return (
+    <section className="relative w-full bg-brand-coral">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
+          <div className="px-0 sm:px-8">
+            <h2 className="headingstyle font-heading font-extrabold text-white/90">
+              Meet Our Team
+            </h2>
+
+            <p className="textstyles mt-3 max-w-prose text-white/90">
+              Our team is an eclectic mix of personnel whose passion is their profession. In
+              addition to these full-time members we engage with multiple contract associates to
+              deliver world-class content for our&nbsp;stakeholders.
+            </p>
+
+            <div className="mt-6">
+              <CTAButton
+                text="View all team members"
+                href="/about/teamMembers"
+                bg="#fbb041"
+                color="#3d3b40"
+                hoverBg="#fa9e15"
+                hoverColor="#3d3b40"
+                roundedClass="rounded-full"
+                size="md"
+                className="font-medium transition-colors"
+                ariaLabel="View team members"
+                rightIcon={
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-4 shadow-soft sm:rounded-3xl sm:p-6">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
+              {teamMembers.map((m, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className="group relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 ring-1 ring-gray-200 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] sm:rounded-xl"
+                  aria-label={`Open profile: ${m.name}`}
+                >
+                  <img
+                    src={m.image}
+                    alt={m.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 flex items-end bg-black/0 transition-all duration-300 group-hover:bg-black/10">
+                    <div className="w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
+                      <p className="truncate text-xs font-semibold text-white sm:text-sm">
+                        {m.name}
+                      </p>
+                      <p className="truncate text-[11px] text-white/80 sm:text-xs">{m.role}</p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {active !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+          <div className="relative mx-4 w-full max-w-2xl">
+            <button
+              onClick={() => setActive(null)}
+              className="absolute -top-12 right-0 z-10 rounded-full bg-white/20 p-2 transition-colors hover:bg-white/30"
+              aria-label="Close profile"
+            >
+              <svg
+                className="h-6 w-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="rounded-2xl bg-white p-6">
+              <img
+                src={teamMembers[active].image}
+                alt={teamMembers[active].name}
+                className="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+              />
+              <h3 className="text-center text-2xl font-bold text-gray-900">
+                {teamMembers[active].name}
+              </h3>
+              <p className="mb-4 text-center text-gray-600">{teamMembers[active].role}</p>
+              <p className="text-center text-gray-700">{teamMembers[active].bio}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* --------------------- Our Vision (Gray) --------------------- */
+function OurVision() {
+  return (
+    <section id="vision" className="w-full bg-brand-grayBg py-16">
+      <div className="mx-auto px-3 sm:px-5 lg:max-w-[80vw]">
+        <div className="mb-12 text-center">
+          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
+
+          <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
+            To build a world where learning feels less like work and more like discovery.
+          </p>
+        </div>
+
+        {/* Mission + Goal Section with Gray Background */}
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Mission */}
+          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
+            {/* Label */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
+                Mission
+              </span>
+            </div>
+
+            <div className="rounded-2xl bg-brand-grayBg p-5">
+              <p className="text-center text-lg text-gray-800">
+                To create world-class games, books and learning experiences that turn big ideas into
+                child’s play. Made in India. Built for curious minds everywhere.
+              </p>
+            </div>
+          </div>
+
+          {/* Goal */}
+          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
+            {/* Label */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span className="text-md rounded-full bg-red-500 px-4 py-1 font-bold text-white shadow">
+                Goal
+              </span>
+            </div>
+
+            <div className="rounded-2xl bg-brand-grayBg p-5">
+              <p className="text-center text-lg text-gray-800">
+                To build the world's most loved fun-learning brand—creating products that children
+                enjoy, parents trust and educators value.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------- Contact Us (Maroon) --------------------- */
+function ContactUs() {
+  return (
+    <section className="w-full bg-[#642B3B]">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="grid items-center gap-10 md:grid-cols-2">
+          {/* Left: text & contact details */}
+          <div className="text-white">
+            <h2 className="headingstyle mb-10 font-extrabold">Contact Us</h2>
+
+            <ul className="space-y-8">
+              {/* Phone */}
+              <li className="flex items-center gap-5">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.8}
+                      d="M3 5a2 2 0 012-2h1.2a1 1 0 01.95.684l1.2 3.272a1 1 0 01-.27 1.07L7.9 9.93a14.5 14.5 0 006.17 6.17l1.905-1.18a1 1 0 011.07-.27l3.272 1.2A1 1 0 0121 17.8V19a2 2 0 01-2 2h-.5C9.492 21 3 14.508 3 6.5V6a2 2 0 010-1z"
+                    />
+                  </svg>
+                </span>
+                <a
+                  href="tel:+918446980747"
+                  className="text-xl font-semibold leading-tight hover:underline"
+                >
+                  +91 8446980747
+                </a>
+              </li>
+
+              {/* Email */}
+              <li className="flex items-center gap-5">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.8}
+                      d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </span>
+                <a
+                  href="mailto:learn@logicology.in"
+                  className="text-xl font-semibold leading-tight hover:underline"
+                >
+                  learn@logicology.in
+                </a>
+              </li>
+
+              {/* Address */}
+              <li className="flex items-start gap-5">
+                <span className="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.8}
+                      d="M12 11a3 3 0 100-6 3 3 0 000 6zm0 0c4.418 0 8 3.134 8 7a1 1 0 01-1 1H5a1 1 0 01-1-1c0-3.866 3.582-7 8-7z"
+                    />
+                  </svg>
+                </span>
+                <p className="text-xl font-semibold leading-snug">
+                  Regd Office: Ameya Towers, 25,
+                  <br />
+                  Humpyard Road, Dhantoli,
+                  <br />
+                  Nagpur, India – 440012
+                </p>
+              </li>
+            </ul>
+
+            <p className="mt-10 max-w-xl text-sm text-white/85">
+              We operate fully online. Our registered office is used for official communication and
+              correspondence.
+            </p>
+          </div>
+
+          {/* Right: framed collage */}
+          <div className="flex items-center justify-center">
+            <MediaLayout
+              image="https://ik.imagekit.io/pratik11/CONTACT-US-IMAGE.png?updatedAt=1758544204579"
+              videoSrc=""
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
