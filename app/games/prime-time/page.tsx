@@ -365,10 +365,10 @@ function Hero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 uppercase leading-[1.1] text-white"
+                    className="mb-5 uppercase leading-[1.1] text-white text-[28px] md:text-[36px] lg:text-[50px]"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      fontSize: "50px",
+                      
                       fontWeight: 800,
                     }}
                     initial={{ y: 40, opacity: 0 }}
@@ -515,10 +515,10 @@ function Hero() {
                 </motion.p>
 
                 <motion.h1
-                  className="mb-4 font-bold uppercase leading-[1.15] text-white"
+                  className="mb-4 font-bold uppercase leading-[1.15] text-white text-[28px] md:text-[36px] lg:text-[50px]"
                   style={{
                     fontFamily: "var(--font-outfit), sans-serif",
-                    fontSize: "4.4162rem",
+                    
                     fontWeight: 800,
                   }}
                   initial={{ y: 30, opacity: 0 }}
