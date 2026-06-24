@@ -51,15 +51,15 @@ export async function POST(req: NextRequest) {
     // Fields updated on every write
     const $set: Record<string, unknown> = {
       rzpDeviceId,
-      cart,         // latest cart snapshot
+      cart, // latest cart snapshot
       updatedAt: now,
     };
 
     // Enrich with identity when user fills checkout Step 1
     if (userInfo) {
-      if (userInfo.name)  $set["userInfo.name"]       = userInfo.name;
-      if (userInfo.email) $set["userInfo.email"]      = userInfo.email;
-      if (userInfo.phone) $set["userInfo.phone"]      = userInfo.phone;
+      if (userInfo.name) $set["userInfo.name"] = userInfo.name;
+      if (userInfo.email) $set["userInfo.email"] = userInfo.email;
+      if (userInfo.phone) $set["userInfo.phone"] = userInfo.phone;
       $set["userInfo.enrichedAt"] = now;
     }
 
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       { rzpDeviceId },
       {
         $set,
-        $setOnInsert: { createdAt: now },   // only on first insert
+        $setOnInsert: { createdAt: now }, // only on first insert
         $push: { history: event } as any,
       },
       { upsert: true }
@@ -89,13 +89,10 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const rzpDeviceId = searchParams.get("rzpDeviceId");
-    const phone       = searchParams.get("phone");
+    const phone = searchParams.get("phone");
 
     if (!rzpDeviceId && !phone) {
-      return NextResponse.json(
-        { error: "Provide rzpDeviceId or phone" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Provide rzpDeviceId or phone" }, { status: 400 });
     }
 
     const client = new MongoClient(MONGO_URI);

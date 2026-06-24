@@ -15,7 +15,10 @@ export async function POST(req: Request) {
       cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
     }
     if (cleanedPhoneNumber.length !== 10) {
-      return NextResponse.json({ success: false, error: "Invalid phone number format" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Invalid phone number format" },
+        { status: 400 }
+      );
     }
     const countryCode = "+91";
     // Send WhatsApp message using Interakt API
@@ -38,7 +41,10 @@ export async function POST(req: Request) {
     });
     const messageResult = await messageRes.json();
     if (!messageResult.id) {
-      return NextResponse.json({ success: false, error: "Failed to send WhatsApp message" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: "Failed to send WhatsApp message" },
+        { status: 500 }
+      );
     }
     return NextResponse.json({ success: true, messageId: messageResult.id });
   } catch (error: any) {

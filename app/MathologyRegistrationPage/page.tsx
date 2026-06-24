@@ -159,7 +159,6 @@ function HeroSection() {
       >
         {/* Left: Text */}
         <div>
-         
           <h1
             style={{
               fontFamily: "'Outfit', sans-serif",
@@ -306,9 +305,7 @@ function HeroSection() {
             backdropFilter: "blur(16px)",
           }}
         >
-          <div style={{ marginBottom: 28 }}>
-            
-          </div>
+          <div style={{ marginBottom: 28 }}></div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {[
               {

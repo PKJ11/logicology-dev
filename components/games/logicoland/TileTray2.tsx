@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Tile from './Tile2';
-import { Color } from './data';
+import { motion } from "framer-motion";
+import Tile from "./Tile2";
+import { Color } from "./data";
 
 interface TileTrayProps {
   tiles: Array<{
     id: string;
-    type: 'letter' | 'color';
+    type: "letter" | "color";
     value: string | Color;
     isUsed: boolean;
   }>;
@@ -17,21 +17,21 @@ interface TileTrayProps {
   onDragStart?: (tileId: string, e: React.DragEvent) => void;
 }
 
-export default function TileTray({ 
-  tiles, 
-  onTileSelect, 
+export default function TileTray({
+  tiles,
+  onTileSelect,
   selectedTileId,
   draggable = false,
-  onDragStart 
+  onDragStart,
 }: TileTrayProps) {
-  const availableTiles = tiles.filter(tile => !tile.isUsed);
+  const availableTiles = tiles.filter((tile) => !tile.isUsed);
 
   return (
-    <div className="p-6 bg-white/90 rounded-4xl shadow-soft">
-      <h3 className="font-outfit text-xl font-semibold text-center text-gray-700 mb-4">
+    <div className="rounded-4xl bg-white/90 p-6 shadow-soft">
+      <h3 className="font-outfit mb-4 text-center text-xl font-semibold text-gray-700">
         Drag or Tap Tiles
       </h3>
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap justify-center gap-4">
         {availableTiles.map((tile) => (
           <motion.div
             key={tile.id}

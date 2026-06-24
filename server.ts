@@ -91,7 +91,10 @@ app.prepare().then(() => {
 
   function clearRoundTimer(roomId: string) {
     const t = roundTimers.get(roomId);
-    if (t) { clearTimeout(t); roundTimers.delete(roomId); }
+    if (t) {
+      clearTimeout(t);
+      roundTimers.delete(roomId);
+    }
   }
 
   function advanceRound(roomId: string) {
@@ -135,27 +138,64 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log("connected:", socket.id);
 
-    socket.on("room:create", ({ playerName, mode, totalRounds }: { playerName: string; mode: GameMode; totalRounds: number }) => {
-      const roomId = generateRoomId();
-      const player: Player = { id: socket.id, name: playerName, score: 0, color: PLAYER_COLORS[0] };
-      rooms.set(roomId, {
-        id: roomId, players: [player], host: socket.id, mode,
-        status: "waiting", currentCountry: null, roundStartedAt: null,
-        roundWon: false, roundNum: 1, totalRounds: totalRounds ?? 10,
-      });
-      socket.join(roomId);
-      socket.data.roomId = roomId;
-      socket.emit("room:created", { roomId, playerId: socket.id });
-      broadcastRoom(roomId);
-    });
+    socket.on(
+      "room:create",
+      ({
+        playerName,
+        mode,
+        totalRounds,
+      }: {
+        playerName: string;
+        mode: GameMode;
+        totalRounds: number;
+      }) => {
+        const roomId = generateRoomId();
+        const player: Player = {
+          id: socket.id,
+          name: playerName,
+          score: 0,
+          color: PLAYER_COLORS[0],
+        };
+        rooms.set(roomId, {
+          id: roomId,
+          players: [player],
+          host: socket.id,
+          mode,
+          status: "waiting",
+          currentCountry: null,
+          roundStartedAt: null,
+          roundWon: false,
+          roundNum: 1,
+          totalRounds: totalRounds ?? 10,
+        });
+        socket.join(roomId);
+        socket.data.roomId = roomId;
+        socket.emit("room:created", { roomId, playerId: socket.id });
+        broadcastRoom(roomId);
+      }
+    );
 
     socket.on("room:join", ({ roomId, playerName }: { roomId: string; playerName: string }) => {
       const id = roomId.toUpperCase();
       const room = rooms.get(id);
-      if (!room) { socket.emit("error", { message: "Room not found" }); return; }
-      if (room.players.length >= 4) { socket.emit("error", { message: "Room is full" }); return; }
-      if (room.status !== "waiting") { socket.emit("error", { message: "Game already started" }); return; }
-      const player: Player = { id: socket.id, name: playerName, score: 0, color: PLAYER_COLORS[room.players.length % PLAYER_COLORS.length] };
+      if (!room) {
+        socket.emit("error", { message: "Room not found" });
+        return;
+      }
+      if (room.players.length >= 4) {
+        socket.emit("error", { message: "Room is full" });
+        return;
+      }
+      if (room.status !== "waiting") {
+        socket.emit("error", { message: "Game already started" });
+        return;
+      }
+      const player: Player = {
+        id: socket.id,
+        name: playerName,
+        score: 0,
+        color: PLAYER_COLORS[room.players.length % PLAYER_COLORS.length],
+      };
       room.players.push(player);
       socket.join(id);
       socket.data.roomId = id;
@@ -167,7 +207,10 @@ app.prepare().then(() => {
       const roomId = socket.data.roomId;
       const room = rooms.get(roomId);
       if (!room || room.host !== socket.id) return;
-      if (room.players.length < 2) { socket.emit("error", { message: "Need at least 2 players" }); return; }
+      if (room.players.length < 2) {
+        socket.emit("error", { message: "Need at least 2 players" });
+        return;
+      }
       room.status = "playing";
       room.roundNum = 1;
       room.players.forEach((p) => (p.score = 0));
@@ -176,45 +219,83 @@ app.prepare().then(() => {
       startRound(roomId);
     });
 
-    socket.on("country:click", ({ countryCode, countryName }: { countryCode: string; countryName: string }) => {
-      const roomId = socket.data.roomId;
-      const room = rooms.get(roomId);
-      if (!room || room.status !== "playing" || !room.currentCountry) return;
+    socket.on(
+      "country:click",
+      ({ countryCode, countryName }: { countryCode: string; countryName: string }) => {
+        const roomId = socket.data.roomId;
+        const room = rooms.get(roomId);
+        if (!room || room.status !== "playing" || !room.currentCountry) return;
 
-      const isCorrect = countryCode === room.currentCountry.code || countryName === room.currentCountry.name;
-      const player = room.players.find((p) => p.id === socket.id);
-      if (!player) return;
+        const isCorrect =
+          countryCode === room.currentCountry.code || countryName === room.currentCountry.name;
+        const player = room.players.find((p) => p.id === socket.id);
+        if (!player) return;
 
-      if (!isCorrect) {
-        socket.emit("click:result", { correct: false, countryName, playerName: player.name });
-        return;
+        if (!isCorrect) {
+          socket.emit("click:result", { correct: false, countryName, playerName: player.name });
+          return;
+        }
+
+        if (room.mode === "free-for-all") {
+          player.score += 1;
+          io.to(roomId).emit("click:result", {
+            correct: true,
+            countryName: room.currentCountry.name,
+            playerName: player.name,
+            points: 1,
+            color: player.color,
+          });
+          broadcastRoom(roomId);
+          advanceRound(roomId);
+        } else if (room.mode === "first-click") {
+          if (room.roundWon) {
+            socket.emit("click:result", {
+              correct: true,
+              late: true,
+              points: 0,
+              countryName: room.currentCountry.name,
+              playerName: player.name,
+            });
+            return;
+          }
+          room.roundWon = true;
+          player.score += 1;
+          io.to(roomId).emit("click:result", {
+            correct: true,
+            countryName: room.currentCountry.name,
+            playerName: player.name,
+            points: 1,
+            color: player.color,
+          });
+          broadcastRoom(roomId);
+          advanceRound(roomId);
+        } else if (room.mode === "race") {
+          if (room.roundWon) {
+            socket.emit("click:result", {
+              correct: true,
+              late: true,
+              points: 0,
+              countryName: room.currentCountry.name,
+              playerName: player.name,
+            });
+            return;
+          }
+          room.roundWon = true;
+          const elapsed = (Date.now() - (room.roundStartedAt ?? Date.now())) / 1000;
+          const points = Math.max(1, Math.round(10 - (elapsed / 20) * 9));
+          player.score += points;
+          io.to(roomId).emit("click:result", {
+            correct: true,
+            countryName: room.currentCountry.name,
+            playerName: player.name,
+            points,
+            color: player.color,
+          });
+          broadcastRoom(roomId);
+          advanceRound(roomId);
+        }
       }
-
-      if (room.mode === "free-for-all") {
-        player.score += 1;
-        io.to(roomId).emit("click:result", { correct: true, countryName: room.currentCountry.name, playerName: player.name, points: 1, color: player.color });
-        broadcastRoom(roomId);
-        advanceRound(roomId);
-
-      } else if (room.mode === "first-click") {
-        if (room.roundWon) { socket.emit("click:result", { correct: true, late: true, points: 0, countryName: room.currentCountry.name, playerName: player.name }); return; }
-        room.roundWon = true;
-        player.score += 1;
-        io.to(roomId).emit("click:result", { correct: true, countryName: room.currentCountry.name, playerName: player.name, points: 1, color: player.color });
-        broadcastRoom(roomId);
-        advanceRound(roomId);
-
-      } else if (room.mode === "race") {
-        if (room.roundWon) { socket.emit("click:result", { correct: true, late: true, points: 0, countryName: room.currentCountry.name, playerName: player.name }); return; }
-        room.roundWon = true;
-        const elapsed = (Date.now() - (room.roundStartedAt ?? Date.now())) / 1000;
-        const points = Math.max(1, Math.round(10 - (elapsed / 20) * 9));
-        player.score += points;
-        io.to(roomId).emit("click:result", { correct: true, countryName: room.currentCountry.name, playerName: player.name, points, color: player.color });
-        broadcastRoom(roomId);
-        advanceRound(roomId);
-      }
-    });
+    );
 
     socket.on("disconnect", () => {
       const roomId = socket.data.roomId;
@@ -222,7 +303,11 @@ app.prepare().then(() => {
       const room = rooms.get(roomId);
       if (!room) return;
       room.players = room.players.filter((p) => p.id !== socket.id);
-      if (room.players.length === 0) { clearRoundTimer(roomId); rooms.delete(roomId); return; }
+      if (room.players.length === 0) {
+        clearRoundTimer(roomId);
+        rooms.delete(roomId);
+        return;
+      }
       if (room.host === socket.id) room.host = room.players[0].id;
       if (room.status === "playing" && room.players.length < 2) {
         clearRoundTimer(roomId);

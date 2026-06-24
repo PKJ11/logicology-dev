@@ -18,7 +18,7 @@ const SiteFooter = () => {
             px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
             Previously this was max-w-[74vw] which caused misalignment.
           */}
-          <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8 py-12">
+          <div className="px-4 py-12 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
             <div className="grid items-start gap-10 md:grid-cols-4">
               <div className="relative h-auto w-[200px]">
                 <Image

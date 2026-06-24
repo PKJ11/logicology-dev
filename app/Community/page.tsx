@@ -336,8 +336,7 @@ export default function CommunityPage() {
     setTimeout(() => setCopySuccess(false), 3000);
   };
 
-  const cleanPhoneNumber = (phoneNumber: string): string =>
-    phoneNumber.replace(/\D/g, "");
+  const cleanPhoneNumber = (phoneNumber: string): string => phoneNumber.replace(/\D/g, "");
 
   const extractCountryCode = (
     phoneNumber: string
@@ -434,7 +433,10 @@ export default function CommunityPage() {
         bodyValues
       );
       if (result.success) {
-        setInviteStatus({ success: true, message: `Invitation sent successfully to ${friendName}!` });
+        setInviteStatus({
+          success: true,
+          message: `Invitation sent successfully to ${friendName}!`,
+        });
         setShowWhatsappForm(false);
         setFriendName("");
         setFriendNumber("");
@@ -568,7 +570,6 @@ export default function CommunityPage() {
       <CommunityHeader userData={userData} onLogout={handleLogout} />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-
         {/* Welcome */}
         <section className="mb-12 text-center" aria-labelledby="welcome-heading">
           <div className="mx-auto max-w-3xl">
@@ -610,10 +611,7 @@ export default function CommunityPage() {
               Exclusive Worksheets Available!
             </div>
 
-            <h2
-              id="worksheets-heading"
-              className="mb-4 text-3xl font-bold text-brand-tealDark"
-            >
+            <h2 id="worksheets-heading" className="mb-4 text-3xl font-bold text-brand-tealDark">
               Download Your Premium Worksheets
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
@@ -657,24 +655,30 @@ export default function CommunityPage() {
               PlayThinkers Community Guidelines
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <GuidelineItem title="Be Creative" description="Share unique ideas and creative solutions to puzzles." />
-              <GuidelineItem title="Share Learning" description="Help fellow PlayThinkers learn and grow together." />
-              <GuidelineItem title="Play Fair" description="Respect all community members in discussions and activities." />
-              <GuidelineItem title="Keep it Fun" description="Maintain a positive and engaging learning environment." />
+              <GuidelineItem
+                title="Be Creative"
+                description="Share unique ideas and creative solutions to puzzles."
+              />
+              <GuidelineItem
+                title="Share Learning"
+                description="Help fellow PlayThinkers learn and grow together."
+              />
+              <GuidelineItem
+                title="Play Fair"
+                description="Respect all community members in discussions and activities."
+              />
+              <GuidelineItem
+                title="Keep it Fun"
+                description="Maintain a positive and engaging learning environment."
+              />
             </div>
           </div>
         </section>
 
         {/* Sharing */}
-        <section
-          aria-labelledby="sharing-heading"
-          className="mb-8 mt-16 text-center"
-        >
+        <section aria-labelledby="sharing-heading" className="mb-8 mt-16 text-center">
           <div className="rounded-3xl bg-gradient-to-r from-brand-teal to-brand-tealDark p-8 text-white shadow-xl">
-            <h3
-              id="sharing-heading"
-              className="mb-4 text-2xl font-bold"
-            >
+            <h3 id="sharing-heading" className="mb-4 text-2xl font-bold">
               Loving the PlayThinkers Experience?
             </h3>
             <p className="mb-6 text-lg opacity-90">
@@ -934,9 +938,7 @@ function WorksheetCard({
       {/* Card Body */}
       <div className="flex flex-1 flex-col p-6">
         <h3 className="mb-3 text-xl font-bold text-brand-tealDark">{worksheet.title}</h3>
-        <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">
-          {worksheet.description}
-        </p>
+        <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">{worksheet.description}</p>
 
         <div className="flex gap-3">
           <button
@@ -1021,4 +1023,4 @@ function GuidelineItem({ title, description }: { title: string; description: str
       </div>
     </div>
   );
-} 
+}

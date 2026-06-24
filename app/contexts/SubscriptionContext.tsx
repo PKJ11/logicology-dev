@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { TierId, UserSubscription } from '../types/subscription';
-import { useTiers } from './TiersContext';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { TierId, UserSubscription } from "../types/subscription";
+import { useTiers } from "./TiersContext";
 
 interface SubscriptionContextType {
   currentTier: TierId;
@@ -32,17 +32,17 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   const loadUserSubscription = async () => {
     try {
-      const token = localStorage.getItem('communityToken');
+      const token = localStorage.getItem("communityToken");
       if (!token) {
         setCurrentTier(1);
         setIsLoading(false);
         return;
       }
 
-      const response = await fetch('/api/subscription/current', {
+      const response = await fetch("/api/subscription/current", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
@@ -51,7 +51,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         setCurrentTier(data.subscription?.tierId || 1);
       }
     } catch (error) {
-      console.error('Error loading subscription:', error);
+      console.error("Error loading subscription:", error);
     } finally {
       setIsLoading(false);
     }
@@ -69,17 +69,19 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const isSubscribed = currentTier > 1;
 
   return (
-    <SubscriptionContext.Provider value={{
-      currentTier,
-      setCurrentTier,
-      isSubscribed,
-      canAccessTier,
-      userSubscription,
-      isLoading,
-      showSubscriptionModal,
-      setShowSubscriptionModal,
-      initiateUpgrade
-    }}>
+    <SubscriptionContext.Provider
+      value={{
+        currentTier,
+        setCurrentTier,
+        isSubscribed,
+        canAccessTier,
+        userSubscription,
+        isLoading,
+        showSubscriptionModal,
+        setShowSubscriptionModal,
+        initiateUpgrade,
+      }}
+    >
       {children}
     </SubscriptionContext.Provider>
   );
@@ -88,7 +90,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 export function useSubscription() {
   const context = useContext(SubscriptionContext);
   if (context === undefined) {
-    throw new Error('useSubscription must be used within a SubscriptionProvider');
+    throw new Error("useSubscription must be used within a SubscriptionProvider");
   }
   return context;
 }

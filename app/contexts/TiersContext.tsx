@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Tier } from '../types/subscription';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { Tier } from "../types/subscription";
 
 interface TiersContextType {
   tiers: Tier[];
@@ -21,18 +21,18 @@ export function TiersProvider({ children }: { children: React.ReactNode }) {
   const fetchTiers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/tiers');
+      const response = await fetch("/api/admin/tiers");
       const data = await response.json();
-      
+
       if (data.success) {
         setTiers(data.tiers);
         setError(null);
       } else {
-        setError(data.error || 'Failed to fetch tiers');
+        setError(data.error || "Failed to fetch tiers");
       }
     } catch (err) {
-      setError('Network error while fetching tiers');
-      console.error('Error fetching tiers:', err);
+      setError("Network error while fetching tiers");
+      console.error("Error fetching tiers:", err);
     } finally {
       setLoading(false);
     }
@@ -43,17 +43,19 @@ export function TiersProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const getTierById = (id: number) => {
-    return tiers.find(tier => tier.id === id);
+    return tiers.find((tier) => tier.id === id);
   };
 
   return (
-    <TiersContext.Provider value={{
-      tiers,
-      loading,
-      error,
-      refreshTiers: fetchTiers,
-      getTierById
-    }}>
+    <TiersContext.Provider
+      value={{
+        tiers,
+        loading,
+        error,
+        refreshTiers: fetchTiers,
+        getTierById,
+      }}
+    >
       {children}
     </TiersContext.Provider>
   );
@@ -62,7 +64,7 @@ export function TiersProvider({ children }: { children: React.ReactNode }) {
 export function useTiers() {
   const context = useContext(TiersContext);
   if (context === undefined) {
-    throw new Error('useTiers must be used within a TiersProvider');
+    throw new Error("useTiers must be used within a TiersProvider");
   }
   return context;
 }

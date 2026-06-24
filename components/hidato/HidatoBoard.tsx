@@ -28,9 +28,9 @@ export const HidatoBoard: React.FC<HidatoBoardProps> = ({
   const size = board.length;
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex w-full justify-center">
       <div
-        className="inline-block p-4 bg-gray-50 rounded-lg shadow-lg"
+        className="inline-block rounded-lg bg-gray-50 p-4 shadow-lg"
         style={{
           display: "inline-grid",
           gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
@@ -41,8 +41,7 @@ export const HidatoBoard: React.FC<HidatoBoardProps> = ({
         {board.map((row, rowIdx) =>
           row.map((value, colIdx) => {
             const isClue = puzzle[rowIdx][colIdx] > 0;
-            const isSelected =
-              selectedCell?.row === rowIdx && selectedCell?.col === colIdx;
+            const isSelected = selectedCell?.row === rowIdx && selectedCell?.col === colIdx;
             const isHighlighted =
               highlightedNumber !== null &&
               highlightedNumber !== undefined &&

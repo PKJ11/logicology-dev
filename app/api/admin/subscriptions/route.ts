@@ -1,28 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdmin } from '@/app/lib/admin-auth';
-import { ObjectId } from 'mongodb';
-import { connectToDatabase } from '../../lib/db/models';
+import { NextRequest, NextResponse } from "next/server";
+import { verifyAdmin } from "@/app/lib/admin-auth";
+import { ObjectId } from "mongodb";
+import { connectToDatabase } from "../../lib/db/models";
 
 export async function GET(req: NextRequest) {
   try {
     const admin = await verifyAdmin(req);
     if (!admin) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { db } = await connectToDatabase();
-    
+
     // Fetch all subscriptions
-    const subscriptions = await db.collection('subscriptions')
+    const subscriptions = await db
+      .collection("subscriptions")
       .find({})
       .sort({ startDate: -1 })
       .toArray();
 
     // Format subscriptions for frontend
-    const formattedSubscriptions = subscriptions.map(sub => ({
+    const formattedSubscriptions = subscriptions.map((sub) => ({
       _id: sub._id.toString(),
       userId: sub.userId.toString(),
       tierId: sub.tierId,
@@ -30,20 +28,16 @@ export async function GET(req: NextRequest) {
       startDate: sub.startDate || new Date().toISOString(),
       endDate: sub.endDate || new Date().toISOString(),
       paymentId: sub.paymentId,
-      autoRenew: sub.autoRenew || false
+      autoRenew: sub.autoRenew || false,
     }));
 
     return NextResponse.json({
       success: true,
-      subscriptions: formattedSubscriptions
+      subscriptions: formattedSubscriptions,
     });
-
   } catch (error: any) {
-    console.error('Error fetching subscriptions:', error);
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    console.error("Error fetching subscriptions:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
@@ -52,10 +46,7 @@ export async function POST(req: NextRequest) {
   try {
     const admin = await verifyAdmin(req);
     if (!admin) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const data = await req.json();
@@ -65,21 +56,17 @@ export async function POST(req: NextRequest) {
       ...data,
       userId: new ObjectId(data.userId),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
-    const result = await db.collection('subscriptions').insertOne(newSubscription);
+    const result = await db.collection("subscriptions").insertOne(newSubscription);
 
     return NextResponse.json({
       success: true,
-      subscription: { ...newSubscription, _id: result.insertedId }
+      subscription: { ...newSubscription, _id: result.insertedId },
     });
-
   } catch (error: any) {
-    console.error('Error creating subscription:', error);
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    console.error("Error creating subscription:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

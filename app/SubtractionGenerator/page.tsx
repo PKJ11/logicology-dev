@@ -1,7 +1,10 @@
-"use client"
+"use client";
 import { useState, useEffect, useRef } from "react";
 
-interface Question { a: number; b: number; }
+interface Question {
+  a: number;
+  b: number;
+}
 
 function generateQuestion(): Question {
   let a: number, b: number;
@@ -25,7 +28,10 @@ export default function SubtractionGenerator() {
   const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleNext = () => {
-    if (autoTimer.current) { clearTimeout(autoTimer.current); autoTimer.current = null; }
+    if (autoTimer.current) {
+      clearTimeout(autoTimer.current);
+      autoTimer.current = null;
+    }
     setQuestion(generateQuestion());
     setAnswer("");
     setFeedback(null);
@@ -38,8 +44,8 @@ export default function SubtractionGenerator() {
     const isCorrect = parseInt(answer) === question.a - question.b;
     setFeedback(isCorrect ? "correct" : "wrong");
     setCardFlash(isCorrect ? "correct" : "wrong");
-    setScore(s => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }));
-    setStreak(s => {
+    setScore((s) => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }));
+    setStreak((s) => {
       const next = isCorrect ? s + 1 : 0;
       return next;
     });
@@ -59,50 +65,70 @@ export default function SubtractionGenerator() {
 
   useEffect(() => {
     inputRef.current?.focus();
-    return () => { if (autoTimer.current) clearTimeout(autoTimer.current); };
+    return () => {
+      if (autoTimer.current) clearTimeout(autoTimer.current);
+    };
   }, []);
 
   const flashBg =
-    cardFlash === "correct" ? "rgba(34,197,94,0.08)" :
-    cardFlash === "wrong"   ? "rgba(239,68,68,0.07)" : "#fff";
+    cardFlash === "correct"
+      ? "rgba(34,197,94,0.08)"
+      : cardFlash === "wrong"
+        ? "rgba(239,68,68,0.07)"
+        : "#fff";
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#f5f5f5",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontFamily: "sans-serif",
-    }}>
-      <div style={{
-        background: flashBg,
-        border: "1px solid #ddd",
-        borderRadius: "12px",
-        padding: "40px 48px",
-        textAlign: "center",
-        width: "320px",
-        transition: "background 0.4s ease",
-      }}>
-
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f5f5f5",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <div
+        style={{
+          background: flashBg,
+          border: "1px solid #ddd",
+          borderRadius: "12px",
+          padding: "40px 48px",
+          textAlign: "center",
+          width: "320px",
+          transition: "background 0.4s ease",
+        }}
+      >
         {/* Stats row */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
+          }}
+        >
           <p style={{ color: "#999", fontSize: "13px", margin: 0 }}>
             Score: {score.correct} / {score.total}
           </p>
-          <span style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "4px",
-            padding: "4px 10px",
-            borderRadius: "20px",
-            fontSize: "13px",
-            fontWeight: 500,
-            background: streak > 0 ? "#fef3c7" : "#f0f0f0",
-            color: streak > 0 ? "#92400e" : "#aaa",
-            transition: "background 0.3s, color 0.3s",
-            animation: streakAnimate && streak > 0 ? "bounceIn 0.4s cubic-bezier(0.36,0.07,0.19,0.97)" : "none",
-          }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 10px",
+              borderRadius: "20px",
+              fontSize: "13px",
+              fontWeight: 500,
+              background: streak > 0 ? "#fef3c7" : "#f0f0f0",
+              color: streak > 0 ? "#92400e" : "#aaa",
+              transition: "background 0.3s, color 0.3s",
+              animation:
+                streakAnimate && streak > 0
+                  ? "bounceIn 0.4s cubic-bezier(0.36,0.07,0.19,0.97)"
+                  : "none",
+            }}
+          >
             🔥 {streak} streak
           </span>
         </div>
@@ -114,7 +140,9 @@ export default function SubtractionGenerator() {
             ref={inputRef}
             type="number"
             value={answer}
-            onChange={e => { if (!feedback) setAnswer(e.target.value); }}
+            onChange={(e) => {
+              if (!feedback) setAnswer(e.target.value);
+            }}
             onKeyDown={handleKeyDown}
             placeholder="?"
             style={{
@@ -124,8 +152,7 @@ export default function SubtractionGenerator() {
               textAlign: "center",
               border: "none",
               borderBottom: `3px solid ${
-                feedback === "correct" ? "#22c55e" :
-                feedback === "wrong"   ? "#ef4444" : "#333"
+                feedback === "correct" ? "#22c55e" : feedback === "wrong" ? "#ef4444" : "#333"
               }`,
               outline: "none",
               background: "transparent",
@@ -139,9 +166,7 @@ export default function SubtractionGenerator() {
         <div style={{ height: "24px", marginBottom: "20px", fontSize: "15px" }}>
           {feedback === "correct" && <span style={{ color: "#22c55e" }}>✓ Correct!</span>}
           {feedback === "wrong" && (
-            <span style={{ color: "#ef4444" }}>
-              ✗ Answer: {question.a - question.b}
-            </span>
+            <span style={{ color: "#ef4444" }}>✗ Answer: {question.a - question.b}</span>
           )}
         </div>
 

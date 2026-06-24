@@ -6,7 +6,7 @@ const HOSTINGER_PASSWORD = process.env.HOSTINGER_PASSWORD || "Raha@1ogic$$$";
 
 export async function POST(req: NextRequest) {
   try {
-    const { to, subject, html, pdfUrl , cc} = await req.json();
+    const { to, subject, html, pdfUrl, cc } = await req.json();
 
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com", // Hostinger SMTP server
@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
     if (cc && cc.length > 0) {
       mailOptions.cc = cc;
     }
-
 
     // Attach PDF if available
     if (pdfUrl) {

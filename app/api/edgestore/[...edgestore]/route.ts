@@ -1,5 +1,5 @@
-import { initEdgeStore } from '@edgestore/server';
-import { createEdgeStoreNextHandler } from '@edgestore/server/adapters/next/app';
+import { initEdgeStore } from "@edgestore/server";
+import { createEdgeStoreNextHandler } from "@edgestore/server/adapters/next/app";
 
 const es = initEdgeStore.create();
 
@@ -10,19 +10,19 @@ const es = initEdgeStore.create();
 const edgeStoreRouter = es.router({
   // For PDF worksheets
   worksheets: es.fileBucket(),
-  
-  // For images and thumbnails  
+
+  // For images and thumbnails
   images: es.imageBucket(),
-  
+
   // For videos (Mindstamp, etc.)
   videos: es.fileBucket(),
-  
+
   // For assessments and documents
   assessments: es.fileBucket(),
-  
+
   // For game assets
   games: es.fileBucket(),
-  
+
   // For general public files
   publicFiles: es.fileBucket(),
 });

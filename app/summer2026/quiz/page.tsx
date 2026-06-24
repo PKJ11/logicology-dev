@@ -28,8 +28,6 @@ function useReveal() {
   return { ref, visible };
 }
 
-
-
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
@@ -559,9 +557,7 @@ function CTAStrip() {
         >
           Enjoyed the Games?
           <br />
-          <span style={{ color: "rgba(255,255,255,0.82)" }}>
-            Join the Full Summer Workshop!
-          </span>
+          <span style={{ color: "rgba(255,255,255,0.82)" }}>Join the Full Summer Workshop!</span>
         </h2>
         <p
           style={{
@@ -737,8 +733,8 @@ function GamesSection() {
                 lineHeight: 1.6,
               }}
             >
-              Play all three games before the workshop to warm up your brain. Children who play first
-              tend to pick up workshop concepts faster!
+              Play all three games before the workshop to warm up your brain. Children who play
+              first tend to pick up workshop concepts faster!
             </div>
           </div>
         </div>
@@ -765,7 +761,7 @@ export default function SummerQuizPage() {
       <HeroSection />
       <GamesSection />
       <CTAStrip />
-      <SiteFooter/>
+      <SiteFooter />
     </>
   );
 }

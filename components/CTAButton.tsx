@@ -17,6 +17,11 @@ type CTAButtonProps = {
   rightIcon?: ReactNode;
   className?: string;
   ariaLabel?: string;
+  borderColor?: string; // border color for normal state
+  hoverBorderColor?: string; // border color on hover
+  showShadow?: boolean; // whether to show box shadow
+  showScaleOnHover?: boolean; // whether to scale on hover
+  showScaleOnActive?: boolean; // whether to scale on active/click
 };
 
 export default function CTAButton({
@@ -33,6 +38,11 @@ export default function CTAButton({
   rightIcon,
   className = "",
   ariaLabel,
+  borderColor = "transparent",
+  hoverBorderColor = "transparent",
+  showShadow = false,
+  showScaleOnHover = false,
+  showScaleOnActive = false,
 }: CTAButtonProps) {
   const sizeClasses =
     size === "sm"
@@ -44,10 +54,13 @@ export default function CTAButton({
   const baseClasses = `
     inline-flex items-center justify-center gap-2
     ${roundedClass} ${sizeClasses}
-    font-medium transition-colors duration-200
-    focus:outline-none focus:ring-2 focus:ring-white/70
+    font-medium transition-all duration-300 ease
+    
     bg-[var(--btn-bg)] text-[var(--btn-color)]
     hover:bg-[var(--btn-hover-bg)] hover:text-[var(--btn-hover-color)]
+    ${borderColor !== "transparent" ? "border-2" : "border-2 border-transparent"}
+    ${showScaleOnHover ? "hover:scale-105" : ""}
+    ${showScaleOnActive ? "active:scale-95" : ""}
   `;
 
   const style = {
@@ -60,8 +73,16 @@ export default function CTAButton({
     ["--btn-hover-color" as any]: hoverColor,
   } as React.CSSProperties;
 
+  // Hover style for box shadow
+
   const content = (
-    <span className={`${baseClasses} ${className}`} style={style} aria-label={ariaLabel}>
+    <span
+      className={`${baseClasses} ${className}`}
+      style={style}
+      onMouseEnter={(e) => {}}
+      onMouseLeave={(e) => {}}
+      aria-label={ariaLabel}
+    >
       {leftIcon}
       {text}
       {rightIcon}

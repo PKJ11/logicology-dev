@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { HelpCircle, Trash2, CheckCircle, SkipForward, Trophy } from 'lucide-react';
+import { motion } from "framer-motion";
+import { HelpCircle, Trash2, CheckCircle, SkipForward, Trophy } from "lucide-react";
 
 interface GameControlsProps {
   onHint: () => void;
@@ -14,51 +14,49 @@ interface GameControlsProps {
   isCorrect?: boolean;
 }
 
-export default function GameControls({ 
-  onHint, 
-  onClear, 
-  onCheck, 
+export default function GameControls({
+  onHint,
+  onClear,
+  onCheck,
   onNext,
   hintsUsed,
   canCheck,
   canProceed,
-  isCorrect = false 
+  isCorrect = false,
 }: GameControlsProps) {
   return (
-    <div className="flex flex-wrap gap-4 justify-center">
+    <div className="flex flex-wrap justify-center gap-4">
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onHint}
-        className="flex items-center gap-2 px-6 py-3 bg-sky-100 text-sky-700 rounded-2xl font-outfit font-semibold text-lg"
+        className="font-outfit flex items-center gap-2 rounded-2xl bg-sky-100 px-6 py-3 text-lg font-semibold text-sky-700"
       >
         <HelpCircle />
         Hint ({3 - hintsUsed} left)
       </motion.button>
-      
+
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onClear}
-        className="flex items-center gap-2 px-6 py-3 bg-amber-100 text-amber-700 rounded-2xl font-outfit font-semibold text-lg"
+        className="font-outfit flex items-center gap-2 rounded-2xl bg-amber-100 px-6 py-3 text-lg font-semibold text-amber-700"
       >
         <Trash2 />
         Clear
       </motion.button>
-      
+
       {!isCorrect ? (
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onCheck}
           disabled={!canCheck}
-          className={`
-            flex items-center gap-2 px-6 py-3 rounded-2xl font-outfit font-semibold text-lg
-            ${canCheck 
-              ? 'bg-brand-teal text-white hover:bg-teal-600' 
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }
-          `}
+          className={`font-outfit flex items-center gap-2 rounded-2xl px-6 py-3 text-lg font-semibold ${
+            canCheck
+              ? "bg-brand-teal text-white hover:bg-teal-600"
+              : "cursor-not-allowed bg-gray-200 text-gray-500"
+          } `}
         >
           <CheckCircle />
           Check Answer
@@ -68,7 +66,7 @@ export default function GameControls({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onNext}
-          className="flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-2xl font-outfit font-semibold text-lg"
+          className="font-outfit flex items-center gap-2 rounded-2xl bg-green-500 px-6 py-3 text-lg font-semibold text-white"
         >
           <SkipForward />
           Next Level

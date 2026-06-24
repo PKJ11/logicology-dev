@@ -4,16 +4,16 @@ import { useState, useEffect } from "react";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 const B = {
-  teal:       "#0A8A80",
-  tealDark:   "#0B3F44",
-  coral:      "#E45C48",
-  gold:       "#D8AE4F",
-  grayBg:     "#F5F6F7",
-  maroon:     "#6d2e46",
+  teal: "#0A8A80",
+  tealDark: "#0B3F44",
+  coral: "#E45C48",
+  gold: "#D8AE4F",
+  grayBg: "#F5F6F7",
+  maroon: "#6d2e46",
   maroonDark: "#5a2438",
-  pink:       "#b44b73",
-  yellow:     "#fddf5c",
-  whiteText:  "#f7f7f7",
+  pink: "#b44b73",
+  yellow: "#fddf5c",
+  whiteText: "#f7f7f7",
 };
 
 // Sample questions for testing (use this until APIs are ready)
@@ -84,26 +84,43 @@ function LoginScreen({ onLogin }: { onLogin: (phoneNumber: string, name: string)
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: `linear-gradient(135deg, ${B.tealDark}, ${B.maroonDark})`,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "20px",
-    }}>
-      <div style={{
-        background: "white", borderRadius: "48px", padding: "48px 40px",
-        maxWidth: "480px", width: "100%", textAlign: "center",
-        boxShadow: "0 32px 80px rgba(0,0,0,0.3)",
-      }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: `linear-gradient(135deg, ${B.tealDark}, ${B.maroonDark})`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          background: "white",
+          borderRadius: "48px",
+          padding: "48px 40px",
+          maxWidth: "480px",
+          width: "100%",
+          textAlign: "center",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.3)",
+        }}
+      >
         <div style={{ fontSize: "72px", marginBottom: "16px" }}>🧮</div>
-        <h1 style={{
-          fontFamily: "'Fredoka One', cursive", fontSize: "32px",
-          color: B.tealDark, marginBottom: "8px",
-        }}> Math Quest</h1>
+        <h1
+          style={{
+            fontFamily: "'Fredoka One', cursive",
+            fontSize: "32px",
+            color: B.tealDark,
+            marginBottom: "8px",
+          }}
+        >
+          {" "}
+          Math Quest
+        </h1>
         <p style={{ fontFamily: "'Nunito', sans-serif", color: B.maroon, marginBottom: "32px" }}>
           Enter to begin your adventure!
         </p>
-        
+
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -111,9 +128,13 @@ function LoginScreen({ onLogin }: { onLogin: (phoneNumber: string, name: string)
             value={name}
             onChange={(e) => setName(e.target.value)}
             style={{
-              width: "100%", padding: "16px 20px", marginBottom: "16px",
-              borderRadius: "24px", border: `2px solid ${B.teal}40`,
-              fontSize: "16px", fontFamily: "'Nunito', sans-serif",
+              width: "100%",
+              padding: "16px 20px",
+              marginBottom: "16px",
+              borderRadius: "24px",
+              border: `2px solid ${B.teal}40`,
+              fontSize: "16px",
+              fontFamily: "'Nunito', sans-serif",
               outline: "none",
             }}
           />
@@ -121,21 +142,32 @@ function LoginScreen({ onLogin }: { onLogin: (phoneNumber: string, name: string)
             type="tel"
             placeholder="Phone Number (10 digits)"
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0,10))}
+            onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
             style={{
-              width: "100%", padding: "16px 20px", marginBottom: "16px",
-              borderRadius: "24px", border: `2px solid ${B.teal}40`,
-              fontSize: "16px", fontFamily: "'Nunito', sans-serif",
+              width: "100%",
+              padding: "16px 20px",
+              marginBottom: "16px",
+              borderRadius: "24px",
+              border: `2px solid ${B.teal}40`,
+              fontSize: "16px",
+              fontFamily: "'Nunito', sans-serif",
               outline: "none",
             }}
           />
-          {error && <p style={{ color: B.coral, marginBottom: "16px", fontSize: "14px" }}>{error}</p>}
+          {error && (
+            <p style={{ color: B.coral, marginBottom: "16px", fontSize: "14px" }}>{error}</p>
+          )}
           <button
             type="submit"
             style={{
-              width: "100%", padding: "16px", borderRadius: "999px",
-              border: "none", background: `linear-gradient(135deg, ${B.teal}, ${B.tealDark})`,
-              color: "white", fontSize: "18px", fontFamily: "'Fredoka One', cursive",
+              width: "100%",
+              padding: "16px",
+              borderRadius: "999px",
+              border: "none",
+              background: `linear-gradient(135deg, ${B.teal}, ${B.tealDark})`,
+              color: "white",
+              fontSize: "18px",
+              fontFamily: "'Fredoka One', cursive",
               cursor: "pointer",
             }}
           >
@@ -150,49 +182,105 @@ function LoginScreen({ onLogin }: { onLogin: (phoneNumber: string, name: string)
 // ─── Leaderboard Component ────────────────────────────────────────────────────
 function Leaderboard({ entries, onClose }: { entries: any[]; onClose: () => void }) {
   return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-      background: "rgba(0,0,0,0.8)", backdropFilter: "blur(8px)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      zIndex: 1000, padding: "20px",
-    }} onClick={onClose}>
-      <div style={{
-        background: "white", borderRadius: "32px", maxWidth: "600px",
-        width: "100%", maxHeight: "80vh", overflow: "auto",
-        padding: "32px",
-      }} onClick={(e) => e.stopPropagation()}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: "rgba(0,0,0,0.8)",
+        backdropFilter: "blur(8px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+        padding: "20px",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "white",
+          borderRadius: "32px",
+          maxWidth: "600px",
+          width: "100%",
+          maxHeight: "80vh",
+          overflow: "auto",
+          padding: "32px",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
+          }}
+        >
           <h2 style={{ fontFamily: "'Fredoka One', cursive", fontSize: "28px", color: B.tealDark }}>
             🏆 Leaderboard 🏆
           </h2>
-          <button onClick={onClose} style={{
-            background: "none", border: "none", fontSize: "24px",
-            cursor: "pointer", color: B.maroon,
-          }}>✕</button>
+          <button
+            onClick={onClose}
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "24px",
+              cursor: "pointer",
+              color: B.maroon,
+            }}
+          >
+            ✕
+          </button>
         </div>
-        
+
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {entries.length === 0 ? (
-            <p style={{ textAlign: "center", color: B.maroon }}>No entries yet. Be the first to play!</p>
+            <p style={{ textAlign: "center", color: B.maroon }}>
+              No entries yet. Be the first to play!
+            </p>
           ) : (
             entries.map((entry, idx) => (
-              <div key={idx} style={{
-                display: "flex", alignItems: "center", gap: "16px",
-                padding: "16px", background: idx < 3 ? `${B.gold}20` : B.grayBg,
-                borderRadius: "20px",
-              }}>
-                <div style={{
-                  width: "40px", height: "40px", borderRadius: "50%",
-                  background: idx === 0 ? B.gold : idx === 1 ? "#C0C0C0" : idx === 2 ? "#CD7F32" : B.teal,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "20px", fontWeight: "bold", color: "white",
-                }}>{idx + 1}</div>
+              <div
+                key={idx}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  padding: "16px",
+                  background: idx < 3 ? `${B.gold}20` : B.grayBg,
+                  borderRadius: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    background:
+                      idx === 0 ? B.gold : idx === 1 ? "#C0C0C0" : idx === 2 ? "#CD7F32" : B.teal,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "white",
+                  }}
+                >
+                  {idx + 1}
+                </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: "bold", fontSize: "16px", color: B.tealDark }}>{entry.name}</div>
+                  <div style={{ fontWeight: "bold", fontSize: "16px", color: B.tealDark }}>
+                    {entry.name}
+                  </div>
                   <div style={{ fontSize: "12px", color: B.maroon }}>{entry.phoneNumber}</div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontWeight: "bold", fontSize: "20px", color: B.teal }}>{entry.score}</div>
+                  <div style={{ fontWeight: "bold", fontSize: "20px", color: B.teal }}>
+                    {entry.score}
+                  </div>
                 </div>
               </div>
             ))
@@ -227,7 +315,7 @@ export default function QuizPage() {
       totalScore: 0,
     });
     // Load leaderboard from localStorage
-    const savedLeaderboard = localStorage.getItem('quizLeaderboard');
+    const savedLeaderboard = localStorage.getItem("quizLeaderboard");
     if (savedLeaderboard) {
       setLeaderboard(JSON.parse(savedLeaderboard));
     }
@@ -239,14 +327,14 @@ export default function QuizPage() {
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);
     setLeaderboard(updatedLeaderboard);
-    localStorage.setItem('quizLeaderboard', JSON.stringify(updatedLeaderboard));
+    localStorage.setItem("quizLeaderboard", JSON.stringify(updatedLeaderboard));
   };
 
   const handleSelect = (index: number) => {
     if (selected !== null || completed) return;
     setSelected(index);
-    setAttempts(prev => prev + 1);
-    
+    setAttempts((prev) => prev + 1);
+
     if (index === currentQuestion.correct) {
       const newScore = score + 10;
       setScore(newScore);
@@ -256,13 +344,13 @@ export default function QuizPage() {
         updateLeaderboard(user.name, user.phoneNumber, newScore);
       }
     }
-    
+
     setTimeout(() => setShowFact(true), 380);
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex + 1 < SAMPLE_QUESTIONS.length) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
       setSelected(null);
       setShowFact(false);
     } else {
@@ -291,16 +379,26 @@ export default function QuizPage() {
 
   if (completed) {
     return (
-      <div style={{
-        minHeight: "100vh",
-        background: `linear-gradient(135deg, ${B.tealDark}, ${B.maroonDark})`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "20px",
-      }}>
-        <div style={{
-          background: "white", borderRadius: "48px", padding: "48px",
-          maxWidth: "500px", width: "100%", textAlign: "center",
-        }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: `linear-gradient(135deg, ${B.tealDark}, ${B.maroonDark})`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+        }}
+      >
+        <div
+          style={{
+            background: "white",
+            borderRadius: "48px",
+            padding: "48px",
+            maxWidth: "500px",
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
           <div style={{ fontSize: "64px", marginBottom: "20px" }}>🎉</div>
           <h2 style={{ fontFamily: "'Fredoka One', cursive", fontSize: "32px", color: B.tealDark }}>
             Congratulations!
@@ -315,9 +413,14 @@ export default function QuizPage() {
           <button
             onClick={() => setShowLeaderboard(true)}
             style={{
-              marginTop: "20px", padding: "12px 24px", borderRadius: "999px",
-              background: B.gold, border: "none", cursor: "pointer",
-              fontFamily: "'Fredoka One', cursive", marginRight: "12px",
+              marginTop: "20px",
+              padding: "12px 24px",
+              borderRadius: "999px",
+              background: B.gold,
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "'Fredoka One', cursive",
+              marginRight: "12px",
             }}
           >
             View Leaderboard 🏆
@@ -325,15 +428,22 @@ export default function QuizPage() {
           <button
             onClick={handleRestart}
             style={{
-              marginTop: "20px", padding: "12px 24px", borderRadius: "999px",
-              background: B.teal, color: "white", border: "none", cursor: "pointer",
+              marginTop: "20px",
+              padding: "12px 24px",
+              borderRadius: "999px",
+              background: B.teal,
+              color: "white",
+              border: "none",
+              cursor: "pointer",
               fontFamily: "'Fredoka One', cursive",
             }}
           >
             Play Again 🔄
           </button>
         </div>
-        {showLeaderboard && <Leaderboard entries={leaderboard} onClose={() => setShowLeaderboard(false)} />}
+        {showLeaderboard && (
+          <Leaderboard entries={leaderboard} onClose={() => setShowLeaderboard(false)} />
+        )}
       </div>
     );
   }
@@ -347,38 +457,75 @@ export default function QuizPage() {
         @keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
       `}</style>
 
-      <div style={{
-        minHeight: "100vh",
-        background: `radial-gradient(ellipse at top, ${B.teal}40, transparent),
+      <div
+        style={{
+          minHeight: "100vh",
+          background: `radial-gradient(ellipse at top, ${B.teal}40, transparent),
                      radial-gradient(ellipse at bottom, ${B.maroon}40, transparent),
                      linear-gradient(135deg, ${B.tealDark}, ${B.maroonDark})`,
-        padding: "20px",
-      }}>
+          padding: "20px",
+        }}
+      >
         {/* Header */}
-        <div style={{
-          maxWidth: "800px", margin: "0 auto", marginBottom: "20px",
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          flexWrap: "wrap", gap: "16px",
-        }}>
-          <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "999px", padding: "8px 20px" }}>
+        <div
+          style={{
+            maxWidth: "800px",
+            margin: "0 auto",
+            marginBottom: "20px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              borderRadius: "999px",
+              padding: "8px 20px",
+            }}
+          >
             <span style={{ color: "white", fontWeight: "bold" }}>👋 {user.name}</span>
           </div>
-          <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "999px", padding: "8px 20px" }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              borderRadius: "999px",
+              padding: "8px 20px",
+            }}
+          >
             <span style={{ color: "white", fontWeight: "bold" }}>⭐ Score: {score}</span>
           </div>
-          <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "999px", padding: "8px 20px" }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              borderRadius: "999px",
+              padding: "8px 20px",
+            }}
+          >
             <span style={{ color: "white", fontWeight: "bold" }}>
               📊 Question: {currentQuestionIndex + 1}/{SAMPLE_QUESTIONS.length}
             </span>
           </div>
-          <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: "999px", padding: "8px 20px" }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              borderRadius: "999px",
+              padding: "8px 20px",
+            }}
+          >
             <span style={{ color: "white", fontWeight: "bold" }}>📝 Attempts: {attempts}</span>
           </div>
           <button
             onClick={() => setShowLeaderboard(true)}
             style={{
-              background: B.gold, border: "none", borderRadius: "999px",
-              padding: "8px 20px", fontWeight: "bold", cursor: "pointer",
+              background: B.gold,
+              border: "none",
+              borderRadius: "999px",
+              padding: "8px 20px",
+              fontWeight: "bold",
+              cursor: "pointer",
             }}
           >
             🏆 Leaderboard
@@ -387,26 +534,38 @@ export default function QuizPage() {
 
         {/* Question Card */}
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-          <div style={{
-            background: "white", borderRadius: "48px", overflow: "hidden",
-            boxShadow: "0 32px 80px rgba(0,0,0,0.3)",
-            animation: "slideIn 0.5s ease-out",
-          }}>
+          <div
+            style={{
+              background: "white",
+              borderRadius: "48px",
+              overflow: "hidden",
+              boxShadow: "0 32px 80px rgba(0,0,0,0.3)",
+              animation: "slideIn 0.5s ease-out",
+            }}
+          >
             {/* Animal Banner */}
-            <div style={{
-              background: currentQuestion.bgColor,
-              padding: "30px",
-            }}>
+            <div
+              style={{
+                background: currentQuestion.bgColor,
+                padding: "30px",
+              }}
+            >
               <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
                 <div style={{ fontSize: "80px", animation: "floatSlow 3s ease-in-out infinite" }}>
                   {currentQuestion.animalEmoji}
                 </div>
                 <div>
-                  <div style={{
-                    display: "inline-block", background: currentQuestion.color,
-                    color: "white", padding: "4px 12px", borderRadius: "999px",
-                    fontSize: "12px", marginBottom: "8px",
-                  }}>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      background: currentQuestion.color,
+                      color: "white",
+                      padding: "4px 12px",
+                      borderRadius: "999px",
+                      fontSize: "12px",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {currentQuestion.animal}
                   </div>
                   <h2 style={{ fontSize: "24px", fontWeight: "bold", color: B.tealDark }}>
@@ -468,12 +627,16 @@ export default function QuizPage() {
               </div>
 
               {showFact && (
-                <div style={{
-                  marginTop: "20px", padding: "16px", borderRadius: "20px",
-                  background: isCorrect ? `${B.teal}20` : `${B.coral}20`,
-                  border: `2px solid ${isCorrect ? B.teal : B.coral}`,
-                  animation: "zoomIn 0.4s ease-out",
-                }}>
+                <div
+                  style={{
+                    marginTop: "20px",
+                    padding: "16px",
+                    borderRadius: "20px",
+                    background: isCorrect ? `${B.teal}20` : `${B.coral}20`,
+                    border: `2px solid ${isCorrect ? B.teal : B.coral}`,
+                    animation: "zoomIn 0.4s ease-out",
+                  }}
+                >
                   <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
                     {isCorrect ? "🎉 Correct! +10 points!" : "💪 Not quite right! Keep trying!"}
                   </p>
@@ -484,18 +647,30 @@ export default function QuizPage() {
                         <button
                           onClick={handleNextQuestion}
                           style={{
-                            marginTop: "12px", padding: "8px 16px", borderRadius: "999px",
-                            background: B.teal, color: "white", border: "none", cursor: "pointer",
+                            marginTop: "12px",
+                            padding: "8px 16px",
+                            borderRadius: "999px",
+                            background: B.teal,
+                            color: "white",
+                            border: "none",
+                            cursor: "pointer",
                           }}
                         >
-                          {currentQuestionIndex + 1 < SAMPLE_QUESTIONS.length ? "Next Question →" : "Finish Quiz 🎉"}
+                          {currentQuestionIndex + 1 < SAMPLE_QUESTIONS.length
+                            ? "Next Question →"
+                            : "Finish Quiz 🎉"}
                         </button>
                       ) : (
                         <button
                           onClick={handleTryAgain}
                           style={{
-                            marginTop: "12px", padding: "8px 16px", borderRadius: "999px",
-                            background: B.coral, color: "white", border: "none", cursor: "pointer",
+                            marginTop: "12px",
+                            padding: "8px 16px",
+                            borderRadius: "999px",
+                            background: B.coral,
+                            color: "white",
+                            border: "none",
+                            cursor: "pointer",
                           }}
                         >
                           Try Again 🔄
@@ -510,7 +685,9 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {showLeaderboard && <Leaderboard entries={leaderboard} onClose={() => setShowLeaderboard(false)} />}
+      {showLeaderboard && (
+        <Leaderboard entries={leaderboard} onClose={() => setShowLeaderboard(false)} />
+      )}
     </>
   );
 }

@@ -29,16 +29,14 @@ export const HidatoResultModal: React.FC<HidatoResultModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-6 animate-in fade-in zoom-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="w-full max-w-md space-y-6 rounded-xl bg-white p-6 shadow-2xl duration-300 animate-in fade-in zoom-in sm:p-8">
         {/* Icon and Title */}
-        <div className="text-center space-y-3">
+        <div className="space-y-3 text-center">
           <div className="flex justify-center">
             <div
-              className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-3xl sm:text-4xl ${
-                isCorrect
-                  ? "bg-green-100 animate-pulse"
-                  : "bg-red-100"
+              className={`flex h-16 w-16 items-center justify-center rounded-full text-3xl sm:h-20 sm:w-20 sm:text-4xl ${
+                isCorrect ? "animate-pulse bg-green-100" : "bg-red-100"
               }`}
             >
               {isCorrect ? "✨" : "❌"}
@@ -46,7 +44,7 @@ export const HidatoResultModal: React.FC<HidatoResultModalProps> = ({
           </div>
 
           <h2
-            className={`text-2xl sm:text-3xl font-bold ${
+            className={`text-2xl font-bold sm:text-3xl ${
               isCorrect ? "text-green-700" : "text-red-700"
             }`}
           >
@@ -55,16 +53,13 @@ export const HidatoResultModal: React.FC<HidatoResultModalProps> = ({
         </div>
 
         {/* Message */}
-        <p className="text-center text-gray-700 text-sm sm:text-base leading-relaxed">
-          {message}
-        </p>
+        <p className="text-center text-sm leading-relaxed text-gray-700 sm:text-base">{message}</p>
 
         {/* Actions */}
         <div className="flex flex-col gap-3">
           <button
             onClick={onClose}
-            className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold 
-              rounded-lg transition-colors duration-200 text-sm sm:text-base"
+            className="rounded-lg bg-gray-500 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gray-600 sm:text-base"
           >
             {isCorrect ? "Back to Puzzle" : "Try Again"}
           </button>
@@ -72,8 +67,7 @@ export const HidatoResultModal: React.FC<HidatoResultModalProps> = ({
           {isCorrect && hasNextPuzzle && onNextPuzzle && (
             <button
               onClick={onNextPuzzle}
-              className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold 
-                rounded-lg transition-colors duration-200 text-sm sm:text-base"
+              className="rounded-lg bg-green-500 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-600 sm:text-base"
             >
               Next Puzzle →
             </button>
@@ -82,7 +76,7 @@ export const HidatoResultModal: React.FC<HidatoResultModalProps> = ({
 
         {/* Decorative Elements */}
         {isCorrect && (
-          <div className="flex justify-center gap-2 text-2xl animate-bounce">
+          <div className="flex animate-bounce justify-center gap-2 text-2xl">
             <span>🎉</span>
             <span>🎉</span>
             <span>🎉</span>

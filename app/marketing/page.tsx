@@ -386,7 +386,10 @@ export default function MarketingPage() {
               className="mb-8 max-w-[480px] text-base leading-relaxed text-[#5a6e88]"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              Don't have a Marketing team or need to supplement your lean Marketing team? We are here to help! Be it Strategy, ABM, Content Marketing, Branding, Digital Presence, or Execution we do it all without the overhead of a full in-house department. Premium outcomes. Flexible engagements.
+              Don't have a Marketing team or need to supplement your lean Marketing team? We are
+              here to help! Be it Strategy, ABM, Content Marketing, Branding, Digital Presence, or
+              Execution we do it all without the overhead of a full in-house department. Premium
+              outcomes. Flexible engagements.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a
@@ -437,7 +440,8 @@ export default function MarketingPage() {
             className="max-w-[540px] text-base leading-relaxed text-[#5a6e88]"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            World-class quality with high RoI. Proven expertise, high pace execution, and full flexibility. We work as your partners to provide premium services.
+            World-class quality with high RoI. Proven expertise, high pace execution, and full
+            flexibility. We work as your partners to provide premium services.
           </p>
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
@@ -664,7 +668,9 @@ export default function MarketingPage() {
             className="max-w-[540px] text-base leading-relaxed text-white/55"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            Schedule a call to understand how we help our customers deliver world-class outcomes. We work only on high value, long term engagements. If you are looking for a low value one time project, look elsewhere.
+            Schedule a call to understand how we help our customers deliver world-class outcomes. We
+            work only on high value, long term engagements. If you are looking for a low value one
+            time project, look elsewhere.
           </p>
 
           <div className="mt-12 overflow-x-auto">
@@ -1531,7 +1537,7 @@ export default function MarketingPage() {
                   marketing@logicology.com
                 </a>
               </div>
-              
+
               <div className="flex flex-wrap gap-4">
                 <a
                   href="https://calendly.com"

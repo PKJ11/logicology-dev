@@ -18,9 +18,7 @@ const firebaseConfig = {
   appId: "1:459695194150:web:6005630525769d5d0c26e7",
   measurementId: "G-QJ8BT8V2YD",
 };
-const firebaseApp = getApps().length
-  ? getApps()[0]
-  : initializeApp(firebaseConfig);
+const firebaseApp = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
 /* ─── API helpers ───────────────────────────────────────────── */
@@ -150,9 +148,7 @@ export default function CommunityBooking() {
             adminPhone={ADMIN_PHONE}
           />
         )}
-        {view === "admin" && user && (
-          <AdminPanel user={user} onBack={() => setView("home")} />
-        )}
+        {view === "admin" && user && <AdminPanel user={user} onBack={() => setView("home")} />}
       </main>
     </div>
   );
@@ -186,11 +182,7 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
     setLoading(true);
     try {
       const fullPhone = `+91${phone}`;
-      confirmRef.current = await signInWithPhoneNumber(
-        auth,
-        fullPhone,
-        recaptchaRef.current!
-      );
+      confirmRef.current = await signInWithPhoneNumber(auth, fullPhone, recaptchaRef.current!);
       setStep("otp");
     } catch (e: any) {
       setError(e.message || "Failed to send OTP");
@@ -224,9 +216,7 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
       <div className="lc-login-card">
         <div className="lc-login-badge">Community Access</div>
         <h1 className="lc-login-title">Welcome back.</h1>
-        <p className="lc-login-sub">
-          Sign in with your mobile number to access offline sessions.
-        </p>
+        <p className="lc-login-sub">Sign in with your mobile number to access offline sessions.</p>
 
         <div id="recaptcha-container" />
 
@@ -245,11 +235,7 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
               />
             </div>
             {error && <p className="lc-error">{error}</p>}
-            <button
-              className="lc-btn lc-btn-primary"
-              onClick={sendOtp}
-              disabled={loading}
-            >
+            <button className="lc-btn lc-btn-primary" onClick={sendOtp} disabled={loading}>
               {loading ? <Spinner /> : "Send OTP →"}
             </button>
           </div>
@@ -266,11 +252,7 @@ function LoginPanel({ onLogin }: { onLogin: (u: UserDoc) => void }) {
               onKeyDown={(e) => e.key === "Enter" && verifyOtp()}
             />
             {error && <p className="lc-error">{error}</p>}
-            <button
-              className="lc-btn lc-btn-primary"
-              onClick={verifyOtp}
-              disabled={loading}
-            >
+            <button className="lc-btn lc-btn-primary" onClick={verifyOtp} disabled={loading}>
               {loading ? <Spinner /> : "Verify & Enter →"}
             </button>
             <button
@@ -365,14 +347,10 @@ function HomePanel({
     setBookingId(null);
   };
 
-
-
   const upcoming = sessions.filter(
     (s) => new Date(s.date) >= new Date(new Date().setHours(0, 0, 0, 0))
   );
-  const past = sessions.filter(
-    (s) => new Date(s.date) < new Date(new Date().setHours(0, 0, 0, 0))
-  );
+  const past = sessions.filter((s) => new Date(s.date) < new Date(new Date().setHours(0, 0, 0, 0)));
 
   return (
     <div className="lc-home">
@@ -382,9 +360,7 @@ function HomePanel({
       <div className="lc-home-header">
         <div>
           <h2 className="lc-page-title">Offline Sessions</h2>
-          <p className="lc-page-sub">
-            Reserve your seat for upcoming community gatherings.
-          </p>
+          <p className="lc-page-sub">Reserve your seat for upcoming community gatherings.</p>
         </div>
         <div className="lc-wallet-badge">
           <span className="lc-wallet-icon">◈</span>
@@ -393,10 +369,7 @@ function HomePanel({
             <p className="lc-wallet-count">{user.tokens}</p>
           </div>
           {user.phone === adminPhone && (
-            <button
-              className="lc-btn lc-btn-outline lc-admin-btn"
-              onClick={onAdmin}
-            >
+            <button className="lc-btn lc-btn-outline lc-admin-btn" onClick={onAdmin}>
               Admin ↗
             </button>
           )}
@@ -482,15 +455,9 @@ function SessionCard({
   });
 
   return (
-    <div
-      className={`lc-card ${booked ? "lc-card-booked" : ""} ${
-        isPast ? "lc-card-past" : ""
-      }`}
-    >
+    <div className={`lc-card ${booked ? "lc-card-booked" : ""} ${isPast ? "lc-card-past" : ""}`}>
       {booked && <span className="lc-card-badge">✓ Booked</span>}
-      {soldOut && !booked && (
-        <span className="lc-card-badge lc-badge-sold">Sold Out</span>
-      )}
+      {soldOut && !booked && <span className="lc-card-badge lc-badge-sold">Sold Out</span>}
 
       <div className="lc-card-body">
         <p className="lc-card-date">{dateStr}</p>
@@ -498,9 +465,7 @@ function SessionCard({
         <p className="lc-card-time">
           🕐 {session.time} &nbsp;·&nbsp; 📍 {session.venue}
         </p>
-        {session.description && (
-          <p className="lc-card-desc">{session.description}</p>
-        )}
+        {session.description && <p className="lc-card-desc">{session.description}</p>}
 
         {/* Seat meter */}
         <div className="lc-seat-meter">
@@ -513,7 +478,9 @@ function SessionCard({
               }}
             />
           </div>
-          <p className="lc-seat-label">{filled}/{total} seats filled</p>
+          <p className="lc-seat-label">
+            {filled}/{total} seats filled
+          </p>
         </div>
 
         {/* Seat grid */}
@@ -525,11 +492,7 @@ function SessionCard({
               <div
                 key={i}
                 className={`lc-seat ${
-                  !occupant
-                    ? "lc-seat-free"
-                    : isMe
-                    ? "lc-seat-mine"
-                    : "lc-seat-taken"
+                  !occupant ? "lc-seat-free" : isMe ? "lc-seat-mine" : "lc-seat-taken"
                 }`}
                 title={isMe ? "Your seat" : occupant ? "Taken" : "Available"}
               />
@@ -596,10 +559,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
-      const [s, u] = await Promise.all([
-        apiFetch("/sessions"),
-        apiFetch("/users"),
-      ]);
+      const [s, u] = await Promise.all([apiFetch("/sessions"), apiFetch("/users")]);
       setSessions(s);
       setUsers(u);
     } catch (e: any) {
@@ -687,9 +647,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
         body: JSON.stringify({ phone, amount }),
       });
       showToast(
-        `${amount > 0 ? "+" : ""}${amount} token${
-          Math.abs(amount) !== 1 ? "s" : ""
-        } for ${phone}`
+        `${amount > 0 ? "+" : ""}${amount} token${Math.abs(amount) !== 1 ? "s" : ""} for ${phone}`
       );
       fetchAll();
     } catch (e: any) {
@@ -736,10 +694,10 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
             {t === "sessions"
               ? "📅 Sessions"
               : t === "users"
-              ? "👥 Members"
-              : editId
-              ? "✏️ Edit Session"
-              : "＋ New Session"}
+                ? "👥 Members"
+                : editId
+                  ? "✏️ Edit Session"
+                  : "＋ New Session"}
           </button>
         ))}
       </div>
@@ -761,9 +719,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
           {sessions.map((s) => (
             <div
               key={s._id}
-              className={`lc-admin-row ${
-                !s.isActive ? "lc-admin-row-inactive" : ""
-              }`}
+              className={`lc-admin-row ${!s.isActive ? "lc-admin-row-inactive" : ""}`}
             >
               <div className="lc-admin-row-info">
                 <p className="lc-admin-row-title">{s.title}</p>
@@ -779,9 +735,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                   <div
                     className="lc-seat-fill-sm"
                     style={{
-                      width: `${
-                        (s.bookedSeats.length / s.totalSeats) * 100
-                      }%`,
+                      width: `${(s.bookedSeats.length / s.totalSeats) * 100}%`,
                     }}
                   />
                   <span>
@@ -791,17 +745,12 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
               </div>
               <div className="lc-admin-row-actions">
                 <button
-                  className={`lc-pill ${
-                    s.isActive ? "lc-pill-active" : "lc-pill-inactive"
-                  }`}
+                  className={`lc-pill ${s.isActive ? "lc-pill-active" : "lc-pill-inactive"}`}
                   onClick={() => toggleActive(s)}
                 >
                   {s.isActive ? "Active" : "Inactive"}
                 </button>
-                <button
-                  className="lc-btn lc-btn-sm"
-                  onClick={() => editSession(s)}
-                >
+                <button className="lc-btn lc-btn-sm" onClick={() => editSession(s)}>
                   Edit
                 </button>
                 <button
@@ -830,22 +779,14 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                 <p className="lc-admin-row-title">{u.phone}</p>
                 <p className="lc-admin-row-meta">
                   {u.bookings?.length || 0} bookings &nbsp;·&nbsp;
-                  <strong style={{ color: "#0a8a80" }}>
-                    {u.tokens} tokens
-                  </strong>
+                  <strong style={{ color: "#0a8a80" }}>{u.tokens} tokens</strong>
                 </p>
               </div>
               <div className="lc-admin-row-actions">
-                <button
-                  className="lc-btn lc-btn-sm"
-                  onClick={() => addTokens(u.phone, 5)}
-                >
+                <button className="lc-btn lc-btn-sm" onClick={() => addTokens(u.phone, 5)}>
                   +5 Tokens
                 </button>
-                <button
-                  className="lc-btn lc-btn-sm"
-                  onClick={() => addTokens(u.phone, 10)}
-                >
+                <button className="lc-btn lc-btn-sm" onClick={() => addTokens(u.phone, 10)}>
                   +10 Tokens
                 </button>
                 <button
@@ -864,9 +805,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
       {tab === "create" && (
         <div className="lc-form-wrap">
           <div className="lc-form">
-            <h3 className="lc-form-title">
-              {editId ? "Edit Session" : "Create New Session"}
-            </h3>
+            <h3 className="lc-form-title">{editId ? "Edit Session" : "Create New Session"}</h3>
 
             <div className="lc-form-grid">
               <div className="lc-field">
@@ -913,9 +852,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                   min={1}
                   max={30}
                   value={form.totalSeats}
-                  onChange={(e) =>
-                    setForm({ ...form, totalSeats: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, totalSeats: e.target.value })}
                 />
               </div>
               <div className="lc-field lc-field-full">
@@ -924,26 +861,14 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
                   className="lc-input lc-textarea"
                   placeholder="Briefly describe this session…"
                   value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
                 />
               </div>
             </div>
 
             <div className="lc-form-actions">
-              <button
-                className="lc-btn lc-btn-primary"
-                onClick={saveSession}
-                disabled={loading}
-              >
-                {loading ? (
-                  <Spinner />
-                ) : editId ? (
-                  "Update Session"
-                ) : (
-                  "Create Session"
-                )}
+              <button className="lc-btn lc-btn-primary" onClick={saveSession} disabled={loading}>
+                {loading ? <Spinner /> : editId ? "Update Session" : "Create Session"}
               </button>
               {editId && (
                 <button
@@ -967,7 +892,7 @@ function AdminPanel({ user, onBack }: { user: UserDoc; onBack: () => void }) {
 
 /* ─── Spinner ───────────────────────────────────────────────── */
 function Spinner({ large = false }: { large?: boolean }) {
-  return <span className={`lc-spinner${large ? " lc-spinner-lg" : ""}`} />;
+  return <span className={`lc-spinner${large ? "lc-spinner-lg" : ""}`} />;
 }
 
 /* ═══════════════════════════════════════════════════════════════

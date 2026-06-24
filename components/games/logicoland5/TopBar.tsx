@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Trophy, Star, Home } from 'lucide-react';
-import Link from 'next/link';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, Trophy, Star, Home } from "lucide-react";
+import Link from "next/link";
 
 interface TopBarProps {
   onBack: () => void;
@@ -22,30 +22,30 @@ export default function TopBar({
   progress,
   totalPuzzles,
   streak,
-  sectionNumber
+  sectionNumber,
 }: TopBarProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-orange-200/50"
+      className="mb-6 rounded-2xl border border-orange-200/50 bg-gradient-to-r from-orange-500/10 to-amber-500/10 p-4 backdrop-blur-sm"
     >
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         {/* Left Section */}
         <div className="flex items-center gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onBack}
-            className="bg-white rounded-xl p-3 shadow-soft border border-orange-200 hover:shadow-brand transition-all"
+            className="rounded-xl border border-orange-200 bg-white p-3 shadow-soft transition-all hover:shadow-brand"
           >
-            <ArrowLeft className="w-6 h-6 text-orange-500" />
+            <ArrowLeft className="h-6 w-6 text-orange-500" />
           </motion.button>
-          
+
           <div>
-            <h2 className="text-2xl font-heading font-bold text-gray-800">{title}</h2>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-bold">
+            <h2 className="font-heading text-2xl font-bold text-gray-800">{title}</h2>
+            <div className="mt-1 flex items-center gap-2">
+              <div className="rounded-full bg-orange-100 px-3 py-1 text-sm font-bold text-orange-800">
                 Section {sectionNumber}
               </div>
             </div>
@@ -57,25 +57,25 @@ export default function TopBar({
           {/* Score */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="bg-gradient-to-r from-amber-100 to-yellow-100 rounded-xl p-3 shadow-soft border border-amber-200 min-w-[120px]"
+            className="min-w-[120px] rounded-xl border border-amber-200 bg-gradient-to-r from-amber-100 to-yellow-100 p-3 shadow-soft"
           >
             <div className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-amber-600" />
+              <Trophy className="h-5 w-5 text-amber-600" />
               <span className="text-lg font-bold text-gray-800">Score</span>
             </div>
-            <div className="text-2xl font-black text-amber-700 mt-1">{score}</div>
+            <div className="mt-1 text-2xl font-black text-amber-700">{score}</div>
           </motion.div>
 
           {/* Progress */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="bg-gradient-to-r from-blue-100 to-sky-100 rounded-xl p-3 shadow-soft border border-blue-200 min-w-[120px]"
+            className="min-w-[120px] rounded-xl border border-blue-200 bg-gradient-to-r from-blue-100 to-sky-100 p-3 shadow-soft"
           >
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-gradient-to-r from-blue-500 to-sky-500 rounded-full" />
+              <div className="h-5 w-5 rounded-full bg-gradient-to-r from-blue-500 to-sky-500" />
               <span className="text-lg font-bold text-gray-800">Progress</span>
             </div>
-            <div className="text-2xl font-black text-blue-700 mt-1">
+            <div className="mt-1 text-2xl font-black text-blue-700">
               {progress}/{totalPuzzles}
             </div>
           </motion.div>
@@ -83,28 +83,28 @@ export default function TopBar({
           {/* Streak */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="bg-gradient-to-r from-pink-100 to-rose-100 rounded-xl p-3 shadow-soft border border-pink-200 min-w-[120px]"
+            className="min-w-[120px] rounded-xl border border-pink-200 bg-gradient-to-r from-pink-100 to-rose-100 p-3 shadow-soft"
           >
             <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-pink-600 fill-pink-600" />
+              <Star className="h-5 w-5 fill-pink-600 text-pink-600" />
               <span className="text-lg font-bold text-gray-800">Streak</span>
             </div>
-            <div className="text-2xl font-black text-pink-700 mt-1">{streak}</div>
+            <div className="mt-1 text-2xl font-black text-pink-700">{streak}</div>
           </motion.div>
         </div>
       </div>
 
       {/* Progress Bar */}
       <div className="mt-4">
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 overflow-hidden rounded-full bg-gray-200">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${(progress / totalPuzzles) * 100}%` }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"
+            className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500"
           />
         </div>
-        <div className="flex justify-between text-sm text-gray-600 mt-1">
+        <div className="mt-1 flex justify-between text-sm text-gray-600">
           <span>Keep going!</span>
           <span>{Math.round((progress / totalPuzzles) * 100)}% complete</span>
         </div>

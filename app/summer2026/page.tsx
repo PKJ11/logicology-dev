@@ -2099,7 +2099,6 @@ function EnrollmentSection({
     activeFeeRef.current = activeFee;
   }, [baseAmount, activeFee]);
 
-
   const validate = () => {
     const e: Partial<Record<keyof FormData, string>> = {};
     if (!form.parentName.trim()) e.parentName = "This field is required.";
@@ -2617,8 +2616,16 @@ function EnrollmentSection({
                   marginBottom: 2,
                 }}
               >
-                <div style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", marginBottom: 2 }}>
-                  Base: ₹{baseAmount.toLocaleString("en-IN")} + GST ({GST_RATE}%): ₹{gstAmount.toLocaleString("en-IN")} = ₹{activeFee.toLocaleString("en-IN")}
+                <div
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontSize: 13,
+                    color: "rgba(255,255,255,0.65)",
+                    marginBottom: 2,
+                  }}
+                >
+                  Base: ₹{baseAmount.toLocaleString("en-IN")} + GST ({GST_RATE}%): ₹
+                  {gstAmount.toLocaleString("en-IN")} = ₹{activeFee.toLocaleString("en-IN")}
                 </div>
               </div>
             )}
@@ -3024,8 +3031,7 @@ function EnrollmentSection({
                   setForm((f) => {
                     const batchIsJunior = f.preferredBatch.startsWith("Logicoland");
                     const batchIsSenior = f.preferredBatch !== "" && !batchIsJunior;
-                    const shouldReset =
-                      (age <= 9 && batchIsSenior) || (age >= 10 && batchIsJunior);
+                    const shouldReset = (age <= 9 && batchIsSenior) || (age >= 10 && batchIsJunior);
                     return {
                       ...f,
                       childAge: newAge,
@@ -3251,7 +3257,8 @@ function EnrollmentSection({
                 color: "#888",
               }}
             >
-              Incl. CGST {GST_RATE / 2}%: ₹{cgst.toLocaleString("en-IN")} + SGST {GST_RATE / 2}%: ₹{sgst.toLocaleString("en-IN")}
+              Incl. CGST {GST_RATE / 2}%: ₹{cgst.toLocaleString("en-IN")} + SGST {GST_RATE / 2}%: ₹
+              {sgst.toLocaleString("en-IN")}
             </div>
           )}
 

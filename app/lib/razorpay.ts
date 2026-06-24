@@ -12,15 +12,17 @@ interface RazorpayOptions {
   handler: (response: any) => void;
 }
 
-export const initiateRazorpayPayment = (options: RazorpayOptions): Promise<{ success: boolean; error?: string }> => {
+export const initiateRazorpayPayment = (
+  options: RazorpayOptions
+): Promise<{ success: boolean; error?: string }> => {
   return new Promise((resolve) => {
-    if (typeof window === 'undefined' || !(window as any).Razorpay) {
-      resolve({ success: false, error: 'Razorpay SDK not loaded' });
+    if (typeof window === "undefined" || !(window as any).Razorpay) {
+      resolve({ success: false, error: "Razorpay SDK not loaded" });
       return;
     }
 
     const razorpayOptions = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_RNIwt54hh7eqmk',
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_RNIwt54hh7eqmk",
       amount: options.amount,
       currency: options.currency,
       name: options.name,
@@ -30,20 +32,20 @@ export const initiateRazorpayPayment = (options: RazorpayOptions): Promise<{ suc
       handler: options.handler,
       modal: {
         ondismiss: () => {
-          resolve({ success: false, error: 'Payment cancelled' });
-        }
+          resolve({ success: false, error: "Payment cancelled" });
+        },
       },
       theme: {
-        color: '#f97316' // Orange color
-      }
+        color: "#f97316", // Orange color
+      },
     };
 
     const razorpay = new (window as any).Razorpay(razorpayOptions);
-    
-    razorpay.on('payment.failed', (response: any) => {
-      resolve({ 
-        success: false, 
-        error: response.error.description || 'Payment failed' 
+
+    razorpay.on("payment.failed", (response: any) => {
+      resolve({
+        success: false,
+        error: response.error.description || "Payment failed",
       });
     });
 
@@ -57,22 +59,22 @@ export const validatePayment = async (
   signature: string
 ): Promise<boolean> => {
   try {
-    const response = await fetch('/api/razorpay/verify', {
-      method: 'POST',
+    const response = await fetch("/api/razorpay/verify", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         orderId,
         paymentId,
-        signature
-      })
+        signature,
+      }),
     });
 
     const data = await response.json();
     return data.valid;
   } catch (error) {
-    console.error('Error validating payment:', error);
+    console.error("Error validating payment:", error);
     return false;
   }
 };

@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
     const { name, className, school, branch, parentName, mobile, email, area } = await req.json();
 
     const missing: string[] = [];
-    if (!name?.trim())       missing.push("name");
-    if (!school?.trim())     missing.push("school");
-    if (!branch?.trim())     missing.push("branch");
+    if (!name?.trim()) missing.push("name");
+    if (!school?.trim()) missing.push("school");
+    if (!branch?.trim()) missing.push("branch");
     if (!parentName?.trim()) missing.push("parentName");
-    if (!mobile?.trim())     missing.push("mobile");
-    if (!area?.trim())       missing.push("area");
+    if (!mobile?.trim()) missing.push("mobile");
+    if (!area?.trim()) missing.push("area");
 
     if (missing.length > 0) {
       return NextResponse.json(
@@ -36,15 +36,15 @@ export async function POST(req: NextRequest) {
     }
 
     const document = {
-      name:       name.trim(),
-      className:  className ?? "Grade 8",
-      school:     school.trim(),
-      branch:     branch.trim(),
+      name: name.trim(),
+      className: className ?? "Grade 8",
+      school: school.trim(),
+      branch: branch.trim(),
       parentName: parentName.trim(),
-      mobile:     cleanMobile,
-      email:      email?.trim() || "",
-      area:       area.trim(),
-      createdAt:  new Date(),
+      mobile: cleanMobile,
+      email: email?.trim() || "",
+      area: area.trim(),
+      createdAt: new Date(),
     };
 
     const client = new MongoClient(MONGO_URI);
@@ -53,7 +53,6 @@ export async function POST(req: NextRequest) {
     await client.close();
 
     return NextResponse.json({ success: true, registrationId: result.insertedId.toString() });
-
   } catch (err: any) {
     console.error("[register] POST error:", err);
     return NextResponse.json(
@@ -66,7 +65,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const id     = searchParams.get("id");
+    const id = searchParams.get("id");
     const mobile = searchParams.get("mobile");
 
     if (!id && !mobile) {
@@ -106,7 +105,6 @@ export async function GET(req: NextRequest) {
       success: true,
       registration: { ...registration, _id: registration._id.toString() },
     });
-
   } catch (err: any) {
     console.error("[register] GET error:", err);
     return NextResponse.json(
@@ -141,11 +139,13 @@ export async function PATCH(req: NextRequest) {
     await client.close();
 
     if (result.matchedCount === 0) {
-      return NextResponse.json({ success: false, error: "Registration not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Registration not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true, updated: result.modifiedCount > 0 });
-
   } catch (err: any) {
     console.error("[register] PATCH error:", err);
     return NextResponse.json(

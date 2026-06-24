@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Define proper types
 interface Stats {
@@ -51,11 +51,11 @@ type ProgressBarProps = {
   label: string;
   value: number;
   total: number;
-  color: 'orange' | 'blue' | 'green' | 'purple' | 'gray' | 'pink' | 'red';
+  color: "orange" | "blue" | "green" | "purple" | "gray" | "pink" | "red";
   loading?: boolean;
 };
 
-type QuickActionColor = 'orange' | 'blue' | 'green' | 'purple' | 'pink' | 'red';
+type QuickActionColor = "orange" | "blue" | "green" | "purple" | "pink" | "red";
 
 type QuickActionButtonProps = {
   href: string;
@@ -70,12 +70,12 @@ export default function AdminDashboard() {
   const [tierStats, setTierStats] = useState<TierStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'year'>('month');
+  const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "year">("month");
   const router = useRouter();
 
   useEffect(() => {
     fetchDashboardData();
-    
+
     // Refresh data every 30 seconds
     const interval = setInterval(fetchDashboardData, 30000);
     return () => clearInterval(interval);
@@ -83,16 +83,16 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
+      const token = localStorage.getItem("adminToken");
       if (!token) {
-        router.push('/admin/login');
+        router.push("/admin/login");
         return;
       }
 
       const response = await fetch(`/api/admin/stats?range=${dateRange}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await response.json();
@@ -103,11 +103,11 @@ export default function AdminDashboard() {
         setTierStats(data.tierStats);
         setError(null);
       } else {
-        setError(data.error || 'Failed to fetch dashboard data');
+        setError(data.error || "Failed to fetch dashboard data");
       }
     } catch (err) {
-      setError('Network error. Please try again.');
-      console.error('Error fetching dashboard data:', err);
+      setError("Network error. Please try again.");
+      console.error("Error fetching dashboard data:", err);
     } finally {
       setIsLoading(false);
     }
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
     return {
       value: change.toFixed(1),
       isPositive: change >= 0,
-      text: `${change >= 0 ? '+' : ''}${change.toFixed(1)}%`
+      text: `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`,
     };
   };
 
@@ -157,39 +157,51 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-2 text-gray-600">Welcome back! Here's what's happening with your platform.</p>
+          <p className="mt-2 text-gray-600">
+            Welcome back! Here's what's happening with your platform.
+          </p>
         </div>
         <div className="flex items-center gap-4">
           {/* Date Range Selector */}
           <div className="flex rounded-xl border border-gray-200 bg-white p-1">
-            {(['today', 'week', 'month', 'year'] as const).map((range) => (
+            {(["today", "week", "month", "year"] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setDateRange(range)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   dateRange === range
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? "bg-orange-500 text-white"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 {range.charAt(0).toUpperCase() + range.slice(1)}
               </button>
             ))}
           </div>
-          
+
           <button className="flex items-center space-x-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
             </svg>
             <span>Export Report</span>
           </button>
-          
+
           <Link
             href="/admin/content/upload"
             className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-white shadow-lg shadow-orange-200 transition-all hover:scale-[1.02]"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
             </svg>
             <span>Add Content</span>
           </Link>
@@ -200,14 +212,14 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Users"
-          value={stats?.totalUsers?.toLocaleString() || '0'}
+          value={stats?.totalUsers?.toLocaleString() || "0"}
           change={`+${((stats?.totalUsers || 0) * 0.125).toFixed(0)}%`}
           icon="👥"
           color="from-blue-500 to-blue-600"
         />
         <StatCard
           title="Active Subs"
-          value={stats?.activeSubscriptions?.toLocaleString() || '0'}
+          value={stats?.activeSubscriptions?.toLocaleString() || "0"}
           change={`+${((stats?.activeSubscriptions || 0) * 0.082).toFixed(0)}%`}
           icon="🎯"
           color="from-green-500 to-green-600"
@@ -221,7 +233,7 @@ export default function AdminDashboard() {
         />
         <StatCard
           title="Content Items"
-          value={stats?.contentItems?.toLocaleString() || '0'}
+          value={stats?.contentItems?.toLocaleString() || "0"}
           change={`+${((stats?.contentItems || 0) * 0.053).toFixed(0)}%`}
           icon="📚"
           color="from-purple-500 to-purple-600"
@@ -231,52 +243,52 @@ export default function AdminDashboard() {
       {/* Content Distribution & Tier Stats */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-2xl bg-white p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Content Distribution</h2>
             <span className="text-sm text-gray-500">Total: {stats?.contentItems || 0} items</span>
           </div>
           <div className="space-y-4">
-            <ProgressBar 
-              label="Worksheets" 
-              value={stats?.worksheets || 0} 
-              total={stats?.contentItems || 1} 
-              color="orange" 
+            <ProgressBar
+              label="Worksheets"
+              value={stats?.worksheets || 0}
+              total={stats?.contentItems || 1}
+              color="orange"
             />
-            <ProgressBar 
-              label="Wordwall Games" 
-              value={stats?.wordwall || 0} 
-              total={stats?.contentItems || 1} 
-              color="blue" 
+            <ProgressBar
+              label="Wordwall Games"
+              value={stats?.wordwall || 0}
+              total={stats?.contentItems || 1}
+              color="blue"
             />
-            <ProgressBar 
-              label="Mindstamp Videos" 
-              value={stats?.mindstamp || 0} 
-              total={stats?.contentItems || 1} 
-              color="purple" 
+            <ProgressBar
+              label="Mindstamp Videos"
+              value={stats?.mindstamp || 0}
+              total={stats?.contentItems || 1}
+              color="purple"
             />
-            <ProgressBar 
-              label="Games" 
-              value={stats?.games || 0} 
-              total={stats?.contentItems || 1} 
-              color="green" 
+            <ProgressBar
+              label="Games"
+              value={stats?.games || 0}
+              total={stats?.contentItems || 1}
+              color="green"
             />
-            <ProgressBar 
-              label="Assessments" 
-              value={stats?.assessments || 0} 
-              total={stats?.contentItems || 1} 
-              color="pink" 
+            <ProgressBar
+              label="Assessments"
+              value={stats?.assessments || 0}
+              total={stats?.contentItems || 1}
+              color="pink"
             />
-            <ProgressBar 
-              label="External Links" 
-              value={stats?.externalLinks || 0} 
-              total={stats?.contentItems || 1} 
-              color="gray" 
+            <ProgressBar
+              label="External Links"
+              value={stats?.externalLinks || 0}
+              total={stats?.contentItems || 1}
+              color="gray"
             />
           </div>
         </div>
 
         <div className="rounded-2xl bg-white p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Tier Performance</h2>
             <span className="text-sm text-gray-500">Active: {stats?.activeSubscriptions || 0}</span>
           </div>
@@ -293,7 +305,9 @@ export default function AdminDashboard() {
                 <div className="h-2 rounded-full bg-gray-200">
                   <div
                     className={`h-2 rounded-full bg-gradient-to-r ${tier.color}`}
-                    style={{ width: `${(tier.subscribers / (stats?.activeSubscriptions || 1)) * 100}%` }}
+                    style={{
+                      width: `${(tier.subscribers / (stats?.activeSubscriptions || 1)) * 100}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -306,33 +320,49 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Recent Activity */}
         <div className="col-span-2 rounded-2xl bg-white p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
-            <Link href="/admin/activities" className="text-sm text-orange-600 hover:text-orange-700">
+            <Link
+              href="/admin/activities"
+              className="text-sm text-orange-600 hover:text-orange-700"
+            >
               View All →
             </Link>
           </div>
           <div className="space-y-4">
             {recentActivities.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">No recent activities</p>
+              <p className="py-8 text-center text-gray-500">No recent activities</p>
             ) : (
               recentActivities.map((activity) => (
-                <div key={activity.id} className="flex items-center justify-between border-b border-gray-100 pb-4 last:border-0">
+                <div
+                  key={activity.id}
+                  className="flex items-center justify-between border-b border-gray-100 pb-4 last:border-0"
+                >
                   <div className="flex items-center space-x-3">
-                    <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${
-                      activity.tier === 1 ? 'from-gray-500 to-gray-600' :
-                      activity.tier === 2 ? 'from-blue-500 to-blue-600' :
-                      activity.tier === 3 ? 'from-purple-500 to-purple-600' :
-                      'from-orange-500 to-orange-600'
-                    } flex items-center justify-center text-white`}>
-                      {activity.type === 'content' ? '📄' : 
-                       activity.type === 'subscription' ? '🎯' : 
-                       activity.type === 'user' ? '👤' : '⚙️'}
+                    <div
+                      className={`h-10 w-10 rounded-xl bg-gradient-to-br ${
+                        activity.tier === 1
+                          ? "from-gray-500 to-gray-600"
+                          : activity.tier === 2
+                            ? "from-blue-500 to-blue-600"
+                            : activity.tier === 3
+                              ? "from-purple-500 to-purple-600"
+                              : "from-orange-500 to-orange-600"
+                      } flex items-center justify-center text-white`}
+                    >
+                      {activity.type === "content"
+                        ? "📄"
+                        : activity.type === "subscription"
+                          ? "🎯"
+                          : activity.type === "user"
+                            ? "👤"
+                            : "⚙️"}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">{activity.user}</p>
                       <p className="text-sm text-gray-500">
-                        {activity.action} {activity.details && (
+                        {activity.action}{" "}
+                        {activity.details && (
                           <span className="text-gray-400">• {activity.details}</span>
                         )}
                       </p>
@@ -355,18 +385,8 @@ export default function AdminDashboard() {
               label="Upload Content"
               color="orange"
             />
-            <QuickActionButton
-              href="/admin/tiers"
-              icon="⚙️"
-              label="Manage Tiers"
-              color="blue"
-            />
-            <QuickActionButton
-              href="/admin/users"
-              icon="👥"
-              label="View Users"
-              color="green"
-            />
+            <QuickActionButton href="/admin/tiers" icon="⚙️" label="Manage Tiers" color="blue" />
+            <QuickActionButton href="/admin/users" icon="👥" label="View Users" color="green" />
             {/* <QuickActionButton
               href="/admin/analytics"
               icon="📊"
@@ -416,7 +436,7 @@ export default function AdminDashboard() {
 }
 
 function StatCard({ title, value, change, icon, color, loading }: StatCardProps) {
-  const isPositive = change.startsWith('+');
+  const isPositive = change.startsWith("+");
   return (
     <div className="rounded-2xl bg-white p-6 shadow-xl transition-all hover:scale-[1.02] hover:shadow-2xl">
       <div className="flex items-center justify-between">
@@ -424,15 +444,17 @@ function StatCard({ title, value, change, icon, color, loading }: StatCardProps)
           <p className="text-sm text-gray-500">{title}</p>
           <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
         </div>
-        <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-2xl text-white`}>
+        <div
+          className={`h-12 w-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-2xl text-white`}
+        >
           {icon}
         </div>
       </div>
       <div className="mt-4 flex items-center">
-        <span className={`text-sm font-semibold ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+        <span className={`text-sm font-semibold ${isPositive ? "text-green-500" : "text-red-500"}`}>
           {change}
         </span>
-        <span className="ml-2 text-sm text-gray-400">vs last {loading ? '...' : 'month'}</span>
+        <span className="ml-2 text-sm text-gray-400">vs last {loading ? "..." : "month"}</span>
       </div>
     </div>
   );
@@ -441,15 +463,15 @@ function StatCard({ title, value, change, icon, color, loading }: StatCardProps)
 function ProgressBar({ label, value, total, color, loading }: ProgressBarProps) {
   const percentage = total > 0 ? (value / total) * 100 : 0;
   const colors: Record<string, string> = {
-    orange: 'bg-orange-500',
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    purple: 'bg-purple-500',
-    pink: 'bg-pink-500',
-    gray: 'bg-gray-500',
-    red: 'bg-red-500',
+    orange: "bg-orange-500",
+    blue: "bg-blue-500",
+    green: "bg-green-500",
+    purple: "bg-purple-500",
+    pink: "bg-pink-500",
+    gray: "bg-gray-500",
+    red: "bg-red-500",
   };
-  
+
   return (
     <div>
       <div className="mb-1 flex justify-between text-sm">
@@ -468,14 +490,16 @@ function ProgressBar({ label, value, total, color, loading }: ProgressBarProps) 
 
 function QuickActionButton({ href, icon, label, color }: QuickActionButtonProps) {
   const colors: Record<QuickActionColor, string> = {
-    orange: 'from-orange-50 to-orange-100 text-orange-600 hover:from-orange-100 hover:to-orange-200',
-    blue: 'from-blue-50 to-blue-100 text-blue-600 hover:from-blue-100 hover:to-blue-200',
-    green: 'from-green-50 to-green-100 text-green-600 hover:from-green-100 hover:to-green-200',
-    purple: 'from-purple-50 to-purple-100 text-purple-600 hover:from-purple-100 hover:to-purple-200',
-    pink: 'from-pink-50 to-pink-100 text-pink-600 hover:from-pink-100 hover:to-pink-200',
-    red: 'from-red-50 to-red-100 text-red-600 hover:from-red-100 hover:to-red-200',
+    orange:
+      "from-orange-50 to-orange-100 text-orange-600 hover:from-orange-100 hover:to-orange-200",
+    blue: "from-blue-50 to-blue-100 text-blue-600 hover:from-blue-100 hover:to-blue-200",
+    green: "from-green-50 to-green-100 text-green-600 hover:from-green-100 hover:to-green-200",
+    purple:
+      "from-purple-50 to-purple-100 text-purple-600 hover:from-purple-100 hover:to-purple-200",
+    pink: "from-pink-50 to-pink-100 text-pink-600 hover:from-pink-100 hover:to-pink-200",
+    red: "from-red-50 to-red-100 text-red-600 hover:from-red-100 hover:to-red-200",
   };
-  
+
   return (
     <Link
       href={href}

@@ -87,7 +87,10 @@ export default function BooksPage() {
           name="keywords"
           content="educational books for kids, Logicoland series, Speed Maths book, Hidden in the Jungle, logic books for children, kids puzzle books, math books for kids, Logicology books, learning books India"
         />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
         <meta name="author" content="Logicology" />
         <meta name="publisher" content="Logicology" />
         <link rel="canonical" href="https://www.logicology.in/books" />
@@ -96,7 +99,10 @@ export default function BooksPage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.logicology.in/books" />
         <meta property="og:site_name" content="Logicology" />
-        <meta property="og:title" content="Books Collection | Logicology – Educational Books for Kids" />
+        <meta
+          property="og:title"
+          content="Books Collection | Logicology – Educational Books for Kids"
+        />
         <meta
           property="og:description"
           content="Discover Logicology's educational books — Logicoland Series, Speed Maths, and Hidden in the Jungle. Designed to make learning fun for children."
@@ -112,7 +118,10 @@ export default function BooksPage() {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://www.logicology.in/books" />
-        <meta name="twitter:title" content="Books Collection | Logicology – Educational Books for Kids" />
+        <meta
+          name="twitter:title"
+          content="Books Collection | Logicology – Educational Books for Kids"
+        />
         <meta
           name="twitter:description"
           content="Explore Logicology's educational books for kids. Fun, engaging, and designed to build logical thinking and math skills."
@@ -129,33 +138,34 @@ export default function BooksPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ItemList",
-              "name": "Logicology Books Collection",
-              "url": "https://www.logicology.in/books",
-              "description": "Educational books for kids by Logicology covering logic, math, and observation skills.",
-              "itemListElement": books.map((book, index) => ({
+              name: "Logicology Books Collection",
+              url: "https://www.logicology.in/books",
+              description:
+                "Educational books for kids by Logicology covering logic, math, and observation skills.",
+              itemListElement: books.map((book, index) => ({
                 "@type": "ListItem",
-                "position": index + 1,
-                "item": {
+                position: index + 1,
+                item: {
                   "@type": "Book",
-                  "name": book.title,
-                  "author": {
+                  name: book.title,
+                  author: {
                     "@type": "Organization",
-                    "name": book.author,
+                    name: book.author,
                   },
-                  "description": book.description,
-                  "image": book.imageUrl,
-                  "url": `https://www.logicology.in/books/${toSlug(book.title)}`,
-                  "aggregateRating": {
+                  description: book.description,
+                  image: book.imageUrl,
+                  url: `https://www.logicology.in/books/${toSlug(book.title)}`,
+                  aggregateRating: {
                     "@type": "AggregateRating",
-                    "ratingValue": book.rating,
-                    "bestRating": "5",
-                    "worstRating": "1",
-                    "ratingCount": "50",
+                    ratingValue: book.rating,
+                    bestRating: "5",
+                    worstRating: "1",
+                    ratingCount: "50",
                   },
-                  "publisher": {
+                  publisher: {
                     "@type": "Organization",
-                    "name": "Logicology",
-                    "url": "https://www.logicology.in",
+                    name: "Logicology",
+                    url: "https://www.logicology.in",
                   },
                 },
               })),
@@ -170,18 +180,18 @@ export default function BooksPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "BreadcrumbList",
-              "itemListElement": [
+              itemListElement: [
                 {
                   "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://www.logicology.in",
+                  position: 1,
+                  name: "Home",
+                  item: "https://www.logicology.in",
                 },
                 {
                   "@type": "ListItem",
-                  "position": 2,
-                  "name": "Books",
-                  "item": "https://www.logicology.in/books",
+                  position: 2,
+                  name: "Books",
+                  item: "https://www.logicology.in/books",
                 },
               ],
             }),
@@ -191,7 +201,6 @@ export default function BooksPage() {
 
       <NavBar />
       <div className="min-h-screen bg-brand-hero p-6 text-brand-tealDark sm:p-8 md:p-10">
-
         <header className="mb-6 sm:mb-8">
           <h1 className="text-center text-3xl font-extrabold tracking-tight text-brand-teal sm:text-4xl md:text-5xl">
             Books Collection
@@ -248,7 +257,11 @@ export default function BooksPage() {
                           if (!isComingSoon) openModal(book);
                         }}
                         disabled={isComingSoon}
-                        aria-label={isComingSoon ? `${book.title} coming soon` : `View details for ${book.title}`}
+                        aria-label={
+                          isComingSoon
+                            ? `${book.title} coming soon`
+                            : `View details for ${book.title}`
+                        }
                       >
                         {isComingSoon ? "Coming Soon" : "View details →"}
                       </button>
@@ -304,16 +317,16 @@ export default function BooksPage() {
                   </div>
 
                   <div className="p-6 sm:p-8">
-                    <h2
-                      id="modal-title"
-                      className="mb-1 text-3xl font-extrabold text-brand-teal"
-                    >
+                    <h2 id="modal-title" className="mb-1 text-3xl font-extrabold text-brand-teal">
                       {selectedBook.title}
                     </h2>
                     <p className="mb-4 text-brand-tealDark/75">by {selectedBook.author}</p>
 
                     <div className="mb-6 flex items-center">
-                      <div className="flex text-brand-gold" aria-label={`Rating: ${selectedBook.rating} out of 5`}>
+                      <div
+                        className="flex text-brand-gold"
+                        aria-label={`Rating: ${selectedBook.rating} out of 5`}
+                      >
                         {[...Array(5)].map((_, i) => (
                           <svg
                             key={i}

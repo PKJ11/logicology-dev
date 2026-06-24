@@ -95,7 +95,7 @@ export default function FeedbackPage() {
         )}
       </form>
       {success && (
-        <div className="animate-fade-in mt-6 flex w-full max-w-xs flex-col items-center">
+        <div className="mt-6 flex w-full max-w-xs animate-fade-in flex-col items-center">
           <img
             src="https://ik.imagekit.io/pratik2002/LOGICOLOGY%20NEW%20LOGO%20WHITE%20COLOR%20VERSION%20VARIATION%201.png?updatedAt=1757316882239"
             alt="Logicology Logo"

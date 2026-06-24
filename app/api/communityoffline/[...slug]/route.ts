@@ -53,11 +53,9 @@ async function getDb(): Promise<Db> {
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ok = (data: unknown, status = 200) =>
-  NextResponse.json(data, { status });
+const ok = (data: unknown, status = 200) => NextResponse.json(data, { status });
 
-const err = (msg: string, status = 400) =>
-  NextResponse.json({ error: msg }, { status });
+const err = (msg: string, status = 400) => NextResponse.json({ error: msg }, { status });
 
 /** Sign a JWT and attach it as an httpOnly cookie to any NextResponse */
 function attachJwtCookie(res: NextResponse, phone: string): NextResponse {
@@ -90,10 +88,7 @@ function verifyJwtCookie(req: NextRequest): string | null {
 // GET Handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { slug: string[] } }
-) {
+export async function GET(req: NextRequest, { params }: { params: { slug: string[] } }) {
   const database = await getDb();
   const [resource] = params.slug ?? [];
 
@@ -115,21 +110,13 @@ export async function GET(
   if (resource === "sessions") {
     const onlyActive = req.nextUrl.searchParams.get("active") === "true";
     const filter = onlyActive ? { isActive: true } : {};
-    const sessions = await database
-      .collection("sessions")
-      .find(filter)
-      .sort({ date: 1 })
-      .toArray();
+    const sessions = await database.collection("sessions").find(filter).sort({ date: 1 }).toArray();
     return ok(sessions);
   }
 
   // ── GET /api/communityoffline/users ───────────────────────────────────────
   if (resource === "users") {
-    const users = await database
-      .collection("users")
-      .find({})
-      .sort({ tokens: -1 })
-      .toArray();
+    const users = await database.collection("users").find({}).sort({ tokens: -1 }).toArray();
     return ok(users);
   }
 
@@ -140,10 +127,7 @@ export async function GET(
 // POST Handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { slug: string[] } }
-) {
+export async function POST(req: NextRequest, { params }: { params: { slug: string[] } }) {
   const database = await getDb();
   const [resource, sub] = params.slug ?? [];
   const body = await req.json().catch(() => ({}));
@@ -174,9 +158,7 @@ export async function POST(
   if (resource === "user" && sub === "tokens") {
     const { phone, amount } = body;
     if (!phone || amount == null) return err("phone and amount required");
-    await database
-      .collection("users")
-      .updateOne({ phone }, { $inc: { tokens: Number(amount) } });
+    await database.collection("users").updateOne({ phone }, { $inc: { tokens: Number(amount) } });
     const user = await database.collection("users").findOne({ phone });
     return ok(user);
   }
@@ -184,8 +166,7 @@ export async function POST(
   // ── POST /api/communityoffline/sessions — admin: create session ───────────
   if (resource === "sessions") {
     const { title, date, time, venue, description, totalSeats } = body;
-    if (!title || !date || !time || !venue)
-      return err("title, date, time, venue required");
+    if (!title || !date || !time || !venue) return err("title, date, time, venue required");
     const session = {
       title,
       date: new Date(date),
@@ -210,23 +191,19 @@ export async function POST(
     const { sessionId } = body;
     if (!sessionId) return err("sessionId required");
 
-    const session = await database
-      .collection("sessions")
-      .findOne({ _id: new ObjectId(sessionId) });
+    const session = await database.collection("sessions").findOne({ _id: new ObjectId(sessionId) });
     if (!session) return err("Session not found", 404);
     if (!session.isActive) return err("This session is not active");
     if (session.bookedSeats.includes(phone)) return err("Already booked");
-    if (session.bookedSeats.length >= session.totalSeats)
-      return err("Session is fully booked");
+    if (session.bookedSeats.length >= session.totalSeats) return err("Session is fully booked");
 
     const user = await database.collection("users").findOne({ phone });
     if (!user) return err("User not found", 404);
     if (user.tokens <= 0) return err("Insufficient tokens");
 
-    await database.collection("sessions").updateOne(
-      { _id: new ObjectId(sessionId) },
-      { $push: { bookedSeats: phone } as any }
-    );
+    await database
+      .collection("sessions")
+      .updateOne({ _id: new ObjectId(sessionId) }, { $push: { bookedSeats: phone } as any });
     await database.collection("users").updateOne(
       { phone },
       {
@@ -248,19 +225,16 @@ export async function POST(
     const { sessionId } = body;
     if (!sessionId) return err("sessionId required");
 
-    const session = await database
-      .collection("sessions")
-      .findOne({ _id: new ObjectId(sessionId) });
+    const session = await database.collection("sessions").findOne({ _id: new ObjectId(sessionId) });
     if (!session) return err("Session not found", 404);
 
     const sessionDate = new Date(session.date);
     if (sessionDate < new Date()) return err("Cannot cancel a past session");
     if (!session.bookedSeats.includes(phone)) return err("Booking not found");
 
-    await database.collection("sessions").updateOne(
-      { _id: new ObjectId(sessionId) },
-      { $pull: { bookedSeats: phone } as any }
-    );
+    await database
+      .collection("sessions")
+      .updateOne({ _id: new ObjectId(sessionId) }, { $pull: { bookedSeats: phone } as any });
     await database.collection("users").updateOne(
       { phone },
       {
@@ -280,10 +254,7 @@ export async function POST(
 // PUT Handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { slug: string[] } }
-) {
+export async function PUT(req: NextRequest, { params }: { params: { slug: string[] } }) {
   const database = await getDb();
   const [resource, id] = params.slug ?? [];
   if (resource !== "sessions" || !id) return err("Not found", 404);
@@ -295,16 +266,11 @@ export async function PUT(
   if (body.time !== undefined) update.time = body.time;
   if (body.venue !== undefined) update.venue = body.venue;
   if (body.description !== undefined) update.description = body.description;
-  if (body.totalSeats !== undefined)
-    update.totalSeats = Number(body.totalSeats);
+  if (body.totalSeats !== undefined) update.totalSeats = Number(body.totalSeats);
   if (body.isActive !== undefined) update.isActive = Boolean(body.isActive);
 
-  await database
-    .collection("sessions")
-    .updateOne({ _id: new ObjectId(id) }, { $set: update });
-  const session = await database
-    .collection("sessions")
-    .findOne({ _id: new ObjectId(id) });
+  await database.collection("sessions").updateOne({ _id: new ObjectId(id) }, { $set: update });
+  const session = await database.collection("sessions").findOne({ _id: new ObjectId(id) });
   return ok(session);
 }
 
@@ -312,10 +278,7 @@ export async function PUT(
 // DELETE Handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { slug: string[] } }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: { slug: string[] } }) {
   const database = await getDb();
   const [resource, id] = params.slug ?? [];
 

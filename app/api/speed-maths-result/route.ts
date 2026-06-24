@@ -40,17 +40,11 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!username || username.trim() === "") {
-      return NextResponse.json(
-        { success: false, error: "Username is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Username is required" }, { status: 400 });
     }
 
     if (score === undefined) {
-      return NextResponse.json(
-        { success: false, error: "Test data incomplete" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Test data incomplete" }, { status: 400 });
     }
 
     const mongoClient = await getClient();
@@ -88,10 +82,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error saving test result:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -104,10 +95,7 @@ export async function GET(request: NextRequest) {
     const skip = parseInt(searchParams.get("skip") || "0");
 
     if (!username) {
-      return NextResponse.json(
-        { success: false, error: "Username is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Username is required" }, { status: 400 });
     }
 
     const mongoClient = await getClient();
@@ -134,10 +122,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error fetching test results:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -148,10 +133,7 @@ export async function DELETE(request: NextRequest) {
     const resultId = searchParams.get("id");
 
     if (!resultId) {
-      return NextResponse.json(
-        { success: false, error: "Result ID is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Result ID is required" }, { status: 400 });
     }
 
     const mongoClient = await getClient();
@@ -166,9 +148,6 @@ export async function DELETE(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error deleting test result:", error);
-    return NextResponse.json(
-      { success: false, error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

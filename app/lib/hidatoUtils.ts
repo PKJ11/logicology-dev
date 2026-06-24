@@ -62,10 +62,7 @@ export const isValidBoard = (board: (number | null)[][]): boolean => {
 /**
  * Check if the board is completely filled and correct
  */
-export const isSolutionCorrect = (
-  board: (number | null)[][],
-  solution: number[][]
-): boolean => {
+export const isSolutionCorrect = (board: (number | null)[][], solution: number[][]): boolean => {
   const size = board.length;
 
   // Check if all cells are filled
@@ -116,10 +113,7 @@ export const getNextHint = (
 /**
  * Calculate progress as percentage
  */
-export const calculateProgress = (
-  board: (number | null)[][],
-  puzzle: number[][]
-): number => {
+export const calculateProgress = (board: (number | null)[][], puzzle: number[][]): number => {
   const size = board.length;
   let filled = 0;
   let total = 0;
@@ -141,34 +135,21 @@ export const calculateProgress = (
 /**
  * Initialize board from puzzle
  */
-export const initializeBoard = (
-  puzzle: number[][]
-): (number | null)[][] => {
-  return puzzle.map((row) =>
-    row.map((cell) => (cell === 0 ? null : cell))
-  );
+export const initializeBoard = (puzzle: number[][]): (number | null)[][] => {
+  return puzzle.map((row) => row.map((cell) => (cell === 0 ? null : cell)));
 };
 
 /**
  * Reset board to initial state (keeping clues)
  */
-export const resetBoard = (
-  puzzle: number[][]
-): (number | null)[][] => {
-  return puzzle.map((row) =>
-    row.map((cell) => (cell === 0 ? null : cell))
-  );
+export const resetBoard = (puzzle: number[][]): (number | null)[][] => {
+  return puzzle.map((row) => row.map((cell) => (cell === 0 ? null : cell)));
 };
 
 /**
  * Check if adjacent cells form a valid sequence
  */
-export const isAdjacentCell = (
-  row1: number,
-  col1: number,
-  row2: number,
-  col2: number
-): boolean => {
+export const isAdjacentCell = (row1: number, col1: number, row2: number, col2: number): boolean => {
   const rowDiff = Math.abs(row1 - row2);
   const colDiff = Math.abs(col1 - col2);
   return rowDiff <= 1 && colDiff <= 1 && !(rowDiff === 0 && colDiff === 0);

@@ -1,60 +1,55 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Color } from './data';
+import { motion } from "framer-motion";
+import { Color } from "./data";
 
 interface TileProps {
   value: string | Color;
-  type: 'letter' | 'color';
+  type: "letter" | "color";
   onClick?: () => void;
   isSelected?: boolean;
   isPlaced?: boolean;
   isCorrect?: boolean;
   isWrong?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   draggable?: boolean;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: (e: React.DragEvent) => void;
 }
 
-export default function Tile({ 
-  value, 
-  type, 
-  onClick, 
+export default function Tile({
+  value,
+  type,
+  onClick,
   isSelected = false,
   isPlaced = false,
   isCorrect = false,
   isWrong = false,
-  size = 'md',
+  size = "md",
   draggable = false,
   onDragStart,
-  onDragEnd
+  onDragEnd,
 }: TileProps) {
   const sizeClasses = {
-    sm: 'w-12 h-12 text-xl',
-    md: 'w-16 h-16 text-2xl',
-    lg: 'w-20 h-20 text-3xl',
+    sm: "w-12 h-12 text-xl",
+    md: "w-16 h-16 text-2xl",
+    lg: "w-20 h-20 text-3xl",
   };
 
-  const content = type === 'letter' 
-    ? value as string
-    : (value as Color).name.charAt(0).toUpperCase();
+  const content =
+    type === "letter" ? (value as string) : (value as Color).name.charAt(0).toUpperCase();
 
-  const bgColor = type === 'color' 
-    ? (value as Color).bgClass 
-    : 'bg-white';
+  const bgColor = type === "color" ? (value as Color).bgClass : "bg-white";
 
-  const textColor = type === 'color' 
-    ? (value as Color).textClass 
-    : 'text-gray-800';
+  const textColor = type === "color" ? (value as Color).textClass : "text-gray-800";
 
-  const borderColor = isSelected 
-    ? 'border-4 border-brand-teal' 
-    : isCorrect 
-    ? 'border-4 border-green-400' 
-    : isWrong 
-    ? 'border-4 border-red-400' 
-    : 'border-2 border-gray-300';
+  const borderColor = isSelected
+    ? "border-4 border-brand-teal"
+    : isCorrect
+      ? "border-4 border-green-400"
+      : isWrong
+        ? "border-4 border-red-400"
+        : "border-2 border-gray-300";
 
   // Helper functions to handle both gesture and native drag events
   const handleGestureDragStart = (e: any) => {
@@ -96,25 +91,10 @@ export default function Tile({
       onDragStart={handleGestureDragStart}
       onDragEnd={handleGestureDragEnd}
       onClick={onClick}
-      className={`
-        ${sizeClasses[size]}
-        ${bgColor}
-        ${textColor}
-        ${borderColor}
-        rounded-2xl
-        flex items-center justify-center
-        font-outfit font-bold
-        cursor-pointer
-        select-none
-        touch-none
-        shadow-soft
-        transition-all duration-200
-        ${draggable && !isPlaced ? 'animate-float' : ''}
-        ${isPlaced ? 'opacity-100' : 'opacity-100'}
-      `}
+      className={` ${sizeClasses[size]} ${bgColor} ${textColor} ${borderColor} font-outfit flex cursor-pointer touch-none select-none items-center justify-center rounded-2xl font-bold shadow-soft transition-all duration-200 ${draggable && !isPlaced ? "animate-float" : ""} ${isPlaced ? "opacity-100" : "opacity-100"} `}
       draggable={false} // Disable native drag when using Framer Motion
       data-tile-type={type}
-      data-tile-value={type === 'letter' ? value : (value as Color).hex}
+      data-tile-value={type === "letter" ? value : (value as Color).hex}
     >
       {content}
     </motion.div>

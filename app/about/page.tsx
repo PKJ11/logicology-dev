@@ -7,36 +7,55 @@ import MediaLayout from "@/components/MediaLayout";
 import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
 import Head from "next/head";
+import Community from "@/components/Community";
 
 export default function AboutUs() {
   return (
     <>
-    <Head>
+      <Head>
         <title>About Logicology - Our Story, Team & Vision | Educational Games for Kids</title>
-        <meta name="description" content="Learn about Logicology's mission to create engaging gamified educational content for children. Meet our passionate team of designers, developers, and educators dedicated to making learning fun through innovative games and books." />
-        <meta name="keywords" content="about logicology, educational games company, kids learning games, STEM education company, game-based learning, educational content creators, childrens educational books, logic games for kids, learning through play, educational startup" />
-        
+        <meta
+          name="description"
+          content="Learn about Logicology's mission to create engaging gamified educational content for children. Meet our passionate team of designers, developers, and educators dedicated to making learning fun through innovative games and books."
+        />
+        <meta
+          name="keywords"
+          content="about logicology, educational games company, kids learning games, STEM education company, game-based learning, educational content creators, childrens educational books, logic games for kids, learning through play, educational startup"
+        />
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://yourdomain.com/about" />
         <meta property="og:title" content="About Logicology - Empowering Minds Through Play" />
-        <meta property="og:description" content="Discover the story behind Logicology. We create innovative gamified content to help children develop 21st century skills through fun learning." />
-        <meta property="og:image" content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493" />
-        
+        <meta
+          property="og:description"
+          content="Discover the story behind Logicology. We create innovative gamified content to help children develop 21st century skills through fun learning."
+        />
+        <meta
+          property="og:image"
+          content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+        />
+
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://yourdomain.com/about" />
         <meta property="twitter:title" content="About Logicology - Our Story & Team" />
-        <meta property="twitter:description" content="Meet the team behind Logicology - passionate creators making learning fun through games." />
-        <meta property="twitter:image" content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493" />
-        
+        <meta
+          property="twitter:description"
+          content="Meet the team behind Logicology - passionate creators making learning fun through games."
+        />
+        <meta
+          property="twitter:image"
+          content="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+        />
+
         {/* Additional SEO meta tags */}
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Logicology Team" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#0A8A80" />
         <link rel="canonical" href="https://yourdomain.com/about" />
-        
+
         {/* Schema.org markup for Organization */}
         <script
           type="application/ld+json"
@@ -44,51 +63,57 @@ export default function AboutUs() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Logicology",
-              "url": "https://yourdomain.com",
-              "logo": "https://ik.imagekit.io/pratik11/logo.png",
-              "description": "We create engaging gamified educational content for children to develop 21st century skills through fun learning.",
-              "address": {
+              name: "Logicology",
+              url: "https://yourdomain.com",
+              logo: "https://ik.imagekit.io/pratik11/logo.png",
+              description:
+                "We create engaging gamified educational content for children to develop 21st century skills through fun learning.",
+              address: {
                 "@type": "PostalAddress",
-                "streetAddress": "Ameya Towers, 25, Humpyard Road, Dhantoli",
-                "addressLocality": "Nagpur",
-                "addressRegion": "Maharashtra",
-                "postalCode": "440012",
-                "addressCountry": "IN"
+                streetAddress: "Ameya Towers, 25, Humpyard Road, Dhantoli",
+                addressLocality: "Nagpur",
+                addressRegion: "Maharashtra",
+                postalCode: "440012",
+                addressCountry: "IN",
               },
-              "contactPoint": [
+              contactPoint: [
                 {
                   "@type": "ContactPoint",
-                  "telephone": "+91-8446980747",
-                  "contactType": "customer service",
-                  "email": "learn@logicology.in"
-                }
+                  telephone: "+91-8446980747",
+                  contactType: "customer service",
+                  email: "learn@logicology.in",
+                },
               ],
-              "sameAs": [
+              sameAs: [
                 "https://www.facebook.com/logicology",
                 "https://www.instagram.com/logicology",
-                "https://www.linkedin.com/company/logicology"
+                "https://www.linkedin.com/company/logicology",
               ],
-              "founders": [
+              founders: [
                 {
                   "@type": "Person",
-                  "name": "Gayatri Phadnis",
-                  "jobTitle": "Co-Founder"
+                  name: "Gayatri Phadnis",
+                  jobTitle: "Co-Founder",
                 },
                 {
                   "@type": "Person",
-                  "name": "Kartik Girish Vyas",
-                  "jobTitle": "Co-Founder"
-                }
+                  name: "Kartik Girish Vyas",
+                  jobTitle: "Co-Founder",
+                },
               ],
-              "foundingDate": "2020",
-              "foundingLocation": "Nagpur, India",
-              "areaServed": "Worldwide",
-              "knowsAbout": ["Educational Games", "STEM Education", "Child Development", "Game-Based Learning"]
-            })
+              foundingDate: "2020",
+              foundingLocation: "Nagpur, India",
+              areaServed: "Worldwide",
+              knowsAbout: [
+                "Educational Games",
+                "STEM Education",
+                "Child Development",
+                "Game-Based Learning",
+              ],
+            }),
           }}
         />
-        
+
         {/* Schema.org for Team Members */}
         <script
           type="application/ld+json"
@@ -96,58 +121,59 @@ export default function AboutUs() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ItemList",
-              "itemListElement": [
+              itemListElement: [
                 {
                   "@type": "Person",
-                  "name": "Gayatri Phadnis",
-                  "jobTitle": "Co-Founder",
-                  "worksFor": {
+                  name: "Gayatri Phadnis",
+                  jobTitle: "Co-Founder",
+                  worksFor: {
                     "@type": "Organization",
-                    "name": "Logicology"
-                  }
+                    name: "Logicology",
+                  },
                 },
                 {
                   "@type": "Person",
-                  "name": "Kartik Girish Vyas",
-                  "jobTitle": "Co-Founder",
-                  "worksFor": {
+                  name: "Kartik Girish Vyas",
+                  jobTitle: "Co-Founder",
+                  worksFor: {
                     "@type": "Organization",
-                    "name": "Logicology"
-                  }
+                    name: "Logicology",
+                  },
                 },
                 {
                   "@type": "Person",
-                  "name": "Jasneet Singh Babra",
-                  "jobTitle": "Head of Design",
-                  "worksFor": {
+                  name: "Jasneet Singh Babra",
+                  jobTitle: "Head of Design",
+                  worksFor: {
                     "@type": "Organization",
-                    "name": "Logicology"
-                  }
+                    name: "Logicology",
+                  },
                 },
                 {
                   "@type": "Person",
-                  "name": "Pratik Kumar Jha",
-                  "jobTitle": "Head of Technology",
-                  "worksFor": {
+                  name: "Pratik Kumar Jha",
+                  jobTitle: "Head of Technology",
+                  worksFor: {
                     "@type": "Organization",
-                    "name": "Logicology"
-                  }
-                }
-              ]
-            })
+                    name: "Logicology",
+                  },
+                },
+              ],
+            }),
           }}
         />
       </Head>
-    <main className="min-h-screen bg-brand-hero">
-      <NavBar />
-      <HeroVideo />
-      <OurStory />
-      <OurTeam />
-      <OurVision />
-      <ContactUs />
-      <Tribe />
-      <Footer />
-    </main>
+      <main className="min-h-screen bg-brand-hero">
+        <NavBar />
+        <HeroVideo />
+        <OurStory />
+        <OurVision />
+
+        <OurTeam />
+        <ContactUs />
+        <Community />
+        <Footer />
+      </main>
     </>
   );
 }
@@ -266,9 +292,15 @@ function HeroVideo() {
             {/* centered overlay content */}
             <div className="absolute left-10 top-10 z-20 flex items-start">
               <div className="px-6 py-8 text-white sm:px-10 sm:py-12">
-                <h1 className="headingstyle font-extrabold leading-tight">Our Philosophy</h1>
+                <h2 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
+                  About Us
+                </h2>
+                <h1 className="headingstyle font-extrabold leading-tight">
+                  Learn to Play. Play to Learn.
+                </h1>
                 <p className="textstyles mt-4 max-w-md text-white/90">
-                  That guides all our actions.
+                  A small team with a simple belief: children learn best when they're genuinely
+                  having fun.
                 </p>
               </div>
             </div>
@@ -383,12 +415,18 @@ function OurStory() {
             </h2>
 
             <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
-              We believe that children learn the most when they are engaged. At Logicology we strive
-              to create innovative gamified content to help children develop
-              21st&nbsp;century&nbsp;skills.
+              Logicology began with a simple observation: children learn more when they're engaged,
+              curious and eager to keep going.
+              <br />
+              That belief led us to create games and books that develop real skills through play.
+              Whether it's logic, problem-solving, mathematical thinking or creativity, our goal has
+              always been the same—to make big ideas approachable, meaningful and enjoyable.
+              <br />
+              What started as a single idea has grown into a family of products finding homes in
+              classrooms, living rooms and everywhere in between.
             </p>
 
-            <div className="mt-6">
+            {/* <div className="mt-6">
               <CTAButton
                 text="View our journey"
                 href="#story"
@@ -413,7 +451,7 @@ function OurStory() {
                   </svg>
                 }
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -448,17 +486,18 @@ function OurTeam() {
       image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
       bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
     },
-    {
-      name: "Simran Kaur",
-      role: "Designer",
-      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
-      bio: "Graphic designer focused on books and worksheets. Balances design creativity with insights as a young mother.",
-    },
+
     {
       name: "Gauri Bhople",
       role: "Designer",
       image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
       bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
+    },
+    {
+      name: "You could be the next!",
+      role: "",
+      image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
+      bio: "",
     },
   ];
 
@@ -495,10 +534,10 @@ function OurTeam() {
               <CTAButton
                 text="View all team members"
                 href="/about/teamMembers"
-                bg="#FFFFFF"
-                color="#AB4637"
-                hoverBg="rgba(0,0,0,0.25)"
-                hoverColor="#FFFFFF"
+                bg="#fbb041"
+                color="#3d3b40"
+                hoverBg="#fa9e15"
+                hoverColor="#3d3b40"
                 roundedClass="rounded-full"
                 size="md"
                 className="font-medium transition-colors"
@@ -599,19 +638,25 @@ function OurVision() {
       <div className="mx-auto px-3 sm:px-5 lg:max-w-[80vw]">
         <div className="mb-12 text-center">
           <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
-          <p className="textstyles font-semibold text-brand-tealDark/90">
-            Learn to Play — Play to Learn
-          </p>
-          <p className="textstyles mx-auto mt-4 max-w-3xl text-brand-tealDark/80">
-            At Logicology, our vision is to create engaging gamified content that teaches children
-            concepts. We believe if the children have fun while learning, they learn in a much
-            better way. Each of our books and games aims at helping children learn real-life
-            concepts/skills through a gamified, fun-learning way.
-          </p>
         </div>
 
         {/* Mission + Goal Section with Gray Background */}
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-3">
+          {/* vision */}
+          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
+            {/* Label */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
+                Vision
+              </span>
+            </div>
+
+            <div className="h-full rounded-2xl bg-brand-grayBg p-5">
+              <p className="text-center text-lg text-gray-800">
+                To build a world where learning feels less like work and more like discovery.
+              </p>
+            </div>
+          </div>
           {/* Mission */}
           <div className="relative rounded-3xl bg-white p-6 shadow-soft">
             {/* Label */}
@@ -623,9 +668,8 @@ function OurVision() {
 
             <div className="rounded-2xl bg-brand-grayBg p-5">
               <p className="text-center text-lg text-gray-800">
-                To create world class educational content that is engaging, gamified and concept
-                based. Our mission is to make top class educational content that is made in India,
-                made&nbsp;for&nbsp;the&nbsp;world.
+                To create world-class games, books and learning experiences that turn big ideas into
+                child’s play. Made in India. Built for curious minds everywhere.
               </p>
             </div>
           </div>
@@ -641,9 +685,8 @@ function OurVision() {
 
             <div className="rounded-2xl bg-brand-grayBg p-5">
               <p className="text-center text-lg text-gray-800">
-                Our goal is to create a world class brand of educational products that focuses on
-                fun learning. We want to develop best in class educational content for children that
-                is fun and easy&nbsp;to&nbsp;learn.
+                To build the world's most loved fun-learning brand—creating products that children
+                enjoy, parents trust and educators value.
               </p>
             </div>
           </div>
@@ -657,8 +700,6 @@ function OurVision() {
 function ContactUs() {
   return (
     <section className="w-full bg-[#642B3B]">
-      {" "}
-      {/* deep maroon background */}
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="grid items-center gap-10 md:grid-cols-2">
           {/* Left: text & contact details */}
@@ -669,7 +710,6 @@ function ContactUs() {
               {/* Phone */}
               <li className="flex items-center gap-5">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
-                  {/* phone icon */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-7 w-7"
@@ -685,13 +725,17 @@ function ContactUs() {
                     />
                   </svg>
                 </span>
-                <p className="text-xl font-semibold leading-tight">+91 8446980747</p>
+                <a
+                  href="tel:+918446980747"
+                  className="text-xl font-semibold leading-tight hover:underline"
+                >
+                  +91 8446980747
+                </a>
               </li>
 
               {/* Email */}
               <li className="flex items-center gap-5">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
-                  {/* mail icon */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-7 w-7"
@@ -707,13 +751,17 @@ function ContactUs() {
                     />
                   </svg>
                 </span>
-                <p className="text-xl font-semibold leading-tight">learn@logicology.in</p>
+                <a
+                  href="mailto:learn@logicology.in"
+                  className="text-xl font-semibold leading-tight hover:underline"
+                >
+                  learn@logicology.in
+                </a>
               </li>
 
               {/* Address */}
               <li className="flex items-start gap-5">
                 <span className="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
-                  {/* location icon */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-7 w-7"
@@ -734,14 +782,14 @@ function ContactUs() {
                   <br />
                   Humpyard Road, Dhantoli,
                   <br />
-                  Nagpur, India - 440012
+                  Nagpur, India – 440012
                 </p>
               </li>
             </ul>
 
             <p className="mt-10 max-w-xl text-sm text-white/85">
-              Please note that we operate in a fully online mode. The registered office address is
-              only for official communication.
+              We operate fully online. Our registered office is used for official communication and
+              correspondence.
             </p>
           </div>
 

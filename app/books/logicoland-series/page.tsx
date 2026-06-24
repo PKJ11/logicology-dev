@@ -9,6 +9,16 @@ import Community from "@/components/Community";
 import BuySection from "@/components/BuySection";
 import { motion, useInView } from "framer-motion";
 import Head from "next/head";
+import MediaLayoutRight from "@/components/MediaLayoutRight";
+import { useCart } from "@/components/CartContext";
+import HeroCheckoutModal, { HeroProductConfig } from "@/components/HeroCheckoutModal";
+import toast from "react-hot-toast";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import Link from "next/link";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 /* ============================================================
    MAIN PAGE COMPONENT
 ============================================================ */
@@ -230,8 +240,12 @@ export default function Logicoland1Page() {
           <HeroVideo isActive={activeSection === "hero"} />
         </section>
 
+        <section id="book-details">
+          <BookDetails />
+        </section>
+
         {/* ================= LOGICOLAND V1 ================= */}
-        <section id="buy">
+        <section id="buysection">
           <BuySection />
         </section>
 
@@ -245,8 +259,11 @@ export default function Logicoland1Page() {
           <PrintablesSection isActive={activeSection === "printables"} />
         </section>
 
-        <section id="symmetry-game">
+        {/* <section id="symmetry-game">
           <SymmetryPatternGame />
+        </section> */}
+        <section id="buy-block">
+          <LogicolandBuyBlock />
         </section>
         {/* ================= COMMUNITY ================= */}
         <section id="community">
@@ -265,7 +282,6 @@ export default function Logicoland1Page() {
    HERO VIDEO SECTION
 ============================================================ */
 function HeroVideo({ isActive }: { isActive: boolean }) {
-  // iOS fullscreen support
   interface ExtendedHTMLVideoElement extends HTMLVideoElement {
     webkitEnterFullscreen?: () => void;
     webkitRequestFullscreen?: () => Promise<void>;
@@ -274,11 +290,19 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(isIOSDevice);
+  }, []);
+
+  useEffect(() => {
+    const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   const toggleMute = () => {
@@ -312,87 +336,130 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
     }
   };
 
+  const scrollToBuySection = () => {
+    const buySection = document.getElementById("buy-block");
+    if (buySection) {
+      buySection.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+  const ACCENT = "#fbb041";
   return (
-    <section className="w-full overflow-hidden bg-white" ref={sectionRef}>
-      <div className="px-3 py-10 sm:px-5">
-        <div
-          className={`relative rounded-[28px] bg-white px-2 transition-all duration-1000 ${
-            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
-        >
-          <div className="relative overflow-hidden rounded-[22px]">
-            <video
-              ref={videoRef}
-              autoPlay
-              loop
-              muted={isMuted}
-              playsInline={!isIOS || !isFullscreen}
-              controls={isIOS && isFullscreen}
-              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
+    <>
+      <style>{`
+        .hv-buy-btn {
+          background-color: #fbb041;
+          color: #3d3b40;
+          border: 2px solid transparent;
+          transition: all 0.3s ease, transform 0.15s ease;
+        }
+        .hv-buy-btn:hover {
+          background-color: #fa9e15;
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(250,158,21,0.4);
+        }
+        .hv-buy-btn:active { transform: scale(0.95); }
+ 
+        .hv-details-btn {
+          background-color: transparent;
+          border: 2px solid #ffffff;
+          color: #ffffff;
+          transition: all 0.3s ease, transform 0.15s ease;
+        }
+        .hv-details-btn:hover {
+          background-color: #fa9e15;
+          border-color: #fa9e15;
+          color: #3d3b40;
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(250,158,21,0.4);
+        }
+        .hv-details-btn:active { transform: scale(0.95); }
+        .hv-details-btn .hv-label {
+          position: relative;
+          z-index: 1;
+        }
+      `}</style>
+
+      {/* ── OUTER WRAPPER — matches HeroSlide2 / HeroSlider structure ── */}
+      <section className="section my-10" ref={sectionRef}>
+        <div className="container-padding">
+          <div className="section-rounded relative overflow-hidden">
+            {/* Background — same as HeroSlide2 */}
+            <div
+              className="relative w-full overflow-hidden"
+              style={{
+                backgroundImage: isMobile
+                  ? `url('https://ik.imagekit.io/pratik11/LOGICOLAND-BACKGROUND-FRO-MOBILE.png?updatedAt=1781940668867')`
+                  : `url('https://ik.imagekit.io/pratik11/LOGICOLAND-BACKGROUND-DESIGN-3.png')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                minHeight: isMobile ? 720 : 680,
+              }}
             >
-              <source
-                src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-                type="video/mp4"
-              />
-            </video>
+              {/* ══ DESKTOP LAYOUT ══ */}
+              <div className="hidden min-h-[680px] w-full items-center md:flex">
+                {/* Left — Text block */}
+                <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
+                  <motion.p
+                    className="mb-2 text-[20px] font-bold text-white md:text-[24px]"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    The Logicoland Series • Ages 5+
+                  </motion.p>
 
-            {/* gradient under text */}
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+                  <motion.h1
+                    className="mb-5 uppercase leading-[1.1] text-white"
+                    style={{
+                      fontFamily: "var(--font-outfit), sans-serif",
+                      fontSize: "50px",
+                      fontWeight: 800,
+                    }}
+                    initial={{ y: 40, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.7, delay: 0.25 }}
+                  >
+                    Big ideas turned
+                    <br />
+                    into child&apos;s play.
+                  </motion.h1>
 
-            {/* centered overlay content */}
-            <div className="absolute inset-0 z-20 flex items-start sm:items-center">
-              <div
-                className={`mx-auto w-[75vw] max-w-[75vw] px-6 py-8 text-white transition-all duration-1000 sm:px-10 sm:py-14 ${
-                  isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-                }`}
-              >
-                <p
-                  className="textstyles mb-3 transition-all delay-200 duration-500"
-                  style={{
-                    transform: isActive ? "translateY(0)" : "translateY(20px)",
-                    opacity: isActive ? 1 : 0,
-                  }}
-                >
-                  Empowering Minds
-                </p>
-                <h1
-                  className="headingstyle delay-400 font-extrabold leading-tight transition-all duration-500"
-                  style={{
-                    transform: isActive ? "translateY(0)" : "translateY(20px)",
-                    opacity: isActive ? 1 : 0,
-                  }}
-                >
-                  Through STEM Play
-                  <br /> and Logic-Based Learning
-                </h1>
-                <p
-                  className="textstyles delay-600 mt-4 max-w-md text-white/90 transition-all duration-500"
-                  style={{
-                    transform: isActive ? "translateY(0)" : "translateY(20px)",
-                    opacity: isActive ? 1 : 0,
-                  }}
-                >
-                  At Logicology we endeavour to make learning fun so that children learn while they
-                  play.
-                </p>
-                <div
-                  className="delay-800 mt-6 transition-all duration-500"
-                  style={{
-                    transform: isActive ? "translateY(0)" : "translateY(20px)",
-                    opacity: isActive ? 1 : 0,
-                  }}
-                >
-                  <CTAButton
-                    text="Learn More"
-                    href="#buy"
-                    bg="#FFFFFF"
-                    color="#0A8A80"
-                    hoverBg="#0A8A80"
-                    hoverColor="#FFFFFF"
-                    size="md"
-                    rightIcon={
+                  <motion.p
+                    className="mb-3 max-w-[420px] text-[18px] font-bold leading-7 text-white lg:text-[26px]"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.35 }}
+                  >
+                    Looks like coloring, works like logic.
+                  </motion.p>
+
+                  <motion.p
+                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.42 }}
+                  >
+                    Five books. Five topics. Endless possibilities. Perfect for children aged 5–8.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="flex flex-row gap-3"
+                  >
+                    <button
+                      onClick={scrollToBuySection}
+                      className="hv-buy-btn inline-flex items-center gap-2 rounded-full px-8 py-4 text-center text-[18px] font-semibold"
+                      style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
+                    >
+                      Shop the series
                       <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                        className="h-4 w-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -404,105 +471,300 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                           d="M9 5l7 7-7 7"
                         />
                       </svg>
-                    }
-                  />
+                    </button>
+
+                    <Link
+                      href="/books/logicoland-series"
+                      className="hv-details-btn inline-block rounded-full px-8 py-4 text-center text-[18px] font-semibold"
+                      style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    >
+                      <span className="hv-label">View details →</span>
+                    </Link>
+                  </motion.div>
+                </div>
+
+                {/* Right — Amber circle + video */}
+                <div className="relative z-10 flex flex-1 items-center justify-center py-8 pr-[3vw]">
+                  <div
+                    className="relative flex items-center justify-center overflow-hidden rounded-full"
+                    style={{
+                      width: "clamp(340px, 38vw, 520px)",
+                      height: "clamp(340px, 38vw, 520px)",
+                      border: `10px solid ${ACCENT}`,
+                      boxShadow: "0 0 0 6px rgba(251,176,65,0.25)",
+                      background: "#ffffff",
+                    }}
+                  >
+                    <motion.img
+                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE.png?updatedAt=1782280451275"
+                      alt="Logicoland Series"
+                      className="object-cover"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        inset: 0,
+                        zIndex: 5,
+                      }}
+                      initial={{ scale: 0.85, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* ══ MOBILE LAYOUT ══ */}
+              <div className="flex w-full flex-col md:hidden" style={{ minHeight: 720 }}>
+                {/* Amber circle + video */}
+                <div
+                  className="relative flex items-center justify-center pb-4 pt-10"
+                  style={{ minHeight: 300 }}
+                >
+                  <div
+                    className="relative flex items-center justify-center overflow-hidden rounded-full"
+                    style={{
+                      width: 260,
+                      height: 260,
+                      background: "#000000",
+                      border: `8px solid ${ACCENT}`,
+                      boxShadow: "0 0 0 4px rgba(251,176,65,0.25)",
+                    }}
+                  >
+                    <video
+                      autoPlay
+                      loop
+                      muted={isMuted}
+                      playsInline
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                        position: "relative",
+                        zIndex: 5,
+                      }}
+                    >
+                      <source
+                        src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
+                        type="video/mp4"
+                      />
+                    </video>
+
+                    {/* Mobile video controls */}
+                    <div className="absolute bottom-4 right-4 z-30 flex items-center gap-1">
+                      <button
+                        onClick={toggleMute}
+                        className="rounded-full bg-black/50 p-1.5 text-white"
+                        aria-label={isMuted ? "Unmute video" : "Mute video"}
+                      >
+                        {isMuted ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5.586 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15.536 8.464a5 5 0 0 1 0 7.072m2.828-9.9a9 9 0 0 1 0 12.728M5.586 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                            />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Text + CTAs */}
+                <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
+                  <motion.p
+                    className="mb-1 text-[16px] font-bold text-white"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                  >
+                    The Logicoland Series • Ages 5+
+                  </motion.p>
+
+                  <motion.h1
+                    className="my-4 uppercase leading-[1.15] text-white"
+                    style={{
+                      fontFamily: "var(--font-outfit), sans-serif",
+                      fontSize: "clamp(28px, 8vw, 36px)",
+                      fontWeight: 800,
+                    }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    Big ideas
+                    <br />
+                    turned into
+                    <br />
+                    child&apos;s play.
+                  </motion.h1>
+
+                  <motion.p
+                    className="mb-2 max-w-[300px] text-[16px] font-bold leading-relaxed text-white"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                  >
+                    Looks like coloring, works like logic.
+                  </motion.p>
+
+                  <motion.p
+                    className="mb-6 max-w-[300px] text-[14px] leading-relaxed text-white"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.52 }}
+                  >
+                    Five books. Five topics. Endless possibilities. Perfect for children aged 5–8.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ y: 15, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.45, delay: 0.6 }}
+                    className="flex w-full flex-col items-center gap-3"
+                  >
+                    <button
+                      onClick={scrollToBuySection}
+                      className="hv-buy-btn inline-flex w-[260px] items-center justify-center gap-2 rounded-full py-4 text-center text-[16px] font-semibold"
+                      style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
+                    >
+                      Shop the series
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+
+                    <Link
+                      href="/books/logicoland-series"
+                      className="hv-details-btn inline-block w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
+                      style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    >
+                      <span className="hv-label">View details →</span>
+                    </Link>
+                  </motion.div>
                 </div>
               </div>
             </div>
-
-            {/* Controls group (bottom-right) */}
-            <div
-              className={`absolute bottom-4 right-4 z-30 flex items-center gap-2 transition-all delay-1000 duration-500 ${
-                isActive ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
-            >
-              {/* Mute/Unmute */}
-              <button
-                onClick={toggleMute}
-                className="rounded-full bg-black/50 p-2 text-white transition-all duration-300 hover:scale-110 hover:bg-black/70"
-                aria-label={isMuted ? "Unmute video" : "Mute video"}
-              >
-                {isMuted ? (
-                  // Muted icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
-                    />
-                  </svg>
-                ) : (
-                  // Unmuted icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5L6 9H3v6h3l5 4V5z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
-                    />
-                  </svg>
-                )}
-              </button>
-
-              {/* Fullscreen */}
-              <button
-                onClick={toggleFullscreen}
-                className="rounded-full bg-black/50 p-2 text-white transition-all duration-300 hover:scale-110 hover:bg-black/70"
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-              >
-                {!isFullscreen ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
+            {/* end background div */}
           </div>
+          {/* end section-rounded */}
+        </div>
+        {/* end container-padding */}
+      </section>
+    </>
+  );
+}
+
+function BookDetails() {
+  const [open, setOpen] = useState(false);
+  const YT = "https://youtu.be/2qLAo-AydUc";
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  return (
+    <section ref={sectionRef} id="BookDetails" className="w-full bg-brand-purple">
+      <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
+        <div className="flex flex-col items-center md:flex-row">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="order-1 flex w-full items-center py-6 md:order-1 md:w-1/2 md:py-0"
+          >
+            <MediaLayoutRight
+              image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
+              videoSrc=""
+              text="PrimeTime™"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+          >
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.6 }}
+              className="headingstyle font-heading font-extrabold leading-tight text-white"
+            >
+              The trick? <br /> It never feels hard.
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="textstyles mt-3 max-w-xl font-sans text-white"
+            >
+              Big ideas become approachable when they're broken into small, enjoyable challenges.
+              Every puzzle builds on the last, helping children gain confidence as they explore
+              logic, patterns and problem-solving. Before they know it, they're tackling ideas that
+              once seemed far beyond their reach.
+            </motion.p>
+            <motion.div
+              className="mt-6"
+              initial={{ y: 20, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <CTAButton
+                text="Explore the Promise"
+                bg="#fbb041"
+                color="#3d3b40"
+                hoverBg="#fa9e15"
+                hoverColor="#3d3b40"
+                showShadow={true}
+                showScaleOnHover={true}
+                showScaleOnActive={true}
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -518,68 +780,57 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 
   return (
     <section ref={sectionRef} className="w-full overflow-hidden bg-brand-coral text-white">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:max-w-[75vw] md:py-20 lg:mx-auto lg:max-w-[75vw]">
-        <div
-          className={`grid items-center gap-12 transition-all duration-1000 md:grid-cols-2 ${
-            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
-        >
+      <div className="mx-auto px-4 py-12 sm:px-5 sm:py-16 md:max-w-[75vw] md:py-20 lg:mx-auto lg:max-w-[75vw]">
+        <div className="grid items-center gap-12 px-4 md:grid-cols-2">
           {/* Text Content */}
           <div className="space-y-6 sm:px-4">
-            <div
-              className="transition-all delay-200 duration-500"
-              style={{
-                transform: isActive ? "translateX(0)" : "translateX(-50px)",
-                opacity: isActive ? 1 : 0,
-              }}
-            >
-              <h3 className="headingstyle font-heading font-extrabold">Interactive Puzzles</h3>
+            <div>
+              <h3 className="headingstyle font-heading font-extrabold">
+                Start small.
+                <br /> Think big.{" "}
+              </h3>
             </div>
 
-            <div
-              className="delay-400 transition-all duration-500"
-              style={{
-                transform: isActive ? "translateX(0)" : "translateX(-50px)",
-                opacity: isActive ? 1 : 0,
-              }}
-            >
+            <div>
               <p className="textstyles mt-4 font-sans text-white/90">
-                Solve the 4×4 Sudoku puzzles given here. The rules that you need to follow are:
+                No numbers. No pressure. Just colours, patterns and a simple challenge. It's exactly
+                how Volume 1 introduces Sudoku—and how confidence starts to grow.
+              </p>
+              <p className="textstyles mt-4 font-sans text-white/90">
+                The rules that you need to follow are:
               </p>
               <ol className="mt-3 list-decimal space-y-2 pl-6 text-white/90">
-                <li>Each standing line should have all 4 colours appearing exactly once.</li>
-                <li>Each sleeping line should have all 4 colours appearing exactly once.</li>
-                <li>Each 2×2 grid should have all 4 colours appearing exactly once.</li>
+                <li>
+                  Each standing line should have all 4 colours appearing <br /> exactly once.
+                </li>
+                <li>
+                  Each sleeping line should have all 4 colours appearing <br /> exactly once.
+                </li>
+                <li>
+                  Each 2×2 grid should have all 4 colours appearing <br /> exactly once.
+                </li>
               </ol>
             </div>
 
-            <div
-              className="delay-600 transition-all duration-500"
-              style={{
-                transform: isActive ? "translateX(0)" : "translateX(-50px)",
-                opacity: isActive ? 1 : 0,
-              }}
-            >
+            <div>
               <div className="mt-6 flex gap-4">
                 <CTAButton
                   text="Watch Demo"
                   onClick={() => setIsOpen(true)}
-                  bg="#FFFFFF"
-                  color="#AB4637"
-                  hoverBg="#AB4637"
-                  hoverColor="#FFFFFF"
-                  size="md"
+                  bg="#fbb041"
+                  color="#3d3b40"
+                  hoverBg="#fa9e15"
+                  hoverColor="#3d3b40"
+                  showShadow={true}
+                  showScaleOnHover={true}
+                  showScaleOnActive={true}
                 />
               </div>
             </div>
           </div>
 
           {/* Puzzle Content */}
-          <div
-            className={`transition-all delay-500 duration-1000 ${
-              isActive ? "rotate-0 scale-100 opacity-100" : "rotate-3 scale-75 opacity-0"
-            }`}
-          >
+          <div>
             <div className="rounded-[26px] bg-white p-3 transition-transform duration-500 hover:scale-[1.02]">
               <div className="relative overflow-hidden rounded-[20px] bg-brand-grayBg p-4">
                 <SudokuSlider isActive={isActive} />
@@ -616,36 +867,23 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
 ============================================================ */
 function PrintablesSection({ isActive }: { isActive: boolean }) {
   return (
-    <section className="w-full overflow-hidden bg-white">
+    <section className="w-full overflow-hidden bg-brand-buttonYellowBefore">
       <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:py-20 lg:max-w-[80vw]">
-        <div
-          className={`rounded-[22px] bg-brand-grayBg p-6 shadow-soft transition-all duration-1000 sm:p-10 ${
-            isActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
-        >
+        <div className="rounded-[22px] p-6 sm:p-10">
           {/* Header */}
-          <div
-            className="transition-all delay-200 duration-500"
-            style={{
-              transform: isActive ? "translateY(0)" : "translateY(-30px)",
-              opacity: isActive ? 1 : 0,
-            }}
-          >
-            <h3 className="headingstyle text-center font-extrabold text-brand-teal">Printables</h3>
-            <p className="textstyles mt-2 text-center text-brand-teal">
-              Done with Logicoland 1 already? Here are a few more worksheets for your practice.
+          <div>
+            <h3 className="headingstyle text-center font-extrabold text-brand-black">
+              Keep the Curiosity Going
+            </h3>
+            <p className="textstyles mt-2 text-center text-brand-black">
+              Free worksheets filled with puzzles, patterns and playful challenges. For the complete
+              collection, join the community.
             </p>
           </div>
 
           {/* Cards Grid */}
           <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <div
-              className="delay-400 transition-all duration-500"
-              style={{
-                transform: isActive ? "translateX(0)" : "translateX(-50px)",
-                opacity: isActive ? 1 : 0,
-              }}
-            >
+            <div>
               <PrintableCard
                 bgImage="https://ik.imagekit.io/pratik11/logicaoldandpdf1.JPG?updatedAt=1758342080344"
                 buttonColor="#7E5C2E"
@@ -656,13 +894,7 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
               />
             </div>
 
-            <div
-              className="delay-600 transition-all duration-500"
-              style={{
-                transform: isActive ? "translateX(0)" : "translateX(50px)",
-                opacity: isActive ? 1 : 0,
-              }}
-            >
+            <div>
               <PrintableCard
                 bgImage="https://ik.imagekit.io/pratik11/logicolandpdf2.JPG?updatedAt=1758342079963"
                 buttonColor="#AB4637"
@@ -675,20 +907,759 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
           </div>
 
           {/* Footer Text */}
-          <div
-            className="delay-800 transition-all duration-500"
-            style={{
-              transform: isActive ? "translateY(0)" : "translateY(30px)",
-              opacity: isActive ? 1 : 0,
-            }}
-          >
-            <p className="mt-8 text-center text-brand-tealDark/70">
+          <div>
+            <p className="mt-8 text-center text-brand-black">
               For more such printables, join our community.
             </p>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+const LOGICOLAND_SET: HeroProductConfig = {
+  name: "Logicoland Set (All Volumes)",
+  price: "₹999",
+  initialprice: undefined,
+  razorpayItemId: "item_SSxJhDUqb7HTiy",
+  description: "Every volume in one box — the complete thinking skills collection.",
+  image: "https://ik.imagekit.io/pratik11/LOGICOLAND-HERO-IMAGE.png?updatedAt=1781163914607",
+  rating: 5,
+  specialOffer: "",
+  category: "set",
+};
+
+type VolumeProduct = HeroProductConfig & {
+  displayName: string;
+  volumeNumber: number;
+  bundleRazorpayItemId: string;
+  bundleImage: string;
+};
+
+const VOLUMES: VolumeProduct[] = [
+  {
+    name: "Logicoland - Volume 1",
+    displayName: "Volume 1",
+    volumeNumber: 1,
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_S4UBymXQ91Vmk4",
+    bundleRazorpayItemId: "item_RVa7Osutc07pfB",
+    description: "Logicoland Volume 1",
+    image: "https://ik.imagekit.io/pratik11/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png",
+    bundleImage: "https://ik.imagekit.io/pratik2002/logicolandv2_4oprmp0lO?updatedAt=1756947338913",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
+  },
+  {
+    name: "Logicoland - Volume 2",
+    displayName: "Volume 2",
+    volumeNumber: 2,
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_RNn0h9rGIq8zOL",
+    bundleRazorpayItemId: "item_S4UDQe8qCtOp21",
+    description: "Logicoland Volume 2",
+    image: "https://ik.imagekit.io/pratik11/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%202.png",
+    bundleImage:
+      "https://ik.imagekit.io/pratik2002/VOLUMNE%202/LOGICOLAND%20SUDOKU%20VOLUMNE%202%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906051069",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
+  },
+  {
+    name: "Logicoland - Volume 3",
+    displayName: "Volume 3",
+    volumeNumber: 3,
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxGzOM6REipuz",
+    bundleRazorpayItemId: "item_ST2GJDox7LUaVH",
+    description: "Logicoland Volume 3",
+    image: "https://ik.imagekit.io/pratik11/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%203.png",
+    bundleImage:
+      "https://ik.imagekit.io/pratik2002/VOLUMNE%203/LOGICOLAND%20SUDOKU%20VOLUMNE%203%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906081265",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
+  },
+  {
+    name: "Logicoland - Volume 4",
+    displayName: "Volume 4",
+    volumeNumber: 4,
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxHO3cngCSldC",
+    bundleRazorpayItemId: "item_ST2GnU6n3qjAEc",
+    description: "Logicoland Volume 4",
+    image: "https://ik.imagekit.io/pratik11/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%204.png",
+    bundleImage:
+      "https://ik.imagekit.io/pratik2002/VOLUMNE%204/LOGICOLAND%20SUDOKU%20VOLUMNE%204%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906115914",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
+  },
+  {
+    name: "Logicoland - Volume 5",
+    displayName: "Volume 5",
+    volumeNumber: 5,
+    price: "₹249",
+    initialprice: "₹299",
+    razorpayItemId: "item_SSxHltEcqtYsJ1",
+    bundleRazorpayItemId: "item_ST2HEofqR6OCm6",
+    description: "Logicoland Volume 5",
+    image: "https://ik.imagekit.io/pratik11/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%205.png",
+    bundleImage:
+      "https://ik.imagekit.io/pratik2002/VOLUMNE%205/LOGICOLAND%20SUDOKU%20VOLUMNE%205%20STACK%20COVER%20MOCKUP.png?updatedAt=1773906134668",
+    rating: 5,
+    specialOffer: "",
+    category: "books",
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────
+// Palette — mirrors PrimeTimeBuyBlock exactly
+// ─────────────────────────────────────────────────────────────────
+const GOLD = "#E45C48";
+const TAG_COLOR = "#fbb041";
+const TEXT_DARK = "#3d3b40";
+const BUY_DEFAULT = "#fbb041";
+const BUY_HOVER = "#fa9e15";
+const CART_DEFAULT = "#E45C48";
+const CART_HOVER = "#c94433";
+
+// ─────────────────────────────────────────────────────────────────
+// Shared button CSS
+// ─────────────────────────────────────────────────────────────────
+const llbStyles = `
+  .llb-buy-btn {
+    background-color: ${BUY_DEFAULT};
+    color: ${TEXT_DARK};
+    border: 2px solid transparent;
+    transition: all 0.3s ease, transform 0.15s ease;
+    box-shadow: 0 4px 16px rgba(251,176,65,0.35);
+  }
+  .llb-buy-btn:hover {
+    background-color: ${BUY_HOVER};
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(250,158,21,0.4);
+  }
+  .llb-buy-btn:active { transform: scale(0.95); }
+ 
+  .llb-cart-btn {
+    background-color: ${CART_DEFAULT};
+    color: #fff;
+    border: 2px solid transparent;
+    transition: all 0.3s ease, transform 0.15s ease;
+    box-shadow: 0 4px 16px rgba(228,92,72,0.30);
+  }
+  .llb-cart-btn:hover {
+    background-color: ${CART_HOVER};
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(201,68,51,0.38);
+  }
+  .llb-cart-btn:active { transform: scale(0.95); }
+  .llb-cart-btn--added {
+    background-color: ${CART_HOVER} !important;
+    color: #fff !important;
+  }
+ 
+  .llb-bundle-btn {
+    background-color: transparent;
+    color: #0A8A80;
+    border: 2px solid #0A8A80;
+    transition: all 0.3s ease, transform 0.15s ease;
+  }
+  .llb-bundle-btn:hover {
+    background-color: #0A8A80;
+    color: #fff;
+    transform: scale(1.03);
+  }
+  .llb-bundle-btn:active { transform: scale(0.97); }
+
+  /* Swiper navigation arrows */
+  .llb-swiper .swiper-button-next,
+  .llb-swiper .swiper-button-prev {
+    color: #3d3b40;
+    background: #fbb041;
+    backdrop-filter: blur(4px);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .llb-swiper .swiper-button-next::after,
+  .llb-swiper .swiper-button-prev::after {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .llb-swiper .swiper-button-next:hover,
+  .llb-swiper .swiper-button-prev:hover {
+    background: #fa9e15;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+    .llb-swiper .swiper-pagination {
+    display: none;
+  }
+`;
+
+// ─────────────────────────────────────────────────────────────────
+// Volume Card
+// ─────────────────────────────────────────────────────────────────
+function VolumeCard({
+  volume,
+  index,
+  onBuyNow,
+  onBuyBundle,
+}: {
+  volume: VolumeProduct;
+  index: number;
+  onBuyNow: (p: HeroProductConfig) => void;
+  onBuyBundle: (p: HeroProductConfig) => void;
+}) {
+  const { addToCart } = useCart();
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [showBundle, setShowBundle] = useState(false);
+
+  function handleAddToCart() {
+    addToCart({
+      name: volume.name,
+      price: volume.price,
+      initialprice: volume.initialprice,
+      razorpayItemId: volume.razorpayItemId,
+      description: volume.description,
+      image: volume.image,
+      rating: volume.rating ?? 5,
+    });
+    toast.success(`${volume.displayName} added to cart!`);
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  }
+
+  const bundleProduct: HeroProductConfig = {
+    name: `Logicoland Volume ${volume.volumeNumber} Bundle - 20 Books`,
+    price: "₹4,000",
+    initialprice: undefined,
+    razorpayItemId: volume.bundleRazorpayItemId,
+    description: `Perfect return gift — 20 copies of Volume ${volume.volumeNumber} for just ₹4,000 (₹200/copy).`,
+    image: volume.bundleImage,
+    rating: 5,
+    specialOffer: "",
+    category: "bundles",
+  };
+
+  return (
+    <motion.div
+      className="group relative flex w-full flex-col overflow-hidden rounded-[32px] bg-white"
+      style={{
+        boxShadow: "0 2px 16px 0 rgba(11,63,68,0.08), 0 1px 3px 0 rgba(11,63,68,0.06)",
+      }}
+      initial={{ opacity: 0, y: 48 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{
+        y: -6,
+        boxShadow: "0 20px 48px 0 rgba(11,63,68,0.18), 0 4px 12px 0 rgba(11,63,68,0.10)",
+        transition: { duration: 0.25, ease: "easeOut" },
+      }}
+    >
+      {/* Volume number badge */}
+
+      {/* ── IMAGE ZONE ── */}
+      <div
+        className="relative overflow-hidden"
+        style={{
+          height: 260,
+          border: "16px solid #e0e0e3",
+          borderTopLeftRadius: "32px",
+          borderTopRightRadius: "32px",
+        }}
+      >
+        <img
+          src={showBundle ? volume.bundleImage : volume.image}
+          alt={volume.displayName}
+          className="h-full w-full object-cover transition-all duration-700 group-hover:scale-[1.06]"
+        />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "linear-gradient(to bottom, transparent 45%, rgba(255,255,255,0.18) 100%)",
+          }}
+        />
+        {/* Tag pill */}
+        <div
+          className="absolute left-4 top-4 z-10 flex items-center rounded-full px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#3d3b40] shadow-lg"
+          style={{ backgroundColor: TAG_COLOR }}
+        >
+          {showBundle ? "Bundle ×20" : `Vol. ${volume.volumeNumber}`}
+        </div>
+      </div>
+
+      {/* ── CONTENT ZONE ── */}
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
+        <h3
+          className="font-heading text-[18px] font-extrabold leading-tight tracking-tight"
+          style={{ color: TEXT_DARK }}
+        >
+          {volume.displayName}
+        </h3>
+
+        <p
+          className="mt-1.5 line-clamp-2 font-sans text-[13.5px] leading-relaxed"
+          style={{ color: TEXT_DARK, opacity: 0.65 }}
+        >
+          {volume.description}
+        </p>
+
+        {/* Stars */}
+        <div className="mt-3 flex items-center gap-2">
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill={GOLD}>
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
+          <span className="font-sans text-xs" style={{ color: TEXT_DARK, opacity: 0.5 }}>
+            5.0
+          </span>
+        </div>
+
+        {/* Price + Bundle toggle */}
+        <div className="mt-4 flex items-baseline justify-between gap-2">
+          <div className="flex items-baseline gap-2">
+            <span
+              className="font-heading text-[26px] font-extrabold leading-none tracking-tight"
+              style={{ color: TEXT_DARK }}
+            >
+              {showBundle ? "₹4,000" : volume.price}
+            </span>
+            {!showBundle && volume.initialprice && (
+              <span
+                className="font-sans text-sm line-through"
+                style={{ color: TEXT_DARK, opacity: 0.35 }}
+              >
+                {volume.initialprice}
+              </span>
+            )}
+            {showBundle && (
+              <span className="font-sans text-[11px]" style={{ color: TEXT_DARK, opacity: 0.5 }}>
+                / 20 books
+              </span>
+            )}
+          </div>
+
+          {/* Single / Bundle toggle */}
+          <button
+            onClick={() => setShowBundle((s) => !s)}
+            className="rounded-full px-2.5 py-1 font-sans text-[10px] font-bold uppercase tracking-wide transition-all"
+            style={{
+              backgroundColor: showBundle ? "rgba(10,138,128,0.12)" : "rgba(251,176,65,0.18)",
+              color: showBundle ? "#0A8A80" : "#7a5c00",
+              border: showBundle
+                ? "1px solid rgba(10,138,128,0.3)"
+                : "1px solid rgba(251,176,65,0.4)",
+            }}
+          >
+            {showBundle ? "→ Single" : "Bundle ×20"}
+          </button>
+        </div>
+
+        <div className="min-h-[12px] flex-1" />
+
+        {/* ── BUTTONS ── */}
+        <div className="mt-4 flex flex-col gap-2.5">
+          <button
+            onClick={() => (showBundle ? onBuyBundle(bundleProduct) : onBuyNow(volume))}
+            className="llb-buy-btn relative flex w-full items-center justify-center rounded-full py-3 text-[14px] font-extrabold"
+          >
+            <span className="relative flex items-center gap-2">
+              {showBundle ? "Buy Bundle" : "Buy Now"}
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </span>
+          </button>
+
+          {showBundle ? (
+            <button
+              onClick={() => alert("Enquiry submitted! We'll contact you shortly.")}
+              className="llb-cart-btn flex w-full items-center justify-center gap-2 rounded-full py-3 text-[14px] font-extrabold"
+            >
+              Enquire for Big Deals
+            </button>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className={`llb-cart-btn flex w-full items-center justify-center gap-2 rounded-full py-3 text-[14px] font-extrabold ${addedToCart ? "llb-cart-btn--added" : ""}`}
+            >
+              {addedToCart ? (
+                <>
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  Added to Cart!
+                </>
+              ) : (
+                <>Add to Cart</>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// LogicolandBuyBlock — main section
+// ─────────────────────────────────────────────────────────────────
+export function LogicolandBuyBlock() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { addToCart } = useCart();
+
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [checkoutProduct, setCheckoutProduct] = useState<HeroProductConfig>(LOGICOLAND_SET);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  function handleBuyNow(p: HeroProductConfig = LOGICOLAND_SET) {
+    setCheckoutProduct(p);
+    setIsCheckoutOpen(true);
+  }
+
+  function handleAddToCart() {
+    addToCart({
+      name: LOGICOLAND_SET.name,
+      price: LOGICOLAND_SET.price,
+      initialprice: LOGICOLAND_SET.initialprice,
+      razorpayItemId: LOGICOLAND_SET.razorpayItemId,
+      description: LOGICOLAND_SET.description,
+      image: LOGICOLAND_SET.image,
+      rating: LOGICOLAND_SET.rating ?? 5,
+    });
+    toast.success("Logicoland Complete Set added to cart!");
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq("track", "AddToCart", {
+        content_name: LOGICOLAND_SET.name,
+        value: 999,
+        currency: "INR",
+      });
+    }
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  }
+
+  return (
+    <>
+      <style>{llbStyles}</style>
+
+      <section id="buy" ref={ref} className="relative w-full overflow-hidden bg-brand-tealDark">
+        <div className="relative px-4 py-20 md:mx-auto md:max-w-[82vw] lg:mx-auto lg:max-w-[82vw] lg:px-8">
+          {/* ── Hero buy card — Complete Set ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto mb-16 flex flex-col items-stretch rounded-[28px] bg-white md:flex-row lg:max-w-[70vw]"
+            style={{ boxShadow: "0 8px 48px 0 rgba(0,0,0,0.18)" }}
+          >
+            {/* LEFT — image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="relative w-full flex-shrink-0 self-stretch md:w-[45%]"
+              style={{
+                border: "16px solid #e0e0e3",
+                borderTopLeftRadius: "28px",
+                borderBottomLeftRadius: isMobile ? "0px" : "28px",
+                borderTopRightRadius: isMobile ? "28px" : "0px",
+                borderBottomRightRadius: "0px",
+                margin: "0px",
+              }}
+            >
+              <img
+                src={LOGICOLAND_SET.image}
+                alt="Logicoland Complete Set"
+                className="h-full w-full object-contain"
+                style={{
+                  borderTopLeftRadius: "14px",
+                  borderBottomLeftRadius: "14px",
+                }}
+              />
+            </motion.div>
+
+            {/* RIGHT — Text + CTAs */}
+            <div className="flex flex-1 flex-col p-8 sm:p-12">
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mb-2 font-sans text-xs font-bold uppercase tracking-[0.2em]"
+                style={{ color: TEXT_DARK }}
+              >
+                Best Value · Complete Series
+              </motion.p>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="headingstyle font-heading font-extrabold leading-tight"
+                style={{ color: TEXT_DARK }}
+              >
+                Logicoland — All 5 Volumes
+              </motion.h2>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="mt-2 flex items-center gap-2"
+              >
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <svg key={i} className="h-4 w-4" viewBox="0 0 20 20" fill={GOLD}>
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <span className="font-sans text-sm" style={{ color: TEXT_DARK, opacity: 0.45 }}>
+                  4.8 · 150 reviews
+                </span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.35 }}
+                className="mt-4 flex items-baseline gap-3"
+              >
+                <span
+                  className="font-heading text-[38px] font-extrabold leading-none"
+                  style={{ color: TEXT_DARK }}
+                >
+                  ₹999
+                </span>
+                <span
+                  className="rounded-full px-2.5 py-1 font-sans text-[11px] font-bold uppercase tracking-wide"
+                  style={{ backgroundColor: TAG_COLOR, color: TEXT_DARK }}
+                >
+                  Best Value
+                </span>
+              </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mt-1 font-sans text-xs"
+                style={{ color: TEXT_DARK, opacity: 0.4 }}
+              >
+                All prices include GST &nbsp;·&nbsp; Detailed invoice sent after purchase
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.45 }}
+                className="mt-6 flex flex-wrap gap-3"
+              >
+                <button
+                  onClick={() => handleBuyNow()}
+                  className="llb-buy-btn relative flex items-center justify-center overflow-hidden rounded-full px-8 py-3.5 text-[15px] font-extrabold"
+                >
+                  <span className="relative flex items-center gap-2">
+                    Buy Now — ₹999
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </span>
+                </button>
+
+                <button
+                  onClick={handleAddToCart}
+                  className={`llb-cart-btn flex items-center gap-2 rounded-full px-8 py-3.5 text-[15px] font-extrabold ${addedToCart ? "llb-cart-btn--added" : ""}`}
+                >
+                  {addedToCart ? (
+                    <>
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      Added to Cart!
+                    </>
+                  ) : (
+                    <>Add to Cart</>
+                  )}
+                </button>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.55 }}
+                className="mt-5 flex flex-wrap gap-2"
+              >
+                {[
+                  { text: "All 5 volumes included" },
+                  { text: "Ages 5–16" },
+                  { text: "Logic & critical thinking" },
+                  { text: "No prior knowledge needed" },
+                ].map((b) => (
+                  <span
+                    key={b.text}
+                    className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-sans text-[12px]"
+                    style={{
+                      borderColor: "rgba(10,138,128,0.25)",
+                      color: TEXT_DARK,
+                      opacity: 0.75,
+                      backgroundColor: "rgba(10,138,128,0.04)",
+                    }}
+                  >
+                    {b.text}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* ── Individual Volumes heading ── */}
+          <motion.div
+            className="mb-8 text-center"
+            initial={{ opacity: 0, y: 24 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <p className="mb-3 font-sans text-[25px] font-bold uppercase tracking-[0.2em] text-white">
+              Or pick a volume
+            </p>
+            <h3 className="headingstyle font-heading font-extrabold text-white">
+              Individual Volumes · ₹249 each
+            </h3>
+            <p className="mt-2 font-sans text-sm text-white/50">
+              Each card has a <strong className="text-white/70">Bundle ×20</strong> toggle — flip it
+              to order 20 copies at ₹4,000 (₹200/copy), perfect for classrooms and return gifts.
+            </p>
+          </motion.div>
+
+          {/* ── Volume cards — Swiper with external nav buttons ── */}
+          <div className="relative px-8">
+            {/* Prev Button */}
+            <button
+              className="llb-swiper-prev absolute -left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-buttonYellowBefore shadow-lg transition hover:scale-110 hover:bg-brand-buttonYellowAfter hover:shadow-xl disabled:opacity-30"
+              style={{ color: TEXT_DARK }}
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation={{
+                prevEl: ".llb-swiper-prev",
+                nextEl: ".llb-swiper-next",
+              }}
+              pagination={{ clickable: true }}
+              spaceBetween={20}
+              slidesPerView={1}
+              breakpoints={{
+                480: { slidesPerView: 2, spaceBetween: 16 },
+                768: { slidesPerView: 3, spaceBetween: 20 },
+                1024: { slidesPerView: 4, spaceBetween: 20 },
+              }}
+              className="llb-swiper w-full pb-10"
+            >
+              {VOLUMES.map((volume, i) => (
+                <SwiperSlide key={volume.razorpayItemId} className="!h-auto py-2">
+                  <VolumeCard
+                    volume={volume}
+                    index={i}
+                    onBuyNow={handleBuyNow}
+                    onBuyBundle={handleBuyNow}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            {/* Next Button */}
+            <button
+              className="llb-swiper-next absolute -right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-buttonYellowBefore shadow-lg transition hover:scale-110 hover:bg-brand-buttonYellowAfter hover:shadow-xl disabled:opacity-30"
+              style={{ color: TEXT_DARK }}
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* ── Footer note ── */}
+          <motion.p
+            className="mt-12 text-center font-sans text-xs text-white/35"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            All prices include GST &nbsp;·&nbsp; Free shipping on orders above ₹499 &nbsp;·&nbsp;
+            Bulk pricing available on request
+          </motion.p>
+        </div>
+      </section>
+
+      <HeroCheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        product={checkoutProduct}
+      />
+    </>
   );
 }
 
@@ -1011,26 +1982,10 @@ function SudokuSlider({ isActive }: { isActive: boolean }) {
   };
 
   return (
-    <div
-      className={`w-full transition-all duration-500 ${isActive ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
-    >
+    <div className="w-full">
       <div className="mb-3 flex items-center justify-between">
-        <div
-          className="font-semibold text-brand-tealDark transition-all delay-200 duration-300"
-          style={{
-            transform: isActive ? "translateX(0)" : "translateX(-20px)",
-            opacity: isActive ? 1 : 0,
-          }}
-        >
-          {PUZZLES[idx].name}
-        </div>
-        <div
-          className="delay-400 flex items-center gap-2 transition-all duration-300"
-          style={{
-            transform: isActive ? "translateX(0)" : "translateX(20px)",
-            opacity: isActive ? 1 : 0,
-          }}
-        >
+        <div className="font-semibold text-brand-tealDark">{PUZZLES[idx].name}</div>
+        <div className="flex items-center gap-2">
           <button
             onClick={prev}
             className="rounded-full bg-white px-3 py-1.5 text-brand-tealDark ring-1 ring-black/10 transition-all duration-300 hover:scale-110 hover:bg-white/90 active:scale-95"
@@ -1059,13 +2014,7 @@ function SudokuSlider({ isActive }: { isActive: boolean }) {
         />
       </div>
 
-      <div
-        className="delay-600 mt-3 flex justify-center gap-2 transition-all duration-300"
-        style={{
-          transform: isActive ? "translateY(0)" : "translateY(20px)",
-          opacity: isActive ? 1 : 0,
-        }}
-      >
+      <div className="mt-3 flex justify-center gap-2">
         {PUZZLES.map((_, i) => (
           <button
             key={i}
@@ -1452,9 +2401,9 @@ function PrintableCard({
             <CTAButton
               text="Download PDF"
               href={filePath}
-              bg="#FFFFFF"
-              color={buttonColor}
-              hoverBg={buttonColor}
+              bg={CART_DEFAULT}
+              color="#FFFFFF"
+              hoverBg={CART_HOVER}
               hoverColor="#FFFFFF"
               size="md"
               rightIcon={

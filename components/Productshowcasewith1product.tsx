@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 
 // Sample product data
 const products = [
-
   {
     name: "Test dummy product",
     price: "₹1",

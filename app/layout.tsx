@@ -50,10 +50,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <EdgeStoreProvider>
             {/* <TiersProvider> */}
-              <ToastProvider>
-          {/* Meta Pixel Script */}
-          <Script id="meta-pixel" strategy="afterInteractive">
-            {`
+            <ToastProvider>
+              {/* Meta Pixel Script */}
+              <Script id="meta-pixel" strategy="afterInteractive">
+                {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
               n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -66,27 +66,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               fbq('track', 'PageView');
               window.fbq = window.fbq || fbq;
             `}
-          </Script>
+              </Script>
 
-          {/* Server-to-Meta: CAPI PageView ping from the browser */}
-          <MetaCapiPageView />
+              {/* Server-to-Meta: CAPI PageView ping from the browser */}
+              <MetaCapiPageView />
 
-          {/* NoScript fallback */}
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
-              src="https://www.facebook.com/tr?id=1374809147978540&ev=PageView&noscript=1"
-              alt="facebook pixel"
-            />
-          </noscript>
+              {/* NoScript fallback */}
+              <noscript>
+                <img
+                  height="1"
+                  width="1"
+                  style={{ display: "none" }}
+                  src="https://www.facebook.com/tr?id=1374809147978540&ev=PageView&noscript=1"
+                  alt="facebook pixel"
+                />
+              </noscript>
 
-          {children}
-          <FeedbackButton />
-          <Toaster position="top-right" />
-          </ToastProvider>
-          {/* </TiersProvider> */}
+              {children}
+              <FeedbackButton />
+              <Toaster position="top-right" />
+            </ToastProvider>
+            {/* </TiersProvider> */}
           </EdgeStoreProvider>
         </CartProvider>
       </body>

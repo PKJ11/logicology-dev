@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     // ── Add timestamp + rzpDeviceId to every order document ──
     await col.insertOne({
       ...data,
-      createdAt: new Date(),        // ← NEW: order timestamp
-      rzpDeviceId: data.rzpDeviceId ?? null,  // ← NEW: device link
+      createdAt: new Date(), // ← NEW: order timestamp
+      rzpDeviceId: data.rzpDeviceId ?? null, // ← NEW: device link
     });
 
     // ── Mark the matching cart_events record as converted ──

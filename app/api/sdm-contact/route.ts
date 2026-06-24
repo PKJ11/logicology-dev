@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const allowedOrigins = [
       "https://stellardesignmfg.com",
       "https://www.stellardesignmfg.com",
-      "https://steller-med.netlify.app",  // ← no trailing slash
+      "https://steller-med.netlify.app", // ← no trailing slash
       "http://localhost:5173",
       "http://localhost:8080",
       "http://localhost:3000",
@@ -73,16 +73,9 @@ export async function POST(req: Request) {
       );
     }
 
-    return NextResponse.json(
-      { success: true },
-      { headers: corsHeaders(isAllowed ? origin : "") }
-    );
-
+    return NextResponse.json({ success: true }, { headers: corsHeaders(isAllowed ? origin : "") });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 

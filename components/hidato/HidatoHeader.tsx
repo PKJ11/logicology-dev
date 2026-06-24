@@ -15,9 +15,7 @@ interface HidatoHeaderProps {
   totalPuzzles?: number;
 }
 
-const getDifficultyColor = (
-  difficulty: "easy" | "medium" | "hard"
-): string => {
+const getDifficultyColor = (difficulty: "easy" | "medium" | "hard"): string => {
   switch (difficulty) {
     case "easy":
       return "bg-green-100 text-green-800";
@@ -53,11 +51,11 @@ export const HidatoHeader: React.FC<HidatoHeaderProps> = ({
   return (
     <div className="w-full space-y-3 sm:space-y-4">
       {/* Title and Badge Container */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{title}</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h1>
 
         {puzzleNumber !== undefined && totalPuzzles !== undefined && (
-          <span className="inline-block text-sm font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+          <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-600">
             {puzzleNumber} / {totalPuzzles}
           </span>
         )}
@@ -67,20 +65,21 @@ export const HidatoHeader: React.FC<HidatoHeaderProps> = ({
       <div className="flex flex-wrap items-center gap-2 sm:gap-4">
         {/* Difficulty Badge */}
         <span
-          className={`inline-block px-3 py-1 sm:py-2 rounded-full font-semibold text-sm sm:text-base ${getDifficultyColor(
+          className={`inline-block rounded-full px-3 py-1 text-sm font-semibold sm:py-2 sm:text-base ${getDifficultyColor(
             difficulty
           )}`}
         >
-          {getDifficultyEmoji(difficulty)} {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+          {getDifficultyEmoji(difficulty)}{" "}
+          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
         </span>
 
         {/* Size Badge */}
-        <span className="inline-block px-3 py-1 sm:py-2 bg-blue-100 text-blue-800 rounded-full font-semibold text-sm sm:text-base">
+        <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-800 sm:py-2 sm:text-base">
           {size}×{size}
         </span>
 
         {/* Info Text */}
-        <span className="text-xs sm:text-sm text-gray-600">
+        <span className="text-xs text-gray-600 sm:text-sm">
           Fill consecutive numbers (1-{size * size}) horizontally, vertically, or diagonally
         </span>
       </div>

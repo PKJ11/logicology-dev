@@ -6,14 +6,14 @@ export default function ImportanceBubbles() {
   // bubble & kid assets
   const bubbleImgs = [
     "https://ik.imagekit.io/pratik2002/BUBBLE%201.png?updatedAt=1757035882810",
-    "https://ik.imagekit.io/pratik2002/BUBBLE%202.png?updatedAt=1757035882839",
-    "https://ik.imagekit.io/pratik2002/BUBBLE%203.png?updatedAt=1757035883281",
+    "https://ik.imagekit.io/pratik11/YELLOW-BUBBLE.png?updatedAt=1781177452691",
+    "https://ik.imagekit.io/pratik11/ORANGE-BUBBLE.png?updatedAt=1781177427665",
     "https://ik.imagekit.io/pratik2002/BUBBLE%204.png?updatedAt=1757035883179",
   ];
   const kidImgs = [
     "https://ik.imagekit.io/pratik2002/green.png?updatedAt=1757744211414",
-    "https://ik.imagekit.io/pratik2002/yellow.png?updatedAt=1757744211774",
-    "https://ik.imagekit.io/pratik2002/red.png?updatedAt=1757744211792",
+    "https://ik.imagekit.io/pratik11/yelow-girl-croped?updatedAt=1781177216524",
+    "https://ik.imagekit.io/pratik11/BOY-IMAGE.png?updatedAt=1781177244282",
     "https://ik.imagekit.io/pratik2002/black.png?updatedAt=1757744338918",
   ];
 
@@ -61,14 +61,14 @@ export default function ImportanceBubbles() {
     <section className="section w-full bg-white sm:px-3" id="offerings">
       <div className="section-rounded mx-auto px-3 py-14 sm:px-5">
         {/* white container */}
-        <div className="bg- rounded-[22px] bg-[#EDEDED] p-6 sm:p-10">
+        <div className="bg- rounded-[22px] p-6 sm:p-10">
           <div className="mb-4 text-center">
-            <h2 className="headingstyle mb-3 font-heading font-extrabold text-brand-teal">
-              Our Offerings for you
+            <h2 className="headingstyle mb-20 font-heading font-extrabold text-brand-black">
+              However your child likes to learn.
             </h2>
-            <p className="mx-auto max-w-3xl font-sans text-lg text-brand-tealDark/80 sm:text-xl">
+            {/* <p className="mx-auto max-w-3xl font-sans text-lg text-brand-tealDark/80 sm:text-xl">
               You can choose from a wide variety of formats and engagement types.
-            </p>
+            </p> */}
           </div>
 
           <div className="mx-auto mt-10 grid max-w-[80vw] grid-cols-1 justify-items-center gap-8 md:grid-cols-4 md:gap-10">

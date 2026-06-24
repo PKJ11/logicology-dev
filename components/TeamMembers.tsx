@@ -38,19 +38,19 @@ const teamMembers = [
     bio: "Pratik is the technology lead at Logicology. A passionate technologist, he manages the entire tech stack—from the website, community, and e-shop to interactive games and modules. Always on the lookout for new features, Pratik drives all of Logicology’s technology initiatives.",
     linkedin: "https://www.linkedin.com/in/pratik-kumar-jha-b95473259/",
   },
-  {
-    name: "Simran Kaur",
-    role: "Designer",
-    image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
-    bio: "Simran is a budding graphic designer focusing on books and illustrated worksheets for children. As a mother of two, she brings a young mother’s perspective to her design work, balancing creativity with practicality to create content that resonates with both kids and parents.",
-    linkedin: "",
-  },
+
   {
     name: "Gauri Bhople",
     role: "Designer (Animation & Video)",
     image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
     bio: "Gauri is the newest member of Logicology’s design team, with a keen interest in video animation. As she builds her expertise under the guidance of Jasneet and the team, she contributes fresh ideas to content and design. Logicology continues to look out for passionate designers to join the team—though only the very best make the cut.",
     linkedin: "",
+  },
+  {
+    name: "You could be the next!",
+    role: "",
+    image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
+    bio: "",
   },
 ];
 

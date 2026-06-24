@@ -13,7 +13,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 // import swatiPhoto from "./assets/swati.jpeg";
 // import chinmayPhoto from "./assets/chinmay.jpeg";
 // For the demo we use placeholder strings — replace with your real imports.
-const swatiPhoto   = "/assets/swati.jpeg";   // Dr. Swati Jaiswal
+const swatiPhoto = "/assets/swati.jpeg"; // Dr. Swati Jaiswal
 const chinmayPhoto = "/assets/chinmay.jpeg"; // Chinmay Phadke
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -308,9 +308,7 @@ export default function TestimonialsSection() {
           }}
         />
 
-        <div
-          style={{ maxWidth: 1160, margin: "0 auto", position: "relative", zIndex: 1 }}
-        >
+        <div style={{ maxWidth: 1160, margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: 56 }}>
             <div
@@ -359,8 +357,8 @@ export default function TestimonialsSection() {
             navigation={true}
             pagination={{ clickable: true }}
             breakpoints={{
-              640:  { slidesPerView: 1 },
-              768:  { slidesPerView: 2 },
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
             }}
           >

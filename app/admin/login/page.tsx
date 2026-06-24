@@ -1,39 +1,39 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('adminUser', JSON.stringify(data.admin));
-        router.push('/admin');
+        localStorage.setItem("adminToken", data.token);
+        localStorage.setItem("adminUser", JSON.stringify(data.admin));
+        router.push("/admin");
       } else {
-        setError(data.error || 'Invalid credentials');
+        setError(data.error || "Invalid credentials");
       }
     } catch (error) {
-      setError('Login failed. Please try again.');
+      setError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -77,17 +77,11 @@ export default function AdminLogin() {
           <h2 className="mb-2 text-3xl font-bold text-gray-900">Admin Login</h2>
           <p className="mb-8 text-gray-600">Enter your credentials to access the dashboard</p>
 
-          {error && (
-            <div className="mb-6 rounded-lg bg-red-50 p-4 text-red-700">
-              {error}
-            </div>
-          )}
+          {error && <div className="mb-6 rounded-lg bg-red-50 p-4 text-red-700">{error}</div>}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -99,9 +93,7 @@ export default function AdminLogin() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Password
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Password</label>
               <input
                 type="password"
                 value={password}
@@ -123,7 +115,7 @@ export default function AdminLogin() {
                   <span>Logging in...</span>
                 </span>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>

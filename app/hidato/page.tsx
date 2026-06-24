@@ -14,8 +14,7 @@ export const metadata: Metadata = {
   keywords: ["puzzle", "hidato", "number", "game", "brain teaser"],
   openGraph: {
     title: "Hidato Puzzle Game",
-    description:
-      "Play Hidato puzzles online with multiple difficulty levels.",
+    description: "Play Hidato puzzles online with multiple difficulty levels.",
     type: "website",
   },
 };

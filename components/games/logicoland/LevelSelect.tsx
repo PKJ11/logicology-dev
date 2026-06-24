@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 interface LevelSelectProps {
   currentLevel: number;
@@ -11,11 +11,11 @@ interface LevelSelectProps {
   completedLevels: number[];
 }
 
-export default function LevelSelect({ 
-  currentLevel, 
-  onLevelChange, 
+export default function LevelSelect({
+  currentLevel,
+  onLevelChange,
   totalLevels,
-  completedLevels 
+  completedLevels,
 }: LevelSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,19 +27,19 @@ export default function LevelSelect({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-3 bg-white rounded-2xl shadow-soft font-outfit font-semibold text-lg text-brand-teal"
+        className="font-outfit flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-lg font-semibold text-brand-teal shadow-soft"
       >
         Level {currentLevel}
-        <ChevronDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </motion.button>
 
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-soft z-50 min-w-[120px]"
+          className="absolute left-0 top-full z-50 mt-2 min-w-[120px] rounded-2xl bg-white shadow-soft"
         >
-          <div className="p-2 max-h-60 overflow-y-auto">
+          <div className="max-h-60 overflow-y-auto p-2">
             {levels.map((level) => (
               <button
                 key={level}
@@ -47,17 +47,10 @@ export default function LevelSelect({
                   onLevelChange(level);
                   setIsOpen(false);
                 }}
-                className={`
-                  w-full text-left px-4 py-2 rounded-xl font-roboto text-base
-                  transition-colors hover:bg-brand-grayBg
-                  ${currentLevel === level ? 'bg-brand-teal text-white' : ''}
-                  ${completedLevels.includes(level) ? 'text-green-600 font-semibold' : ''}
-                `}
+                className={`font-roboto w-full rounded-xl px-4 py-2 text-left text-base transition-colors hover:bg-brand-grayBg ${currentLevel === level ? "bg-brand-teal text-white" : ""} ${completedLevels.includes(level) ? "font-semibold text-green-600" : ""} `}
               >
                 Level {level}
-                {completedLevels.includes(level) && (
-                  <span className="ml-2">✓</span>
-                )}
+                {completedLevels.includes(level) && <span className="ml-2">✓</span>}
               </button>
             ))}
           </div>

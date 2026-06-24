@@ -74,15 +74,7 @@ export const HidatoCell: React.FC<HidatoCellProps> = ({
   return (
     <div
       onClick={handleClick}
-      className={`
-        relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center
-        border-2 border-gray-300 font-bold text-lg rounded-md
-        cursor-pointer transition-all duration-200
-        ${isClue ? "bg-gray-100 cursor-default" : "bg-white hover:bg-blue-50"}
-        ${isSelected ? "ring-2 ring-blue-500 ring-inset" : ""}
-        ${isHighlighted ? "bg-yellow-100" : ""}
-        ${value !== null && value > 0 ? "text-gray-800" : "text-gray-400"}
-      `}
+      className={`relative flex h-12 w-12 cursor-pointer items-center justify-center rounded-md border-2 border-gray-300 text-lg font-bold transition-all duration-200 sm:h-14 sm:w-14 ${isClue ? "cursor-default bg-gray-100" : "bg-white hover:bg-blue-50"} ${isSelected ? "ring-2 ring-inset ring-blue-500" : ""} ${isHighlighted ? "bg-yellow-100" : ""} ${value !== null && value > 0 ? "text-gray-800" : "text-gray-400"} `}
     >
       {isEditing && !isClue ? (
         <input
@@ -93,8 +85,7 @@ export const HidatoCell: React.FC<HidatoCellProps> = ({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           autoFocus
-          className="w-10 h-10 text-center bg-blue-100 border-2 border-blue-400 rounded px-1 
-            font-bold text-lg focus:outline-none"
+          className="h-10 w-10 rounded border-2 border-blue-400 bg-blue-100 px-1 text-center text-lg font-bold focus:outline-none"
           maxLength={3}
         />
       ) : (

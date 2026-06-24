@@ -374,7 +374,6 @@ function WhyWeExist() {
                   hoverBg="#fa9e15"
                   hoverColor="#3d3b40"
                   size="md"
-                  
                 />
               </motion.div>
             </motion.div>
@@ -595,7 +594,7 @@ function TrustCard({
   );
 }
 
- function HowWeDesign() {
+function HowWeDesign() {
   const sectionRef = useRef<HTMLElement>(null);
   const [triggered, setTriggered] = useState(false);
 
@@ -641,12 +640,9 @@ function TrustCard({
       className="relative w-full overflow-hidden bg-white px-4 py-16 md:px-8"
     >
       <div className="relative mx-auto max-w-6xl">
-        <h2
-        className="mb-12 text-center font-heading text-[32px] font-extrabold leading-tight md:text-[40px] text-brand-black"
-        
-      >
-        The Principles Behind Every Product
-      </h2>
+        <h2 className="mb-12 text-center font-heading text-[32px] font-extrabold leading-tight text-brand-black md:text-[40px]">
+          The Principles Behind Every Product
+        </h2>
         <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_420px_1fr]">
           {/* ── LEFT CARDS ── */}
           <div className="flex flex-col items-center gap-5 md:items-end">
@@ -798,7 +794,6 @@ function CloseSection() {
               hoverBg="#fa9e15"
               hoverColor="#3d3b40"
               size="md"
-              
               rightIcon={
                 <svg
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
@@ -823,7 +818,6 @@ function CloseSection() {
               hoverBg="#fbb041"
               hoverColor="#3d3b40"
               size="md"
-              
               className="border-2 border-white/60"
               rightIcon={
                 <svg

@@ -4,13 +4,13 @@ import { useState, useCallback } from "react";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const BRAND_TEAL_DK = "#0B3F44";
-const RACING  = "'Racing Sans One', cursive";
-const OUTFIT  = "'Outfit', sans-serif";
+const RACING = "'Racing Sans One', cursive";
+const OUTFIT = "'Outfit', sans-serif";
 
 const FRIENDS_COLOR = {
-  bg:    "#F5A623",
+  bg: "#F5A623",
   light: "#FFF8EC",
-  dark:  "#7A4F00",
+  dark: "#7A4F00",
 };
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -54,13 +54,12 @@ function generateFriendPair(base: FriendBase): FriendPair {
 }
 
 function generateOptions(correct: number, base: FriendBase): number[] {
-  const offsets = base === 100
-    ? shuffle([correct + 10, correct - 10, correct + 1, correct - 1, correct + 9, correct - 9])
-    : shuffle([correct + 1, correct - 1, correct + 2, correct - 2]);
+  const offsets =
+    base === 100
+      ? shuffle([correct + 10, correct - 10, correct + 1, correct - 1, correct + 9, correct - 9])
+      : shuffle([correct + 1, correct - 1, correct + 2, correct - 2]);
 
-  const wrongs = offsets
-    .filter(v => v > 0 && v !== correct && v < base)
-    .slice(0, 3);
+  const wrongs = offsets.filter((v) => v > 0 && v !== correct && v < base).slice(0, 3);
 
   return shuffle([correct, ...wrongs]);
 }
@@ -79,8 +78,10 @@ function FriendPanel({
 }) {
   const { bg, light, dark } = FRIENDS_COLOR;
 
-  const [pair,     setPair]     = useState<FriendPair>(() => generateFriendPair(base));
-  const [options,  setOptions]  = useState<number[]>(() => generateOptions(generateFriendPair(base).b, base));
+  const [pair, setPair] = useState<FriendPair>(() => generateFriendPair(base));
+  const [options, setOptions] = useState<number[]>(() =>
+    generateOptions(generateFriendPair(base).b, base)
+  );
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
 
@@ -119,15 +120,12 @@ function FriendPanel({
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleInputSubmit();
     }
   };
 
-  const borderCol =
-    feedback === "correct" ? "#22c55e" :
-    feedback === "wrong"   ? "#ef4444" :
-    bg;
+  const borderCol = feedback === "correct" ? "#22c55e" : feedback === "wrong" ? "#ef4444" : bg;
 
   return (
     <div
@@ -147,47 +145,73 @@ function FriendPanel({
       }}
     >
       {/* Header */}
-      <div style={{
-        background: bg,
-        borderRadius: 14,
-        padding: "10px 14px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}>
-        <span style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}>
+      <div
+        style={{
+          background: bg,
+          borderRadius: 14,
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <span
+          style={{ fontFamily: RACING, fontSize: "1rem", color: "#fff", letterSpacing: "0.04em" }}
+        >
           Friends of {base}
         </span>
-        <span style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}>
+        <span
+          style={{ fontFamily: OUTFIT, fontSize: "0.85rem", fontWeight: 700, color: "#fff99c" }}
+        >
           {score}/{total}
         </span>
       </div>
 
       {/* Question */}
-      <div style={{
-        background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
-        borderRadius: 16,
-        padding: "18px 12px",
-        textAlign: "center",
-        transition: "background 0.3s ease",
-      }}>
-        <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.82rem", color: dark, margin: "0 0 4px" }}>
+      <div
+        style={{
+          background: feedback === "correct" ? "#f0fdf4" : feedback === "wrong" ? "#fef2f2" : light,
+          borderRadius: 16,
+          padding: "18px 12px",
+          textAlign: "center",
+          transition: "background 0.3s ease",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: OUTFIT,
+            fontWeight: 600,
+            fontSize: "0.82rem",
+            color: dark,
+            margin: "0 0 4px",
+          }}
+        >
           What is the friend of
         </p>
         <div style={{ fontFamily: RACING, fontSize: "3.5rem", color: bg, lineHeight: 1 }}>
           {pair.a}
         </div>
-        <div style={{ fontFamily: OUTFIT, fontWeight: 700, fontSize: "0.78rem", color: `${bg}99`, marginTop: 2 }}>
+        <div
+          style={{
+            fontFamily: OUTFIT,
+            fontWeight: 700,
+            fontSize: "0.78rem",
+            color: `${bg}99`,
+            marginTop: 2,
+          }}
+        >
           {pair.a} + ? = {base}
         </div>
         {feedback && (
-          <div style={{
-            marginTop: 8,
-            fontFamily: OUTFIT,
-            fontWeight: 800,
-            fontSize: "0.9rem",
-            color: feedback === "correct" ? "#16a34a" : "#dc2626",
-          }}>
+          <div
+            style={{
+              marginTop: 8,
+              fontFamily: OUTFIT,
+              fontWeight: 800,
+              fontSize: "0.9rem",
+              color: feedback === "correct" ? "#16a34a" : "#dc2626",
+            }}
+          >
             {feedback === "correct"
               ? `✅ Yes! ${pair.a} + ${pair.b} = ${base}`
               : `❌ It's ${pair.b}! (${pair.a} + ${pair.b} = ${base})`}
@@ -196,12 +220,14 @@ function FriendPanel({
       </div>
 
       {/* Input Field for Single Digit */}
-      <div style={{
-        display: "flex",
-        gap: 10,
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <input
           type="text"
           inputMode="numeric"
@@ -237,16 +263,16 @@ function FriendPanel({
             fontWeight: 700,
             fontSize: "1rem",
             color: "#fff",
-            cursor: (!feedback && inputValue) ? "pointer" : "not-allowed",
-            opacity: (!feedback && inputValue) ? 1 : 0.5,
+            cursor: !feedback && inputValue ? "pointer" : "not-allowed",
+            opacity: !feedback && inputValue ? 1 : 0.5,
             transition: "transform 0.15s",
           }}
-          onMouseEnter={e => {
+          onMouseEnter={(e) => {
             if (!feedback && inputValue) {
               (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
             }
           }}
-          onMouseLeave={e => {
+          onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
           }}
         >
@@ -255,15 +281,17 @@ function FriendPanel({
       </div>
 
       {/* Options Buttons */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 10,
-        opacity: feedback ? 0.5 : 1,
-        transition: "opacity 0.2s",
-        marginTop: 4,
-      }}>
-        {options.map(opt => (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 10,
+          opacity: feedback ? 0.5 : 1,
+          transition: "opacity 0.2s",
+          marginTop: 4,
+        }}
+      >
+        {options.map((opt) => (
           <button
             key={opt}
             onClick={() => handleAnswer(opt)}
@@ -280,13 +308,13 @@ function FriendPanel({
               transition: "transform 0.15s, box-shadow 0.15s",
               boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               if (!feedback) {
                 (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.06)";
                 (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 6px 18px ${bg}33`;
               }
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
               (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 6px rgba(0,0,0,0.06)";
             }}
@@ -318,23 +346,19 @@ function FriendPanel({
 }
 
 // ── Main FriendsChallenge component ──────────────────────────────────────────
-export default function FriendsChallenge({
-  onStartChallenge,
-}: {
-  onStartChallenge?: () => void;
-}) {
+export default function FriendsChallenge({ onStartChallenge }: { onStartChallenge?: () => void }) {
   const { bg } = FRIENDS_COLOR;
   const bases: FriendBase[] = [9, 10, 100];
 
   const [activeTab, setActiveTab] = useState<FriendBase>(9);
   const [tabScores, setTabScores] = useState<Record<FriendBase, TabScore>>({
-    9:   { score: 0, total: 0 },
-    10:  { score: 0, total: 0 },
+    9: { score: 0, total: 0 },
+    10: { score: 0, total: 0 },
     100: { score: 0, total: 0 },
   });
 
   const handleScore = (base: FriendBase, correct: boolean) => {
-    setTabScores(prev => ({
+    setTabScores((prev) => ({
       ...prev,
       [base]: {
         score: prev[base].score + (correct ? 1 : 0),
@@ -360,24 +384,34 @@ export default function FriendsChallenge({
         <div style={{ fontFamily: RACING, fontSize: "2.2rem", color: bg, lineHeight: 1 }}>
           🤝 Friends Practice
         </div>
-        <p style={{ fontFamily: OUTFIT, fontWeight: 600, color: "#7A4F00", marginTop: 4, fontSize: "0.95rem" }}>
+        <p
+          style={{
+            fontFamily: OUTFIT,
+            fontWeight: 600,
+            color: "#7A4F00",
+            marginTop: 4,
+            fontSize: "0.95rem",
+          }}
+        >
           Number pairs that add up to 9, 10, or 100
         </p>
       </div>
 
       {/* Tabs */}
-      <div style={{
-        display: "flex",
-        gap: 8,
-        justifyContent: "center",
-        background: "#FFF8EC",
-        borderRadius: 99,
-        padding: 4,
-        maxWidth: 360,
-        margin: "0 auto",
-        width: "100%",
-      }}>
-        {bases.map(base => (
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          justifyContent: "center",
+          background: "#FFF8EC",
+          borderRadius: 99,
+          padding: 4,
+          maxWidth: 360,
+          margin: "0 auto",
+          width: "100%",
+        }}
+      >
+        {bases.map((base) => (
           <button
             key={base}
             onClick={() => setActiveTab(base)}
@@ -427,10 +461,10 @@ export default function FriendsChallenge({
             boxShadow: `0 8px 24px ${bg}55`,
             transition: "transform 0.2s, box-shadow 0.2s",
           }}
-          onMouseEnter={e => {
+          onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.03)";
           }}
-          onMouseLeave={e => {
+          onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
           }}
         >

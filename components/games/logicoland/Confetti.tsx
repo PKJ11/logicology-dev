@@ -1,8 +1,8 @@
 export default function Confetti() {
-  const confettiColors = ['#3B82F6', '#8B5CF6', '#10B981', '#FBBF24', '#F97316', '#EC4899'];
+  const confettiColors = ["#3B82F6", "#8B5CF6", "#10B981", "#FBBF24", "#F97316", "#EC4899"];
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-40">
+    <div className="pointer-events-none fixed inset-0 z-40">
       {Array.from({ length: 100 }).map((_, i) => {
         const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
         const size = Math.random() * 12 + 6;
@@ -16,11 +16,11 @@ export default function Confetti() {
             className="absolute animate-confetti"
             style={{
               left: `${left}vw`,
-              top: '-20px',
+              top: "-20px",
               width: `${size}px`,
               height: `${size}px`,
               backgroundColor: color,
-              borderRadius: '50%',
+              borderRadius: "50%",
               animationDelay: `${animationDelay}s`,
               animationDuration: `${duration}s`,
               transform: `rotate(${Math.random() * 360}deg)`,

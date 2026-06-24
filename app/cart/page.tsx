@@ -7,6 +7,7 @@ import Script from "next/script";
 import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "../utils/indianStates";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   trackRemoveFromCart,
   trackBeginCheckout,
@@ -172,6 +173,257 @@ function generateGSTReceipt(
 `;
 }
 
+const CORAL = "#E45C48";
+const BG_LIGHT = "#F8F9FA";
+const CARD_BG = "#FFFFFF";
+const BORDER_LIGHT = "#E9ECEF";
+const TEXT_PRIMARY = "#212529";
+const TEXT_SECONDARY = "#6C757D";
+const TEXT_MUTED = "#ADB5BD";
+
+function StepBar({ current }: { current: number }) {
+  const steps = ["Biller", "Shipping", "Review"];
+  return (
+    <div className="flex items-center justify-center gap-0 px-6 py-5">
+      {steps.map((label, i) => {
+        const done = i < current - 1;
+        const active = i === current - 1;
+        return (
+          <div key={label} className="flex items-center">
+            <div className="flex flex-col items-center gap-1.5">
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-full text-[12px] font-bold transition-all duration-300"
+                style={{
+                  backgroundColor: done || active ? CORAL : "#E9ECEF",
+                  color: done || active ? "#fff" : TEXT_SECONDARY,
+                  boxShadow: active ? `0 0 0 4px ${CORAL}20` : "none",
+                }}
+              >
+                {done ? (
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  i + 1
+                )}
+              </div>
+              <span
+                className="text-[10px] font-bold uppercase tracking-widest"
+                style={{ color: active || done ? CORAL : TEXT_MUTED }}
+              >
+                {label}
+              </span>
+            </div>
+            {i < steps.length - 1 && (
+              <div
+                className="mx-3 mb-5 h-[2px] w-12 rounded-full transition-all duration-500"
+                style={{ backgroundColor: done ? CORAL : "#E9ECEF" }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Field({
+  label,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  error,
+  hint,
+  required,
+  maxLength,
+  as,
+  children,
+}: {
+  label: string;
+  type?: string;
+  placeholder?: string;
+  value?: string;
+  onChange?: (v: string) => void;
+  error?: string;
+  hint?: string;
+  required?: boolean;
+  maxLength?: number;
+  as?: "select";
+  children?: React.ReactNode;
+}) {
+  const [focused, setFocused] = useState(false);
+  const baseStyle: React.CSSProperties = {
+    backgroundColor: BG_LIGHT,
+    border: `1.5px solid ${error ? CORAL : focused ? CORAL : BORDER_LIGHT}`,
+    boxShadow: focused ? `0 0 0 3px ${CORAL}10` : "none",
+    color: TEXT_PRIMARY,
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontSize: 14,
+    fontWeight: 500,
+    width: "100%",
+    outline: "none",
+    transition: "all 0.2s",
+  };
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label
+        className="text-[11px] font-bold uppercase tracking-widest"
+        style={{ color: TEXT_SECONDARY }}
+      >
+        {label}
+        {required && <span style={{ color: CORAL }}> *</span>}
+      </label>
+      {as === "select" ? (
+        <select
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={{ ...baseStyle, appearance: "none" }}
+          className="cursor-pointer"
+        >
+          {children}
+        </select>
+      ) : (
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          maxLength={maxLength}
+          onChange={(e) => onChange?.(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={baseStyle}
+          className="placeholder:text-[#ADB5BD]"
+        />
+      )}
+      {error ? (
+        <p className="text-[11px] font-medium" style={{ color: CORAL }}>
+          {error}
+        </p>
+      ) : hint ? (
+        <p className="text-[11px]" style={{ color: TEXT_MUTED }}>
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function PrimaryBtn({
+  children,
+  onClick,
+  disabled,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl py-3.5 text-[14px] font-extrabold text-white transition-all duration-200 active:scale-[.98] disabled:opacity-40"
+      style={{ backgroundColor: CORAL }}
+    >
+      <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-20deg] bg-white/20 transition-transform duration-500 group-hover/btn:translate-x-[200%]" />
+      <span className="relative">{children}</span>
+    </button>
+  );
+}
+
+function GhostBtn({
+  children,
+  onClick,
+  disabled,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="flex w-full items-center justify-center gap-1.5 rounded-xl py-3.5 text-[13px] font-bold transition-all duration-200 active:scale-[.98] disabled:opacity-40"
+      style={{ border: "1.5px solid #E9ECEF", color: TEXT_SECONDARY, backgroundColor: "white" }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Card({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div
+      className={`rounded-xl p-5 ${className ?? ""}`}
+      style={{
+        backgroundColor: CARD_BG,
+        border: "1px solid #E9ECEF",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="mb-2 text-[11px] font-bold uppercase tracking-[0.12em]"
+      style={{ color: TEXT_SECONDARY }}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Toggle({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div
+      className="flex rounded-xl p-1"
+      style={{ backgroundColor: BG_LIGHT, border: "1px solid #E9ECEF" }}
+    >
+      {options.map((opt) => (
+        <button
+          key={opt}
+          type="button"
+          onClick={() => onChange(opt)}
+          className="flex-1 rounded-lg py-2.5 text-[13px] font-bold transition-all duration-200"
+          style={
+            value === opt
+              ? {
+                  backgroundColor: CORAL,
+                  color: "#fff",
+                  boxShadow: "0 2px 6px rgba(228,92,72,0.2)",
+                }
+              : { color: TEXT_SECONDARY }
+          }
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 const CartPage = () => {
   const {
     cart,
@@ -253,6 +505,13 @@ const CartPage = () => {
     // Fetch item details for GST calculation
     fetchItemDetails();
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isCheckoutModalOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCheckoutModalOpen]);
 
   const fetchItemDetails = async () => {
     try {
@@ -938,754 +1197,877 @@ const CartPage = () => {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-      {/* Payment Processing Overlay */}
-      {isPaymentProcessing && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
-          {/* Blurred Backdrop */}
-          <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md" />
+      {/* ── Payment processing overlay ── */}
+      <AnimatePresence>
+        {isPaymentProcessing && (
+          <motion.div
+            className="fixed inset-0 z-[1000] flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className="absolute inset-0 backdrop-blur-md"
+              style={{ backgroundColor: "rgba(0,0,0,0.7)" }}
+            />
+            <motion.div
+              className="relative z-10 flex flex-col items-center rounded-2xl bg-white p-8 text-center shadow-2xl"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+            >
+              <div
+                className="mb-5 h-12 w-12 animate-spin rounded-full"
+                style={{ border: `3px solid ${CORAL}30`, borderTopColor: CORAL }}
+              />
+              <h3 className="mb-1.5 text-xl font-extrabold" style={{ color: TEXT_PRIMARY }}>
+                Processing Payment
+              </h3>
+              <p className="mb-5 text-sm" style={{ color: TEXT_SECONDARY }}>
+                Generating your GST invoice…
+              </p>
+              <div
+                className="rounded-lg px-4 py-2 text-xs font-bold"
+                style={{ backgroundColor: `${CORAL}10`, color: CORAL }}
+              >
+                Do not refresh or close this page
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Loading Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center rounded-2xl bg-white p-8 shadow-2xl">
-            {/* Spinner */}
-            <div className="mb-4 h-16 w-16 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+      {/* ── Checkout Modal ── */}
+      <AnimatePresence>
+        {isCheckoutModalOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 z-50 bg-black/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeCheckoutModal}
+            />
 
-            {/* Message */}
-            <h3 className="mb-2 text-xl font-bold text-gray-900">Processing Payment</h3>
-            <p className="mb-4 text-center text-gray-600">
-              Please wait while we process your payment and generate your invoice...
-            </p>
-
-            {/* Warning */}
-            <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+            {/* Drawer */}
+            <motion.div
+              className="fixed inset-y-0 right-0 z-[60] flex w-full max-w-lg flex-col overflow-hidden bg-white shadow-2xl"
+              style={{ boxShadow: "-8px 0 40px rgba(0,0,0,0.08)" }}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 35 }}
+            >
+              {/* Cart strip header */}
+              <div
+                className="relative mt-16 flex flex-shrink-0 items-center gap-4 px-6 py-5"
+                style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
+              >
+                <div className="flex -space-x-2">
+                  {cart.slice(0, 3).map((item, i) => (
+                    <div
+                      key={i}
+                      className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50 ring-2 ring-white"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-yellow-800">
-                    Do not refresh or close this page
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-[10px] font-bold uppercase tracking-[0.15em]"
+                    style={{ color: CORAL }}
+                  >
+                    Checkout
+                  </p>
+                  <h3
+                    className="truncate text-[15px] font-extrabold"
+                    style={{ color: TEXT_PRIMARY }}
+                  >
+                    {cart.length === 1 ? cart[0].name : `${cart.length} items`}
+                  </h3>
+                  <p className="text-[12px]" style={{ color: TEXT_MUTED }}>
+                    {cart.length} {cart.length === 1 ? "item" : "items"} in cart
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Checkout Modal - Updated for sidebar style on large screens */}
-      {isCheckoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Backdrop with blur effect for entire screen */}
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-            onClick={closeCheckoutModal}
-          />
-
-          {/* Modal Content - Sidebar style from right side for large screens */}
-          <div
-            className={`fixed inset-y-0 right-0 z-[100] w-full max-w-md transform bg-white shadow-xl transition-transform duration-300 ease-out ${
-              isCheckoutModalOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-          >
-            <div className="flex h-full flex-col bg-white">
-              {/* Header */}
-              <div className="mt-20 flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                <h2 className="text-xl font-bold text-gray-900">
-                  {step === 1
-                    ? "Biller Information"
-                    : step === 2
-                      ? "Shipping Address"
-                      : "Review Order"}
-                </h2>
+                <div className="flex-shrink-0 text-right">
+                  <div className="text-[20px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
+                    ₹{finalAmount.toLocaleString("en-IN")}
+                  </div>
+                  {appliedPromo && (
+                    <div className="text-xs font-semibold" style={{ color: CORAL }}>
+                      −₹{discountAmount} saved
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={closeCheckoutModal}
                   disabled={isProcessing}
-                  className="text-2xl text-gray-400 hover:text-gray-600 disabled:opacity-50"
+                  className="absolute right-4 top-5 flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-100 disabled:opacity-40"
+                  style={{ color: TEXT_SECONDARY }}
                 >
-                  ×
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
 
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto">
-                <div className="p-6">
-                  {/* Step 1: Biller Information */}
-                  {step === 1 && (
-                    <div className="space-y-6">
-                      <div className="space-y-4">
-                        <h3 className="font-semibold text-gray-900">Biller Details</h3>
-                        <p className="text-sm text-gray-600">
-                          This information will be used for billing and receipts
-                        </p>
-                        <input
-                          required
-                          type="text"
-                          placeholder="Full Name"
-                          value={userInfo.name}
-                          onChange={(e) => setUserInfo((u) => ({ ...u, name: e.target.value }))}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                        <div>
-                          <input
-                            required
-                            type="email"
-                            placeholder="Email Address"
-                            value={userInfo.email}
-                            onChange={(e) => setUserInfo((u) => ({ ...u, email: e.target.value }))}
-                            onBlur={(e) => {
-                              const email = e.target.value;
-                              if (email && !/\S+@\S+\.\S+/.test(email)) {
-                                setUserInfo(
-                                  (u) =>
-                                    ({
-                                      ...u,
-                                      emailError: "Please enter a valid email address",
-                                    }) as any
+              {/* Step bar */}
+              <div
+                className="flex-shrink-0"
+                style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
+              >
+                <StepBar current={step} />
+              </div>
+
+              {/* Scrollable content */}
+              <div
+                className="flex-1 overflow-y-auto px-6 py-6"
+                style={{ backgroundColor: BG_LIGHT }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step}
+                    initial={{ opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="flex flex-col gap-4"
+                  >
+                    {/* ── STEP 1: BILLER ── */}
+                    {step === 1 && (
+                      <>
+                        <Card>
+                          <div className="mb-4 flex flex-col gap-0.5">
+                            <SectionLabel>Biller Details</SectionLabel>
+                            <p className="text-xs" style={{ color: TEXT_MUTED }}>
+                              Used for billing & GST receipts
+                            </p>
+                          </div>
+                          <div className="flex flex-col gap-3.5">
+                            <Field
+                              label="Full Name"
+                              placeholder="Riya Sharma"
+                              value={userInfo.name}
+                              onChange={(v) => setUserInfo((u) => ({ ...u, name: v }))}
+                              required
+                            />
+                            <Field
+                              label="Email Address"
+                              type="email"
+                              placeholder="riya@example.com"
+                              value={userInfo.email}
+                              onChange={(v) => setUserInfo((u) => ({ ...u, email: v }))}
+                              required
+                              hint="GST invoice will be sent here"
+                            />
+                            <Field
+                              label="Phone Number"
+                              type="tel"
+                              placeholder="98765 43210"
+                              value={userInfo.phone}
+                              maxLength={10}
+                              onChange={(v) => {
+                                const c = sanitizePhone(v);
+                                setUserInfo((u) => ({ ...u, phone: c }));
+                                setPhoneError(
+                                  c.length > 0 && c.length < 10 ? "Must be 10 digits" : ""
                                 );
-                              } else {
-                                setUserInfo((u) => ({ ...u, emailError: "" }) as any);
-                              }
-                            }}
-                            className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                              (userInfo as any).emailError ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {(userInfo as any).emailError ? (
-                            <p className="mt-2 text-sm text-red-600">
-                              {(userInfo as any).emailError}
-                            </p>
-                          ) : (
-                            <p className="mt-2 text-sm text-gray-600">
-                              You will receive the GST invoice on this email
-                            </p>
-                          )}
-                        </div>
-                        {/* Phone — digits only, max 10 */}
-                        <div>
-                          <input
-                            required
-                            type="tel"
-                            placeholder="Phone Number (10 digits)"
-                            value={userInfo.phone}
-                            maxLength={10}
-                            onChange={(e) => {
-                              const val = sanitizePhone(e.target.value);
-                              setUserInfo((u) => ({ ...u, phone: val }));
-                              setPhoneError(
-                                val.length > 0 && val.length < 10
-                                  ? "Phone number must be 10 digits"
-                                  : ""
-                              );
-                            }}
-                            className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                              phoneError ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {phoneError ? (
-                            <p className="mt-2 text-sm text-red-600">{phoneError}</p>
-                          ) : (
-                            <p className="mt-2 text-sm text-gray-600">
-                              WhatsApp notifications will be sent to this number
-                            </p>
-                          )}
-                        </div>
-                      </div>
+                              }}
+                              error={phoneError}
+                              hint={!phoneError ? "WhatsApp order updates sent here" : undefined}
+                              required
+                            />
+                          </div>
+                        </Card>
+                        <PrimaryBtn
+                          onClick={() => setStep(2)}
+                          disabled={
+                            !userInfo.name ||
+                            !userInfo.email ||
+                            !/\S+@\S+\.\S+/.test(userInfo.email) ||
+                            !isBillerPhoneValid
+                          }
+                        >
+                          Continue to Shipping →
+                        </PrimaryBtn>
+                      </>
+                    )}
 
-                      <button
-                        onClick={() => setStep(2)}
-                        disabled={
-                          !userInfo.name ||
-                          !userInfo.email ||
-                          !/\S+@\S+\.\S+/.test(userInfo.email) ||
-                          !isBillerPhoneValid
-                        }
-                        className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                      >
-                        Continue to Shipping
-                      </button>
-                    </div>
-                  )}
-                  {step === 2 && (
-                    <div className="space-y-5">
-                      {/* Tab switcher */}
-                      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-gray-200">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            // Reload saved address if one was selected, otherwise just flip the flag
-                            if (selectedAddress && selectedAddress !== "__new__") {
-                              loadSelectedAddress(selectedAddress);
-                            } else {
-                              setShipping((s) => ({
-                                ...s,
-                                isDifferentFromBiller: false,
+                    {/* ── STEP 2: SHIPPING ── */}
+                    {step === 2 && (
+                      <>
+                        <Toggle
+                          options={["For me", "For someone else"]}
+                          value={shipping.isDifferentFromBiller ? "For someone else" : "For me"}
+                          onChange={(v) => {
+                            const diff = v === "For someone else";
+                            if (!diff)
+                              setShipping({
                                 name: userInfo.name,
+                                address: "",
+                                building: "",
+                                street: "",
+                                landmark: "",
+                                pin: "",
+                                city: "",
+                                state: "",
                                 phone: userInfo.phone,
-                                email: userInfo.email,
-                              }));
+                                email: "",
+                                isGift: false,
+                                isDifferentFromBiller: false,
+                              });
+                            else {
+                              setShipping({ ...BLANK_SHIPPING, isDifferentFromBiller: true });
+                              setSelectedAddress("");
                             }
-                            setShipping((s) => ({ ...s, isDifferentFromBiller: false }));
                             setShippingPhoneError("");
                           }}
-                          className={`py-3 text-sm font-semibold transition-colors ${
-                            !shipping.isDifferentFromBiller
-                              ? "bg-orange-500 text-white"
-                              : "bg-white text-gray-500 hover:bg-gray-50"
-                          }`}
-                        >
-                          For me
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            // Wipe ALL fields so saved address never bleeds into "For someone else"
-                            setShipping({ ...BLANK_SHIPPING, isDifferentFromBiller: true });
-                            setSelectedAddress("");
-                            setShippingPhoneError("");
-                          }}
-                          className={`border-l border-gray-200 py-3 text-sm font-semibold transition-colors ${
-                            shipping.isDifferentFromBiller
-                              ? "bg-orange-500 text-white"
-                              : "bg-white text-gray-500 hover:bg-gray-50"
-                          }`}
-                        >
-                          For someone else
-                        </button>
-                      </div>
+                        />
 
-                      {/* ── FOR ME ── */}
-                      {!shipping.isDifferentFromBiller && (
-                        <div className="space-y-4">
-                          {savedAddresses.filter((a) => !a.isDifferentFromBiller).length > 0 &&
-                            selectedAddress !== "__new__" && (
-                              <div className="space-y-2">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                  Saved address
-                                </p>
-                                {savedAddresses
-                                  .filter((a) => !a.isDifferentFromBiller)
-                                  .map((address) => (
-                                    <div
-                                      key={address.id}
-                                      onClick={() => {
-                                        setSelectedAddress(address.id);
-                                        loadSelectedAddress(address.id);
-                                        setShipping((s) => ({
-                                          ...s,
-                                          isDifferentFromBiller: false,
-                                          isGift: address.isGift || false,
-                                        }));
-                                      }}
-                                      className={`cursor-pointer rounded-xl border p-4 transition-all ${
-                                        selectedAddress === address.id
-                                          ? "border-orange-500 bg-orange-50"
-                                          : "border-gray-200 hover:border-gray-300"
-                                      }`}
-                                    >
-                                      <div className="flex items-start justify-between">
-                                        <div>
-                                          <p className="font-medium text-gray-900">
-                                            {address.name}
+                        {/* FOR ME */}
+                        {!shipping.isDifferentFromBiller && (
+                          <Card>
+                            <div className="flex flex-col gap-3.5">
+                              {savedAddresses.filter((a) => !a.isDifferentFromBiller).length > 0 &&
+                                selectedAddress !== "__new__" && (
+                                  <div className="flex flex-col gap-2">
+                                    <SectionLabel>Saved Address</SectionLabel>
+                                    {savedAddresses
+                                      .filter((a) => !a.isDifferentFromBiller)
+                                      .map((addr) => (
+                                        <button
+                                          key={addr.id}
+                                          type="button"
+                                          onClick={() => {
+                                            setSelectedAddress(addr.id);
+                                            loadSelectedAddress(addr.id);
+                                            setShipping((s) => ({
+                                              ...s,
+                                              isDifferentFromBiller: false,
+                                              isGift: addr.isGift || false,
+                                            }));
+                                          }}
+                                          className="w-full rounded-lg p-3.5 text-left transition-all duration-200"
+                                          style={{
+                                            border: `1.5px solid ${selectedAddress === addr.id ? CORAL : "#E9ECEF"}`,
+                                            backgroundColor:
+                                              selectedAddress === addr.id ? `${CORAL}08` : "white",
+                                          }}
+                                        >
+                                          <p
+                                            className="text-sm font-bold"
+                                            style={{ color: TEXT_PRIMARY }}
+                                          >
+                                            {addr.name}
                                           </p>
-                                          <p className="mt-0.5 text-sm text-gray-500">
-                                            {address.address}, {address.building}, {address.street}
+                                          <p
+                                            className="mt-0.5 text-xs"
+                                            style={{ color: TEXT_SECONDARY }}
+                                          >
+                                            {addr.address}
+                                            {addr.building ? `, ${addr.building}` : ""}
                                           </p>
-                                          <p className="text-sm text-gray-500">
-                                            {address.city}, {address.state} – {address.pin}
+                                          <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                                            {addr.city}, {addr.state} – {addr.pin}
                                           </p>
-                                          <p className="mt-0.5 text-sm text-gray-500">
-                                            {address.phone}
+                                          <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                                            {addr.phone}
                                           </p>
-                                          {address.isGift && (
-                                            <span className="mt-1 inline-block rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800">
+                                          {addr.isGift && (
+                                            <span
+                                              className="mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold"
+                                              style={{
+                                                backgroundColor: `${CORAL}10`,
+                                                color: CORAL,
+                                              }}
+                                            >
                                               🎁 Gift
                                             </span>
                                           )}
-                                        </div>
-                                        {selectedAddress === address.id && (
-                                          <span className="ml-2 shrink-0 rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
-                                            Selected
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
+                                        </button>
+                                      ))}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedAddress("__new__");
+                                        setShipping({
+                                          name: userInfo.name,
+                                          address: "",
+                                          building: "",
+                                          street: "",
+                                          landmark: "",
+                                          pin: "",
+                                          city: "",
+                                          state: "",
+                                          phone: userInfo.phone,
+                                          email: "",
+                                          isGift: false,
+                                          isDifferentFromBiller: false,
+                                        });
+                                      }}
+                                      className="w-full rounded-lg py-3 text-[13px] font-bold transition-all"
+                                      style={{ border: `1.5px dashed ${CORAL}`, color: CORAL }}
+                                    >
+                                      + Add new address
+                                    </button>
+                                  </div>
+                                )}
 
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedAddress("__new__");
-                                    setShipping({
-                                      name: userInfo.name,
-                                      address: "",
-                                      building: "",
-                                      street: "",
-                                      landmark: "",
-                                      pin: "",
-                                      city: "",
-                                      state: "",
-                                      phone: userInfo.phone,
-                                      email: "",
-                                      isGift: false,
-                                      isDifferentFromBiller: false,
-                                    });
-                                  }}
-                                  className="w-full rounded-xl border border-dashed border-orange-400 py-3 text-sm font-semibold text-orange-500 transition-colors hover:bg-orange-50"
-                                >
-                                  + Add new address
-                                </button>
-                              </div>
-                            )}
-
-                          {/* New address form */}
-                          {(savedAddresses.filter((a) => !a.isDifferentFromBiller).length === 0 ||
-                            selectedAddress === "__new__") && (
-                            <div className="space-y-3">
-                              {selectedAddress === "__new__" && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedAddress(
-                                      savedAddresses.find((a) => !a.isDifferentFromBiller)?.id || ""
-                                    );
-                                  }}
-                                  className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-800"
-                                >
-                                  ← Back to saved addresses
-                                </button>
+                              {(savedAddresses.filter((a) => !a.isDifferentFromBiller).length ===
+                                0 ||
+                                selectedAddress === "__new__") && (
+                                <div className="flex flex-col gap-3">
+                                  {selectedAddress === "__new__" &&
+                                    savedAddresses.filter((a) => !a.isDifferentFromBiller).length >
+                                      0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          setSelectedAddress(
+                                            savedAddresses.find((a) => !a.isDifferentFromBiller)
+                                              ?.id || ""
+                                          )
+                                        }
+                                        className="flex items-center gap-1.5 text-[12px] font-bold"
+                                        style={{ color: TEXT_SECONDARY }}
+                                      >
+                                        <svg
+                                          className="h-3.5 w-3.5"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeWidth={2.5}
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M15 19l-7-7 7-7"
+                                          />
+                                        </svg>
+                                        Back to saved
+                                      </button>
+                                    )}
+                                  <SectionLabel>Delivery Address</SectionLabel>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    <Field
+                                      label="Building"
+                                      placeholder="Apt / Block"
+                                      value={shipping.building}
+                                      onChange={(v) => setShipping((s) => ({ ...s, building: v }))}
+                                    />
+                                    <Field
+                                      label="Street"
+                                      placeholder="Road / Colony"
+                                      value={shipping.street}
+                                      onChange={(v) => setShipping((s) => ({ ...s, street: v }))}
+                                    />
+                                  </div>
+                                  <Field
+                                    label="Address"
+                                    placeholder="Full address"
+                                    value={shipping.address}
+                                    onChange={(v) => setShipping((s) => ({ ...s, address: v }))}
+                                    required
+                                  />
+                                  <Field
+                                    label="Landmark"
+                                    placeholder="Near… (optional)"
+                                    value={shipping.landmark}
+                                    onChange={(v) => setShipping((s) => ({ ...s, landmark: v }))}
+                                  />
+                                  <div className="grid grid-cols-2 gap-3">
+                                    <Field
+                                      label="PIN Code"
+                                      type="tel"
+                                      placeholder="400001"
+                                      value={shipping.pin}
+                                      onChange={(v) => setShipping((s) => ({ ...s, pin: v }))}
+                                      required
+                                    />
+                                    <Field
+                                      label="City"
+                                      placeholder="Mumbai"
+                                      value={shipping.city}
+                                      onChange={(v) => setShipping((s) => ({ ...s, city: v }))}
+                                      required
+                                    />
+                                  </div>
+                                  <Field
+                                    label="State / UT"
+                                    as="select"
+                                    value={shipping.state}
+                                    onChange={(v) => setShipping((s) => ({ ...s, state: v }))}
+                                    required
+                                  >
+                                    <option value="">Select State / Union Territory</option>
+                                    {INDIAN_STATES_AND_UTS.map((st) => (
+                                      <option key={st} value={st}>
+                                        {st}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                </div>
                               )}
-                              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                New shipping address
-                              </p>
-                              <div className="grid grid-cols-2 gap-3">
-                                <input
-                                  required
-                                  type="text"
-                                  placeholder="Building"
-                                  value={shipping.building}
-                                  onChange={(e) =>
-                                    setShipping((s) => ({ ...s, building: e.target.value }))
-                                  }
-                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                />
-                                <input
-                                  required
-                                  type="text"
-                                  placeholder="Street"
-                                  value={shipping.street}
-                                  onChange={(e) =>
-                                    setShipping((s) => ({ ...s, street: e.target.value }))
-                                  }
-                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                />
-                              </div>
-                              <input
-                                required
-                                type="text"
-                                placeholder="Address"
-                                value={shipping.address}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, address: e.target.value }))
-                                }
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                              <input
-                                type="text"
-                                placeholder="Landmark (Optional)"
-                                value={shipping.landmark}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, landmark: e.target.value }))
-                                }
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                              <div className="grid grid-cols-2 gap-3">
-                                <input
-                                  required
-                                  type="text"
-                                  placeholder="PIN Code"
-                                  value={shipping.pin}
-                                  onChange={(e) =>
-                                    setShipping((s) => ({ ...s, pin: e.target.value }))
-                                  }
-                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                />
-                                <input
-                                  required
-                                  type="text"
-                                  placeholder="City"
-                                  value={shipping.city}
-                                  onChange={(e) =>
-                                    setShipping((s) => ({ ...s, city: e.target.value }))
-                                  }
-                                  className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                />
-                              </div>
-                              <select
-                                required
-                                value={shipping.state}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, state: e.target.value }))
-                                }
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+
+                              {/* Gift toggle */}
+                              <button
+                                type="button"
+                                onClick={() => setShipping((s) => ({ ...s, isGift: !s.isGift }))}
+                                className="flex items-center gap-3 rounded-lg px-4 py-3 text-[13px] font-bold transition-all"
+                                style={{
+                                  border: `1.5px solid ${shipping.isGift ? CORAL : "#E9ECEF"}`,
+                                  backgroundColor: shipping.isGift ? `${CORAL}08` : "white",
+                                  color: shipping.isGift ? TEXT_PRIMARY : TEXT_SECONDARY,
+                                }}
                               >
-                                <option value="">Select State / Union Territory</option>
-                                {INDIAN_STATES_AND_UTS.map((state) => (
-                                  <option key={state} value={state}>
-                                    {state}
-                                  </option>
-                                ))}
-                              </select>
+                                <span>🎁</span>
+                                <span>This is a gift</span>
+                                {shipping.isGift && (
+                                  <svg
+                                    className="ml-auto h-4 w-4"
+                                    fill="none"
+                                    stroke={CORAL}
+                                    strokeWidth={2.5}
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                )}
+                              </button>
                             </div>
-                          )}
+                          </Card>
+                        )}
 
-                          {/* Gift checkbox */}
-                          <div className="border-t pt-4">
-                            <label className="flex cursor-pointer items-center gap-3">
-                              <input
-                                type="checkbox"
-                                id="isGift"
-                                checked={shipping.isGift}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, isGift: e.target.checked }))
-                                }
-                                className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                              />
-                              <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
-                            </label>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── FOR SOMEONE ELSE ── */}
-                      {shipping.isDifferentFromBiller && (
-                        <div className="space-y-4">
-                          <div className="space-y-3">
-                            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                              Recipient details
-                            </p>
-                            <input
-                              required
-                              type="text"
-                              placeholder="Recipient's full name"
-                              value={shipping.name}
-                              onChange={(e) => setShipping((s) => ({ ...s, name: e.target.value }))}
-                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            />
-                            <input
-                              type="email"
-                              placeholder="Recipient's email"
-                              value={shipping.email || ""}
-                              onChange={(e) =>
-                                setShipping((s) => ({ ...s, email: e.target.value }))
-                              }
-                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            />
-                            {/* Recipient phone — digits only, max 10 */}
-                            <div>
-                              <input
+                        {/* FOR SOMEONE ELSE */}
+                        {shipping.isDifferentFromBiller && (
+                          <Card>
+                            <div className="flex flex-col gap-3.5">
+                              <SectionLabel>Recipient Details</SectionLabel>
+                              <Field
+                                label="Recipient's Name"
+                                placeholder="Full name"
+                                value={shipping.name}
+                                onChange={(v) => setShipping((s) => ({ ...s, name: v }))}
                                 required
+                              />
+                              <Field
+                                label="Recipient's Email"
+                                type="email"
+                                placeholder="Optional"
+                                value={shipping.email || ""}
+                                onChange={(v) => setShipping((s) => ({ ...s, email: v }))}
+                              />
+                              <Field
+                                label="Recipient's Phone"
                                 type="tel"
-                                placeholder="Recipient's phone number (10 digits) *"
+                                placeholder="10-digit number"
                                 value={shipping.phone}
                                 maxLength={10}
-                                onChange={(e) => {
-                                  const val = sanitizePhone(e.target.value);
-                                  setShipping((s) => ({ ...s, phone: val }));
+                                onChange={(v) => {
+                                  const c = sanitizePhone(v);
+                                  setShipping((s) => ({ ...s, phone: c }));
                                   setShippingPhoneError(
-                                    val.length > 0 && val.length < 10
-                                      ? "Phone number must be 10 digits"
-                                      : ""
+                                    c.length > 0 && c.length < 10 ? "Must be 10 digits" : ""
                                   );
                                 }}
-                                className={`w-full rounded-xl border px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                                  shippingPhoneError ? "border-red-500" : "border-gray-300"
-                                }`}
+                                error={shippingPhoneError}
+                                hint={
+                                  !shippingPhoneError ? "Required for delivery updates" : undefined
+                                }
+                                required
                               />
-                              {shippingPhoneError ? (
-                                <p className="mt-1 text-xs text-red-600">{shippingPhoneError}</p>
-                              ) : (
-                                <p className="mt-1 text-xs text-gray-500">
-                                  * Required for delivery updates
+                              <div className="my-0.5 border-t" style={{ borderColor: "#E9ECEF" }} />
+                              <SectionLabel>Delivery Address</SectionLabel>
+                              <div className="grid grid-cols-2 gap-3">
+                                <Field
+                                  label="Building"
+                                  placeholder="Apt / Block"
+                                  value={shipping.building}
+                                  onChange={(v) => setShipping((s) => ({ ...s, building: v }))}
+                                />
+                                <Field
+                                  label="Street"
+                                  placeholder="Road / Colony"
+                                  value={shipping.street}
+                                  onChange={(v) => setShipping((s) => ({ ...s, street: v }))}
+                                />
+                              </div>
+                              <Field
+                                label="Address"
+                                placeholder="Full address"
+                                value={shipping.address}
+                                onChange={(v) => setShipping((s) => ({ ...s, address: v }))}
+                                required
+                              />
+                              <Field
+                                label="Landmark"
+                                placeholder="Near… (optional)"
+                                value={shipping.landmark}
+                                onChange={(v) => setShipping((s) => ({ ...s, landmark: v }))}
+                              />
+                              <div className="grid grid-cols-2 gap-3">
+                                <Field
+                                  label="PIN Code"
+                                  type="tel"
+                                  placeholder="400001"
+                                  value={shipping.pin}
+                                  onChange={(v) => setShipping((s) => ({ ...s, pin: v }))}
+                                  required
+                                />
+                                <Field
+                                  label="City"
+                                  placeholder="Mumbai"
+                                  value={shipping.city}
+                                  onChange={(v) => setShipping((s) => ({ ...s, city: v }))}
+                                  required
+                                />
+                              </div>
+                              <Field
+                                label="State / UT"
+                                as="select"
+                                value={shipping.state}
+                                onChange={(v) => setShipping((s) => ({ ...s, state: v }))}
+                                required
+                              >
+                                <option value="">Select State / Union Territory</option>
+                                {INDIAN_STATES_AND_UTS.map((st) => (
+                                  <option key={st} value={st}>
+                                    {st}
+                                  </option>
+                                ))}
+                              </Field>
+                              <button
+                                type="button"
+                                onClick={() => setShipping((s) => ({ ...s, isGift: !s.isGift }))}
+                                className="flex items-center gap-3 rounded-lg px-4 py-3 text-[13px] font-bold transition-all"
+                                style={{
+                                  border: `1.5px solid ${shipping.isGift ? CORAL : "#E9ECEF"}`,
+                                  backgroundColor: shipping.isGift ? `${CORAL}08` : "white",
+                                  color: shipping.isGift ? TEXT_PRIMARY : TEXT_SECONDARY,
+                                }}
+                              >
+                                <span>🎁</span>
+                                <span>This is a gift</span>
+                                {shipping.isGift && (
+                                  <svg
+                                    className="ml-auto h-4 w-4"
+                                    fill="none"
+                                    stroke={CORAL}
+                                    strokeWidth={2.5}
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                )}
+                              </button>
+                            </div>
+                          </Card>
+                        )}
+
+                        {/* Promo code */}
+                        <Card>
+                          <SectionLabel>Promo Code</SectionLabel>
+                          {!appliedPromo ? (
+                            <div className="mt-3 flex flex-col gap-2">
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  placeholder="Enter code…"
+                                  value={promoCode}
+                                  onChange={(e) => {
+                                    setPromoCode(e.target.value);
+                                    setPromoError("");
+                                  }}
+                                  onKeyDown={(e) => e.key === "Enter" && validatePromoCode()}
+                                  className="flex-1 rounded-lg px-4 py-3 text-sm font-medium outline-none transition-all"
+                                  style={{
+                                    backgroundColor: BG_LIGHT,
+                                    border: "1.5px solid #E9ECEF",
+                                  }}
+                                />
+                                <button
+                                  onClick={validatePromoCode}
+                                  disabled={isValidatingPromo || !promoCode.trim()}
+                                  className="rounded-lg px-5 py-3 text-[13px] font-bold transition-all disabled:opacity-40"
+                                  style={{ backgroundColor: CORAL, color: "white" }}
+                                >
+                                  {isValidatingPromo ? "…" : "Apply"}
+                                </button>
+                              </div>
+                              {promoError && (
+                                <p className="text-[11px] font-medium" style={{ color: CORAL }}>
+                                  {promoError}
                                 </p>
                               )}
                             </div>
-                          </div>
-
-                          <div className="space-y-3">
-                            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                              Delivery address
-                            </p>
-                            <div className="grid grid-cols-2 gap-3">
-                              <input
-                                required
-                                type="text"
-                                placeholder="Building"
-                                value={shipping.building}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, building: e.target.value }))
-                                }
-                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                              <input
-                                required
-                                type="text"
-                                placeholder="Street"
-                                value={shipping.street}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, street: e.target.value }))
-                                }
-                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                            </div>
-                            <input
-                              required
-                              type="text"
-                              placeholder="Address"
-                              value={shipping.address}
-                              onChange={(e) =>
-                                setShipping((s) => ({ ...s, address: e.target.value }))
-                              }
-                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Landmark (Optional)"
-                              value={shipping.landmark}
-                              onChange={(e) =>
-                                setShipping((s) => ({ ...s, landmark: e.target.value }))
-                              }
-                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            />
-                            <div className="grid grid-cols-2 gap-3">
-                              <input
-                                required
-                                type="text"
-                                placeholder="PIN Code"
-                                value={shipping.pin}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, pin: e.target.value }))
-                                }
-                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                              <input
-                                required
-                                type="text"
-                                placeholder="City"
-                                value={shipping.city}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, city: e.target.value }))
-                                }
-                                className="rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
-                              />
-                            </div>
-                            <select
-                              required
-                              value={shipping.state}
-                              onChange={(e) =>
-                                setShipping((s) => ({ ...s, state: e.target.value }))
-                              }
-                              className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          ) : (
+                            <div
+                              className="mt-3 flex items-center justify-between rounded-lg px-4 py-3"
+                              style={{
+                                backgroundColor: `${CORAL}08`,
+                                border: `1.5px solid ${CORAL}20`,
+                              }}
                             >
-                              <option value="">Select State / Union Territory</option>
-                              {INDIAN_STATES_AND_UTS.map((state) => (
-                                <option key={state} value={state}>
-                                  {state}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          {/* Gift checkbox */}
-                          <div className="border-t pt-4">
-                            <label className="flex cursor-pointer items-center gap-3">
-                              <input
-                                type="checkbox"
-                                id="isGiftOthers"
-                                checked={shipping.isGift}
-                                onChange={(e) =>
-                                  setShipping((s) => ({ ...s, isGift: e.target.checked }))
-                                }
-                                className="h-5 w-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                              />
-                              <span className="font-medium text-gray-900">Is this a gift? 🎁</span>
-                            </label>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Navigation buttons */}
-                      <div className="flex space-x-3 pt-2">
-                        <button
-                          onClick={() => setStep(1)}
-                          disabled={isProcessing}
-                          className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                        >
-                          Back
-                        </button>
-                        <button
-                          onClick={() => setStep(3)}
-                          disabled={
-                            // For someone else: name, valid phone, and full address required
-                            (shipping.isDifferentFromBiller &&
-                              (!shipping.name || !shipping.phone || !isShippingPhoneValid)) ||
-                            // Address fields always required
-                            !shipping.address ||
-                            !shipping.pin ||
-                            !shipping.city ||
-                            !shipping.state ||
-                            // For me with no saved address: building + street required too
-                            (!shipping.isDifferentFromBiller &&
-                              savedAddresses.filter((a) => !a.isDifferentFromBiller).length === 0 &&
-                              (!shipping.building || !shipping.street))
-                          }
-                          className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                        >
-                          Continue to Review
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 3: Review Order */}
-                  {step === 3 && (
-                    <div className="space-y-6">
-                      {/* Order Summary */}
-                      <div className="rounded-xl bg-gray-50 p-4">
-                        <h3 className="mb-3 font-semibold text-gray-900">Order Summary</h3>
-                        <div className="space-y-3">
-                          {cart.map((item) => {
-                            const details = itemDetails[item.razorpayItemId] || {};
-                            const gstRate = details.tax_rate || 0;
-                            return (
-                              <div key={item.name} className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="h-12 w-12 rounded-lg object-cover"
-                                  />
-                                  <div>
-                                    <p className="font-medium text-gray-900">{item.name}</p>
-                                    <p className="text-sm text-gray-600">
-                                      {item.price} × {item.quantity}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                      GST: {gstRate}% | HSN: {details.hsn_code || "-"}
-                                    </p>
-                                  </div>
-                                </div>
-                                <p className="font-semibold text-gray-900">
-                                  ₹
-                                  {(
-                                    parseFloat(item.price.replace(/[^\d.]/g, "")) * item.quantity
-                                  ).toFixed(2)}
+                              <div>
+                                <p className="text-[13px] font-bold" style={{ color: CORAL }}>
+                                  {appliedPromo.promoCode}
+                                </p>
+                                <p className="text-[12px]" style={{ color: TEXT_SECONDARY }}>
+                                  You saved ₹{appliedPromo.discountAmount}!
                                 </p>
                               </div>
-                            );
-                          })}
-                        </div>
+                              <button
+                                onClick={removePromoCode}
+                                className="text-[12px] font-bold"
+                                style={{ color: CORAL }}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          )}
+                        </Card>
 
-                        {/* GST Breakdown - FIXED to show actual rates */}
-                        <div className="mt-4 border-t pt-4">
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span>Taxable Value:</span>
+                        <div className="flex gap-3">
+                          <GhostBtn onClick={() => setStep(1)}>
+                            <svg
+                              className="h-3.5 w-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2.5}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                            Back
+                          </GhostBtn>
+                          <PrimaryBtn
+                            onClick={() => setStep(3)}
+                            disabled={
+                              (shipping.isDifferentFromBiller &&
+                                (!shipping.name || !shipping.phone || !isShippingPhoneValid)) ||
+                              !shipping.address ||
+                              !shipping.pin ||
+                              !shipping.city ||
+                              !shipping.state ||
+                              (!shipping.isDifferentFromBiller &&
+                                savedAddresses.filter((a) => !a.isDifferentFromBiller).length ===
+                                  0 &&
+                                (!shipping.building || !shipping.street))
+                            }
+                          >
+                            Review Order →
+                          </PrimaryBtn>
+                        </div>
+                      </>
+                    )}
+
+                    {/* ── STEP 3: REVIEW ── */}
+                    {step === 3 && (
+                      <>
+                        <Card>
+                          <SectionLabel>Order Summary</SectionLabel>
+                          <div className="mt-3 flex flex-col gap-3">
+                            {cart.map((item) => {
+                              const details = itemDetails[item.razorpayItemId] || {};
+                              const gstRate = details.tax_rate || 0;
+                              const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, ""));
+                              return (
+                                <div key={item.name} className="flex items-center gap-3">
+                                  <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50">
+                                    <img
+                                      src={item.image}
+                                      alt={item.name}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <p
+                                      className="truncate text-sm font-bold"
+                                      style={{ color: TEXT_PRIMARY }}
+                                    >
+                                      {item.name}
+                                    </p>
+                                    <p className="text-xs" style={{ color: TEXT_MUTED }}>
+                                      Qty: {item.quantity} · ₹{itemPrice.toLocaleString("en-IN")}
+                                    </p>
+                                    {gstRate > 0 && (
+                                      <p className="text-[11px]" style={{ color: TEXT_MUTED }}>
+                                        GST {gstRate}% · HSN {details.hsn_code || "–"}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <span
+                                    className="flex-shrink-0 text-[15px] font-extrabold"
+                                    style={{ color: TEXT_PRIMARY }}
+                                  >
+                                    ₹{(itemPrice * (item.quantity || 1)).toLocaleString("en-IN")}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div
+                            className="mt-4 flex flex-col gap-2 border-t pt-4"
+                            style={{ borderColor: "#E9ECEF" }}
+                          >
+                            <div
+                              className="flex justify-between text-[13px]"
+                              style={{ color: TEXT_SECONDARY }}
+                            >
+                              <span>Taxable Value</span>
                               <span>₹{taxableValue.toFixed(2)}</span>
                             </div>
-                            <div className="flex justify-between">
-                              <span>Total GST:</span>
+                            <div
+                              className="flex justify-between text-[13px]"
+                              style={{ color: TEXT_SECONDARY }}
+                            >
+                              <span>GST Amount</span>
                               <span>₹{totalGST.toFixed(2)}</span>
                             </div>
                             {appliedPromo && (
-                              <>
-                                <div className="flex justify-between text-green-600">
-                                  <span>Discount ({appliedPromo.promoCode}):</span>
-                                  <span>-₹{discountAmount.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between border-t pt-2 font-semibold">
-                                  <span>Final Amount:</span>
-                                  <span>₹{finalAmount.toFixed(2)}</span>
-                                </div>
-                              </>
+                              <div
+                                className="flex justify-between text-[13px] font-semibold"
+                                style={{ color: CORAL }}
+                              >
+                                <span>Promo ({appliedPromo.promoCode})</span>
+                                <span>−₹{discountAmount.toFixed(2)}</span>
+                              </div>
                             )}
-                            <div className="flex justify-between border-t pt-2 text-lg font-bold">
-                              <span>Total Amount:</span>
-                              <span>₹{finalAmount.toFixed(2)}</span>
+                            <div
+                              className="flex justify-between border-t pt-2.5 text-[16px] font-extrabold"
+                              style={{ borderColor: "#E9ECEF", color: TEXT_PRIMARY }}
+                            >
+                              <span>Total</span>
+                              <span>₹{finalAmount.toLocaleString("en-IN")}</span>
                             </div>
                           </div>
+                        </Card>
+
+                        <Card>
+                          <SectionLabel>Biller</SectionLabel>
+                          <div className="mt-2 flex flex-col gap-0.5">
+                            <p className="text-sm font-bold" style={{ color: TEXT_PRIMARY }}>
+                              {userInfo.name}
+                            </p>
+                            <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                              {userInfo.email}
+                            </p>
+                            <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                              {userInfo.phone}
+                            </p>
+                            <p className="mt-1 text-[11px]" style={{ color: TEXT_MUTED }}>
+                              GST invoice sent here
+                            </p>
+                          </div>
+                        </Card>
+
+                        <Card>
+                          <div className="mb-2 flex items-center gap-2">
+                            <SectionLabel>Ship To</SectionLabel>
+                            {shipping.isDifferentFromBiller && (
+                              <span
+                                className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                                style={{ backgroundColor: `${CORAL}10`, color: CORAL }}
+                              >
+                                Different recipient
+                              </span>
+                            )}
+                            {shipping.isGift && (
+                              <span
+                                className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                                style={{ backgroundColor: `${CORAL}10`, color: CORAL }}
+                              >
+                                🎁 Gift
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-0.5">
+                            <p className="text-sm font-bold" style={{ color: TEXT_PRIMARY }}>
+                              {shipping.name}
+                            </p>
+                            <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                              {shipping.address}
+                              {shipping.building ? `, ${shipping.building}` : ""}
+                              {shipping.street ? `, ${shipping.street}` : ""}
+                            </p>
+                            {shipping.landmark && (
+                              <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                                {shipping.landmark}
+                              </p>
+                            )}
+                            <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                              {shipping.city}, {shipping.state} – {shipping.pin}
+                            </p>
+                            <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                              {shipping.phone}
+                            </p>
+                            {shipping.email && (
+                              <p className="text-xs" style={{ color: TEXT_SECONDARY }}>
+                                {shipping.email}
+                              </p>
+                            )}
+                          </div>
+                        </Card>
+
+                        <div className="flex gap-3">
+                          <GhostBtn onClick={() => setStep(2)} disabled={isProcessing}>
+                            <svg
+                              className="h-3.5 w-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2.5}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                            Back
+                          </GhostBtn>
+                          <PrimaryBtn onClick={handleCheckout} disabled={isProcessing}>
+                            {isProcessing
+                              ? "Processing…"
+                              : `Pay ₹${finalAmount.toLocaleString("en-IN")}`}
+                          </PrimaryBtn>
                         </div>
-                      </div>
 
-                      {/* Biller Info Preview */}
-                      <div className="rounded-xl bg-gray-50 p-4">
-                        <h3 className="mb-2 font-semibold text-gray-900">Biller Information</h3>
-                        <p className="font-medium text-gray-900">{userInfo.name}</p>
-                        <p className="mt-1 text-sm text-gray-600">{userInfo.email}</p>
-                        <p className="text-sm text-gray-600">{userInfo.phone}</p>
-                        <p className="mt-2 text-xs text-gray-500">
-                          GST invoice and receipts will be sent here
+                        <p className="text-center text-[11px]" style={{ color: TEXT_MUTED }}>
+                          Secured by Razorpay &nbsp;·&nbsp; 256-bit SSL encryption
                         </p>
-                      </div>
-
-                      {/* Shipping Info Preview */}
-                      <div className="rounded-xl bg-gray-50 p-4">
-                        <div className="mb-2 flex items-center justify-between">
-                          <h3 className="font-semibold text-gray-900">Shipping to</h3>
-                          {shipping.isDifferentFromBiller && (
-                            <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
-                              Different Recipient
-                            </span>
-                          )}
-                          {shipping.isGift && (
-                            <span className="ml-2 rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800">
-                              🎁 Gift
-                            </span>
-                          )}
-                        </div>
-                        <p className="font-medium text-gray-900">{shipping.name}</p>
-                        <p className="mt-1 text-sm text-gray-600">
-                          {shipping.address}, {shipping.building}, {shipping.street}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {shipping.landmark && `${shipping.landmark}, `}
-                          {shipping.city}, {shipping.state} - {shipping.pin}
-                        </p>
-                        <p className="mt-1 text-sm text-gray-600">{shipping.phone}</p>
-                        {shipping.email && (
-                          <p className="text-sm text-gray-600">{shipping.email}</p>
-                        )}
-                      </div>
-
-                      <div className="flex space-x-3">
-                        <button
-                          onClick={() => setStep(2)}
-                          disabled={isProcessing}
-                          className="flex-1 rounded-xl border border-gray-300 py-4 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                        >
-                          Back
-                        </button>
-                        <button
-                          onClick={handleCheckout}
-                          disabled={isProcessing}
-                          className="flex-1 rounded-xl bg-orange-500 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition-colors hover:bg-orange-600 disabled:bg-gray-400 disabled:shadow-none"
-                        >
-                          {isProcessing ? "Processing..." : `Pay ₹${finalAmount.toFixed(2)}`}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Main Cart Page */}
       <div className="min-h-screen bg-gray-50">

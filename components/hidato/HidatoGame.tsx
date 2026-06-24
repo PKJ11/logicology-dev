@@ -23,9 +23,7 @@ interface HidatoGameProps {
   initialPuzzleId?: string;
 }
 
-export const HidatoGame: React.FC<HidatoGameProps> = ({
-  initialPuzzleId,
-}) => {
+export const HidatoGame: React.FC<HidatoGameProps> = ({ initialPuzzleId }) => {
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
   const [board, setBoard] = useState<(number | null)[][]>([]);
   const [selectedCell, setSelectedCell] = useState<{
@@ -37,9 +35,7 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
   const [resultMessage, setResultMessage] = useState("");
   const [resultIsCorrect, setResultIsCorrect] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
-  const [highlightedNumber, setHighlightedNumber] = useState<number | null>(
-    null
-  );
+  const [highlightedNumber, setHighlightedNumber] = useState<number | null>(null);
 
   // Initialize puzzle on mount or when puzzle changes
   useEffect(() => {
@@ -61,11 +57,7 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
     }
   };
 
-  const handleCellChange = (
-    row: number,
-    col: number,
-    value: number | null
-  ) => {
+  const handleCellChange = (row: number, col: number, value: number | null) => {
     const newBoard = board.map((r) => [...r]);
     newBoard[row][col] = value;
     setBoard(newBoard);
@@ -113,9 +105,7 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
         if (correct) {
           setIsCompleted(true);
           setResultIsCorrect(true);
-          setResultMessage(
-            `Congratulations! You solved the puzzle with hints!`
-          );
+          setResultMessage(`Congratulations! You solved the puzzle with hints!`);
           setShowResultModal(true);
         }
       }
@@ -127,23 +117,17 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
 
     if (progress < 100) {
       setResultIsCorrect(false);
-      setResultMessage(
-        `You've filled ${progress}% of the puzzle. Keep going!`
-      );
+      setResultMessage(`You've filled ${progress}% of the puzzle. Keep going!`);
       setShowResultModal(true);
     } else {
       const correct = isSolutionCorrect(board, currentPuzzle.solution);
       if (correct) {
         setResultIsCorrect(true);
-        setResultMessage(
-          `Perfect! You solved the puzzle correctly! 🎉`
-        );
+        setResultMessage(`Perfect! You solved the puzzle correctly! 🎉`);
         setIsCompleted(true);
       } else {
         setResultIsCorrect(false);
-        setResultMessage(
-          `Something's not quite right. Check the connections between numbers!`
-        );
+        setResultMessage(`Something's not quite right. Check the connections between numbers!`);
       }
       setShowResultModal(true);
     }
@@ -173,12 +157,12 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div className="mx-auto max-w-2xl space-y-8">
         {/* Back Button */}
         <div className="flex justify-start">
           <a
             href="/"
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            className="flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
           >
             ← Back
           </a>
@@ -194,7 +178,7 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
         />
 
         {/* Game Content */}
-        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 space-y-8">
+        <div className="space-y-8 rounded-xl bg-white p-6 shadow-lg sm:p-8">
           {/* Board */}
           {board.length > 0 && (
             <HidatoBoard
@@ -225,15 +209,13 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
           <button
             onClick={handlePreviousPuzzle}
             disabled={!hasPreviousPuzzle}
-            className="px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 
-              text-white font-semibold rounded-lg transition-colors duration-200
-              text-sm sm:text-base"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-600 disabled:bg-gray-300 sm:py-3 sm:text-base"
           >
             ← Previous
           </button>
 
-          <div className="flex-1 flex items-center justify-center">
-            <span className="text-sm sm:text-base text-gray-600 font-medium">
+          <div className="flex flex-1 items-center justify-center">
+            <span className="text-sm font-medium text-gray-600 sm:text-base">
               Puzzle {currentPuzzleIndex + 1} of {hidatoPuzzles.length}
             </span>
           </div>
@@ -241,9 +223,7 @@ export const HidatoGame: React.FC<HidatoGameProps> = ({
           <button
             onClick={handleNextPuzzle}
             disabled={!hasNextPuzzle}
-            className="px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 
-              text-white font-semibold rounded-lg transition-colors duration-200
-              text-sm sm:text-base"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-600 disabled:bg-gray-300 sm:py-3 sm:text-base"
           >
             Next →
           </button>

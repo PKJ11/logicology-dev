@@ -14,6 +14,9 @@ const config: Config = {
       },
       colors: {
         brand: {
+          black: "#3d3b40",
+          buttonYellowBefore: "#fbb041",
+          buttonYellowAfter: "#fa9e15",
           teal: "#0A8A80",
           tealDark: "#0B3F44",
           coral: "#E45C48",
@@ -24,6 +27,9 @@ const config: Config = {
           pink: "#b44b73",
           yellow: "#fddf5c",
           whiteText: "#f7f7f7",
+          red: "#d93b60",
+          purple: "#5869b2",
+          blue: "#26a9e0",
         },
         fractional: {
           navy: "#17224C",
@@ -137,7 +143,7 @@ const config: Config = {
         "bounce-small": "bounce-small 0.5s ease infinite",
         "float-slow": "float 8s ease-in-out infinite",
         "float-delay": "float 7s ease-in-out 1s infinite",
-        "twinkle": "twinkle 3s ease-in-out infinite",
+        twinkle: "twinkle 3s ease-in-out infinite",
         "twinkle-delay": "twinkle 3.5s ease-in-out 0.5s infinite",
         "twinkle-slow": "twinkle 4s ease-in-out 1s infinite",
       },
@@ -272,11 +278,11 @@ const config: Config = {
             transform: "scale(0.95)",
           },
         },
-		"bounce-small": {
+        "bounce-small": {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.05)" },
         },
-        "twinkle": {
+        twinkle: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.5", transform: "scale(1.2)" },
         },

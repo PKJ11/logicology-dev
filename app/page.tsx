@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import NavBar from "@/components/NavBar";
-import Hero from "@/components/Hero";
 import WhyImportant from "@/components/WhyImportant";
 import Benefit from "@/components/Benefit";
 import ImportanceBubbles from "@/components/ImportanceBubbles";
 import Community from "@/components/Community";
 import Footer from "@/components/Footer";
-import ProductShowcase from "@/components/ProductShowcase";
+import Hero from "@/components/Hero/Hero";
+import ProductShopSection from "@/components/ProductShopSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import BrandPromise from "@/components/BrandPromise";
 
 // ─────────────────────────────────────────────
 // SEO Metadata  (App Router — no <Head> needed)
@@ -14,13 +16,13 @@ import ProductShowcase from "@/components/ProductShowcase";
 export const metadata: Metadata = {
   // ── Core ──────────────────────────────────
   title: {
-    default: "Logicology – Research-Backed Learning Games & Books for Kids",
+    default: "Logicology – Children Think They're Playing. Parents Know They're Learning.",
     template: "%s | Logicology",
   },
 
-  // ~158 chars ✅
+  // ~155 chars ✅ — leads playful, closes with proof
   description:
-    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
+    "The best learning doesn't feel like learning. Logicology builds thinking skills through fun experiences — research-driven, child-tested. Skills that outlast the screen.",
 
   keywords: [
     // ── Brand & Products ──
@@ -50,8 +52,6 @@ export const metadata: Metadata = {
     "family learning games India",
     "fun learning for children",
     "research-backed learning games",
-    "number sense games for kids",
-    "problem solving games for children",
   ],
 
   authors: [{ name: "Logicology", url: "https://logicology.in" }],
@@ -75,34 +75,34 @@ export const metadata: Metadata = {
   },
 
   // ── Open Graph (~200 chars) ───────────────
+  // Uses: "researched not rebranded" + "outsmart/level up" verbs + movement line
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "https://logicology.in",
     siteName: "Logicology",
-    title: "Logicology – Research-Backed Learning Games & Books for Kids",
+    title: "Logicology – What If Learning Was the Most Exciting Part of a Child's Day?",
     description:
-    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
+      "Researched, not rebranded. At Logicology, kids play, think, and outsmart — while building skills that outlast the screen. Join the fun-learning revolution.",
     images: [
       {
         url: "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
         width: 1200,
         height: 630,
-        alt: "Logicology – Research-backed games and books. Designed by educators, loved by kids.",
+        alt: "Logicology – Designed by educators, loved by kids. Learning disguised as fun.",
         type: "image/png",
       },
     ],
   },
 
   // ── Twitter / X (~200 chars) ──────────────
+  // Uses: "small wins stacked" + "not selling games" positioning + "designed by educators"
   twitter: {
     card: "summary_large_image",
-    title: "Logicology – Research-Backed Learning Games & Books for Kids",
-   description:
-    "Deeply researched games and books that build logical thinking, number sense and problem-solving — disguised as fun. Shop Prime Time, Logicoland and more. Ages 5–16.",
-    images: [
-      "https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png",
-    ],
+    title: "Logicology – Children Think They're Playing. Parents Know They're Learning.",
+    description:
+      "We're not selling games. We're stacking small wins into lifelong thinking skills. Designed by educators, loved by kids. Fun in disguise — research-driven. Child-tested.",
+    images: ["https://ik.imagekit.io/pratik11/PRIME-TIME-SLIDER-1-NEW-DESKTOP-VIEW.png"],
   },
 
   // ── Icons ─────────────────────────────────
@@ -121,7 +121,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "Logicoland",
   url: "https://logicoland.in",
-  logo: "https://logicoland.in/logo.png",       // ← update path if needed
+  logo: "https://logicoland.in/logo.png", // ← update path if needed
   sameAs: [
     // "https://www.instagram.com/logicoland",   // ← add social URLs
     // "https://www.facebook.com/logicoland",
@@ -184,10 +184,12 @@ export default function Page() {
       <main>
         <NavBar />
         <Hero />
+        <BrandPromise />
+        <ProductShopSection />
         <WhyImportant />
-        <Benefit />
         <ImportanceBubbles />
-        {/* <ProductShowcase /> */}
+        <TestimonialsSection />
+        <Benefit />
         <Community />
         <Footer />
       </main>

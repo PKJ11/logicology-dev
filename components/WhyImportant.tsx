@@ -1,113 +1,285 @@
 "use client";
-import { useState, useRef } from "react";
-import CTAButton from "./CTAButton";
-import MediaLayoutRight from "./MediaLayoutRight";
-import VideoModal from "./VideoModal";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+// ─── Icon Components ───────────────────────────────────────────────────────────
+
+function ResearchIcon() {
+  return (
+    <div style={{ color: "#3d3b40" }}>
+      <Image
+        src="https://ik.imagekit.io/pratik11/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/research.svg"
+        alt="Research icon"
+        width={40}
+        height={40}
+        style={{ color: "#3d3b40" }}
+      />
+    </div>
+  );
+}
+
+function ConceptIcon() {
+  return (
+    <div style={{ color: "#3d3b40" }}>
+      <Image
+        src="https://ik.imagekit.io/pratik11/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/concept.svg"
+        alt="Concept icon"
+        width={40}
+        height={40}
+        style={{ color: "#3d3b40" }}
+      />
+    </div>
+  );
+}
+
+function WinIcon() {
+  return (
+    <div style={{ color: "#3d3b40" }}>
+      <Image
+        src="https://ik.imagekit.io/pratik11/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/win.svg"
+        alt="Win icon"
+        width={40}
+        height={40}
+        style={{ color: "#3d3b40" }}
+      />
+    </div>
+  );
+}
+
+function SkillIcon() {
+  return (
+    <div style={{ color: "#3d3b40" }}>
+      <Image
+        src="https://ik.imagekit.io/pratik11/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/WHY%20LOGICOLOGY%20SECTION%20NEW%20WITH%20ICONS%20COLOR/skill.svg"
+        alt="Skill icon"
+        width={40}
+        height={40}
+        style={{ color: "#3d3b40" }}
+      />
+    </div>
+  );
+}
+
+// ─── Card Data ─────────────────────────────────────────────────────────────────
+
+const cards = [
+  {
+    id: 1,
+    icon: <ResearchIcon />,
+    title: (
+      <>
+        Researched, not <br /> rebranded
+      </>
+    ),
+    body: "Every concept tested until a child can start solo. Shows them that they are important.",
+    side: "left",
+  },
+  {
+    id: 2,
+    icon: <ConceptIcon />,
+    title: "Concept-first",
+    body: (
+      <>
+        The learning is the foundation, not a label <br /> on the box.
+      </>
+    ),
+    side: "right",
+  },
+  {
+    id: 3,
+    icon: <WinIcon />,
+    title: "Small wins, built in",
+    body: "Kids win early and often, so they keep going.",
+    side: "left",
+  },
+  {
+    id: 4,
+    icon: <SkillIcon />,
+    title: (
+      <>
+        Skills that outlast <br /> the screen
+      </>
+    ),
+    body: "Reasoning, number sense, problem-solving.",
+    side: "right",
+  },
+];
+
+// ─── Card Component ────────────────────────────────────────────────────────────
+
+function TrustCard({
+  icon,
+  title,
+  body,
+  visible,
+  delay,
+  side,
+}: {
+  icon: React.ReactNode;
+  title: React.ReactNode;
+  body: React.ReactNode;
+  visible: boolean;
+  delay: number;
+  side: "left" | "right";
+}) {
+  return (
+    <div
+      className="w-full overflow-hidden rounded-2xl bg-white shadow-md"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible
+          ? "translateX(0) translateY(0)"
+          : side === "left"
+            ? "translateX(-48px) translateY(20px)"
+            : "translateX(48px) translateY(20px)",
+        transition: `opacity 0.55s ease ${delay}ms, transform 0.55s ease ${delay}ms`,
+      }}
+    >
+      {/* Yellow header bar */}
+      <div
+        className="mx-3 mt-3 flex items-center justify-center gap-3 rounded-xl px-4 py-3"
+        style={{ backgroundColor: "#fbb041" }}
+      >
+        <div className="shrink-0 text-[#3d3b40]">{icon}</div>
+        <h3 className="text-left font-heading text-[24px] font-bold leading-snug text-[#3d3b40]">
+          {title}
+        </h3>
+      </div>
+
+      {/* Body text */}
+      <p className="px-5 py-4 text-center font-sans leading-relaxed text-gray-700">{body}</p>
+    </div>
+  );
+}
+
+// ─── Main Section ──────────────────────────────────────────────────────────────
 
 export default function WhyImportant() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const [triggered, setTriggered] = useState(false);
 
-  const YT = "https://youtu.be/oLktBpxN6qw?si=AVuR7nCiCqaA4HHG";
+  // Randomise the order in which the 4 cards reveal (computed once on mount)
+  const [cardOrder] = useState<number[]>(() => {
+    const order = [0, 1, 2, 3];
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  });
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTriggered(true);
+        } else {
+          setTriggered(false); // ← reset when section leaves viewport
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Timing constants (ms)
+  const HEADING_DELAY = 0;
+  const IMAGE_DELAY = 300;
+  // Each card gets its own delay based on its random reveal position
+  // Cards start appearing after the image begins its animation
+  const CARD_BASE_DELAY = 500;
+  const CARD_STAGGER = 150;
+
+  // Build a map: cardId → delay
+  const cardDelayMap: Record<number, number> = {};
+  cards.forEach((card) => {
+    const position = cardOrder.indexOf(cards.indexOf(card));
+    cardDelayMap[card.id] = CARD_BASE_DELAY + position * CARD_STAGGER;
+  });
+
+  const leftCards = cards.filter((c) => c.side === "left");
+  const rightCards = cards.filter((c) => c.side === "right");
 
   return (
-    <section id="why" className="mt-10 w-full bg-[#D8AE4F]" ref={ref}>
-      {/*
-        KEY FIX: Match NavBar's exact container:
-        px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8
-        Previously this was lg:max-w-[80vw] which caused misalignment.
-      */}
-      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
-        <div className="overflow-hidden py-12 text-[#3F2F14]">
-          <div className="flex flex-col items-center md:flex-row">
-            {/* Media (left) — left edge aligns with navbar logo */}
-            <motion.div
-              className="order-1 flex w-full items-center  py-6 md:order-1 md:w-1/2 md:py-0"
-              initial={{ x: -50, opacity: 0, scale: 0.9 }}
-              animate={
-                isInView ? { x: 0, opacity: 1, scale: 1 } : { x: -50, opacity: 0, scale: 0.9 }
-              }
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <MediaLayoutRight
-                image="https://ik.imagekit.io/pratik11/WHY-LOGICOLOGY.png?updatedAt=1758439747708"
-                videoSrc="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-brand-coral px-4 pt-16 md:px-8"
+    >
+      <div className="relative mx-auto max-w-6xl">
+        {/* ── HEADING ── */}
+        <div className="mb-12 text-center">
+          <h2
+            className="headingstyle text-center font-heading font-extrabold leading-tight text-white"
+            style={{
+              opacity: triggered ? 1 : 0,
+              transform: triggered ? "translateY(0)" : "translateY(-28px)",
+              transition: `opacity 0.6s ease ${HEADING_DELAY}ms, transform 0.6s ease ${HEADING_DELAY}ms`,
+            }}
+          >
+            Why parents trust us over the toy aisle.
+          </h2>
+        </div>
+
+        {/* 3-column grid */}
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[1fr_300px_1fr]">
+          {/* ── LEFT CARDS ── */}
+          <div className="flex flex-col items-center gap-5 md:items-end">
+            {leftCards.map((card) => (
+              <TrustCard
+                key={card.id}
+                icon={card.icon}
+                title={card.title}
+                body={card.body}
+                visible={triggered}
+                delay={cardDelayMap[card.id]}
+                side="left"
               />
-            </motion.div>
+            ))}
+          </div>
 
-            {/* Content (right) */}
-            <motion.div
-              className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2"
-              initial={{ x: 50, opacity: 0 }}
-              animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+          {/* ── CENTER IMAGE ── */}
+          <div className="order-first flex flex-col items-center justify-start md:order-none">
+            <div
+              className="relative h-[340px] w-[300px] md:h-[400px] md:w-[500px]"
+              style={{
+                opacity: triggered ? 1 : 0,
+                transform: triggered ? "translateY(0)" : "translateY(64px)",
+                zIndex: 10,
+                transition: `opacity 0.65s ease ${IMAGE_DELAY}ms, transform 0.65s ease ${IMAGE_DELAY}ms`,
+              }}
             >
-              <motion.p
-                className="headingstyle font-heading text-[#3F2F14]"
-                initial={{ y: 20, opacity: 0 }}
-                animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Why Logicology?
-              </motion.p>
-              <motion.p
-                className="textstyles mt-4 max-w-xl font-sans"
-                initial={{ y: 20, opacity: 0 }}
-                animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                Children learn the best when they are engaged. Our thoroughly researched and tested
-                content is crafted to engage children. Gamification helps children learn in a fun
-                way. At Logicology, we want to make learning fun and engaging—that&apos;s why we
-                exist.
-              </motion.p>
+              <Image
+                src="https://ik.imagekit.io/pratik11/why-parent-cropped?updatedAt=1781173936236"
+                alt="Happy parents giving thumbs up"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 260px, 300px"
+              />
+            </div>
+          </div>
 
-              <motion.div
-                className="mt-6"
-                initial={{ y: 20, opacity: 0 }}
-                animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                <CTAButton
-                  text="Learn more"
-                  onClick={() => setOpen(true)}
-                  bg="#FFFFFF"
-                  color="#7E5C2E"
-                  hoverBg="#7E5C2E"
-                  hoverColor="#FFFFFF"
-                  size="md"
-                  ariaLabel="Open Why Logicology video"
-                  rightIcon={
-                    <svg
-                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  }
-                />
-              </motion.div>
-            </motion.div>
+          {/* ── RIGHT CARDS ── */}
+          <div className="mb-8 flex flex-col items-center gap-5 md:mb-0 md:items-start">
+            {rightCards.map((card) => (
+              <TrustCard
+                key={card.id}
+                icon={card.icon}
+                title={card.title}
+                body={card.body}
+                visible={triggered}
+                delay={cardDelayMap[card.id]}
+                side="right"
+              />
+            ))}
           </div>
         </div>
       </div>
-
-      <VideoModal
-        open={open}
-        onClose={() => setOpen(false)}
-        youtubeUrl={YT}
-        title="Why Logicology?"
-      />
     </section>
   );
 }

@@ -4,18 +4,19 @@ import NavBar from "@/components/NavBar";
 import { useState, useEffect, useRef } from "react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const BRAND_TEAL    = "#0A8A80";
+const BRAND_TEAL = "#0A8A80";
 const BRAND_TEAL_DK = "#0B3F44";
-const RACING        = "'Racing Sans One', cursive";
-const OUTFIT        = "'Outfit', sans-serif";
+const RACING = "'Racing Sans One', cursive";
+const OUTFIT = "'Outfit', sans-serif";
 
-const ROCKET_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.png";
-const CLOUDS_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CLOUDS.png";
-const CLOUDS_MOBILE_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/cloud_mobile.png";
-const PENCIL_IMG        = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/PENCIL@2x.png";
-const SCALE_IMG         = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SCALE@2x.png";
-const BOOKS_IMG         = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/BOOKS@2x.png";
-const CALC_IMG          = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CALCULATOR@2x.png";
+const ROCKET_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/ROCKET@2x.png";
+const CLOUDS_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CLOUDS.png";
+const CLOUDS_MOBILE_IMG =
+  "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/cloud_mobile.png";
+const PENCIL_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/PENCIL@2x.png";
+const SCALE_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/SCALE@2x.png";
+const BOOKS_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/BOOKS@2x.png";
+const CALC_IMG = "/Images/speed-maths/SPEED MATHS WEBPAGE IMAGES/PNG RESOURCES/CALCULATOR@2x.png";
 
 const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Outfit:wght@400;600;700;900&display=swap');
@@ -151,25 +152,25 @@ const GAME_CARDS: GameCard[] = [
 ];
 
 const FILTER_TABS: { label: string; value: FilterCategory; emoji: string }[] = [
-  { label: "All Games",       value: "all",            emoji: "🎮" },
-  { label: "Addition",        value: "addition",       emoji: "➕" },
-  { label: "Subtraction",     value: "subtraction",    emoji: "➖" },
-  { label: "Tables",          value: "table",          emoji: "✖️" },
-  { label: "Mixed",           value: "mixed",          emoji: "🔀" },
+  { label: "All Games", value: "all", emoji: "🎮" },
+  { label: "Addition", value: "addition", emoji: "➕" },
+  { label: "Subtraction", value: "subtraction", emoji: "➖" },
+  { label: "Tables", value: "table", emoji: "✖️" },
+  { label: "Mixed", value: "mixed", emoji: "🔀" },
 ];
 
 const MATH_SYMBOLS = [
-  { t: "4²",  style: { top: "9%",  left: "5%",   fontSize: 30 } },
-  { t: "√",   style: { top: "19%", left: "11%",  fontSize: 38 } },
-  { t: "1",   style: { top: "53%", left: "4%",   fontSize: 52 } },
-  { t: "Z",   style: { top: "69%", left: "8%",   fontSize: 26 } },
-  { t: "α²",  style: { top: "8%",  right: "7%",  fontSize: 28 } },
-  { t: "4²",  style: { top: "23%", right: "4%",  fontSize: 34 } },
-  { t: "⬡",   style: { top: "40%", left: "2%",   fontSize: 26 } },
-  { t: "⬡",   style: { top: "14%", right: "19%", fontSize: 20 } },
-  { t: "≈",   style: { top: "59%", right: "5%",  fontSize: 30 } },
-  { t: "÷",   style: { top: "75%", left: "15%",  fontSize: 24 } },
-  { t: "∑",   style: { top: "82%", right: "12%", fontSize: 28 } },
+  { t: "4²", style: { top: "9%", left: "5%", fontSize: 30 } },
+  { t: "√", style: { top: "19%", left: "11%", fontSize: 38 } },
+  { t: "1", style: { top: "53%", left: "4%", fontSize: 52 } },
+  { t: "Z", style: { top: "69%", left: "8%", fontSize: 26 } },
+  { t: "α²", style: { top: "8%", right: "7%", fontSize: 28 } },
+  { t: "4²", style: { top: "23%", right: "4%", fontSize: 34 } },
+  { t: "⬡", style: { top: "40%", left: "2%", fontSize: 26 } },
+  { t: "⬡", style: { top: "14%", right: "19%", fontSize: 20 } },
+  { t: "≈", style: { top: "59%", right: "5%", fontSize: 30 } },
+  { t: "÷", style: { top: "75%", left: "15%", fontSize: 24 } },
+  { t: "∑", style: { top: "82%", right: "12%", fontSize: 28 } },
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -181,7 +182,7 @@ function FloatingSymbols() {
         <span
           key={i}
           aria-hidden
-          className="absolute select-none pointer-events-none font-bold text-white"
+          className="pointer-events-none absolute select-none font-bold text-white"
           style={{ ...sym.style, opacity: 0.12, fontFamily: RACING, position: "fixed", zIndex: 0 }}
         >
           {sym.t}
@@ -249,7 +250,14 @@ function GameCardItem({ card, index }: { card: GameCard; index: number }) {
           src={card.iframeSrc}
           allowFullScreen
           title={card.title}
-          style={{ height: 380, width: "100%", border: "none", borderRadius: 14, background: "#fff", display: "block" }}
+          style={{
+            height: 380,
+            width: "100%",
+            border: "none",
+            borderRadius: 14,
+            background: "#fff",
+            display: "block",
+          }}
         />
       </div>
     </div>
@@ -259,12 +267,12 @@ function GameCardItem({ card, index }: { card: GameCard; index: number }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function SpeedMathsGamesPage() {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("all");
-  const [heroVisible,  setHeroVisible]  = useState(false);
+  const [heroVisible, setHeroVisible] = useState(false);
   const [rocketVisible, setRocketVisible] = useState(false);
-  const [cardsVisible,  setCardsVisible]  = useState(false);
-  const [decoVisible,   setDecoVisible]   = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(false);
+  const [decoVisible, setDecoVisible] = useState(false);
   const [cloudsVisible, setCloudsVisible] = useState(false);
-  const [isMobile,      setIsMobile]      = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -274,17 +282,22 @@ export default function SpeedMathsGamesPage() {
   }, []);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setHeroVisible(true),  80);
+    const t1 = setTimeout(() => setHeroVisible(true), 80);
     const t2 = setTimeout(() => setRocketVisible(true), 180);
-    const t3 = setTimeout(() => setCardsVisible(true),  300);
-    const t4 = setTimeout(() => setDecoVisible(true),   500);
+    const t3 = setTimeout(() => setCardsVisible(true), 300);
+    const t4 = setTimeout(() => setDecoVisible(true), 500);
     const t5 = setTimeout(() => setCloudsVisible(true), 650);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      clearTimeout(t5);
+    };
   }, []);
 
-  const filteredCards = activeFilter === "all"
-    ? GAME_CARDS
-    : GAME_CARDS.filter((c) => c.category === activeFilter);
+  const filteredCards =
+    activeFilter === "all" ? GAME_CARDS : GAME_CARDS.filter((c) => c.category === activeFilter);
 
   const cloudSrc = isMobile ? CLOUDS_MOBILE_IMG : CLOUDS_IMG;
 
@@ -294,7 +307,7 @@ export default function SpeedMathsGamesPage() {
       <style>{GLOBAL_STYLES}</style>
 
       <div
-        className="min-h-screen flex flex-col overflow-x-hidden"
+        className="flex min-h-screen flex-col overflow-x-hidden"
         style={{
           background: "#1b4552",
           fontFamily: OUTFIT,
@@ -312,10 +325,9 @@ export default function SpeedMathsGamesPage() {
 
         {/* ── Hero ── */}
         <section className="relative z-10 overflow-hidden">
-
           {/* Rocket */}
           <div
-            className="absolute pointer-events-none z-20"
+            className="pointer-events-none absolute z-20"
             style={{
               top: isMobile ? "8%" : "clamp(40px, 10vh, 80px)",
               right: isMobile ? "4%" : "clamp(16px, 4vw, 60px)",
@@ -330,13 +342,17 @@ export default function SpeedMathsGamesPage() {
             <img
               src={ROCKET_IMG}
               alt="Rocket"
-              style={{ width: "100%", height: "auto", filter: "drop-shadow(0 12px 28px rgba(0,0,0,0.38))" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                filter: "drop-shadow(0 12px 28px rgba(0,0,0,0.38))",
+              }}
             />
           </div>
 
           {/* Hero text */}
           <div
-            className="relative z-10 text-center px-6"
+            className="relative z-10 px-6 text-center"
             style={{
               paddingTop: isMobile ? "5vh" : "6vh",
               paddingBottom: isMobile ? "2vh" : "3vh",
@@ -346,7 +362,7 @@ export default function SpeedMathsGamesPage() {
             }}
           >
             <h1
-              className="text-white leading-none mb-2"
+              className="mb-2 leading-none text-white"
               style={{
                 fontFamily: RACING,
                 fontSize: "clamp(2.4rem, 6.5vw, 4.8rem)",
@@ -358,7 +374,11 @@ export default function SpeedMathsGamesPage() {
             </h1>
             <p
               className="text-white/80"
-              style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "clamp(0.95rem, 2vw, 1.2rem)" }}
+              style={{
+                fontFamily: OUTFIT,
+                fontWeight: 600,
+                fontSize: "clamp(0.95rem, 2vw, 1.2rem)",
+              }}
             >
               Practice your skills with these interactive games!
             </p>
@@ -388,27 +408,41 @@ export default function SpeedMathsGamesPage() {
           className="relative z-10 flex-1"
           style={{ padding: isMobile ? "24px 16px 60px" : "32px 32px 80px" }}
         >
-
           {/* Section label */}
           <div
-            className="text-center mb-2"
+            className="mb-2 text-center"
             style={{
               opacity: cardsVisible ? 1 : 0,
               transform: cardsVisible ? "translateY(0)" : "translateY(20px)",
               transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
             }}
           >
-            <p style={{ fontFamily: RACING, fontSize: "clamp(1.3rem,3vw,1.7rem)", color: "rgba(255,255,255,0.9)", letterSpacing: "0.05em" }}>
+            <p
+              style={{
+                fontFamily: RACING,
+                fontSize: "clamp(1.3rem,3vw,1.7rem)",
+                color: "rgba(255,255,255,0.9)",
+                letterSpacing: "0.05em",
+              }}
+            >
               🎮 Play &amp; Practice
             </p>
-            <p style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: "0.88rem", color: "rgba(255,255,255,0.45)", marginTop: 4 }}>
+            <p
+              style={{
+                fontFamily: OUTFIT,
+                fontWeight: 600,
+                fontSize: "0.88rem",
+                color: "rgba(255,255,255,0.45)",
+                marginTop: 4,
+              }}
+            >
               Pick a game below — sharpen your mental maths!
             </p>
           </div>
 
           {/* Filter tabs */}
           <div
-            className="flex flex-wrap gap-2 justify-center mb-8"
+            className="mb-8 flex flex-wrap justify-center gap-2"
             style={{
               marginTop: 20,
               opacity: cardsVisible ? 1 : 0,
@@ -429,7 +463,9 @@ export default function SpeedMathsGamesPage() {
                     letterSpacing: "0.05em",
                     padding: "9px 20px",
                     borderRadius: 99,
-                    border: isActive ? `2.5px solid ${BRAND_TEAL}` : "2.5px solid rgba(255,255,255,0.18)",
+                    border: isActive
+                      ? `2.5px solid ${BRAND_TEAL}`
+                      : "2.5px solid rgba(255,255,255,0.18)",
                     color: isActive ? "#fff" : "rgba(255,255,255,0.6)",
                     background: isActive ? BRAND_TEAL : "rgba(255,255,255,0.06)",
                     cursor: "pointer",
@@ -458,7 +494,10 @@ export default function SpeedMathsGamesPage() {
           </div>
 
           {filteredCards.length === 0 && (
-            <div className="text-center mt-20" style={{ color: "rgba(255,255,255,0.4)", fontFamily: OUTFIT, fontWeight: 600 }}>
+            <div
+              className="mt-20 text-center"
+              style={{ color: "rgba(255,255,255,0.4)", fontFamily: OUTFIT, fontWeight: 600 }}
+            >
               No games found for this category.
             </div>
           )}
@@ -466,7 +505,7 @@ export default function SpeedMathsGamesPage() {
 
         {/* ── Bottom decorative strip ── */}
         <div
-          className="relative z-20 pointer-events-none select-none flex items-end justify-between"
+          className="pointer-events-none relative z-20 flex select-none items-end justify-between"
           style={{
             padding: isMobile ? "0 8px 4px" : "0 64px 16px",
             opacity: decoVisible ? 1 : 0,
@@ -475,7 +514,9 @@ export default function SpeedMathsGamesPage() {
         >
           <div
             style={{
-              transform: decoVisible ? "rotate(-20deg) translateY(0)" : "rotate(-20deg) translateY(60px)",
+              transform: decoVisible
+                ? "rotate(-20deg) translateY(0)"
+                : "rotate(-20deg) translateY(60px)",
               transition: "transform 0.6s ease 1.0s",
               transformOrigin: "bottom left",
             }}
@@ -483,18 +524,34 @@ export default function SpeedMathsGamesPage() {
             <img
               src={PENCIL_IMG}
               alt=""
-              style={{ height: isMobile ? 70 : 100, width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))" }}
+              style={{
+                height: isMobile ? 70 : 100,
+                width: "auto",
+                objectFit: "contain",
+                filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
+              }}
             />
           </div>
 
           {!isMobile && (
             <div
               style={{
-                transform: decoVisible ? "rotate(-8deg) translateY(0)" : "rotate(-8deg) translateY(60px)",
+                transform: decoVisible
+                  ? "rotate(-8deg) translateY(0)"
+                  : "rotate(-8deg) translateY(60px)",
                 transition: "transform 0.6s ease 1.1s",
               }}
             >
-              <img src={SCALE_IMG} alt="" style={{ height: 80, width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))" }} />
+              <img
+                src={SCALE_IMG}
+                alt=""
+                style={{
+                  height: 80,
+                  width: "auto",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
+                }}
+              />
             </div>
           )}
 
@@ -505,7 +562,16 @@ export default function SpeedMathsGamesPage() {
                 transition: "transform 0.6s ease 1.15s",
               }}
             >
-              <img src={BOOKS_IMG} alt="" style={{ height: 100, width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))" }} />
+              <img
+                src={BOOKS_IMG}
+                alt=""
+                style={{
+                  height: 100,
+                  width: "auto",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
+                }}
+              />
             </div>
           )}
 
@@ -533,7 +599,12 @@ export default function SpeedMathsGamesPage() {
               <img
                 src={CALC_IMG}
                 alt=""
-                style={{ height: isMobile ? 70 : 90, width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))" }}
+                style={{
+                  height: isMobile ? 70 : 90,
+                  width: "auto",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.2))",
+                }}
               />
             </div>
           </div>
@@ -541,4 +612,4 @@ export default function SpeedMathsGamesPage() {
       </div>
     </>
   );
-} 
+}

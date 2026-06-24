@@ -222,12 +222,21 @@ export default function AnalyticsDashboard() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center" style={{ background: "#F8F9FC" }}>
+      <div
+        className="flex min-h-screen items-center justify-center"
+        style={{ background: "#F8F9FC" }}
+      >
         <div className="text-center">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl" style={{ background: "#1A1F36" }}>
+          <div
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl"
+            style={{ background: "#1A1F36" }}
+          >
             <RefreshCw className="h-8 w-8 animate-spin text-white" />
           </div>
-          <p className="text-sm font-medium tracking-widest uppercase" style={{ color: "#6B7280", letterSpacing: "0.12em" }}>
+          <p
+            className="text-sm font-medium uppercase tracking-widest"
+            style={{ color: "#6B7280", letterSpacing: "0.12em" }}
+          >
             Fetching analytics
           </p>
         </div>
@@ -236,18 +245,25 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "#F8F9FC", fontFamily: "'Inter', sans-serif" }}>
-
+    <div
+      className="min-h-screen"
+      style={{ background: "#F8F9FC", fontFamily: "'Inter', sans-serif" }}
+    >
       {/* ── Top Nav Bar ───────────────────────────────────────────────────── */}
       <header style={{ background: "#1A1F36", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: "#3B5BDB" }}>
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-lg"
+              style={{ background: "#3B5BDB" }}
+            >
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h1 className="text-base font-semibold text-white leading-none">Analytics</h1>
-              <p className="text-xs mt-0.5" style={{ color: "#8892B0" }}>Logicology Dashboard</p>
+              <h1 className="text-base font-semibold leading-none text-white">Analytics</h1>
+              <p className="mt-0.5 text-xs" style={{ color: "#8892B0" }}>
+                Logicology Dashboard
+              </p>
             </div>
           </div>
 
@@ -255,7 +271,11 @@ export default function AnalyticsDashboard() {
             <button
               onClick={exportToCSV}
               className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all"
-              style={{ background: "rgba(255,255,255,0.08)", color: "#CCD6F6", border: "1px solid rgba(255,255,255,0.1)" }}
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                color: "#CCD6F6",
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
             >
               <Download className="h-4 w-4" />
               Export CSV
@@ -273,19 +293,23 @@ export default function AnalyticsDashboard() {
       </header>
 
       <main className="mx-auto max-w-7xl px-6 py-8">
-
         {/* ── Date Range + Period ───────────────────────────────────────────── */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2" style={{ color: "#6B7280" }}>
             <Calendar className="h-4 w-4" />
             {analyticsData ? (
-              <span className="text-sm font-medium">{formatDateRange(analyticsData.dateRange)}</span>
+              <span className="text-sm font-medium">
+                {formatDateRange(analyticsData.dateRange)}
+              </span>
             ) : (
               <span className="text-sm">Select a range</span>
             )}
           </div>
 
-          <div className="flex items-center gap-1 rounded-xl p-1" style={{ background: "#EAECF4", border: "1px solid #D1D5E8" }}>
+          <div
+            className="flex items-center gap-1 rounded-xl p-1"
+            style={{ background: "#EAECF4", border: "1px solid #D1D5E8" }}
+          >
             {dateRangeOptions.map((opt) => (
               <button
                 key={opt.value}
@@ -293,7 +317,11 @@ export default function AnalyticsDashboard() {
                 className="rounded-lg px-4 py-1.5 text-sm font-medium transition-all"
                 style={
                   dateRange === opt.value
-                    ? { background: "#1A1F36", color: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,0.18)" }
+                    ? {
+                        background: "#1A1F36",
+                        color: "#fff",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
+                      }
                     : { color: "#6B7280" }
                 }
               >
@@ -305,7 +333,10 @@ export default function AnalyticsDashboard() {
 
         {/* ── Error Banner ─────────────────────────────────────────────────── */}
         {error && (
-          <div className="mb-6 flex items-start gap-3 rounded-xl px-5 py-4 text-sm" style={{ background: "#FFF7ED", border: "1px solid #FDE68A", color: "#92400E" }}>
+          <div
+            className="mb-6 flex items-start gap-3 rounded-xl px-5 py-4 text-sm"
+            style={{ background: "#FFF7ED", border: "1px solid #FDE68A", color: "#92400E" }}
+          >
             <Activity className="mt-0.5 h-4 w-4 shrink-0" />
             {error}
           </div>
@@ -344,12 +375,27 @@ export default function AnalyticsDashboard() {
             {/* ── KPI Cards ───────────────────────────────────────────────── */}
             <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
               {/* Total Users */}
-              <div className="rounded-2xl p-6 flex items-center gap-5" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl" style={{ background: "#EEF2FF" }}>
+              <div
+                className="flex items-center gap-5 rounded-2xl p-6"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: "#EEF2FF" }}
+                >
                   <Users className="h-6 w-6" style={{ color: "#3B5BDB" }} />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}>Total Users</p>
+                  <p
+                    className="mb-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}
+                  >
+                    Total Users
+                  </p>
                   <p className="text-3xl font-bold leading-none" style={{ color: "#1A1F36" }}>
                     {analyticsData.totalUsers.toLocaleString()}
                   </p>
@@ -357,12 +403,27 @@ export default function AnalyticsDashboard() {
               </div>
 
               {/* Total Sessions */}
-              <div className="rounded-2xl p-6 flex items-center gap-5" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl" style={{ background: "#F0FDF4" }}>
+              <div
+                className="flex items-center gap-5 rounded-2xl p-6"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: "#F0FDF4" }}
+                >
                   <Eye className="h-6 w-6" style={{ color: "#16A34A" }} />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}>Total Sessions</p>
+                  <p
+                    className="mb-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}
+                  >
+                    Total Sessions
+                  </p>
                   <p className="text-3xl font-bold leading-none" style={{ color: "#1A1F36" }}>
                     {analyticsData.totalSessions.toLocaleString()}
                   </p>
@@ -370,12 +431,27 @@ export default function AnalyticsDashboard() {
               </div>
 
               {/* Page Views */}
-              <div className="rounded-2xl p-6 flex items-center gap-5" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl" style={{ background: "#FDF4FF" }}>
+              <div
+                className="flex items-center gap-5 rounded-2xl p-6"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: "#FDF4FF" }}
+                >
                   <MousePointer className="h-6 w-6" style={{ color: "#9333EA" }} />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}>Page Views</p>
+                  <p
+                    className="mb-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}
+                  >
+                    Page Views
+                  </p>
                   <p className="text-3xl font-bold leading-none" style={{ color: "#1A1F36" }}>
                     {analyticsData.pageViews.toLocaleString()}
                   </p>
@@ -386,29 +462,50 @@ export default function AnalyticsDashboard() {
             </div>
 
             {/* ── Tables Row ──────────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-
+            <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
               {/* Top Pages */}
-              <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: "1px solid #F1F3F9" }}>
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ borderBottom: "1px solid #F1F3F9" }}
+                >
                   <BarChart3 className="h-4 w-4" style={{ color: "#3B5BDB" }} />
                   <div>
-                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>Top Pages</h3>
-                    <p className="text-xs" style={{ color: "#9CA3AF" }}>Most viewed pages</p>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      Top Pages
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      Most viewed pages
+                    </p>
                   </div>
                 </div>
                 <div className="divide-y" style={{ borderColor: "#F8F9FC" }}>
                   {analyticsData.topPages.map((page, index) => (
                     <div key={index} className="flex items-center justify-between px-6 py-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold" style={{ background: "#F1F3F9", color: "#6B7280" }}>
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span
+                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                          style={{ background: "#F1F3F9", color: "#6B7280" }}
+                        >
                           {index + 1}
                         </span>
                         <p className="truncate text-sm font-medium" style={{ color: "#374151" }}>
-                          {page.pageTitle.length > 48 ? page.pageTitle.substring(0, 45) + "…" : page.pageTitle}
+                          {page.pageTitle.length > 48
+                            ? page.pageTitle.substring(0, 45) + "…"
+                            : page.pageTitle}
                         </p>
                       </div>
-                      <span className="ml-4 shrink-0 text-sm font-semibold tabular-nums" style={{ color: "#1A1F36" }}>
+                      <span
+                        className="ml-4 shrink-0 text-sm font-semibold tabular-nums"
+                        style={{ color: "#1A1F36" }}
+                      >
                         {page.pageViews.toLocaleString()}
                       </span>
                     </div>
@@ -417,24 +514,46 @@ export default function AnalyticsDashboard() {
               </div>
 
               {/* Top Countries */}
-              <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: "1px solid #F1F3F9" }}>
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ borderBottom: "1px solid #F1F3F9" }}
+                >
                   <Globe className="h-4 w-4" style={{ color: "#3B5BDB" }} />
                   <div>
-                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>Top Countries</h3>
-                    <p className="text-xs" style={{ color: "#9CA3AF" }}>Visitor geography</p>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      Top Countries
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      Visitor geography
+                    </p>
                   </div>
                 </div>
                 <div className="divide-y" style={{ borderColor: "#F8F9FC" }}>
                   {analyticsData.topCountries.map((country, index) => (
                     <div key={index} className="flex items-center justify-between px-6 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold" style={{ background: "#EEF2FF", color: "#3B5BDB" }}>
+                        <span
+                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                          style={{ background: "#EEF2FF", color: "#3B5BDB" }}
+                        >
                           {index + 1}
                         </span>
-                        <p className="text-sm font-medium" style={{ color: "#374151" }}>{country.country}</p>
+                        <p className="text-sm font-medium" style={{ color: "#374151" }}>
+                          {country.country}
+                        </p>
                       </div>
-                      <span className="text-sm font-semibold tabular-nums" style={{ color: "#1A1F36" }}>
+                      <span
+                        className="text-sm font-semibold tabular-nums"
+                        style={{ color: "#1A1F36" }}
+                      >
                         {country.sessions.toLocaleString()}
                       </span>
                     </div>
@@ -445,14 +564,27 @@ export default function AnalyticsDashboard() {
 
             {/* ── Bottom Row ──────────────────────────────────────────────── */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
               {/* Device Distribution */}
-              <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: "1px solid #F1F3F9" }}>
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ borderBottom: "1px solid #F1F3F9" }}
+                >
                   <Smartphone className="h-4 w-4" style={{ color: "#9333EA" }} />
                   <div>
-                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>Device Distribution</h3>
-                    <p className="text-xs" style={{ color: "#9CA3AF" }}>How users access your site</p>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      Device Distribution
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      How users access your site
+                    </p>
                   </div>
                 </div>
                 <div className="divide-y" style={{ borderColor: "#F8F9FC" }}>
@@ -460,17 +592,36 @@ export default function AnalyticsDashboard() {
                     const pct = ((device.sessions / analyticsData.totalSessions) * 100).toFixed(1);
                     return (
                       <div key={index} className="px-6 py-3">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <p className="text-sm font-medium" style={{ color: "#374151" }}>{device.device}</p>
+                        <div className="mb-1.5 flex items-center justify-between">
+                          <p className="text-sm font-medium" style={{ color: "#374151" }}>
+                            {device.device}
+                          </p>
                           <div className="flex items-center gap-3">
-                            <span className="text-sm font-semibold tabular-nums" style={{ color: "#1A1F36" }}>{device.sessions.toLocaleString()}</span>
-                            <span className="text-xs font-medium w-10 text-right tabular-nums" style={{ color: "#9CA3AF" }}>{pct}%</span>
+                            <span
+                              className="text-sm font-semibold tabular-nums"
+                              style={{ color: "#1A1F36" }}
+                            >
+                              {device.sessions.toLocaleString()}
+                            </span>
+                            <span
+                              className="w-10 text-right text-xs font-medium tabular-nums"
+                              style={{ color: "#9CA3AF" }}
+                            >
+                              {pct}%
+                            </span>
                           </div>
                         </div>
-                        <div className="h-1.5 w-full rounded-full" style={{ background: "#F1F3F9" }}>
+                        <div
+                          className="h-1.5 w-full rounded-full"
+                          style={{ background: "#F1F3F9" }}
+                        >
                           <div
                             className="h-1.5 rounded-full"
-                            style={{ width: `${pct}%`, background: index === 0 ? "#9333EA" : index === 1 ? "#3B5BDB" : "#16A34A" }}
+                            style={{
+                              width: `${pct}%`,
+                              background:
+                                index === 0 ? "#9333EA" : index === 1 ? "#3B5BDB" : "#16A34A",
+                            }}
                           />
                         </div>
                       </div>
@@ -480,27 +631,51 @@ export default function AnalyticsDashboard() {
               </div>
 
               {/* User Events */}
-              <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1px solid #E5E8F0", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-                <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: "1px solid #F1F3F9" }}>
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ borderBottom: "1px solid #F1F3F9" }}
+                >
                   <Activity className="h-4 w-4" style={{ color: "#16A34A" }} />
                   <div>
-                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>User Events</h3>
-                    <p className="text-xs" style={{ color: "#9CA3AF" }}>Tracked interactions</p>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      User Events
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      Tracked interactions
+                    </p>
                   </div>
                 </div>
                 <div className="divide-y" style={{ borderColor: "#F8F9FC" }}>
                   {analyticsData.userEvents.map((event, index) => (
                     <div key={index} className="flex items-center justify-between px-6 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold" style={{ background: "#F0FDF4", color: "#16A34A" }}>
+                        <span
+                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                          style={{ background: "#F0FDF4", color: "#16A34A" }}
+                        >
                           {index + 1}
                         </span>
                         <div>
-                          <p className="text-sm font-medium" style={{ color: "#374151" }}>{event.eventName}</p>
-                          <p className="text-xs" style={{ color: "#9CA3AF" }}>{event.userCount.toLocaleString()} users</p>
+                          <p className="text-sm font-medium" style={{ color: "#374151" }}>
+                            {event.eventName}
+                          </p>
+                          <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                            {event.userCount.toLocaleString()} users
+                          </p>
                         </div>
                       </div>
-                      <span className="text-sm font-semibold tabular-nums" style={{ color: "#1A1F36" }}>
+                      <span
+                        className="text-sm font-semibold tabular-nums"
+                        style={{ color: "#1A1F36" }}
+                      >
                         {event.eventCount.toLocaleString()}
                       </span>
                     </div>

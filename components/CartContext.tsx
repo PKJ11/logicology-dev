@@ -139,7 +139,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   function increaseQuantity(name: string) {
     setCart((prev) => {
       const next = prev.map((p) => (p.name === name ? { ...p, quantity: p.quantity + 1 } : p));
-      trackCart("increase", next, next.find((p) => p.name === name));
+      trackCart(
+        "increase",
+        next,
+        next.find((p) => p.name === name)
+      );
       return next;
     });
   }
@@ -149,7 +153,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const next = prev.map((p) =>
         p.name === name ? { ...p, quantity: Math.max(1, p.quantity - 1) } : p
       );
-      trackCart("decrease", next, next.find((p) => p.name === name));
+      trackCart(
+        "decrease",
+        next,
+        next.find((p) => p.name === name)
+      );
       return next;
     });
   }

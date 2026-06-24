@@ -34,13 +34,13 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
     <div className="w-full space-y-6">
       {/* Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-gray-700">Progress</span>
           <span className="text-sm font-bold text-blue-600">{progress}%</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-300"
+            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -51,9 +51,7 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
         <button
           onClick={onReset}
           disabled={disabled}
-          className="px-4 py-2 sm:py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 
-            text-white font-semibold rounded-lg transition-colors duration-200 
-            text-sm sm:text-base"
+          className="rounded-lg bg-gray-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gray-600 disabled:bg-gray-300 sm:py-3 sm:text-base"
         >
           🔄 Reset
         </button>
@@ -61,9 +59,7 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
         <button
           onClick={onHint}
           disabled={disabled || !hasHintAvailable}
-          className="px-4 py-2 sm:py-3 bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-300 
-            text-white font-semibold rounded-lg transition-colors duration-200 
-            text-sm sm:text-base"
+          className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-yellow-600 disabled:bg-yellow-300 sm:py-3 sm:text-base"
         >
           💡 Hint
         </button>
@@ -71,9 +67,7 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
         <button
           onClick={onCheck}
           disabled={disabled || progress === 0}
-          className="px-4 py-2 sm:py-3 bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 
-            text-white font-semibold rounded-lg transition-colors duration-200 
-            text-sm sm:text-base"
+          className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-purple-600 disabled:bg-purple-300 sm:py-3 sm:text-base"
         >
           ✓ Check
         </button>
@@ -81,9 +75,7 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
         {hasNextPuzzle && isCompleted && (
           <button
             onClick={onNextPuzzle}
-            className="px-4 py-2 sm:py-3 bg-green-500 hover:bg-green-600 
-              text-white font-semibold rounded-lg transition-colors duration-200 
-              text-sm sm:text-base col-span-2 sm:col-span-1"
+            className="col-span-2 rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-600 sm:col-span-1 sm:py-3 sm:text-base"
           >
             ➜ Next
           </button>
@@ -92,18 +84,16 @@ export const HidatoControls: React.FC<HidatoControlsProps> = ({
 
       {/* Info Message */}
       {isCompleted && (
-        <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded">
-          <p className="text-green-800 font-semibold text-sm sm:text-base">
+        <div className="rounded border-l-4 border-green-500 bg-green-50 p-4">
+          <p className="text-sm font-semibold text-green-800 sm:text-base">
             ✨ Puzzle solved! Great job!
           </p>
         </div>
       )}
 
       {!hasHintAvailable && progress < 100 && (
-        <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-          <p className="text-blue-800 text-xs sm:text-sm">
-            Fill all cells to solve the puzzle!
-          </p>
+        <div className="rounded border-l-4 border-blue-500 bg-blue-50 p-4">
+          <p className="text-xs text-blue-800 sm:text-sm">Fill all cells to solve the puzzle!</p>
         </div>
       )}
     </div>

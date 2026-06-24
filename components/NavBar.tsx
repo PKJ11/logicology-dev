@@ -197,7 +197,9 @@ export default function NavBar() {
     const dropdown = type === "games" ? gamesDropdownRef.current : booksDropdownRef.current;
     if (!dropdown) return false;
     const rect = dropdown.getBoundingClientRect();
-    return mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+    return (
+      mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom
+    );
   };
 
   const handleDropdownHover = () => {
@@ -248,7 +250,7 @@ export default function NavBar() {
         vw-based drift on ultra-wide monitors.
         ─────────────────────────────────────────────────────────────────
       */}
-      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8 ">
+      <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
         <div className="flex justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -286,7 +288,7 @@ export default function NavBar() {
                 <Link
                   href={item.href}
                   onClick={closeAll}
-                  className="relative flex items-center gap-1 py-1 text-[16px] text-[#0B3F44] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
+                  className="relative flex items-center gap-1 py-1 text-[16px] text-[#3d3b40] transition-colors duration-200 after:absolute after:bottom-[-2px] after:left-1/2 after:h-[2px] after:w-full after:origin-center after:-translate-x-1/2 after:scale-x-0 after:rounded-full after:bg-brand-teal after:transition-transform after:duration-300 after:content-[''] hover:text-brand-teal hover:after:scale-x-100"
                 >
                   {item.name}
                   {item.hasDropdown && (
@@ -468,7 +470,10 @@ export default function NavBar() {
                         key={g.id}
                         href={href}
                         prefetch={false}
-                        onClick={(e) => { e.stopPropagation(); goto(href); }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goto(href);
+                        }}
                         className="block py-2 text-slate-600 hover:text-brand-tealDark"
                       >
                         {g.title}
@@ -478,7 +483,10 @@ export default function NavBar() {
                   <Link
                     href="/games"
                     prefetch={false}
-                    onClick={(e) => { e.stopPropagation(); goto("/games"); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goto("/games");
+                    }}
                     className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Games
@@ -512,7 +520,10 @@ export default function NavBar() {
                         key={b.id}
                         href={href}
                         prefetch={false}
-                        onClick={(e) => { e.stopPropagation(); goto(href); }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goto(href);
+                        }}
                         className="block py-2 text-slate-600 hover:text-brand-tealDark"
                       >
                         {b.title}
@@ -522,7 +533,10 @@ export default function NavBar() {
                   <Link
                     href="/books"
                     prefetch={false}
-                    onClick={(e) => { e.stopPropagation(); goto("/books"); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goto("/books");
+                    }}
                     className="block py-2 font-medium text-brand-teal hover:text-brand-tealDark"
                   >
                     View All Books
@@ -531,13 +545,25 @@ export default function NavBar() {
               )}
             </div>
 
-            <Link href="/products" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
+            <Link
+              href="/products"
+              onClick={closeAll}
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+            >
               Shop
             </Link>
-            <Link href="/about" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
+            <Link
+              href="/about"
+              onClick={closeAll}
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+            >
               About Us
             </Link>
-            <Link href="Community" onClick={closeAll} className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full">
+            <Link
+              href="Community"
+              onClick={closeAll}
+              className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
+            >
               Community
             </Link>
           </div>

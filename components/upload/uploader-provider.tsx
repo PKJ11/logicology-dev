@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
 /**
  * Represents the possible statuses of a file in the uploader.
  */
-export type FileStatus = 'PENDING' | 'UPLOADING' | 'COMPLETE' | 'ERROR';
+export type FileStatus = "PENDING" | "UPLOADING" | "COMPLETE" | "ERROR";
 
 /**
  * Represents the state of a file in the uploader.
@@ -39,9 +39,9 @@ export type FileState = {
 /**
  * Represents a file that has completed uploading.
  */
-export type CompletedFileState = Omit<FileState, 'status' | 'url'> & {
+export type CompletedFileState = Omit<FileState, "status" | "url"> & {
   /** Status is guaranteed to be 'COMPLETE' */
-  status: 'COMPLETE';
+  status: "COMPLETE";
 
   /** URL is guaranteed to be available */
   url: string;
@@ -101,9 +101,7 @@ type UploaderContextType<TOptions = unknown> = {
  */
 type ProviderProps<TOptions = unknown> = {
   /** React children or render function */
-  children:
-    | React.ReactNode
-    | ((context: UploaderContextType<TOptions>) => React.ReactNode);
+  children: React.ReactNode | ((context: UploaderContextType<TOptions>) => React.ReactNode);
 
   /** Callback when files change */
   onChange?: (args: {
@@ -131,8 +129,7 @@ type ProviderProps<TOptions = unknown> = {
 };
 
 // Context
-const UploaderContext =
-  React.createContext<UploaderContextType<unknown> | null>(null);
+const UploaderContext = React.createContext<UploaderContextType<unknown> | null>(null);
 
 /**
  * Hook to access the uploader context.
@@ -148,7 +145,7 @@ const UploaderContext =
 export function useUploader<TOptions = unknown>() {
   const context = React.useContext(UploaderContext);
   if (!context) {
-    throw new Error('useUploader must be used within a UploaderProvider');
+    throw new Error("useUploader must be used within a UploaderProvider");
   }
   return context as UploaderContextType<TOptions>;
 }
@@ -180,12 +177,8 @@ export function UploaderProvider<TOptions = unknown>({
   value: externalValue,
   autoUpload = false,
 }: ProviderProps<TOptions>) {
-  const [fileStates, setFileStates] = React.useState<FileState[]>(
-    externalValue ?? [],
-  );
-  const [pendingAutoUploadKeys, setPendingAutoUploadKeys] = React.useState<
-    string[] | null
-  >(null);
+  const [fileStates, setFileStates] = React.useState<FileState[]>(externalValue ?? []);
+  const [pendingAutoUploadKeys, setPendingAutoUploadKeys] = React.useState<string[] | null>(null);
 
   // Sync with external value if provided
   React.useEffect(() => {
@@ -194,26 +187,22 @@ export function UploaderProvider<TOptions = unknown>({
     }
   }, [externalValue]);
 
-  const updateFileState = React.useCallback(
-    (key: string, changes: Partial<FileState>) => {
-      setFileStates((prevStates) => {
-        return prevStates.map((fileState) => {
-          if (fileState.key === key) {
-            return { ...fileState, ...changes };
-          }
-          return fileState;
-        });
+  const updateFileState = React.useCallback((key: string, changes: Partial<FileState>) => {
+    setFileStates((prevStates) => {
+      return prevStates.map((fileState) => {
+        if (fileState.key === key) {
+          return { ...fileState, ...changes };
+        }
+        return fileState;
       });
-    },
-    [],
-  );
+    });
+  }, []);
 
   const uploadFiles = React.useCallback(
     async (keysToUpload?: string[], options?: TOptions) => {
       const filesToUpload = fileStates.filter(
         (fileState) =>
-          fileState.status === 'PENDING' &&
-          (!keysToUpload || keysToUpload.includes(fileState.key)),
+          fileState.status === "PENDING" && (!keysToUpload || keysToUpload.includes(fileState.key))
       );
 
       if (filesToUpload.length === 0) return;
@@ -224,7 +213,7 @@ export function UploaderProvider<TOptions = unknown>({
             const abortController = new AbortController();
             updateFileState(fileState.key, {
               abortController,
-              status: 'UPLOADING',
+              status: "UPLOADING",
               progress: 0,
             });
 
@@ -242,13 +231,13 @@ export function UploaderProvider<TOptions = unknown>({
 
             const completedFile = {
               ...fileState,
-              status: 'COMPLETE' as const,
+              status: "COMPLETE" as const,
               progress: 100,
               url: uploadResult?.url,
             };
 
             updateFileState(fileState.key, {
-              status: 'COMPLETE',
+              status: "COMPLETE",
               progress: 100,
               url: uploadResult?.url,
             });
@@ -261,40 +250,37 @@ export function UploaderProvider<TOptions = unknown>({
             if (
               err instanceof Error &&
               // if using with EdgeStore, the error name is UploadAbortedError
-              (err.name === 'AbortError' || err.name === 'UploadAbortedError')
+              (err.name === "AbortError" || err.name === "UploadAbortedError")
             ) {
               updateFileState(fileState.key, {
-                status: 'PENDING',
+                status: "PENDING",
                 progress: 0,
-                error: 'Upload canceled',
+                error: "Upload canceled",
               });
             } else {
-              if (process.env.NODE_ENV === 'development') {
+              if (process.env.NODE_ENV === "development") {
                 console.error(err);
               }
-              const errorMessage =
-                err instanceof Error ? err.message : 'Upload failed';
+              const errorMessage = err instanceof Error ? err.message : "Upload failed";
               updateFileState(fileState.key, {
-                status: 'ERROR',
+                status: "ERROR",
                 error: errorMessage,
               });
             }
           }
-        }),
+        })
       );
     },
-    [fileStates, updateFileState, uploadFn, onUploadCompleted],
+    [fileStates, updateFileState, uploadFn, onUploadCompleted]
   );
 
   const addFiles = React.useCallback(
     (files: File[]) => {
       const newFileStates = files.map<FileState>((file) => ({
         file,
-        key: `${file.name}-${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2)}`,
+        key: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         progress: 0,
-        status: 'PENDING',
+        status: "PENDING",
         autoUpload,
       }));
       setFileStates((prev) => [...prev, ...newFileStates]);
@@ -310,21 +296,19 @@ export function UploaderProvider<TOptions = unknown>({
         setPendingAutoUploadKeys(newFileStates.map((fs) => fs.key));
       }
     },
-    [autoUpload, onFileAdded],
+    [autoUpload, onFileAdded]
   );
 
   const removeFile = React.useCallback(
     (key: string) => {
-      setFileStates((prev) =>
-        prev.filter((fileState) => fileState.key !== key),
-      );
+      setFileStates((prev) => prev.filter((fileState) => fileState.key !== key));
 
       // Call onFileRemoved when a file is removed
       if (onFileRemoved) {
         void onFileRemoved(key);
       }
     },
-    [onFileRemoved],
+    [onFileRemoved]
   );
 
   const cancelUpload = React.useCallback(
@@ -337,11 +321,11 @@ export function UploaderProvider<TOptions = unknown>({
           removeFile(key);
         } else {
           // If it was not an auto-upload, reset the file state
-          updateFileState(key, { status: 'PENDING', progress: 0 });
+          updateFileState(key, { status: "PENDING", progress: 0 });
         }
       }
     },
-    [fileStates, updateFileState, removeFile],
+    [fileStates, updateFileState, removeFile]
   );
 
   const resetFiles = React.useCallback(() => {
@@ -350,7 +334,7 @@ export function UploaderProvider<TOptions = unknown>({
 
   React.useEffect(() => {
     const completedFileStates = fileStates.filter(
-      (fs): fs is CompletedFileState => fs.status === 'COMPLETE' && !!fs.url,
+      (fs): fs is CompletedFileState => fs.status === "COMPLETE" && !!fs.url
     );
     void onChange?.({
       allFiles: fileStates,
@@ -367,8 +351,8 @@ export function UploaderProvider<TOptions = unknown>({
   }, [pendingAutoUploadKeys, uploadFiles]);
 
   const isUploading = React.useMemo(
-    () => fileStates.some((fs) => fs.status === 'UPLOADING'),
-    [fileStates],
+    () => fileStates.some((fs) => fs.status === "UPLOADING"),
+    [fileStates]
   );
 
   const value = React.useMemo(
@@ -393,12 +377,12 @@ export function UploaderProvider<TOptions = unknown>({
       resetFiles,
       isUploading,
       autoUpload,
-    ],
+    ]
   );
 
   return (
     <UploaderContext.Provider value={value as UploaderContextType<unknown>}>
-      {typeof children === 'function' ? children(value) : children}
+      {typeof children === "function" ? children(value) : children}
     </UploaderContext.Provider>
   );
 }
@@ -416,10 +400,10 @@ export function UploaderProvider<TOptions = unknown>({
  * ```
  */
 export function formatFileSize(bytes?: number) {
-  if (!bytes) return '0 B';
+  if (!bytes) return "0 B";
   const k = 1024;
   const dm = 2;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }

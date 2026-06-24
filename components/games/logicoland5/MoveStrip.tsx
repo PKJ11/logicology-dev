@@ -1,13 +1,22 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 interface MoveStripProps {
   moves: string[];
   currentMoveIndex: number;
-  type: 'color' | 'arrow';
+  type: "color" | "arrow";
   onMoveClick?: (index: number) => void;
   isInteractive?: boolean;
 }
@@ -17,39 +26,64 @@ export default function MoveStrip({
   currentMoveIndex,
   type,
   onMoveClick,
-  isInteractive = false
+  isInteractive = false,
 }: MoveStripProps) {
   const getMoveDisplay = (move: string) => {
-    if (type === 'color') {
+    if (type === "color") {
       const moveMap: Record<string, { label: string; textColor: string; icon: React.ReactNode }> = {
-        'F': { label: 'Forward', textColor: 'text-green-600', icon: <ChevronUp className="w-6 h-6" /> },
-        'B': { label: 'Backward', textColor: 'text-red-600', icon: <ChevronDown className="w-6 h-6" /> },
-        'L': { label: 'Left', textColor: 'text-blue-600', icon: <ChevronLeft className="w-6 h-6" /> },
-        'R': { label: 'Right', textColor: 'text-yellow-600', icon: <ChevronRight className="w-6 h-6" /> },
-        'U': { label: 'Up', textColor: 'text-green-600', icon: <ArrowUp className="w-6 h-6" /> },
-        'D': { label: 'Down', textColor: 'text-red-600', icon: <ArrowDown className="w-6 h-6" /> }
+        F: {
+          label: "Forward",
+          textColor: "text-green-600",
+          icon: <ChevronUp className="h-6 w-6" />,
+        },
+        B: {
+          label: "Backward",
+          textColor: "text-red-600",
+          icon: <ChevronDown className="h-6 w-6" />,
+        },
+        L: { label: "Left", textColor: "text-blue-600", icon: <ChevronLeft className="h-6 w-6" /> },
+        R: {
+          label: "Right",
+          textColor: "text-yellow-600",
+          icon: <ChevronRight className="h-6 w-6" />,
+        },
+        U: { label: "Up", textColor: "text-green-600", icon: <ArrowUp className="h-6 w-6" /> },
+        D: { label: "Down", textColor: "text-red-600", icon: <ArrowDown className="h-6 w-6" /> },
       };
-      return moveMap[move] || { label: move, textColor: 'text-gray-600', icon: null };
+      return moveMap[move] || { label: move, textColor: "text-gray-600", icon: null };
     } else {
-      const arrowMap: Record<string, { label: string; textColor: string; icon: React.ReactNode }> = {
-        '↑': { label: 'Up', textColor: 'text-sky-600', icon: <ArrowUp className="w-8 h-8" /> },
-        '↓': { label: 'Down', textColor: 'text-purple-600', icon: <ArrowDown className="w-8 h-8" /> },
-        '←': { label: 'Left', textColor: 'text-pink-600', icon: <ArrowLeft className="w-8 h-8" /> },
-        '→': { label: 'Right', textColor: 'text-amber-600', icon: <ArrowRight className="w-8 h-8" /> }
-      };
-      return arrowMap[move] || { label: move, textColor: 'text-gray-600', icon: null };
+      const arrowMap: Record<string, { label: string; textColor: string; icon: React.ReactNode }> =
+        {
+          "↑": { label: "Up", textColor: "text-sky-600", icon: <ArrowUp className="h-8 w-8" /> },
+          "↓": {
+            label: "Down",
+            textColor: "text-purple-600",
+            icon: <ArrowDown className="h-8 w-8" />,
+          },
+          "←": {
+            label: "Left",
+            textColor: "text-pink-600",
+            icon: <ArrowLeft className="h-8 w-8" />,
+          },
+          "→": {
+            label: "Right",
+            textColor: "text-amber-600",
+            icon: <ArrowRight className="h-8 w-8" />,
+          },
+        };
+      return arrowMap[move] || { label: move, textColor: "text-gray-600", icon: null };
     }
   };
 
   return (
-    <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-4 shadow-soft border border-orange-200">
-      <div className="text-center mb-4">
-        <h3 className="text-2xl font-bold text-gray-800 font-heading">
-          {type === 'color' ? 'MOVEMENT CODE' : 'ARROW STEPS'}
+    <div className="rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-4 shadow-soft">
+      <div className="mb-4 text-center">
+        <h3 className="font-heading text-2xl font-bold text-gray-800">
+          {type === "color" ? "MOVEMENT CODE" : "ARROW STEPS"}
         </h3>
         <p className="text-gray-600">Follow the sequence to find your destination</p>
       </div>
-      
+
       <div className="flex flex-wrap justify-center gap-3">
         {moves.map((move, index) => {
           const { label, textColor, icon } = getMoveDisplay(move);
@@ -65,38 +99,23 @@ export default function MoveStrip({
               onClick={() => isInteractive && onMoveClick?.(index)}
               animate={{
                 scale: isCurrent ? [1, 1.1, 1] : 1,
-                y: isCurrent ? [0, -5, 0] : 0
+                y: isCurrent ? [0, -5, 0] : 0,
               }}
               transition={{ duration: 0.3 }}
-              className={`
-                relative
-                rounded-xl
-                bg-white
-                border-2 border-gray-300
-                flex flex-col items-center justify-center
-                ${type === 'color' ? 'w-20 h-20' : 'w-24 h-24'}
-                shadow-lg
-                transition-all duration-200
-                ${isCurrent ? 'ring-2 ring-orange-400 ring-offset-2 shadow-xl' : ''}
-                ${isCurrent ? 'border-orange-400' : ''}
-                ${isPast ? 'opacity-70' : ''}
-                ${isInteractive ? 'cursor-pointer hover:border-gray-400 hover:shadow-md' : ''}
-              `}
+              className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-gray-300 bg-white ${type === "color" ? "h-20 w-20" : "h-24 w-24"} shadow-lg transition-all duration-200 ${isCurrent ? "shadow-xl ring-2 ring-orange-400 ring-offset-2" : ""} ${isCurrent ? "border-orange-400" : ""} ${isPast ? "opacity-70" : ""} ${isInteractive ? "cursor-pointer hover:border-gray-400 hover:shadow-md" : ""} `}
             >
               {/* Move number */}
-              <div className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold shadow">
+              <div className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-sm font-bold text-white shadow">
                 {index + 1}
               </div>
 
               {/* Move icon/content */}
               <div className={`${textColor} font-bold`}>
-                {icon || (
-                  <span className="text-2xl">{move}</span>
-                )}
+                {icon || <span className="text-2xl">{move}</span>}
               </div>
 
               {/* Move label */}
-              <div className="text-xs font-bold mt-1 px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+              <div className="mt-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-700">
                 {label}
               </div>
 
@@ -105,7 +124,7 @@ export default function MoveStrip({
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1 }}
-                  className="absolute -bottom-1 w-3 h-3 bg-orange-500 rounded-full"
+                  className="absolute -bottom-1 h-3 w-3 rounded-full bg-orange-500"
                 />
               )}
             </motion.div>
@@ -115,16 +134,18 @@ export default function MoveStrip({
 
       {/* Progress indicator */}
       <div className="mt-6">
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-          <span>Step {currentMoveIndex + 1} of {moves.length}</span>
+        <div className="mb-1 flex items-center justify-between text-sm text-gray-600">
+          <span>
+            Step {currentMoveIndex + 1} of {moves.length}
+          </span>
           <span>{Math.round(((currentMoveIndex + 1) / moves.length) * 100)}%</span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 overflow-hidden rounded-full bg-gray-200">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${((currentMoveIndex + 1) / moves.length) * 100}%` }}
             transition={{ duration: 0.5 }}
-            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"
+            className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500"
           />
         </div>
       </div>

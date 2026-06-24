@@ -45,10 +45,7 @@ export async function GET(req: NextRequest) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json(
-        { success: false, error: "Missing id parameter" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Missing id parameter" }, { status: 400 });
     }
 
     const client = new MongoClient(MONGO_URI);

@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { ContentItem, Tier, UploadedFile } from '@/app/types/subscription';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ContentItem, Tier, UploadedFile } from "@/app/types/subscription";
 
 export default function AdminWorksheets() {
   const [worksheets, setWorksheets] = useState<ContentItem[]>([]);
   const [filteredWorksheets, setFilteredWorksheets] = useState<ContentItem[]>([]);
   const [tiers, setTiers] = useState<Tier[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTier, setSelectedTier] = useState<number | 'all'>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTier, setSelectedTier] = useState<number | "all">("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
@@ -29,18 +29,18 @@ export default function AdminWorksheets() {
 
   const fetchWorksheets = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/content?type=worksheet', {
-        headers: { 'Authorization': `Bearer ${token}` }
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch("/api/admin/content?type=worksheet", {
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-      
+
       if (data.success) {
         setWorksheets(data.content);
         setFilteredWorksheets(data.content);
       }
     } catch (err) {
-      console.error('Error fetching worksheets:', err);
+      console.error("Error fetching worksheets:", err);
     } finally {
       setIsLoading(false);
     }
@@ -48,30 +48,31 @@ export default function AdminWorksheets() {
 
   const fetchTiers = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/tiers', {
-        headers: { 'Authorization': `Bearer ${token}` }
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch("/api/admin/tiers", {
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
       if (data.success) setTiers(data.tiers);
     } catch (err) {
-      console.error('Error fetching tiers:', err);
+      console.error("Error fetching tiers:", err);
     }
   };
 
   const applyFilters = () => {
     let filtered = [...worksheets];
 
-    if (selectedTier !== 'all') {
-      filtered = filtered.filter(w => w.tierId === selectedTier);
+    if (selectedTier !== "all") {
+      filtered = filtered.filter((w) => w.tierId === selectedTier);
     }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(w => 
-        w.title.toLowerCase().includes(query) ||
-        w.description.toLowerCase().includes(query) ||
-        w.category.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        (w) =>
+          w.title.toLowerCase().includes(query) ||
+          w.description.toLowerCase().includes(query) ||
+          w.category.toLowerCase().includes(query)
       );
     }
 
@@ -79,29 +80,33 @@ export default function AdminWorksheets() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this worksheet?')) return;
+    if (!confirm("Are you sure you want to delete this worksheet?")) return;
 
     try {
-      const token = localStorage.getItem('adminToken');
+      const token = localStorage.getItem("adminToken");
       const response = await fetch(`/api/admin/content?id=${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
         fetchWorksheets();
       }
     } catch (err) {
-      console.error('Error deleting worksheet:', err);
+      console.error("Error deleting worksheet:", err);
     }
   };
 
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty?.toLowerCase()) {
-      case 'easy': return 'bg-green-100 text-green-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'hard': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case "easy":
+        return "bg-green-100 text-green-700";
+      case "medium":
+        return "bg-yellow-100 text-yellow-700";
+      case "hard":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -123,15 +128,20 @@ export default function AdminWorksheets() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">📚 Worksheets Management</h1>
           <p className="mt-2 text-gray-600">
-            Total {filteredWorksheets.length} worksheet{filteredWorksheets.length !== 1 ? 's' : ''}
+            Total {filteredWorksheets.length} worksheet{filteredWorksheets.length !== 1 ? "s" : ""}
           </p>
         </div>
         <Link
           href="/admin/content/upload?type=worksheet"
-          className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-white shadow-lg hover:scale-105 transition-all"
+          className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-white shadow-lg transition-all hover:scale-105"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
           </svg>
           <span>Add New Worksheet</span>
         </Link>
@@ -154,12 +164,16 @@ export default function AdminWorksheets() {
             <label className="mb-2 block text-sm font-medium text-gray-700">Filter by Tier</label>
             <select
               value={selectedTier}
-              onChange={(e) => setSelectedTier(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+              onChange={(e) =>
+                setSelectedTier(e.target.value === "all" ? "all" : Number(e.target.value))
+              }
               className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:border-orange-500 focus:outline-none"
             >
               <option value="all">All Tiers</option>
-              {tiers.map(tier => (
-                <option key={tier.id} value={tier.id}>{tier.name}</option>
+              {tiers.map((tier) => (
+                <option key={tier.id} value={tier.id}>
+                  {tier.name}
+                </option>
               ))}
             </select>
           </div>
@@ -179,9 +193,9 @@ export default function AdminWorksheets() {
           <div className="flex items-end">
             <button
               onClick={() => {
-                setSelectedTier('all');
-                setSelectedDifficulty('all');
-                setSearchQuery('');
+                setSelectedTier("all");
+                setSelectedDifficulty("all");
+                setSearchQuery("");
               }}
               className="w-full rounded-xl border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
             >
@@ -195,8 +209,8 @@ export default function AdminWorksheets() {
       {filteredWorksheets.length === 0 ? (
         <div className="rounded-2xl bg-white p-12 text-center shadow-xl">
           <div className="mx-auto mb-4 text-6xl text-gray-400">📄</div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">No Worksheets Found</h3>
-          <p className="text-gray-600 mb-6">Get started by creating your first worksheet.</p>
+          <h3 className="mb-2 text-xl font-bold text-gray-900">No Worksheets Found</h3>
+          <p className="mb-6 text-gray-600">Get started by creating your first worksheet.</p>
           <Link
             href="/admin/content/upload?type=worksheet"
             className="inline-flex items-center space-x-2 rounded-xl bg-orange-500 px-6 py-3 text-white hover:bg-orange-600"
@@ -205,43 +219,57 @@ export default function AdminWorksheets() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredWorksheets.map((worksheet) => (
-            <div key={worksheet._id} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all">
+            <div
+              key={worksheet._id}
+              className="overflow-hidden rounded-2xl bg-white shadow-xl transition-all hover:shadow-2xl"
+            >
               {/* Preview Image */}
               <div className="relative h-48 bg-gradient-to-br from-orange-100 to-pink-100">
                 {worksheet.thumbnail ? (
-                  <img src={worksheet.thumbnail} alt={worksheet.title} className="w-full h-full object-cover" />
+                  <img
+                    src={worksheet.thumbnail}
+                    alt={worksheet.title}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
-                  <div className="flex items-center justify-center h-full">
+                  <div className="flex h-full items-center justify-center">
                     <span className="text-6xl">📄</span>
                   </div>
                 )}
                 {/* Tier Badge */}
-                <div className="absolute top-3 right-3">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${
-                    worksheet.tierId === 1 ? 'bg-gray-500' :
-                    worksheet.tierId === 2 ? 'bg-blue-500' :
-                    worksheet.tierId === 3 ? 'bg-purple-500' : 'bg-orange-500'
-                  }`}>
-                    {tiers.find(t => t.id === worksheet.tierId)?.name || `Tier ${worksheet.tierId}`}
+                <div className="absolute right-3 top-3">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-bold text-white ${
+                      worksheet.tierId === 1
+                        ? "bg-gray-500"
+                        : worksheet.tierId === 2
+                          ? "bg-blue-500"
+                          : worksheet.tierId === 3
+                            ? "bg-purple-500"
+                            : "bg-orange-500"
+                    }`}
+                  >
+                    {tiers.find((t) => t.id === worksheet.tierId)?.name ||
+                      `Tier ${worksheet.tierId}`}
                   </span>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{worksheet.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{worksheet.description}</p>
-                
+                <h3 className="mb-2 text-xl font-bold text-gray-900">{worksheet.title}</h3>
+                <p className="mb-4 line-clamp-2 text-sm text-gray-600">{worksheet.description}</p>
+
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">
+                <div className="mb-4 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-purple-100 px-2 py-1 text-xs text-purple-600">
                     {worksheet.category}
                   </span>
-                 
+
                   {worksheet.fileCount && (
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
                       📎 {worksheet.fileCount} files
                     </span>
                   )}
@@ -251,19 +279,19 @@ export default function AdminWorksheets() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPreviewPdf(worksheet.files?.[0]?.url || null)}
-                    className="flex-1 bg-gray-100 text-gray-700 rounded-xl py-2 text-sm font-medium hover:bg-gray-200"
+                    className="flex-1 rounded-xl bg-gray-100 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
                   >
                     👁️ Preview
                   </button>
                   <Link
                     href={`/admin/content/edit/${worksheet._id}`}
-                    className="flex-1 bg-blue-500 text-white rounded-xl py-2 text-sm font-medium hover:bg-blue-600 text-center"
+                    className="flex-1 rounded-xl bg-blue-500 py-2 text-center text-sm font-medium text-white hover:bg-blue-600"
                   >
                     ✏️ Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(worksheet._id!)}
-                    className="flex-1 bg-red-500 text-white rounded-xl py-2 text-sm font-medium hover:bg-red-600"
+                    className="flex-1 rounded-xl bg-red-500 py-2 text-sm font-medium text-white hover:bg-red-600"
                   >
                     🗑️ Delete
                   </button>
@@ -277,13 +305,13 @@ export default function AdminWorksheets() {
       {/* Preview Modal */}
       {previewPdf && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="relative w-full max-w-4xl bg-white rounded-2xl overflow-hidden">
+          <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white">
             <div className="h-[80vh]">
-              <iframe src={previewPdf} className="w-full h-full" title="PDF Preview" />
+              <iframe src={previewPdf} className="h-full w-full" title="PDF Preview" />
             </div>
             <button
               onClick={() => setPreviewPdf(null)}
-              className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100"
+              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg hover:bg-gray-100"
             >
               ✕
             </button>
