@@ -294,7 +294,7 @@ function Hero() {
                     }}
                   >
                     <motion.img
-                      src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
+                      src="https://ik.imagekit.io/pratik11/ABOUT-US-MAIN-BANNER-IMAGE.png"
                       alt="Prime Time Game"
                       className="object-cover"
                       style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
@@ -330,7 +330,7 @@ function Hero() {
                   }}
                 >
                   <motion.img
-                    src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
+                    src="https://ik.imagekit.io/pratik11/ABOUT-US-MAIN-BANNER-IMAGE.png"
                     alt="Prime Time Game"
                     className="object-cover"
                     style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
