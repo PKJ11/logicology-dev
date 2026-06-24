@@ -451,7 +451,7 @@ function Hero() {
                     }}
                   >
                     <motion.img
-                      src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-CIRCLE.png?updatedAt=1782280451964"
+                      src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
                       alt="Prime Time Game"
                       className="object-cover"
                       style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
@@ -491,7 +491,7 @@ function Hero() {
                   }}
                 >
                   <motion.img
-                    src="https://ik.imagekit.io/pratik11/PRIME-TIME-HERO-IMAGE.png?updatedAt=1780453409054"
+                    src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
                     alt="Prime Time Game"
                     className="object-contain"
                     style={{ width: "70%", height: "70%", position: "relative", zIndex: 5 }}
@@ -635,21 +635,32 @@ function GameDetails() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} id="GameDetails" className="w-full bg-brand-red">
+    <section ref={sectionRef} id="GameDetails" className="w-full bg-white">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="order-1 flex w-full items-center py-6 md:order-1 md:w-1/2 md:py-0"
-          >
-            <MediaLayoutRight
-              image="https://ik.imagekit.io/pratik11/MATHS-THAT-MAKE-SENSE.png?updatedAt=1781520602044"
-              videoSrc=""
-              text="Prime Time™"
-            />
-          </motion.div>
+  initial={{ opacity: 0, x: -50 }}
+  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+  transition={{ duration: 0.7, delay: 0.2 }}
+  className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
+>
+  <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px] ">
+    {/* Outer white card — matches MediaLayoutRight's wrapper exactly */}
+    <div className="h-full rounded-[28px] bg-gray-200 p-4 shadow-lg sm:p-5 md:p-6" style={{ border: "2px solid #e5e7eb" }}>
+      {/* Inner clipping div */}
+      <div className="relative h-full overflow-hidden rounded-[22px]">
+        <Image
+          src="https://ik.imagekit.io/pratik11/MATHS-THAT-MAKE-SENSE.png?updatedAt=1781520602044"
+          alt="Prime Time™"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
+          priority
+        />
+      </div>
+    </div>
+  </div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 50 }}
@@ -661,7 +672,7 @@ function GameDetails() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6 }}
-              className="headingstyle font-heading font-extrabold leading-tight text-white"
+              className="headingstyle font-heading font-extrabold leading-tight text-brand-black"
             >
               Maths That Makes Sense Through Play
             </motion.h2>
@@ -670,7 +681,7 @@ function GameDetails() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="textstyles mt-3 max-w-xl font-sans text-white"
+              className="textstyles mt-3 max-w-xl font-sans text-brand-black"
             >
               You don't need to teach your child prime numbers before introducing Prime Time™. As
               they play, experiment and develop strategies, concepts like factors, multiples, primes

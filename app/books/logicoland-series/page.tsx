@@ -496,7 +496,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     }}
                   >
                     <motion.img
-                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE.png?updatedAt=1782280451275"
+                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE-NEW.png"
                       alt="Logicoland Series"
                       className="object-cover"
                       style={{
@@ -532,7 +532,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     }}
                   >
                     <motion.img
-                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE.png?updatedAt=1782280451275"
+                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE-NEW.png"
                       alt="Logicoland Series"
                       className="object-cover"
                       style={{
@@ -654,7 +654,7 @@ function BookDetails() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} id="BookDetails" className="w-full bg-brand-purple">
+    <section ref={sectionRef} id="BookDetails" className="w-full bg-brand-teal">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <motion.div
@@ -664,7 +664,7 @@ function BookDetails() {
             className="order-1 flex w-full items-center py-6 md:order-1 md:w-1/2 md:py-0"
           >
             <MediaLayoutRight
-              image="https://ik.imagekit.io/pratik11/PRIME-TIME-FOLD-2-IMAGE.png?updatedAt=1758352229897"
+              image="https://ik.imagekit.io/pratik11/LOGICOLAND-PAGE-FOLD-2-IMAGE.png"
               videoSrc=""
               text="PrimeTime™"
             />

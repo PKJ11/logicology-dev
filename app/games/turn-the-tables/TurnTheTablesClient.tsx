@@ -617,7 +617,7 @@ function GameDetails() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} id="GameDetails" className="w-full bg-brand-blue">
+    <section ref={sectionRef} id="GameDetails" className="w-full bg-brand-coral">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <motion.div

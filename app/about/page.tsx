@@ -8,6 +8,20 @@ import Tribe from "@/components/Tribe";
 import VideoLayout from "@/components/VideoLayout";
 import Head from "next/head";
 import Community from "@/components/Community";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import {
+  Navigation,
+  Autoplay,
+  Keyboard,
+  FreeMode,
+  EffectCoverflow,
+  Pagination,
+} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 export default function AboutUs() {
   return (
@@ -165,7 +179,7 @@ export default function AboutUs() {
       </Head>
       <main className="min-h-screen bg-brand-hero">
         <NavBar />
-        <HeroVideo />
+        <Hero />
         <OurStory />
         <OurVision />
 
@@ -190,219 +204,193 @@ interface ExtendedDocument extends Document {
   webkitFullscreenElement?: Element;
 }
 
-function HeroVideo() {
-  const videoRef = useRef<ExtendedHTMLVideoElement | null>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Detect iOS devices
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    setIsIOS(isIOSDevice);
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const toggleFullscreen = async () => {
-    if (!videoRef.current) return;
-
-    try {
-      if (isIOS) {
-        // Remove playsInline and enable controls for iOS fullscreen
-        videoRef.current.removeAttribute("playsInline");
-        videoRef.current.setAttribute("controls", "true");
-        if (videoRef.current.webkitEnterFullscreen) {
-          videoRef.current.webkitEnterFullscreen();
-          setIsFullscreen(true);
-        }
-      } else {
-        // Standard fullscreen for other devices
-        const doc = document as ExtendedDocument;
-        if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
-          if (videoRef.current.requestFullscreen) {
-            await videoRef.current.requestFullscreen();
-          } else if (videoRef.current.webkitRequestFullscreen) {
-            await videoRef.current.webkitRequestFullscreen();
-          }
-          setIsFullscreen(true);
-        } else {
-          if (doc.exitFullscreen) {
-            await doc.exitFullscreen();
-          } else if (doc.webkitExitFullscreen) {
-            await doc.webkitExitFullscreen();
-          }
-          setIsFullscreen(false);
-        }
-      }
-    } catch (error) {
-      console.error("Fullscreen error:", error);
-    }
-  };
-
-  // Add fullscreen change listeners for all browsers
-  useEffect(() => {
-    const doc = document as ExtendedDocument;
-
-    const handleFullscreenChange = () => {
-      setIsFullscreen(
-        !!(doc.fullscreenElement || doc.webkitFullscreenElement || (doc as any).msFullscreenElement)
-      );
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    document.addEventListener("msfullscreenchange", handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
-      document.removeEventListener("msfullscreenchange", handleFullscreenChange);
-    };
-  }, []);
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  const slides = [
+    {
+      id: 1,
+      pretitle: "About Us",
+      title: "Learn to Play.",
+      subtitle: "Play to Learn.",
+      description:
+        "A small team with a simple belief: children learn best when they're genuinely having fun.",
+    },
+  ];
 
   return (
-    <section className="w-full bg-white">
-      <div className="px-3 py-10 sm:px-5">
-        <div className="relative rounded-[28px] bg-white px-2">
-          <div className="relative flex items-center justify-center overflow-hidden rounded-[22px]">
-            <video
-              ref={videoRef}
-              autoPlay
-              loop
-              muted={isMuted}
-              playsInline={!isIOS || !isFullscreen}
-              controls={isIOS && isFullscreen}
-              className="h-[90vh] w-full object-cover sm:h-[62vh] sm:max-h-[780px] sm:min-h-[420px] md:h-[75vh] lg:h-[85vh]"
+    <>
+      <style>{``}</style>
+
+      {/* ── OUTER WRAPPER ── */}
+      <section className="section my-10">
+        <div className="container-padding">
+          <div className="section-rounded relative overflow-hidden">
+
+            {/* ── DESKTOP LAYOUT ── */}
+            <div
+              className="relative hidden w-full overflow-hidden md:flex"
+              style={{
+                backgroundColor: "#1aaa8a", // brand teal
+                minHeight: 680,
+              }}
             >
-              <source
-                src="https://ik.imagekit.io/pratik11/Kartik%20-%20Philosophy.mp4?updatedAt=1758433043493"
-                type="video/mp4"
-              />
-            </video>
+              <div className="flex min-h-[680px] w-full items-center">
+                {/* Left — Text block */}
+                <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
+                  <motion.p
+                    className="mb-2 text-[20px] font-semibold text-white uppercase tracking-widest md:text-[22px]"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    {slides[0].pretitle}
+                  </motion.p>
 
-            {/* gradient under text */}
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/55 via-black/35 to-transparent" />
+                  <motion.h1
+                    className="mb-5 uppercase leading-[1.1] text-white text-[36px] md:text-[48px] lg:text-[64px]"
+                    style={{
+                      fontFamily: "var(--font-outfit), sans-serif",
+                      fontWeight: 800,
+                    }}
+                    initial={{ y: 40, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.7, delay: 0.3 }}
+                  >
+                    {slides[0].title}
+                    <span className="block">{slides[0].subtitle}</span>
+                  </motion.h1>
 
-            {/* centered overlay content */}
-            <div className="absolute left-10 top-10 z-20 flex items-start">
-              <div className="px-6 py-8 text-white sm:px-10 sm:py-12">
-                <h2 className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]">
-                  About Us
-                </h2>
-                <h1 className="headingstyle font-extrabold leading-tight">
-                  Learn to Play. Play to Learn.
-                </h1>
-                <p className="textstyles mt-4 max-w-md text-white/90">
-                  A small team with a simple belief: children learn best when they're genuinely
-                  having fun.
-                </p>
+                  <motion.p
+                    className="max-w-[420px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    {slides[0].description}
+                  </motion.p>
+                </div>
+
+                {/* Right — Circle + hero image */}
+                <div className="relative z-10 flex flex-1 items-center justify-center py-8 pr-[3vw]">
+                  <div
+                    className="relative flex items-center justify-center rounded-full overflow-hidden"
+                    style={{
+                      width: "clamp(340px, 38vw, 520px)",
+                      height: "clamp(340px, 38vw, 520px)",
+                      border: "10px solid #fbb041",
+                      boxShadow: "0 0 0 6px rgba(251,176,65,0.25)",
+                    }}
+                  >
+                    <motion.img
+                      src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
+                      alt="Prime Time Game"
+                      className="object-cover"
+                      style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
+                      initial={{ scale: 0.85, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Controls group (bottom-right) */}
-            <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2">
-              {/* Mute/Unmute */}
-              <button
-                onClick={toggleMute}
-                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
-                aria-label={isMuted ? "Unmute video" : "Mute video"}
+            {/* ── MOBILE LAYOUT ── */}
+            <div
+              className="relative flex w-full flex-col overflow-hidden md:hidden"
+              style={{
+                backgroundColor: "#1aaa8a", // brand teal
+                minHeight: 680,
+              }}
+            >
+              {/* Circle + hero image */}
+              <div
+                className="relative flex items-center justify-center pb-4 pt-10"
+                style={{ minHeight: 300 }}
               >
-                {isMuted ? (
-                  // Muted icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 9l6 6M15 9l-6 6M5 9v6h4l5 5V4l-5 5H5z"
-                    />
-                  </svg>
-                ) : (
-                  // Unmuted icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5L6 9H3v6h3l5 4V5z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15.54 8.46a5 5 0 010 7.07m2.83-9.9a9 9 0 010 12.73"
-                    />
-                  </svg>
-                )}
-              </button>
+                <div
+                  className="relative flex items-center justify-center rounded-full overflow-hidden"
+                  style={{
+                    width: 260,
+                    height: 260,
+                    border: "8px solid #fbb041",
+                    boxShadow: "0 0 0 4px rgba(251,176,65,0.25)",
+                  }}
+                >
+                  <motion.img
+                    src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
+                    alt="Prime Time Game"
+                    className="object-cover"
+                    style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  />
+                </div>
+              </div>
 
-              {/* Fullscreen */}
-              <button
-                onClick={toggleFullscreen}
-                className="rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-              >
-                {!isFullscreen ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 16h12v4H6zm4-4V8m0 0H6m4 0h4"
-                    />
-                  </svg>
-                )}
-              </button>
+              {/* Text */}
+              <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
+                <motion.p
+                  className="mb-1 text-[16px] font-semibold uppercase tracking-widest text-white"
+                  style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {slides[0].pretitle}
+                </motion.p>
+
+                <motion.h1
+                  className="mb-4 uppercase leading-[1.15] text-white text-[32px] md:text-[44px]"
+                  style={{
+                    fontFamily: "var(--font-outfit), sans-serif",
+                    fontWeight: 800,
+                  }}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  {slides[0].title}
+                  <br />
+                  {slides[0].subtitle}
+                </motion.h1>
+
+                <motion.p
+                  className="max-w-[300px] text-[15px] leading-relaxed text-white"
+                  style={{ fontFamily: "var(--font-outfit), sans-serif" }}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  {slides[0].description}
+                </motion.p>
+              </div>
             </div>
           </div>
+          {/* end section-rounded */}
         </div>
-      </div>
-    </section>
+        {/* end container-padding */}
+      </section>
+    </>
   );
 }
 /* --------------------- Our Story (Gold) --------------------- */
 function OurStory() {
   return (
-    <section id="story" className="w-full bg-brand-gold">
+    <section id="story" className="w-full bg-brand-tealDark">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <div className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0">
@@ -410,11 +398,11 @@ function OurStory() {
           </div>
 
           <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
-            <h2 className="headingstyle font-heading font-extrabold leading-tight text-[#3F2F14]">
+            <h2 className="headingstyle font-heading font-extrabold leading-tight text-white">
               Our Story
             </h2>
 
-            <p className="textstyles mt-3 max-w-xl font-sans text-[#3F2F14]">
+            <p className="textstyles mt-3 max-w-xl font-sans text-white">
               Logicology began with a simple observation: children learn more when they're engaged,
               curious and eager to keep going.
               <br />
@@ -633,63 +621,56 @@ function OurTeam() {
 
 /* --------------------- Our Vision (Gray) --------------------- */
 function OurVision() {
+  const cards = [
+    {
+      title: "Vision",
+      text: "To build a world where learning feels less like work and more like discovery.",
+      bg: "bg-brand-teal",       // teal
+      circleBg: "bg-brand-teal",
+      icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/VISSION.svg"
+    },
+    {
+      title: "Mission",
+      text: "To create world-class games, books and learning experiences that turn big ideas into child's play. Made in India. Built for curious minds everywhere. patterns begin to make sense naturally, without ever feeling like a maths lesson.",
+      bg: "bg-brand-buttonYellowBefore",       // amber/yellow
+      circleBg: "bg-brand-buttonYellowBefore",
+      icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/MISSION.svg"
+    },
+    {
+      title: "Goal",
+      text: "To build the world's most loved fun-learning brand—creating products that children enjoy, parents trust and educators value.",
+      bg: "bg-brand-coral",       // orange-red
+      circleBg: "bg-brand-coral",
+      icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/GOAL.svg"
+    },
+  ];
+
   return (
-    <section id="vision" className="w-full bg-brand-grayBg py-16">
+    <section id="vision" className="w-full bg-white py-16">
       <div className="mx-auto px-3 sm:px-5 lg:max-w-[80vw]">
-        <div className="mb-12 text-center">
-          <h2 className="headingstyle mb-2 font-extrabold text-brand-teal">Our Vision</h2>
+        <div className="mb-16 text-center">
+          <h2 className="headingstyle mb-2 font-extrabold text-brand-black">Our Vision</h2>
         </div>
 
-        {/* Mission + Goal Section with Gray Background */}
         <div className="grid gap-8 md:grid-cols-3">
-          {/* vision */}
-          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
-            {/* Label */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
-                Vision
-              </span>
-            </div>
+          {cards.map((card) => (
+            <div key={card.title} className="flex flex-col items-center">
+              {/* Card */}
+              <div className={`relative w-full rounded-3xl ${card.bg} flex flex-col items-center px-8 pb-20 pt-10 min-h-[380px]`}>
+                <h3 className="mb-4 text-2xl font-bold text-brand-black">{card.title}</h3>
+                <p className="text-center textstyles text-[20px] text-brand-black">{card.text}</p>
 
-            <div className="h-full rounded-2xl bg-brand-grayBg p-5">
-              <p className="text-center text-lg text-gray-800">
-                To build a world where learning feels less like work and more like discovery.
-              </p>
-            </div>
-          </div>
-          {/* Mission */}
-          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
-            {/* Label */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="text-md rounded-full bg-yellow-500 px-4 py-1 font-bold text-white shadow">
-                Mission
-              </span>
-            </div>
+                {/* Circle icon — half outside bottom */}
+                {/* Circle icon — half outside bottom */}
+<div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 flex h-24 w-24 items-center justify-center rounded-full ${card.circleBg} border-4 border-white shadow-lg`}>
+  <img src={card.icon} alt={card.title} className="h-12 w-12" />
+</div>
+              </div>
 
-            <div className="rounded-2xl bg-brand-grayBg p-5">
-              <p className="text-center text-lg text-gray-800">
-                To create world-class games, books and learning experiences that turn big ideas into
-                child’s play. Made in India. Built for curious minds everywhere.
-              </p>
+              {/* Spacer for the protruding circle */}
+              <div className="h-14" />
             </div>
-          </div>
-
-          {/* Goal */}
-          <div className="relative rounded-3xl bg-white p-6 shadow-soft">
-            {/* Label */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="text-md rounded-full bg-red-500 px-4 py-1 font-bold text-white shadow">
-                Goal
-              </span>
-            </div>
-
-            <div className="rounded-2xl bg-brand-grayBg p-5">
-              <p className="text-center text-lg text-gray-800">
-                To build the world's most loved fun-learning brand—creating products that children
-                enjoy, parents trust and educators value.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -699,11 +680,11 @@ function OurVision() {
 /* --------------------- Contact Us (Maroon) --------------------- */
 function ContactUs() {
   return (
-    <section className="w-full bg-[#642B3B]">
+    <section className="w-full bg-brand-buttonYellowBefore">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="grid items-center gap-10 md:grid-cols-2">
           {/* Left: text & contact details */}
-          <div className="text-white">
+          <div className="text-brand-black">
             <h2 className="headingstyle mb-10 font-extrabold">Contact Us</h2>
 
             <ul className="space-y-8">
@@ -787,7 +768,7 @@ function ContactUs() {
               </li>
             </ul>
 
-            <p className="mt-10 max-w-xl text-sm text-white/85">
+            <p className="mt-10 max-w-xl text-sm text-brand-black">
               We operate fully online. Our registered office is used for official communication and
               correspondence.
             </p>
@@ -796,7 +777,7 @@ function ContactUs() {
           {/* Right: framed collage */}
           <div className="flex items-center justify-center">
             <MediaLayout
-              image="https://ik.imagekit.io/pratik11/CONTACT-US-IMAGE.png?updatedAt=1758544204579"
+              image="https://ik.imagekit.io/pratik11/CONTACT-US-SECTION-IMAGE.png"
               videoSrc=""
             />
           </div>
