@@ -526,77 +526,26 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     style={{
                       width: 260,
                       height: 260,
-                      background: "#000000",
+                      background: "#ffffff",
                       border: `8px solid ${ACCENT}`,
                       boxShadow: "0 0 0 4px rgba(251,176,65,0.25)",
                     }}
                   >
-                    <video
-                      autoPlay
-                      loop
-                      muted={isMuted}
-                      playsInline
+                    <motion.img
+                      src="https://ik.imagekit.io/pratik11/LOGICOLAND-IMAGE-CIRCLE.png?updatedAt=1782280451275"
+                      alt="Logicoland Series"
+                      className="object-cover"
                       style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "50%",
-                        position: "relative",
+                        position: "absolute",
+                        inset: 0,
                         zIndex: 5,
                       }}
-                    >
-                      <source
-                        src="https://ik.imagekit.io/pratik2002/Logicoland%201_3.mp4?updatedAt=1755475486495"
-                        type="video/mp4"
-                      />
-                    </video>
-
-                    {/* Mobile video controls */}
-                    <div className="absolute bottom-4 right-4 z-30 flex items-center gap-1">
-                      <button
-                        onClick={toggleMute}
-                        className="rounded-full bg-black/50 p-1.5 text-white"
-                        aria-label={isMuted ? "Unmute video" : "Mute video"}
-                      >
-                        {isMuted ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5.586 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
-                            />
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15.536 8.464a5 5 0 0 1 0 7.072m2.828-9.9a9 9 0 0 1 0 12.728M5.586 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-                            />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
+                      initial={{ scale: 0.85, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    />
                   </div>
                 </div>
 
