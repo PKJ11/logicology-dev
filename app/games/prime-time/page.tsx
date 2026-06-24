@@ -365,7 +365,7 @@ function Hero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 uppercase leading-[1.1] text-white text-[28px] md:text-[36px] lg:text-[4.4162rem]"
+                    className="mb-5 uppercase leading-[1.1] text-white text-[28px] md:text-[36px] lg:text-[3.5rem]"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
                       
