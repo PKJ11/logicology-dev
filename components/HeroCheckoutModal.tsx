@@ -803,65 +803,65 @@ export default function HeroCheckoutModal({
       >
         {/* ── Product strip (light version) ── */}
         {/* ── Product strip (light version) ── */}
-<div
-  className="flex flex-shrink-0 flex-col"
-  style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
->
-  {/* Close button row — sits above everything, right-aligned */}
-  <div className="flex justify-end px-4 pt-3">
-    <button
-      onClick={close}
-      className="flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-100"
-      style={{ color: TEXT_SECONDARY }}
-    >
-      <svg
-        className="h-4 w-4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
+        <div
+          className="flex flex-shrink-0 flex-col"
+          style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
+        >
+          {/* Close button row — sits above everything, right-aligned */}
+          <div className="flex justify-end px-4 pt-3">
+            <button
+              onClick={close}
+              className="flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-100"
+              style={{ color: TEXT_SECONDARY }}
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-  {/* Product info row */}
-  <div className="flex items-center gap-4 px-6 pb-5 pt-1">
-    {/* Thumbnail */}
-    <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50">
-      <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
-    </div>
+          {/* Product info row */}
+          <div className="flex items-center gap-4 px-6 pb-5 pt-1">
+            {/* Thumbnail */}
+            <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50">
+              <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+            </div>
 
-    {/* Info */}
-    <div className="min-w-0 flex-1">
-      <p
-        className="text-[10px] font-bold uppercase tracking-[0.15em]"
-        style={{ color: CORAL }}
-      >
-        Checkout
-      </p>
-      <h3 className="truncate text-[15px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
-        {product.name}
-      </h3>
-      <p className="truncate text-[12px]" style={{ color: TEXT_MUTED }}>
-        {product.description}
-      </p>
-    </div>
+            {/* Info */}
+            <div className="min-w-0 flex-1">
+              <p
+                className="text-[10px] font-bold uppercase tracking-[0.15em]"
+                style={{ color: CORAL }}
+              >
+                Checkout
+              </p>
+              <h3 className="truncate text-[15px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
+                {product.name}
+              </h3>
+              <p className="truncate text-[12px]" style={{ color: TEXT_MUTED }}>
+                {product.description}
+              </p>
+            </div>
 
-    {/* Price — now has natural space since close button is in its own row */}
-    <div className="flex-shrink-0 text-right">
-      <div className="text-[20px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
-        {product.price}
-      </div>
-      {product.initialprice && (
-        <div className="text-xs line-through" style={{ color: TEXT_MUTED }}>
-          {product.initialprice}
+            {/* Price — now has natural space since close button is in its own row */}
+            <div className="flex-shrink-0 text-right">
+              <div className="text-[20px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
+                {product.price}
+              </div>
+              {product.initialprice && (
+                <div className="text-xs line-through" style={{ color: TEXT_MUTED }}>
+                  {product.initialprice}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
-  </div>
-</div>
 
         {/* ── Step bar (light) ── */}
         <div

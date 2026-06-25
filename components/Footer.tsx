@@ -71,7 +71,7 @@ const SiteFooter = () => {
                       href="https://www.instagram.com/logicology_/?hl=en"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-brand-buttonYellowBefore hover:text-brand-black"
                     >
                       <FiInstagram />
                     </Link>
@@ -80,7 +80,7 @@ const SiteFooter = () => {
                       href="https://www.facebook.com/Logicology"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-brand-buttonYellowBefore hover:text-brand-black"
                     >
                       <FiFacebook />
                     </Link>
@@ -89,7 +89,7 @@ const SiteFooter = () => {
                       href="https://www.linkedin.com/company/11215891/admin/dashboard/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-brand-buttonYellowBefore hover:text-brand-black"
                     >
                       <FiLinkedin />
                     </Link>
@@ -98,7 +98,7 @@ const SiteFooter = () => {
                       href="https://www.youtube.com/c/logicology/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"
+                      className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-brand-buttonYellowBefore hover:text-brand-black"
                     >
                       <FiYoutube />
                     </Link>

@@ -185,8 +185,6 @@ const tabs = [
   { key: "set", label: "Complete Set" },
 ];
 
-
-
 const ProductShowcase = () => {
   const { addToCart } = useCart();
   const [itemDetails, setItemDetails] = useState<
@@ -309,7 +307,12 @@ const ProductShowcase = () => {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
 
@@ -323,10 +326,7 @@ const ProductShowcase = () => {
                       setActiveTab(tab.key);
                       setDropdownOpen(false);
                     }}
-                    className={`flex w-full items-center gap-3 px-4 py-3.5 text-left transition
-                      ${i !== tabs.length - 1 ? "border-b border-white/10" : ""}
-                      ${activeTab === tab.key ? "bg-white/15" : "hover:bg-white/10"}
-                    `}
+                    className={`flex w-full items-center gap-3 px-4 py-3.5 text-left transition ${i !== tabs.length - 1 ? "border-b border-white/10" : ""} ${activeTab === tab.key ? "bg-white/15" : "hover:bg-white/10"} `}
                   >
                     <span className="text-[15px] font-semibold text-white">{tab.label}</span>
                     {activeTab === tab.key && (
@@ -400,7 +400,7 @@ const ProductShowcase = () => {
                   </h3>
 
                   {/* Description — desktop only */}
-                  <p className="mt-1.5 hidden line-clamp-2 font-sans text-[13.5px] leading-relaxed text-[#3d3b40] opacity-65 sm:block">
+                  <p className="mt-1.5 line-clamp-2 hidden font-sans text-[13.5px] leading-relaxed text-[#3d3b40] opacity-65 sm:block">
                     {product.description}
                   </p>
 

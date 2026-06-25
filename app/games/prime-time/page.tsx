@@ -355,7 +355,7 @@ function Hero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold text-white md:text-[24px] uppercase"
+                    className="mb-2 text-[20px] font-bold uppercase text-white md:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -365,10 +365,10 @@ function Hero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 uppercase leading-[1.1] text-white text-[28px] md:text-[36px] lg:text-[50px]"
+                    className="mb-5 text-[28px] uppercase leading-[1.1] text-white md:text-[36px] lg:text-[50px]"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      
+
                       fontWeight: 800,
                     }}
                     initial={{ y: 40, opacity: 0 }}
@@ -515,10 +515,10 @@ function Hero() {
                 </motion.p>
 
                 <motion.h1
-                  className="mb-4 font-bold uppercase leading-[1.15] text-white text-[28px] md:text-[36px] lg:text-[50px]"
+                  className="mb-4 text-[28px] font-bold uppercase leading-[1.15] text-white md:text-[36px] lg:text-[50px]"
                   style={{
                     fontFamily: "var(--font-outfit), sans-serif",
-                    
+
                     fontWeight: 800,
                   }}
                   initial={{ y: 30, opacity: 0 }}
@@ -639,28 +639,31 @@ function GameDetails() {
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="flex flex-col items-center md:flex-row">
           <motion.div
-  initial={{ opacity: 0, x: -50 }}
-  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-  transition={{ duration: 0.7, delay: 0.2 }}
-  className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
->
-  <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px] ">
-    {/* Outer white card — matches MediaLayoutRight's wrapper exactly */}
-    <div className="h-full rounded-[28px] bg-gray-200 p-4 shadow-lg sm:p-5 md:p-6" style={{ border: "2px solid #e5e7eb" }}>
-      {/* Inner clipping div */}
-      <div className="relative h-full overflow-hidden rounded-[22px]">
-        <Image
-          src="https://ik.imagekit.io/pratik11/MATHS-THAT-MAKE-SENSE.png?updatedAt=1781520602044"
-          alt="Prime Time™"
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
-          priority
-        />
-      </div>
-    </div>
-  </div>
-</motion.div>
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="order-1 flex w-full items-center justify-center py-6 md:order-1 md:w-1/2 md:py-0"
+          >
+            <div className="relative mx-2 my-2 aspect-square max-h-[500px] w-[95%] max-w-[500px]">
+              {/* Outer white card — matches MediaLayoutRight's wrapper exactly */}
+              <div
+                className="h-full rounded-[28px] bg-gray-200 p-4 shadow-lg sm:p-5 md:p-6"
+                style={{ border: "2px solid #e5e7eb" }}
+              >
+                {/* Inner clipping div */}
+                <div className="relative h-full overflow-hidden rounded-[22px]">
+                  <Image
+                    src="https://ik.imagekit.io/pratik11/MATHS-THAT-MAKE-SENSE.png?updatedAt=1781520602044"
+                    alt="Prime Time™"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 50 }}

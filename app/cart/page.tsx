@@ -1259,68 +1259,75 @@ const CartPage = () => {
               transition={{ type: "spring", stiffness: 300, damping: 35 }}
             >
               {/* Cart strip header */}
-<div
-  className="flex flex-shrink-0 flex-col"
-  style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
->
-  {/* Close button — own row, right-aligned, no overlap possible */}
-  <div className="flex justify-end px-4 pt-3">
-    <button
-      onClick={closeCheckoutModal}
-      disabled={isProcessing}
-      className="flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-100 disabled:opacity-40"
-      style={{ color: TEXT_SECONDARY }}
-    >
-      <svg
-        className="h-4 w-4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
+              <div
+                className="flex flex-shrink-0 flex-col"
+                style={{ borderBottom: "1px solid #E9ECEF", backgroundColor: "white" }}
+              >
+                {/* Close button — own row, right-aligned, no overlap possible */}
+                <div className="flex justify-end px-4 pt-3">
+                  <button
+                    onClick={closeCheckoutModal}
+                    disabled={isProcessing}
+                    className="flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-100 disabled:opacity-40"
+                    style={{ color: TEXT_SECONDARY }}
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
 
-  {/* Product info row — full width, no absolute positioning */}
-  <div className="flex items-center gap-4 px-6 pb-5 pt-1">
-    <div className="flex -space-x-2">
-      {cart.slice(0, 3).map((item, i) => (
-        <div
-          key={i}
-          className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50 ring-2 ring-white"
-        >
-          <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
-        </div>
-      ))}
-    </div>
-    <div className="min-w-0 flex-1">
-      <p
-        className="text-[10px] font-bold uppercase tracking-[0.15em]"
-        style={{ color: CORAL }}
-      >
-        Checkout
-      </p>
-      <h3 className="truncate text-[15px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
-        {cart.length === 1 ? cart[0].name : `${cart.length} items`}
-      </h3>
-      <p className="text-[12px]" style={{ color: TEXT_MUTED }}>
-        {cart.length} {cart.length === 1 ? "item" : "items"} in cart
-      </p>
-    </div>
-    <div className="flex-shrink-0 text-right">
-      <div className="text-[20px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
-        ₹{finalAmount.toLocaleString("en-IN")}
-      </div>
-      {appliedPromo && (
-        <div className="text-xs font-semibold" style={{ color: CORAL }}>
-          −₹{discountAmount} saved
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+                {/* Product info row — full width, no absolute positioning */}
+                <div className="flex items-center gap-4 px-6 pb-5 pt-1">
+                  <div className="flex -space-x-2">
+                    {cart.slice(0, 3).map((item, i) => (
+                      <div
+                        key={i}
+                        className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50 ring-2 ring-white"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className="text-[10px] font-bold uppercase tracking-[0.15em]"
+                      style={{ color: CORAL }}
+                    >
+                      Checkout
+                    </p>
+                    <h3
+                      className="truncate text-[15px] font-extrabold"
+                      style={{ color: TEXT_PRIMARY }}
+                    >
+                      {cart.length === 1 ? cart[0].name : `${cart.length} items`}
+                    </h3>
+                    <p className="text-[12px]" style={{ color: TEXT_MUTED }}>
+                      {cart.length} {cart.length === 1 ? "item" : "items"} in cart
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 text-right">
+                    <div className="text-[20px] font-extrabold" style={{ color: TEXT_PRIMARY }}>
+                      ₹{finalAmount.toLocaleString("en-IN")}
+                    </div>
+                    {appliedPromo && (
+                      <div className="text-xs font-semibold" style={{ color: CORAL }}>
+                        −₹{discountAmount} saved
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               {/* Step bar */}
               <div

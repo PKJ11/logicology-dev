@@ -310,7 +310,7 @@ function TurnTablesHero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold text-white md:text-[24px] uppercase"
+                    className="mb-2 text-[20px] font-bold uppercase text-white md:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -1053,7 +1053,8 @@ const RETURN_GIFT_BUNDLE = {
   initialprice: "",
   razorpayItemId: "item_T5LdlReGC0M9YJ",
   description: "Perfect for Birthdays, Competitions & Events",
-  image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE_withbackground_d0b4XcVqQ.png?updatedAt=1781606906880",
+  image:
+    "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE_withbackground_d0b4XcVqQ.png?updatedAt=1781606906880",
   rating: 5,
   specialOffer: "Perfect for Birthdays, Competitions & Events",
   category: "bundles",

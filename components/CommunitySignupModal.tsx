@@ -488,10 +488,13 @@ export default function CommunitySignupModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4 sm:items-center"
       onClick={handleBackdropClick}
     >
-      <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-8 shadow-brand">
+      <div
+        className="relative my-4 w-full max-w-md rounded-2xl bg-white p-5 shadow-brand sm:p-8"
+        style={{ maxHeight: "80vh", overflowY: "auto" }}
+      >
         <button
           onClick={() => {
             resetForm();
