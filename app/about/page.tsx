@@ -238,9 +238,9 @@ function Hero() {
 
             {/* ── DESKTOP LAYOUT ── */}
             <div
-              className="relative hidden w-full overflow-hidden md:flex"
+              className="relative hidden w-full overflow-hidden md:flex bg-brand-teal"
               style={{
-                backgroundColor: "#1aaa8a", // brand teal
+                
                 minHeight: 680,
               }}
             >
@@ -625,22 +625,25 @@ function OurVision() {
     {
       title: "Vision",
       text: "To build a world where learning feels less like work and more like discovery.",
-      bg: "bg-brand-teal",       // teal
-      circleBg: "bg-brand-teal",
+      bg: "bg-[#0A8A80]",       
+      circleBg: "bg-[#0A8A80]",
+      textColor: "text-white",
       icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/VISSION.svg"
     },
     {
       title: "Mission",
       text: "To create world-class games, books and learning experiences that turn big ideas into child's play. Made in India. Built for curious minds everywhere. patterns begin to make sense naturally, without ever feeling like a maths lesson.",
-      bg: "bg-brand-buttonYellowBefore",       // amber/yellow
+      bg: "bg-brand-buttonYellowBefore",       
       circleBg: "bg-brand-buttonYellowBefore",
+      textColor: "text-brand-black",
       icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/MISSION.svg"
     },
     {
       title: "Goal",
       text: "To build the world's most loved fun-learning brand—creating products that children enjoy, parents trust and educators value.",
-      bg: "bg-brand-coral",       // orange-red
+      bg: "bg-brand-coral",      
       circleBg: "bg-brand-coral",
+      textColor: "text-white",
       icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/GOAL.svg"
     },
   ];
@@ -657,10 +660,9 @@ function OurVision() {
             <div key={card.title} className="flex flex-col items-center">
               {/* Card */}
               <div className={`relative w-full rounded-3xl ${card.bg} flex flex-col items-center px-8 pb-20 pt-10 min-h-[380px]`}>
-                <h3 className="mb-4 text-2xl font-bold text-brand-black">{card.title}</h3>
-                <p className="text-center textstyles text-[20px] text-brand-black">{card.text}</p>
+                <h3 className={`mb-4 text-2xl font-bold ${card.textColor}`}>{card.title}</h3>
+                <p className={`text-center textstyles text-[20px] ${card.textColor}`}>{card.text}</p>
 
-                {/* Circle icon — half outside bottom */}
                 {/* Circle icon — half outside bottom */}
 <div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 flex h-24 w-24 items-center justify-center rounded-full ${card.circleBg} border-4 border-white shadow-lg`}>
   <img src={card.icon} alt={card.title} className="h-12 w-12" />

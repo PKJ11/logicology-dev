@@ -310,7 +310,7 @@ function TurnTablesHero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold text-white md:text-[24px]"
+                    className="mb-2 text-[20px] font-bold text-white md:text-[24px] uppercase"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -1398,7 +1398,7 @@ export function TurnTablesBuyBlock() {
               >
                 {[
                   { text: "2–6 players" },
-                  { text: "Ages 8+" },
+                  { text: "Ages 6+" },
                   { text: "15–20 minutes" },
                   { text: "No prior knowledge needed" },
                 ].map((b) => (
