@@ -67,10 +67,7 @@ export default function HeroSlider() {
     if (dragStartX.current === null) return;
     const delta = e.clientX - dragStartX.current;
     dragStartX.current = null;
-
-    // If not a real drag, do nothing — let clicks bubble to buttons
     if (!isDragging.current) return;
-
     if (delta < -DRAG_THRESHOLD) goTo(active + 1);
     else if (delta > DRAG_THRESHOLD) goTo(active - 1);
     isDragging.current = false;
@@ -105,8 +102,13 @@ export default function HeroSlider() {
       onPointerCancel={onPointerCancel}
       style={{ cursor: "grab", touchAction: "pan-y" }}
     >
-      {/* Fixed-height wrapper so absolute slides don't collapse the parent */}
-      <div style={{ position: "relative", height: "600px" }}>
+      {/*
+        ✅ No fixed height — wrapper sizes naturally to the entering slide.
+           The entering slide is position: relative (takes up space).
+           The exiting slide is position: absolute (removed from flow, no height impact).
+           This works at any screen size automatically.
+      */}
+      <div style={{ position: "relative" }}>
         <AnimatePresence mode="sync" initial={false} custom={direction}>
           <motion.div
             key={active}
@@ -123,8 +125,10 @@ export default function HeroSlider() {
               },
             }}
             style={{
-              position: "absolute",
-              inset: 0,
+              // ✅ Entering slide: relative so it drives the wrapper height
+              // ✅ Exiting slide: Framer Motion applies position:absolute automatically
+              //    via its internal exit handling with mode="sync"
+              width: "100%",
               willChange: "transform",
             }}
           >
@@ -166,7 +170,6 @@ export default function HeroSlider() {
           <button
             key={i}
             onClick={() => goTo(i)}
-            // Stop pointer events bubbling to the slider wrapper
             onPointerDown={(e) => e.stopPropagation()}
             onPointerUp={(e) => e.stopPropagation()}
             aria-label={`Go to slide ${i + 1}`}
