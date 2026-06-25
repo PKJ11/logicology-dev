@@ -26,7 +26,7 @@ export const SLIDE2_PRODUCT: HeroProductConfig = {
 
 export const SLIDE3_PRODUCT: HeroProductConfig = {
   name: "Turn the Tables",
-  price: "₹399",
+  price: "₹299",
   initialprice: undefined,
   razorpayItemId: "item_RsD9AhoF8idQ21",
   description: "Turn the Tables Strategy Game",
