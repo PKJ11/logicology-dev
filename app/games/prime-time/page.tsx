@@ -2384,7 +2384,7 @@ function GallerySection() {
 // --------------------- Lost Card Helper ---------------------
 function LostCardHelper() {
   const trayImages = [
-    "https://res.cloudinary.com/deunonql5/image/upload/v1757381453/TRAY_1_hsi9wt.png",
+    "/Images/tray/TRAY.png",
   ];
   const randomTray = () => trayImages[Math.floor(Math.random() * trayImages.length)];
   const buildCardUrl = (n: number) => `/Images/primetimecardImages/PRIME%20TIME%20CARD%20${n}.png`;
@@ -2456,7 +2456,7 @@ function LostCardHelper() {
                 <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[22px]">
                   {isTray ? (
                     <Image
-                      src={imgSrc}
+                      src="/Images/tray/TRAY.png"
                       alt="Prime Time™ card tray showing all cards organized by number"
                       fill
                       sizes="(min-width: 768px) 600px, 100vw"
