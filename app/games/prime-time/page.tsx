@@ -494,7 +494,7 @@ function Hero() {
                     src="https://ik.imagekit.io/pratik11/PRIME-TIME-IMAGE-NEW.png"
                     alt="Prime Time Game"
                     className="object-contain"
-                    style={{ width: "70%", height: "70%", position: "relative", zIndex: 5 }}
+                    style={{ width: "100%", height: "100%", position: "relative", zIndex: 5 }}
                     initial={{ scale: 0.85, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
