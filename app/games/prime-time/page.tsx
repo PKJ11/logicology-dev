@@ -503,9 +503,9 @@ function Hero() {
               </div>
 
               {/* Text + CTAs */}
-              <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center ">
+              <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
                 <motion.p
-                  className="mb-1 text-[14px] font-bold text-white uppercase"
+                  className="mb-1 text-[14px] font-bold uppercase text-white"
                   style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -691,7 +691,7 @@ function GameDetails() {
               and composites start to make sense naturally. What feels abstract on paper becomes
               meaningful through play, challenge and friendly competition.
             </motion.p>
-            <motion.div
+            {/* <motion.div
               className="mt-6"
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -707,7 +707,7 @@ function GameDetails() {
                 showScaleOnHover={true}
                 showScaleOnActive={true}
               />
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
       </div>
@@ -761,7 +761,7 @@ function GameDetails2() {
               for everyone to join in.
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               className="mt-6"
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -777,7 +777,7 @@ function GameDetails2() {
                 showScaleOnHover={true}
                 showScaleOnActive={true}
               />
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Image — right on desktop, top on mobile */}
@@ -859,7 +859,7 @@ function GameDetails3() {
               interesting.
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               className="mt-6"
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -875,7 +875,7 @@ function GameDetails3() {
                 showScaleOnHover={true}
                 showScaleOnActive={true}
               />
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
       </div>
@@ -929,7 +929,7 @@ function GameDetails4() {
               originality and innovation at the heart of the game.
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               className="mt-6"
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
@@ -945,7 +945,7 @@ function GameDetails4() {
                 showScaleOnHover={true}
                 showScaleOnActive={true}
               />
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Image — right on desktop, top on mobile */}
@@ -1675,7 +1675,7 @@ const CROSS_SELL: CrossSellProduct[] = [
     description: "A fast-paced multiplication card game with wild strategy twists.",
     blurb: "A fast-paced multiplication card game. Pairs brilliantly with Prime Time™.",
     image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-    rating: 5,
+    rating: 4.8,
     specialOffer: "",
     category: "games",
     tag: "25% Off",
@@ -2387,8 +2387,7 @@ function LostCardHelper() {
     "https://res.cloudinary.com/deunonql5/image/upload/v1757381453/TRAY_1_hsi9wt.png",
   ];
   const randomTray = () => trayImages[Math.floor(Math.random() * trayImages.length)];
-  const buildCardUrl = (n: number) => `/Images/primetimecardImages/PrimeTime CARD ${n}.png`;
-
+  const buildCardUrl = (n: number) => `/Images/primetimecardImages/PRIME%20TIME%20CARD%20${n}.png`;
   const [cardNo, setCardNo] = React.useState("");
   const [imgSrc, setImgSrc] = React.useState<string>(randomTray());
   const [isTray, setIsTray] = React.useState(true);
@@ -2472,15 +2471,13 @@ function LostCardHelper() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: "spring", stiffness: 200 }}
                     >
-                      <Image
+                      <img
                         src={imgSrc}
                         alt={`Prime Time™ card number ${cardNo}`}
-                        width={180}
-                        height={240}
                         className={`rounded-xl object-contain shadow-2xl transition-opacity ${
                           loading ? "opacity-60" : "opacity-100"
                         }`}
-                        priority={false}
+                        style={{ width: 180, height: 240 }}
                       />
                     </motion.div>
                   )}
