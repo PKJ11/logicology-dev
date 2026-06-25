@@ -462,7 +462,7 @@ function TurnTablesHero() {
                 {/* Text + CTAs */}
                 <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
                   <motion.p
-                    className="mb-1 text-[16px] font-bold text-white"
+                    className="mb-1 text-[14px] font-bold text-white uppercase"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -490,7 +490,7 @@ function TurnTablesHero() {
                   </motion.h1>
 
                   {/* Mobile price flag */}
-                  <motion.div
+                  {/* <motion.div
                     className="mb-4 flex items-center gap-2"
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -529,7 +529,7 @@ function TurnTablesHero() {
                     >
                       Save ₹100
                     </span>
-                  </motion.div>
+                  </motion.div> */}
 
                   <motion.p
                     className="mb-6 max-w-[300px] text-[14px] leading-relaxed text-white"

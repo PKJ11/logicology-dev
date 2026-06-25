@@ -503,9 +503,9 @@ function Hero() {
               </div>
 
               {/* Text + CTAs */}
-              <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center uppercase">
+              <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center ">
                 <motion.p
-                  className="mb-1 text-[18px] font-bold text-white"
+                  className="mb-1 text-[14px] font-bold text-white uppercase"
                   style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
