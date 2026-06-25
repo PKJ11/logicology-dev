@@ -270,7 +270,7 @@ function Hero() {
                   </motion.h1>
 
                   <motion.p
-                    className="max-w-[420px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    className="max-w-[440px] text-[18px] leading-7 text-white lg:text-[22px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
