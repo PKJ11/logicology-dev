@@ -83,12 +83,18 @@ export default function HeroSlider() {
   const variants = {
     enter: (dir: "next" | "prev") => ({
       x: dir === "next" ? "100%" : "-100%",
+      // ✅ Entering slide: relative so it drives the wrapper height naturally
+      position: "relative" as const,
     }),
     center: {
       x: "0%",
+      position: "relative" as const,
     },
     exit: (dir: "next" | "prev") => ({
       x: dir === "next" ? "-30%" : "30%",
+      // ✅ Exiting slide: absolute so it's removed from flow and doesn't
+      //    push the incoming slide down
+      position: "absolute" as const,
     }),
   };
 
@@ -103,10 +109,10 @@ export default function HeroSlider() {
       style={{ cursor: "grab", touchAction: "pan-y" }}
     >
       {/*
-        ✅ No fixed height — wrapper sizes naturally to the entering slide.
-           The entering slide is position: relative (takes up space).
-           The exiting slide is position: absolute (removed from flow, no height impact).
-           This works at any screen size automatically.
+        ✅ No fixed height needed — the entering slide (position: relative)
+           naturally drives the wrapper height at any screen size.
+           The exiting slide (position: absolute via exit variant) is taken
+           out of flow so it never affects layout.
       */}
       <div style={{ position: "relative" }}>
         <AnimatePresence mode="sync" initial={false} custom={direction}>
@@ -125,9 +131,8 @@ export default function HeroSlider() {
               },
             }}
             style={{
-              // ✅ Entering slide: relative so it drives the wrapper height
-              // ✅ Exiting slide: Framer Motion applies position:absolute automatically
-              //    via its internal exit handling with mode="sync"
+              top: 0,
+              left: 0,
               width: "100%",
               willChange: "transform",
             }}
