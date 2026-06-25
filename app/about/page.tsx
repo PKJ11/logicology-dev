@@ -636,7 +636,13 @@ function OurVision() {
       bg: "bg-brand-buttonYellowBefore",       
       circleBg: "bg-brand-buttonYellowBefore",
       textColor: "text-brand-black",
-      icon: "https://ik.imagekit.io/pratik11/OUR%20VISION%20ICONS/MISSION.svg"
+      icon: (
+        <svg viewBox="0 0 512 512" fill="#3D3B40" className="h-12 w-12">
+          <path d="M470.8,34.2c-95.1-12-187.8,22.8-258.3,89.9-101.1-13.9-163.9,66.7-173.1,132.5-.9,5.1,3.8,9.9,8.9,9.2,0,0,75.9-9.2,75.9-9.2,5.4,5.4,12.1,12.1,20.5,20.4l-13,26.2c-4.6,9.2-2.8,20.3,4.5,27.6l45.1,45.1c7.3,7.3,18.5,9.1,27.6,4.5l26.1-12.9c10,10,18.3,18.3,23.2,23.2,2.5,2.5,6.4,3.1,9.5,1.4,25-13.6,66.1-39.1,105.6-77.4,4.3,77.5-56.1,128.4-109.8,140,0,0,3.5-29,3.5-29,1.1-10.5-14.5-12.3-15.9-1.9,0,0-4.9,40.1-4.9,40.1-.3,2.5.6,5,2.4,6.7,1.8,1.8,4.4,2.5,6.8,2.1,62-8.7,146.4-68.8,132.5-173,60.2-60.5,103.9-163.6,89.8-258.5-.4-3.7-3.3-6.6-7-7h0ZM201.7,366.1c-3.1,1.5-6.8.9-9.2-1.5l-45.1-45.1c-2.4-2.4-3-6.1-1.5-9.2l10.6-21.3c20.7,20.7,45.8,45.9,66.5,66.6l-21.3,10.6h0ZM459.5,129.2c-24.4,135.9-140,215.5-194.2,245.9-26.4-26.4-92-92.1-128.4-128.4,11.8-21.3,31.3-50.2,48.3-70.3,6.6-8.1-5.6-18.2-12.3-10.2-17.7,20.9-39,52.6-50.9,74.4,0,0-64.6,7.9-64.6,7.9,5.5-22.5,22.5-69.4,70.7-94.7,34.3-18,68.4-16.1,85.6-13.4,2.4.3,5-.3,6.9-2,65.9-63.7,152.4-98.5,242.1-89,2.6,27,1.6,53.8-3.1,79.8h0Z"/>
+          <path d="M136.9,375.3c-55.2-49.2-104.2,47.9-104.9,96.2-.4,4.7,3.8,8.9,8.5,8.5,48.1-.8,145-49.5,96.4-104.6ZM121.9,429.6c-12.4,11-26.5,19.7-41.9,25.6-10,3.9-20.4,6.5-31.1,7.9,3.6-27.1,15.3-52.6,33.6-73,28.5-33.4,73.1,10.5,39.3,39.5h0Z"/>
+          <path d="M282.8,138.3c-40.4,39.6-11.1,110.3,45.5,109.7,56.6.5,85.8-69.9,45.5-109.7-25.1-25.1-65.9-25.1-90.9,0h0ZM362.4,217.9c-46.5,43.8-112-21.8-68.3-68.3,46.8-43.6,111.9,21.5,68.3,68.3Z"/>
+        </svg>
+      )
     },
     {
       title: "Goal",
@@ -664,9 +670,13 @@ function OurVision() {
                 <p className={`text-center textstyles text-[20px] ${card.textColor}`}>{card.text}</p>
 
                 {/* Circle icon — half outside bottom */}
-<div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 flex h-24 w-24 items-center justify-center rounded-full ${card.circleBg} border-4 border-white shadow-lg`}>
-  <img src={card.icon} alt={card.title} className="h-12 w-12" />
-</div>
+                <div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 flex h-24 w-24 items-center justify-center rounded-full ${card.circleBg} border-4 border-white shadow-lg`}>
+                  {typeof card.icon === 'string' ? (
+                    <img src={card.icon} alt={card.title} className="h-12 w-12" />
+                  ) : (
+                    card.icon
+                  )}
+                </div>
               </div>
 
               {/* Spacer for the protruding circle */}
