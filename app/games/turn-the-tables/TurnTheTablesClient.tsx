@@ -1053,7 +1053,7 @@ const RETURN_GIFT_BUNDLE = {
   initialprice: "",
   razorpayItemId: "item_T5LdlReGC0M9YJ",
   description: "Perfect for Birthdays, Competitions & Events",
-  image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
+  image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE_withbackground_d0b4XcVqQ.png?updatedAt=1781606906880",
   rating: 5,
   specialOffer: "Perfect for Birthdays, Competitions & Events",
   category: "bundles",
