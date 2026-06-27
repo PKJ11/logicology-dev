@@ -221,7 +221,7 @@ function PhilosophyHero() {
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.2 }}
-                          className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[24px] lg:text-[24px]"
+                          className="font-heading text-[20px] font-bold text-white sm:text-[22px] md:text-[22px] lg:text-[22px]"
                         >
                           Our Philosophy
                         </motion.div>
@@ -231,10 +231,10 @@ function PhilosophyHero() {
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="mt-2 font-heading text-[38px] font-bold uppercase leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]"
+                          className="mt-2 font-heading text-[38px] font-bold  leading-[1.1] text-white sm:text-[37px] md:text-[46px] lg:text-[46px]"
                         >
                           We're not a toy company that added learning.
-                          <span className="block font-heading text-[38px] leading-tight text-white sm:text-[44px] md:text-[50px] lg:text-[50px]">
+                          <span className="block font-heading text-[38px] leading-tight text-white sm:text-[37px] md:text-[46px] lg:text-[46px]">
                             We're a learning company that made it fun.
                           </span>
                         </motion.h1>
@@ -244,7 +244,7 @@ function PhilosophyHero() {
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.4 }}
-                          className="mt-6 max-w-md font-heading text-[20px] leading-7 text-white sm:text-[22px] md:text-[26px] lg:text-[26px]"
+                          className="mt-6 max-w-md font-heading text-[20px] leading-7 text-white sm:text-[20px] md:text-[21.33px] lg:text-[21.33px]"
                         >
                           That one distinction explains everything we make.
                         </motion.p>
@@ -334,7 +334,7 @@ function WhyWeExist() {
 
             {/* RIGHT — Text */}
             <motion.div
-              className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2"
+              className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2 text-center md:text-left"
               initial={{ x: 50, opacity: 0 }}
               animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -400,7 +400,7 @@ function CaseForThinking() {
         <div className="flex flex-col items-center md:flex-row">
           {/* LEFT — Text */}
           <motion.div
-            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:order-1 md:w-1/2 md:pl-2"
+            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:order-1 md:w-1/2 md:pl-2 text-center md:text-left"
             initial={{ x: -50, opacity: 0 }}
             animate={isInView ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -470,7 +470,7 @@ function ResearchedNotRebranded() {
 
           {/* RIGHT — Text */}
           <motion.div
-            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2"
+            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2 text-center md:text-left"
             initial={{ x: 50, opacity: 0 }}
             animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -730,7 +730,7 @@ function TheWinWin() {
 
           {/* RIGHT — Text */}
           <motion.div
-            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2"
+            className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:w-1/2 md:pr-2 text-center md:text-left"
             initial={{ x: 50, opacity: 0 }}
             animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}

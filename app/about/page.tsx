@@ -246,7 +246,7 @@ function Hero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-semibold uppercase tracking-widest text-white md:text-[22px]"
+                    className="mb-2 text-[20px] font-semibold tracking-widest text-white md:text-[22px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -256,7 +256,7 @@ function Hero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 text-[36px] uppercase leading-[1.1] text-white md:text-[48px] lg:text-[64px]"
+                    className="mb-5 text-[37px] leading-[1.1] text-white md:text-[48px] lg:text-[48px]"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
                       fontWeight: 800,
@@ -270,7 +270,7 @@ function Hero() {
                   </motion.h1>
 
                   <motion.p
-                    className="max-w-[440px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    className="max-w-[440px] text-[21.33px] leading-7 text-white lg:text-[21.33px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -352,10 +352,10 @@ function Hero() {
                 </motion.p>
 
                 <motion.h1
-                  className="mb-4 text-[32px] uppercase leading-[1.15] text-white md:text-[44px]"
+                  className="mb-4 text-[37px] leading-[1.15] text-white"
                   style={{
                     fontFamily: "var(--font-outfit), sans-serif",
-                    fontWeight: 800,
+                    fontWeight: 700,
                   }}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -367,7 +367,7 @@ function Hero() {
                 </motion.h1>
 
                 <motion.p
-                  className="max-w-[300px] text-[15px] leading-relaxed text-white"
+                  className="max-w-[300px] text-[20px] leading-relaxed text-white"
                   style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -395,7 +395,7 @@ function OurStory() {
             <VideoLayout videoSrc="https://res.cloudinary.com/deunonql5/video/upload/v1759543919/Logicology_JourneyVideo_Compressed_1_iwbg1f.mp4" />
           </div>
 
-          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2">
+          <div className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 text-center md:text-left">
             <h2 className="headingstyle font-heading font-extrabold leading-tight text-white">
               Our Story
             </h2>
@@ -505,8 +505,8 @@ function OurTeam() {
     <section className="relative w-full bg-brand-coral">
       <div className="mx-auto px-4 py-14 sm:px-6 lg:max-w-[80vw] lg:px-8">
         <div className="grid items-center gap-10 md:grid-cols-[1.1fr,1fr]">
-          <div className="px-0 sm:px-8">
-            <h2 className="headingstyle font-heading font-extrabold text-white/90">
+          <div className="px-0 sm:px-8 text-center lg:text-left">
+            <h2 className="headingstyle font-heading font-extrabold text-white ">
               Meet Our Team
             </h2>
 
