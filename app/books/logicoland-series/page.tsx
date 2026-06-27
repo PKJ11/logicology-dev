@@ -401,7 +401,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold uppercase text-white md:text-[24px]"
+                    className="mb-2 text-[20px] font-bold text-white md:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -411,10 +411,10 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 uppercase leading-[1.1] text-white"
+                    className="mb-5 leading-[1.1] text-white"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      fontSize: "50px",
+                      fontSize: "46px",
                       fontWeight: 800,
                     }}
                     initial={{ y: 40, opacity: 0 }}
@@ -427,7 +427,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.h1>
 
                   <motion.p
-                    className="mb-3 max-w-[420px] text-[18px] font-bold leading-7 text-white lg:text-[26px]"
+                    className="mb-3 max-w-[420px] text-[18px] font-bold leading-7 text-white lg:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -437,7 +437,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.p>
 
                   <motion.p
-                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -562,11 +562,11 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.p>
 
                   <motion.h1
-                    className="my-4 uppercase leading-[1.15] text-white"
+                    className="my-4 leading-[1.15] text-white"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      fontSize: "clamp(28px, 8vw, 36px)",
-                      fontWeight: 800,
+                      fontSize: "37px",
+                      fontWeight: 700,
                     }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -580,7 +580,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.h1>
 
                   <motion.p
-                    className="mb-2 max-w-[300px] text-[16px] font-bold leading-relaxed text-white"
+                    className="mb-2 max-w-[300px] text-[21px] font-bold leading-sung text-white"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -590,7 +590,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                   </motion.p>
 
                   <motion.p
-                    className="mb-6 max-w-[300px] text-[14px] leading-relaxed text-white"
+                    className="mb-6 max-w-[300px] text-[20px] leading-relaxed text-white"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -674,7 +674,7 @@ function BookDetails() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 text-center md:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -734,14 +734,14 @@ function InteractivePuzzlesSection({ isActive }: { isActive: boolean }) {
           {/* Text Content */}
           <div className="space-y-6 sm:px-4">
             <div>
-              <h3 className="headingstyle font-heading font-extrabold">
+              <h3 className="headingstyle font-heading font-extrabold text-center lg:text-left">
                 Start small.
                 <br /> Think big.{" "}
               </h3>
             </div>
 
             <div>
-              <p className="textstyles mt-4 font-sans text-white/90">
+              <p className="textstyles mt-4 font-sans text-white/90 text-center lg:text-left">
                 No numbers. No pressure. Just colours, patterns and a simple challenge. It's exactly
                 how Volume 1 introduces Sudoku—and how confidence starts to grow.
               </p>

@@ -129,7 +129,7 @@ export default function BrandPromise() {
 
               {/* ── RIGHT: Text ──────────────────────────── */}
               <motion.div
-                className="order-2 flex w-full flex-col justify-center p-8 sm:p-12 md:order-2 md:w-1/2 md:pr-2"
+                className="order-2 flex w-full flex-col items-center text-center justify-center p-8 sm:p-12 md:order-2 md:w-1/2 md:pr-2 md:items-start md:text-left"
                 initial={{ x: 50, opacity: 0 }}
                 animate={isInView ? { x: 0, opacity: 1 } : { x: 50, opacity: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}

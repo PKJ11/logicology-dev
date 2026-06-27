@@ -16,7 +16,7 @@ export default function Community() {
               <MediaLayout image="https://ik.imagekit.io/pratik11/COMMUNITY.png" videoSrc="" />
             </div>
 
-            <div className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2">
+            <div className="order-2 w-full p-8 sm:p-12 md:order-2 md:w-1/2 text-center lg:text-left">
               <h2 className="headingstyle font-heading">
                 Join the <br /> fun-learning revolution.
               </h2>

@@ -250,20 +250,19 @@ export default function HeroSlide2({ isInView }: SlideProps) {
               className="mb-5 leading-[1.1] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
-                fontSize: "50px",
+                fontSize: "46px",
                 fontWeight: 800,
               }}
               initial={{ y: 40, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.25 }}
-            >
-              BIG IDEAS TURNED
-              <br />
-              INTO CHILD&apos;S PLAY.
+            >Big ideas turned
+<br />
+into child&apos;s play.
             </motion.h1>
 
             <motion.p
-              className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[26px]"
+              className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
               style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               initial={{ y: 30, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -361,11 +360,12 @@ export default function HeroSlide2({ isInView }: SlideProps) {
 
           <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
             <motion.h1
-              className="my-4 uppercase leading-[1.15] text-white"
+              className="mb-4 font-bold leading-[1.15] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
-                fontSize: "clamp(28px, 8vw, 36px)",
-                fontWeight: 800,
+                cursor: "pointer",
+                fontSize: "37px",
+                fontWeight: 700,
               }}
               initial={{ y: 30, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -379,7 +379,7 @@ export default function HeroSlide2({ isInView }: SlideProps) {
             </motion.h1>
 
             <motion.p
-              className="mb-6 max-w-[300px] text-[18px] leading-relaxed text-white"
+              className="mb-6 max-w-[300px] text-[20px]  leading-snug text-white"
               style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}

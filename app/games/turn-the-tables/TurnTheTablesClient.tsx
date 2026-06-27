@@ -310,7 +310,7 @@ function TurnTablesHero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold uppercase text-white md:text-[24px]"
+                    className="mb-2 text-[20px] font-bold text-white md:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -320,10 +320,10 @@ function TurnTablesHero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-4 uppercase leading-[1.1] text-white"
+                    className="mb-4 leading-[1.1] text-white"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      fontSize: "50px",
+                      fontSize: "46px",
                       fontWeight: 800,
                     }}
                     initial={{ y: 40, opacity: 0 }}
@@ -347,7 +347,7 @@ function TurnTablesHero() {
                   </motion.div> */}
 
                   <motion.p
-                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[22px]"
+                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -462,7 +462,7 @@ function TurnTablesHero() {
                 {/* Text + CTAs */}
                 <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
                   <motion.p
-                    className="mb-1 text-[14px] font-bold text-white uppercase"
+                    className="mb-1 text-[18px] font-bold text-white"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -472,11 +472,11 @@ function TurnTablesHero() {
                   </motion.p>
 
                   <motion.h1
-                    className="my-4 uppercase leading-[1.15] text-white"
+                    className="my-2 leading-[1.15] text-white"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
-                      fontSize: "clamp(28px, 8vw, 36px)",
-                      fontWeight: 800,
+                      fontSize: "37px",
+                      fontWeight: 700,
                     }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -532,7 +532,7 @@ function TurnTablesHero() {
                   </motion.div> */}
 
                   <motion.p
-                    className="mb-6 max-w-[300px] text-[14px] leading-relaxed text-white"
+                    className="mb-6 max-w-[300px] text-[20px] leading-snug text-white"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -637,7 +637,7 @@ function GameDetails() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 30 }}

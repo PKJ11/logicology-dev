@@ -249,8 +249,8 @@ function Hero() {
     {
       id: 1,
       pretitle: "Introducing Prime Time™",
-      title: "The math game that secretly teaches",
-      subtitle: "number sense and strategy.",
+      title: "The math game that secretly teaches number sense and strategy.",
+      subtitle: "",
       description:
         "Players compete, strategize and try to outsmart each other. As the game unfolds, primes, factors and number patterns begin to make sense naturally, without ever feeling like a maths lesson.",
       supporting: "",
@@ -355,7 +355,7 @@ function Hero() {
                 {/* Left — Text block */}
                 <div className="relative z-20 flex flex-1 flex-col justify-center py-12 pl-[6vw] pr-4">
                   <motion.p
-                    className="mb-2 text-[20px] font-bold uppercase text-white md:text-[24px]"
+                    className="mb-2 text-[20px] font-bold text-white md:text-[24px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -365,11 +365,10 @@ function Hero() {
                   </motion.p>
 
                   <motion.h1
-                    className="mb-5 text-[28px] uppercase leading-[1.1] text-white md:text-[36px] lg:text-[50px]"
+                    className="mb-5 text-[37px]  leading-[1.1] text-white md:text-[46px] lg:text-[46px] font-[700] md:font-[800]"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
 
-                      fontWeight: 800,
                     }}
                     initial={{ y: 40, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -380,7 +379,7 @@ function Hero() {
                   </motion.h1>
 
                   <motion.p
-                    className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[26px]"
+                    className="mb-8 max-w-[420px] text-[20px] leading-7 text-white lg:text-[21.33px]"
                     style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -505,7 +504,7 @@ function Hero() {
               {/* Text + CTAs */}
               <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
                 <motion.p
-                  className="mb-1 text-[14px] font-bold uppercase text-white"
+                  className="mb-1 text-[18px] font-bold text-white"
                   style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -515,11 +514,11 @@ function Hero() {
                 </motion.p>
 
                 <motion.h1
-                  className="mb-4 text-[28px] font-bold uppercase leading-[1.15] text-white md:text-[36px] lg:text-[50px]"
+                  className="mb-4 text-[37px] font-bold leading-[1.15] text-white md:text-[46px] lg:text-[46px]"
                   style={{
                     fontFamily: "var(--font-outfit), sans-serif",
 
-                    fontWeight: 800,
+                    fontWeight: 700,
                   }}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -531,7 +530,7 @@ function Hero() {
                 </motion.h1>
 
                 <motion.p
-                  className="mb-6 max-w-[300px] text-[14px] leading-relaxed text-white"
+                  className="mb-6 max-w-[300px] text-[20px] leading-snug text-white"
                   style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -669,16 +668,16 @@ function GameDetails() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6 }}
-              className="headingstyle font-heading font-extrabold leading-tight text-brand-black"
-            >
+            <motion.p
+                  className="headingstyle font-heading"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
               Maths That Makes Sense Through Play
-            </motion.h2>
+            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -737,7 +736,7 @@ function GameDetails2() {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-1 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-1 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -835,7 +834,7 @@ function GameDetails3() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -905,7 +904,7 @@ function GameDetails4() {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="order-2 w-full px-4 py-8 sm:p-12 md:order-1 md:w-1/2"
+            className="order-2 w-full px-4 py-8 sm:p-12 md:order-1 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -2491,7 +2490,7 @@ function LostCardHelper() {
               initial={{ opacity: 0, x: 50 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="order-1 w-full text-white md:order-2 md:w-1/2"
+              className="order-1 w-full text-white md:order-2 md:w-1/2 text-center md:text-left"
             >
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}

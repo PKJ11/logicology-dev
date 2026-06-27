@@ -340,27 +340,27 @@ export default function HeroSlide1({ isInView }: SlideProps) {
             <SmartCard card={TEXT_COLUMN_CARDS[1]} isInView={isInView} popDelay={0.48} /> */}
 
             <motion.h1
-              className="mb-5 uppercase leading-[1.1] text-white"
+              className="mb-5  leading-[1.1] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
-                fontSize: "50px",
+                fontSize: "46px",
                 fontWeight: 800,
               }}
               initial={{ y: 40, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.25 }}
             >
-              The math game that secretly teaches number sense and strategy.
+              The math game that <br/> secretly teaches number sense and strategy.
             </motion.h1>
 
             <motion.p
-              className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[26px]"
+              className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
               style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               initial={{ y: 30, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.38 }}
             >
-              Prime numbers turned into a battle of wits. Ages 8+.
+              Prime numbers turned into a battle <br/> of wits. Ages 8+.
             </motion.p>
 
             <motion.div
@@ -372,7 +372,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
               {/* Buy Now — white bg → amber on hover */}
               <button
                 onClick={() => setIsCheckoutOpen(true)}
-                className="hs1-buy-btn inline-block rounded-full px-8 py-4 text-center text-[18px] font-semibold"
+                className="hs1-buy-btn inline-block rounded-full px-8 py-4 text-center text-[18px]  font-semibold"
                 style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
               >
                 Buy Now ₹1,499
@@ -462,28 +462,28 @@ export default function HeroSlide1({ isInView }: SlideProps) {
             </motion.p> */}
 
             <motion.h1
-              className="mb-4 font-bold uppercase leading-[1.15] text-white"
+              className="mb-4 font-bold leading-[1.15] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
                 cursor: "pointer",
-                fontSize: "clamp(28px, 8vw, 36px)",
-                fontWeight: 800,
+                fontSize: "37px",
+                fontWeight: 700,
               }}
               initial={{ y: 30, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               The math game
-              <br />
+              
               that secretly
-              <br />
+              
               teaches number
-              <br />
+              
               sense & strategy.
             </motion.h1>
 
             <motion.p
-              className="mb-6 max-w-[300px] text-[14px] uppercase leading-relaxed text-white"
+              className="mb-6 max-w-[300px] text-[20px]  leading-snug text-white"
               style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
