@@ -671,7 +671,7 @@ function GameDetails() {
             className="order-2 w-full px-4 py-8 sm:p-12 md:order-2 md:w-1/2 flex flex-col items-center text-center md:items-start md:text-left"
           >
             <motion.p
-                  className="headingstyle font-heading"
+                  className="headingstyle font-heading text-brand-black"
                   initial={{ y: 20, opacity: 0 }}
                   animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
