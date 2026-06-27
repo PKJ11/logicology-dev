@@ -658,23 +658,7 @@ function GameDetails() {
               engaging. As children play, compete and make quick decisions, confidence with
               multiplication grows naturally. Fluency arrives as a side effect of having fun.
             </motion.p>
-            <motion.div
-              className="mt-6"
-              initial={{ y: 20, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <CTAButton
-                text="Explore the Promise"
-                bg="#fbb041"
-                color="#3d3b40"
-                hoverBg="#fa9e15"
-                hoverColor="#3d3b40"
-                showShadow={true}
-                showScaleOnHover={true}
-                showScaleOnActive={true}
-              />
-            </motion.div>
+           
           </motion.div>
         </div>
       </div>
@@ -1191,7 +1175,7 @@ export function TurnTablesBuyBlock() {
   }
 
   function handleEnquire() {
-    window.location.href = "mailto:hello@logicoland.in?subject=Bulk Enquiry for Return-Gift Bundle";
+    window.location.href = "mailto:sales@logicology.in?subject=Bulk Enquiry for Return-Gift Bundle";
   }
 
   return (
@@ -1570,7 +1554,7 @@ export function TurnTablesBuyBlock() {
               >
                 {[
                   { text: "20 copies included" },
-                  { text: "Ages 8+" },
+                  { text: "Ages 6+" },
                   { text: "Perfect for parties" },
                   { text: "Bulk pricing available" },
                 ].map((b) => (

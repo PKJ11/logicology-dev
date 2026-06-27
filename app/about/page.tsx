@@ -706,10 +706,10 @@ function ContactUs() {
             <ul className="space-y-8">
               {/* Phone */}
               <li className="flex items-center gap-5">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-7 w-7"
+                    className="h-5 w-5 sm:h-7 sm:w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -732,10 +732,10 @@ function ContactUs() {
 
               {/* Email */}
               <li className="flex items-center gap-5">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-7 w-7"
+                    className="h-5 w-5 sm:h-7 sm:w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -758,10 +758,10 @@ function ContactUs() {
 
               {/* Address */}
               <li className="flex items-start gap-5">
-                <span className="mt-1 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
+                <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-7 w-7"
+                    className="h-5 w-5 sm:h-7 sm:w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -774,7 +774,7 @@ function ContactUs() {
                     />
                   </svg>
                 </span>
-                <p className="text-xl font-semibold leading-snug">
+                <p className="text-[18px] font-semibold leading-snug">
                   Regd Office: Ameya Towers, 25,
                   <br />
                   Humpyard Road, Dhantoli,

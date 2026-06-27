@@ -405,7 +405,7 @@ into child&apos;s play.
 
               {/* Mobile View details */}
               <Link
-                href="/books"
+                href="/books/logicoland-series"
                 className="hs2-details-btn inline-block w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
                 style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               >

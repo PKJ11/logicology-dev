@@ -350,7 +350,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.25 }}
             >
-              The math game that <br/> secretly teaches number sense and strategy.
+              The math game that <br/> secretly teaches number <br/> sense and strategy.
             </motion.h1>
 
             <motion.p
@@ -509,11 +509,11 @@ export default function HeroSlide1({ isInView }: SlideProps) {
 
               {/* Mobile View details */}
               <Link
-                href="/philosophy"
+                href="/games/prime-time"
                 className="hs1-details-btn inline-block w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
                 style={{ fontFamily: "var(--font-outfit), sans-serif" }}
               >
-                <span className="hs1-label">Learn more →</span>
+                <span className="hs1-label">View Details →</span>
               </Link>
             </motion.div>
           </div>

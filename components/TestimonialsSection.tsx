@@ -381,7 +381,7 @@ export default function TestimonialsSection() {
         <div style={{ maxWidth: 1160, margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* Section heading */}
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <div
+            {/* <div
               className="text-brand-black"
               style={{
                 display: "inline-block",
@@ -393,7 +393,7 @@ export default function TestimonialsSection() {
               }}
             >
               Testimonials
-            </div>
+            </div> */}
             <h2 className="headingstyle mt-4 font-heading font-extrabold text-brand-black">
               Don't Take Our Word for It.
               <br />

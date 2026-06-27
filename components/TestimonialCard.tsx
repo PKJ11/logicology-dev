@@ -311,7 +311,7 @@ export default function TestimonialsSection() {
         <div style={{ maxWidth: 1160, margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <div
+            {/* <div
               style={{
                 display: "inline-block",
                 background: "rgba(255,255,255,0.30)",
@@ -328,7 +328,7 @@ export default function TestimonialsSection() {
               }}
             >
               Testimonials
-            </div>
+            </div> */}
             <h2
               style={{
                 fontFamily: "'Outfit', sans-serif",

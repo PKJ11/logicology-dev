@@ -696,23 +696,7 @@ function BookDetails() {
               logic, patterns and problem-solving. Before they know it, they're tackling ideas that
               once seemed far beyond their reach.
             </motion.p>
-            <motion.div
-              className="mt-6"
-              initial={{ y: 20, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <CTAButton
-                text="Explore the Promise"
-                bg="#fbb041"
-                color="#3d3b40"
-                hoverBg="#fa9e15"
-                hoverColor="#3d3b40"
-                showShadow={true}
-                showScaleOnHover={true}
-                showScaleOnActive={true}
-              />
-            </motion.div>
+            
           </motion.div>
         </div>
       </div>
@@ -1489,7 +1473,7 @@ export function LogicolandBuyBlock() {
               >
                 {[
                   { text: "All 5 volumes included" },
-                  { text: "Ages 5–16" },
+                  { text: "Ages 5–8" },
                   { text: "Logic & critical thinking" },
                   { text: "No prior knowledge needed" },
                 ].map((b) => (
@@ -2184,10 +2168,10 @@ function ColorSudoku({
                 )}
 
                 {cell.locked && (
-                  <span className="absolute right-1 top-1 rounded bg-black/10 px-1.5 py-0.5 text-[10px] text-black/60">
-                    •
-                  </span>
-                )}
+  <span className="absolute right-1 top-1 text-[8px] text-black/40">
+    •
+  </span>
+)}
 
                 {/* conflict highlight */}
                 {hasConflict && (
