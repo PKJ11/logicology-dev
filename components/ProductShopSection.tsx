@@ -22,7 +22,7 @@ const FEATURED: FeaturedProduct[] = [
     name: "Prime Time",
     displayName: "PrimeTime™",
     price: "₹1,499",
-    initialprice: undefined,
+    initialprice: "₹1,999",
     razorpayItemId: "item_RNn1BJlJAJ9sM8",
     description: "The addictive numbers board game that makes prime thinking second nature.",
     image: "https://ik.imagekit.io/pratik11/PRIME-TIME-HERO-IMAGE.png",
@@ -421,7 +421,7 @@ export default function ProductShopSection() {
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
           >
-            All prices include GST &nbsp;·&nbsp; Free shipping on orders above ₹499
+            All prices include GST &nbsp;·&nbsp; 
           </motion.p>
         </div>
       </section>

@@ -61,6 +61,11 @@ const SiteFooter = () => {
                         Contact Us
                       </Link>
                     </li>
+                    <li>
+                      <Link href="/philosophy" className="hover:underline">
+                        Philosophy
+                      </Link>
+                    </li>
                   </ul>
                 </div>
                 <div>
