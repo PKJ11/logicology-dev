@@ -14,6 +14,13 @@ interface TestimonialData {
 const TESTIMONIALS: TestimonialData[] = [
   {
     quote:
+      "We introduced Prime Time in our Math Lab for Grades 4 to 6 last year. Initially, the students were unsure about the idea of a ‘math game.’ But once they started playing, they absolutely loved it. What impressed us most was how naturally the game encouraged children to think and talk about concepts like prime numbers and factorization. Our math teachers found Prime Time to be both engaging and educational.",
+    name: "Ms Nidhi Gupta",
+    role: "Principal, GIIS Nagpur",
+    photo: "",
+  },
+  {
+    quote:
       "As a Computer Science professor, I have always believed that logic and problem-solving should be nurtured from a very early age. When I came across Logicology, it stood out as perhaps the only summer workshop that truly focuses on building these foundational skills in a structured and engaging way. I was extremely satisfied with the Summer workshop 2025 experience for my daughter. I would strongly recommend Logicology to every parent.",
     name: "Dr. Swati Jaiswal",
     role: "Computer Science Professor, VNIT",
