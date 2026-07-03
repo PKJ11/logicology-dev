@@ -1831,7 +1831,7 @@ function CrossSellCard({
             ))}
           </div>
           <span className="font-sans text-xs" style={{ color: TEXT_DARK, opacity: 0.5 }}>
-            5.0
+            {product.rating&&product.rating.toFixed(1)} 
           </span>
         </div>
 
