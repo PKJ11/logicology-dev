@@ -1660,7 +1660,7 @@ const CROSS_SELL: CrossSellProduct[] = [
     description: "Every volume in one box — the complete thinking skills collection.",
     blurb: "Five volumes of logic puzzles for ages 6–16. The full collection in one box.",
     image: "https://ik.imagekit.io/pratik11/LOGICOLAND-HERO-IMAGE.png?updatedAt=1781163914607",
-    rating: 5,
+    rating: 4.8,
     specialOffer: "",
     category: "set",
     tag: "Best Value",
