@@ -67,7 +67,7 @@ const FEATURED: FeaturedProduct[] = [
     name: "Logicoland Set (All Volumes)",
     displayName: "Complete Set",
     price: "₹999",
-    initialprice: undefined,
+    initialprice: "₹1,495",
     razorpayItemId: "item_SSxJhDUqb7HTiy",
     description: "Every volume in one box — the complete thinking skills collection.",
     image: "https://ik.imagekit.io/pratik11/LOGICOLAND-HERO-IMAGE.png?updatedAt=1781163914607",
@@ -291,7 +291,7 @@ function ProductCard({
           >
             {product.isSeries ? "₹249" : product.price}
           </span>
-          {product.initialprice && !product.isSeries && (
+          {product.initialprice && (
             <span
               className="font-sans text-sm line-through"
               style={{ color: TEXT_DARK, opacity: 0.35 }}
