@@ -7,13 +7,15 @@ import SiteFooter from "@/components/Footer";
 import CTAButton from "@/components/CTAButton";
 import Community from "@/components/Community";
 import BuySection from "@/components/BuySection";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView ,AnimatePresence} from "framer-motion";
 import Head from "next/head";
 import MediaLayoutRight from "@/components/MediaLayoutRight";
 import { useCart } from "@/components/CartContext";
 import HeroCheckoutModal, { HeroProductConfig } from "@/components/HeroCheckoutModal";
 import toast from "react-hot-toast";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { createPortal } from "react-dom";
+
 import { Navigation, Pagination } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
@@ -336,10 +338,16 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
     }
   };
 
-  const scrollToBuySection = () => {
+  const scrollToBuySectionTop = () => {
     const buySection = document.getElementById("buy-block");
     if (buySection) {
-      buySection.scrollIntoView({ behavior: "smooth", block: "center" });
+      buySection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const scrollToBuySectionMid = () => {
+    const buySection = document.getElementById("buy-block");
+    if (buySection) {
+      buySection.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   };
   const ACCENT = "#fbb041";
@@ -453,11 +461,11 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     className="flex flex-row gap-3"
                   >
                     <button
-                      onClick={scrollToBuySection}
+                      onClick={scrollToBuySectionMid}
                       className="hv-buy-btn inline-flex items-center gap-2 rounded-full px-8 py-4 text-center text-[18px] font-semibold"
                       style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
                     >
-                      Shop the series
+                      Shop Single Volumes
                       <svg
                         className="h-4 w-4"
                         fill="none"
@@ -473,13 +481,13 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                       </svg>
                     </button>
 
-                    <Link
-                      href="/books/logicoland-series"
+                    <button
+                      onClick={scrollToBuySectionTop}
                       className="hv-details-btn inline-block rounded-full px-8 py-4 text-center text-[18px] font-semibold"
                       style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     >
-                      <span className="hv-label">View details →</span>
-                    </Link>
+                      <span className="hv-label">Shop the Series →</span>
+                    </button>
                   </motion.div>
                 </div>
 
@@ -606,11 +614,11 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     className="flex w-full flex-col items-center gap-3"
                   >
                     <button
-                      onClick={scrollToBuySection}
+                      onClick={scrollToBuySectionMid}
                       className="hv-buy-btn inline-flex w-[260px] items-center justify-center gap-2 rounded-full py-4 text-center text-[16px] font-semibold"
                       style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
                     >
-                      Shop the series
+                      Shop Single Volumes
                       <svg
                         className="h-4 w-4"
                         fill="none"
@@ -626,13 +634,13 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                       </svg>
                     </button>
 
-                    <Link
-                      href="/books/logicoland-series"
+                    <button
+                      onClick={scrollToBuySectionTop}
                       className="hv-details-btn inline-block w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
                       style={{ fontFamily: "var(--font-outfit), sans-serif" }}
                     >
-                      <span className="hv-label">View details →</span>
-                    </Link>
+                      <span className="hv-label">Shop the Series →</span>
+                    </button>
                   </motion.div>
                 </div>
               </div>
@@ -1040,6 +1048,195 @@ const llbStyles = `
   }
 `;
 
+
+function BundleEnquiryModal({
+  isOpen,
+  onClose,
+  volume,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  volume: VolumeProduct | null;
+}) {
+  const [form, setForm] = useState({ phone: "", email: "", city: "", quantity: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  function update(field: keyof typeof form, value: string) {
+    setForm((f) => ({ ...f, [field]: value }));
+    setErrors((e) => ({ ...e, [field]: "" }));
+  }
+
+  function validate() {
+    const next: Record<string, string> = {};
+    if (!/^\d{10}$/.test(form.phone.replace(/\D/g, "")))
+      next.phone = "Enter a valid 10-digit phone number";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      next.email = "Enter a valid email address";
+    if (!form.city.trim()) next.city = "City is required";
+    if (!form.quantity || Number(form.quantity) < 1)
+      next.quantity = "Enter number of books required";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      // TODO: replace with your actual submission endpoint (API route, CRM, email service, etc.)
+      await fetch("/api/bundle-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          volume: volume?.displayName,
+          ...form,
+        }),
+      });
+      toast.success("Enquiry submitted! We'll contact you shortly.");
+      setForm({ phone: "", email: "", city: "", quantity: "" });
+      onClose();
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Early return if no volume
+  if (!volume) return null;
+
+  const modalContent = (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-[24px] bg-white p-6 sm:p-8"
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.97 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="mb-1 flex items-start justify-between gap-4">
+              <div>
+                <p
+                  className="font-sans text-xs font-bold uppercase tracking-[0.2em]"
+                  style={{ color: TEXT_DARK, opacity: 0.5 }}
+                >
+                  Bulk Enquiry
+                </p>
+                <h3 className="mt-1 font-heading text-xl font-extrabold" style={{ color: TEXT_DARK }}>
+                  {volume.displayName} — Bundle
+                </h3>
+              </div>
+              <button
+                onClick={onClose}
+                aria-label="Close"
+                className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-lg"
+                style={{ color: TEXT_DARK, opacity: 0.5 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="mb-5 font-sans text-sm" style={{ color: TEXT_DARK, opacity: 0.6 }}>
+              Tell us a bit about what you need and we'll get back to you with the best bulk pricing.
+            </p>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <Field label="Phone Number" error={errors.phone}>
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={(e) => update("phone", e.target.value)}
+                  placeholder="98765 43210"
+                  className="w-full rounded-xl border px-4 py-2.5 font-sans text-sm outline-none"
+                  style={{ borderColor: errors.phone ? "#e05252" : "rgba(11,63,68,0.15)" }}
+                />
+              </Field>
+
+              <Field label="Email" error={errors.email}>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => update("email", e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full rounded-xl border px-4 py-2.5 font-sans text-sm outline-none"
+                  style={{ borderColor: errors.email ? "#e05252" : "rgba(11,63,68,0.15)" }}
+                />
+              </Field>
+
+              <Field label="City" error={errors.city}>
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => update("city", e.target.value)}
+                  placeholder="Mumbai"
+                  className="w-full rounded-xl border px-4 py-2.5 font-sans text-sm outline-none"
+                  style={{ borderColor: errors.city ? "#e05252" : "rgba(11,63,68,0.15)" }}
+                />
+              </Field>
+
+              <Field label="Number of Books Required" error={errors.quantity}>
+                <input
+                  type="number"
+                  min={1}
+                  value={form.quantity}
+                  onChange={(e) => update("quantity", e.target.value)}
+                  placeholder="e.g. 50"
+                  className="w-full rounded-xl border px-4 py-2.5 font-sans text-sm outline-none"
+                  style={{ borderColor: errors.quantity ? "#e05252" : "rgba(11,63,68,0.15)" }}
+                />
+              </Field>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="llb-buy-btn relative mt-2 flex w-full items-center justify-center rounded-full py-3 text-[14px] font-extrabold disabled:opacity-60"
+              >
+                {submitting ? "Submitting..." : "Submit Enquiry"}
+              </button>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  return createPortal(modalContent, document.body);
+}
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        className="mb-1 block font-sans text-xs font-bold uppercase tracking-wide"
+        style={{ color: TEXT_DARK, opacity: 0.6 }}
+      >
+        {label}
+      </label>
+      {children}
+      {error && <p className="mt-1 font-sans text-xs text-red-500">{error}</p>}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────
 // Volume Card
 // ─────────────────────────────────────────────────────────────────
@@ -1048,11 +1245,13 @@ function VolumeCard({
   index,
   onBuyNow,
   onBuyBundle,
+  onEnquire,
 }: {
   volume: VolumeProduct;
   index: number;
   onBuyNow: (p: HeroProductConfig) => void;
   onBuyBundle: (p: HeroProductConfig) => void;
+  onEnquire: (v: VolumeProduct) => void; // add this
 }) {
   const { addToCart } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
@@ -1086,6 +1285,7 @@ function VolumeCard({
   };
 
   return (
+    <>
     <motion.div
       className="group relative flex w-full flex-col overflow-hidden rounded-[32px] bg-white"
       style={{
@@ -1225,7 +1425,7 @@ function VolumeCard({
 
           {showBundle ? (
             <button
-              onClick={() => alert("Enquiry submitted! We'll contact you shortly.")}
+              onClick={() => onEnquire(volume)}
               className="llb-cart-btn flex w-full items-center justify-center gap-2 rounded-full py-3 text-[14px] font-extrabold"
             >
               Enquire for Big Deals
@@ -1255,6 +1455,9 @@ function VolumeCard({
         </div>
       </div>
     </motion.div>
+
+    
+</>
   );
 }
 
@@ -1282,6 +1485,8 @@ export function LogicolandBuyBlock() {
     setCheckoutProduct(p);
     setIsCheckoutOpen(true);
   }
+  const [enquiryVolume, setEnquiryVolume] = useState<VolumeProduct | null>(null);
+  const isEnquiryOpen = enquiryVolume !== null;
 
   function handleAddToCart() {
     addToCart({
@@ -1549,11 +1754,12 @@ export function LogicolandBuyBlock() {
               {VOLUMES.map((volume, i) => (
                 <SwiperSlide key={volume.razorpayItemId} className="!h-auto py-2">
                   <VolumeCard
-                    volume={volume}
-                    index={i}
-                    onBuyNow={handleBuyNow}
-                    onBuyBundle={handleBuyNow}
-                  />
+      volume={volume}
+      index={i}
+      onBuyNow={handleBuyNow}
+      onBuyBundle={handleBuyNow}
+      onEnquire={setEnquiryVolume}
+    />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -1591,6 +1797,11 @@ export function LogicolandBuyBlock() {
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         product={checkoutProduct}
+      />
+       <BundleEnquiryModal
+        isOpen={isEnquiryOpen}
+        onClose={() => setEnquiryVolume(null)}
+        volume={enquiryVolume}
       />
     </>
   );
