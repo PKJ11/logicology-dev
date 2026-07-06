@@ -1,12 +1,17 @@
 // app/api/validate-promo-code/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
-// Define proper TypeScript interfaces
+interface PriceTier {
+  matchAmount: number; // the base price this tier applies to
+  finalPrice: number;  // the price after the promo is applied
+}
+
 interface PromoCodeDetails {
-  discount: number;
-  type: "percentage" | "fixed";
+  type: "percentage" | "fixed" | "price_tiers";
+  discount?: number;          // used for percentage / fixed
   minAmount: number;
-  maxDiscount?: number;
+  maxDiscount?: number;       // used for percentage
+  tiers?: PriceTier[];        // used for price_tiers
 }
 
 interface PromoCodeResponse {
@@ -23,11 +28,22 @@ interface PromoCodeResponse {
 }
 
 const PROMO_CODES: Record<string, PromoCodeDetails> = {
-  // "WELCOME10": { discount: 10, type: "percentage", minAmount: 0, maxDiscount: 500 },
   LAUNCH20: { discount: 20, type: "percentage", minAmount: 500, maxDiscount: 5000 },
-  // "FLAT500": { discount: 500, type: "fixed", minAmount: 2000 },
-  // "SUMMER25": { discount: 25, type: "percentage", minAmount: 1500, maxDiscount: 750 }
+
+  // Swanil Foundation exclusive: snaps ₹249 books to ₹180, and the ₹999
+  // 5-book set to ₹650. Add more { matchAmount, finalPrice } tiers here
+  // if you introduce other price points this code should cover.
+  LOGIC40SWANIL: {
+    type: "price_tiers",
+    minAmount: 0,
+    tiers: [
+      { matchAmount: 249, finalPrice: 180 }, // single volume
+      { matchAmount: 999, finalPrice: 650 }, // full set of 5
+    ],
+  },
 };
+
+const TOLERANCE = 1; // rupees, to absorb any rounding
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,20 +73,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Calculate discount amount
     let discountAmount = 0;
+    let value = promo.discount ?? 0;
+
     if (promo.type === "percentage") {
-      discountAmount = (cartTotal * promo.discount) / 100;
-      // Only apply maxDiscount if it exists and discount exceeds it
+      discountAmount = (cartTotal * (promo.discount ?? 0)) / 100;
       if (promo.maxDiscount && discountAmount > promo.maxDiscount) {
         discountAmount = promo.maxDiscount;
       }
-    } else {
-      discountAmount = promo.discount;
+    } else if (promo.type === "fixed") {
+      discountAmount = promo.discount ?? 0;
+    } else if (promo.type === "price_tiers") {
+      const tier = promo.tiers?.find(
+        (t) => Math.abs(t.matchAmount - cartTotal) <= TOLERANCE
+      );
+
+      if (!tier) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "This code isn't valid for this item.",
+          },
+          { status: 400 }
+        );
+      }
+
+      discountAmount = cartTotal - tier.finalPrice;
+      value = tier.finalPrice; // report the resulting price as the "value"
     }
 
-    // Ensure discount doesn't exceed cart total
-    discountAmount = Math.min(discountAmount, cartTotal);
+    discountAmount = Math.max(0, Math.min(discountAmount, cartTotal));
 
     const response: PromoCodeResponse = {
       success: true,
@@ -79,9 +111,9 @@ export async function POST(request: NextRequest) {
       finalAmount: Math.round(cartTotal - discountAmount),
       promoDetails: {
         type: promo.type,
-        value: promo.discount,
+        value,
         minAmount: promo.minAmount,
-        ...(promo.maxDiscount && { maxDiscount: promo.maxDiscount }), // Conditionally include maxDiscount
+        ...(promo.maxDiscount && { maxDiscount: promo.maxDiscount }),
       },
     };
 
@@ -92,7 +124,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Add other HTTP methods if needed, but return 405 for unsupported methods
 export async function GET() {
   return NextResponse.json({ success: false, message: "Method not allowed" }, { status: 405 });
 }
