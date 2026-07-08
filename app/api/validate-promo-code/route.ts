@@ -28,7 +28,29 @@ interface PromoCodeResponse {
 }
 
 const PROMO_CODES: Record<string, PromoCodeDetails> = {
-  LAUNCH20: { discount: 20, type: "percentage", minAmount: 500, maxDiscount: 5000 },
+  // 10% off with minimum order of ₹500
+  LOGIC10: { 
+    discount: 10, 
+    type: "percentage", 
+    minAmount: 500,
+    maxDiscount: 5000 // maximum discount of ₹5,000
+  },
+
+  // 20% off with minimum order of ₹1000
+  REPEAT20: { 
+    discount: 20, 
+    type: "percentage", 
+    minAmount: 1000,
+    maxDiscount: 5000 // maximum discount of ₹5,000
+  },
+
+  // 20% off with minimum order of ₹500 (existing code)
+  LAUNCH20: { 
+    discount: 20, 
+    type: "percentage", 
+    minAmount: 500, 
+    maxDiscount: 5000 
+  },
 
   // Swanil Foundation exclusive: snaps ₹249 books to ₹180, and the ₹999
   // 5-book set to ₹650. Add more { matchAmount, finalPrice } tiers here
