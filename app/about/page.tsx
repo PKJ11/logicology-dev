@@ -27,10 +27,10 @@ export default function AboutUs() {
   return (
     <>
       <Head>
-        <title>About Logicology - Our Story, Team & Vision | Educational Games for Kids</title>
+        <title>About Logicology – Our Story & Mission | Screen-Free Play</title>
         <meta
           name="description"
-          content="Learn about Logicology's mission to create engaging gamified educational content for children. Meet our passionate team of designers, developers, and educators dedicated to making learning fun through innovative games and books."
+          content="Founded in Pune, Logicology designs screen-free, gamified learning products that make kids love thinking. Meet the team and the mission behind the play."
         />
         <meta
           name="keywords"

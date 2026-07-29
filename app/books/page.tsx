@@ -78,10 +78,10 @@ export default function BooksPage() {
   return (
     <>
       <Head>
-        <title>Books Collection | Logicology – Educational Books for Kids</title>
+        <title>Kids' Puzzle & Activity Books – Logicoland | Logicology</title>
         <meta
           name="description"
-          content="Explore Logicology's collection of educational books for kids — Logicoland Series, Speed Maths, and Hidden in the Jungle. Fun, engaging, and designed to build logical thinking and math skills."
+          content="Explore Logicoland — five volumes of puzzles, mazes and brain games that build logic and focus in kids. Screen-free activity books from Logicology."
         />
         <meta
           name="keywords"

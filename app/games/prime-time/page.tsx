@@ -30,10 +30,10 @@ export default function PrimeTimeLanding() {
   return (
     <>
       <Head>
-        <title>Prime Time™ - Fun Math Board Game for Kids & Adults | Logicology</title>
+        <title>Prime Time: Prime Numbers Board Game (Ages 8+) | Logicology</title>
         <meta
           name="description"
-          content="A fast, addictive board game that turns prime numbers, composites and factorization into strategy kids play for fun. 2–6 players, ages 8+. No maths needed to start."
+          content="Prime Time is a strategy board game that secretly teaches prime numbers, factors and number sense. Screen-free fun for ages 8+. Shop now at Logicology."
         />
         <meta
           name="keywords"

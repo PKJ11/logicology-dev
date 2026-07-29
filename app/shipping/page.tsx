@@ -4,7 +4,7 @@ import NavBar from "@/components/NavBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shipping Policy • Logicology",
+  title: "Shipping Policy | Logicology",
   description: "Shipping terms and delivery timelines for Logicology orders across India.",
   alternates: { canonical: "/shipping" },
 };

@@ -16,13 +16,12 @@ import BrandPromise from "@/components/BrandPromise";
 export const metadata: Metadata = {
   // ── Core ──────────────────────────────────
   title: {
-    default: "Logicology – Children Think They're Playing. Parents Know They're Learning.",
+    default: "Logicology – Fun, Screen-Free Learning Games for Kids",
     template: "%s | Logicology",
   },
 
-  // ~155 chars ✅ — leads playful, closes with proof
   description:
-    "The best learning doesn't feel like learning. Logicology builds thinking skills through fun experiences — research-driven, child-tested. Skills that outlast the screen.",
+    "Children think they're playing. Parents know they're learning. Discover Logicology's screen-free math games, logic card games and puzzle books for kids.",
 
   keywords: [
     // ── Brand & Products ──

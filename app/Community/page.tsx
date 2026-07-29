@@ -92,10 +92,10 @@ const WORKSHEETS: Worksheet[] = [
 function CommunityPageHead() {
   return (
     <Head>
-      <title>PlayThinkers Community – Free Worksheets & Learning Activities | Logicology</title>
+      <title>PlayThinkers – A Community for Playful Learning | Logicology</title>
       <meta
         name="description"
-        content="Join the PlayThinkers Community by Logicology to access exclusive printable worksheets, logic puzzles, maze games, word searches, and creative activities for kids. Free to join!"
+        content="Join PlayThinkers by Logicology — a community sharing ideas, activities and perspectives on screen-free, playful learning for children. Come think and play."
       />
       <meta
         name="keywords"

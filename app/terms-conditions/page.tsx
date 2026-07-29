@@ -4,7 +4,7 @@ import NavBar from "@/components/NavBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions • Logicology",
+  title: "Terms & Conditions | Logicology",
   description: "Terms and conditions for using Logicology's website and purchasing products.",
   alternates: { canonical: "/terms-and-conditions" },
 };

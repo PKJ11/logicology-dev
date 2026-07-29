@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy • Logicology",
+  title: "Privacy Policy | Logicology",
   description:
     "Logicology’s Privacy Policy explains what we collect, why we collect it, and how you can manage your information.",
   alternates: { canonical: "/privacy-policy" },

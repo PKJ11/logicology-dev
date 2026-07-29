@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Cancellation & Refund Policy • Logicology",
+  title: "Refund & Returns Policy | Logicology",
   description: "Cancellation, returns, and refund terms for Logicology products and programs.",
   alternates: { canonical: "/cancellation-refund-policy" },
 };
