@@ -15,9 +15,23 @@ interface TestimonialData {
 const TESTIMONIALS: TestimonialData[] = [
   {
     quote:
+      "A friend gifted me Prime Time, and my first thought was, 'What am I going to do with a kids' game?' But one game quickly turned into several! It reminded me of those long evenings playing round after round of Satti Lavani with my cousins as kids. Simple to learn, surprisingly strategic, and genuinely fun. I'd happily recommend it - not just for children, but for adults too.",
+    name: "Prathamesh Adhikari",
+    role: "Chief Marketing Officer",
+    photo: "https://ik.imagekit.io/pratik11/TESTIMG4.jpeg",
+  },
+  {
+    quote:
       "We introduced Prime Time in our Math Lab for Grades 4 to 6 last year. Initially, the students were unsure about the idea of a ‘math game.’ But once they started playing, they absolutely loved it. What impressed us most was how naturally the game encouraged children to think and talk about concepts like prime numbers and factorization. Our math teachers found Prime Time to be both engaging and educational.",
     name: "Ms Nidhi Gupta",
     role: "Principal, GIIS Nagpur",
+    photo: "",
+  },
+  {
+    quote:
+      "My 7-year-old started Logicoland Volume 1 and finished the entire book in one sitting! She kept asking when the other books would arrive, and was so excited when the remaining four finally did.She even told her younger cousin, 'When you're a little older, I'll get these books for you too. They'll make your brain sharper!' Seeing her so eager to share something she enjoyed so much was wonderful. It's rare to find books that children genuinely look forward to reading.",
+    name: "Mrunmayee Khedkar",
+    role: "IT Professional, Pune",
     photo: "",
   },
   {
