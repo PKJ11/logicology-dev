@@ -404,8 +404,8 @@ export default function BuySection() {
     const windowWidth = useWindowWidth();
     const isMobile = windowWidth > 0 && windowWidth < 768;
     const imageSrc = isMobile
-      ? "/Images/Books/LOGICOLAND-ALL-BOOK-COVER-SLIDER 2 MOBILE VIEW.png"
-      : "https://ik.imagekit.io/pratik2002/LOGICOLAND-ALL-BOOK-COVER-SLIDER%202%20(1).png";
+      ? "/Images/Books/books-mobile.PNG"
+      : "/Images/Books/books-desktop.PNG";
     return (
       <div className="flex h-full w-full items-center justify-center py-2">
         <div className="relative w-full">
