@@ -680,127 +680,72 @@ const CartPage = () => {
   const isShippingPhoneValid = shipping.phone.replace(/\D/g, "").length === 10;
 
   const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string) => {
-    // Always send to userInfo.phone only
+    // Use Botbiz template API instead of Interakt
     const targetPhone = userInfo.phone;
-    console.log("Phone number for WhatsApp:", targetPhone);
-
     if (!targetPhone) {
       console.warn("No phone number available for WhatsApp message");
-      return {
-        userTracked: false,
-        messageSent: false,
-        messageId: null,
-        error: "No phone number provided",
-      };
+      return { userTracked: false, messageSent: false, messageId: null, error: "No phone number provided" };
     }
 
-    // Clean the phone number - remove any non-digit characters and country code if present
     let cleanedPhoneNumber = targetPhone.replace(/\D/g, "");
-
-    // Remove country code if present (assuming Indian numbers)
     if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
       cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
     } else if (cleanedPhoneNumber.startsWith("+91")) {
       cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
     }
 
-    // Ensure the number is 10 digits
     if (cleanedPhoneNumber.length !== 10) {
       console.warn("Invalid phone number format:", targetPhone);
-      return {
-        userTracked: false,
-        messageSent: false,
-        messageId: null,
-        error: "Invalid phone number format",
-      };
+      return { userTracked: false, messageSent: false, messageId: null, error: "Invalid phone number format" };
     }
-    console.log("cleaned phone number:", cleanedPhoneNumber);
-    const countryCode = "+91";
 
-    // Prepare shipping address string
-    const shippingAddress = `${shipping.city}, ${shipping.state}`;
+    const fullPhone = `91${cleanedPhoneNumber}`; // Botbiz expects country code prefixed number like 917XXXXXXXXX
 
-    // Prepare order items string
-    const orderItems =
-      cart.length > 0
-        ? cart[0].name + (cart.length > 1 ? ` and ${cart.length - 1} more item(s)` : "")
-        : "Your order";
+    const BOTBIZ_API_TOKEN = process.env.BOTBIZ_API_TOKEN ||
+      "22772|IKy6S1FQBF6RJewFjiAqkzSMV5dElqPYas0M53Xa244e9a7e";
+    const BOTBIZ_PHONE_NUMBER_ID = process.env.BOTBIZ_PHONE_NUMBER_ID || "1109076355631500";
+    const BOTBIZ_TEMPLATE_ID = process.env.BOTBIZ_TEMPLATE_ID || "424547";
+
+    const orderItems = cart.length > 0
+      ? cart[0].name + (cart.length > 1 ? ` and ${cart.length - 1} more item(s)` : "")
+      : "Your order";
+
+    const shippingAddress = `${shipping.address ? shipping.address + ", " : ""}${shipping.city}, ${shipping.state} - ${shipping.pin}`;
+
+    const params: Record<string, string> = {
+      apiToken: BOTBIZ_API_TOKEN,
+      phone_number_id: BOTBIZ_PHONE_NUMBER_ID,
+      template_id: BOTBIZ_TEMPLATE_ID,
+      "templateVariable-name-1": userInfo.name || "",
+      "templateVariable-orderItems-2": orderItems,
+      "templateVariable-finalAmount-3": finalAmount.toFixed(0),
+      "templateVariable-shippingAddress-4": shippingAddress,
+      "templateVariable-paymentId-5": paymentId,
+      phone_number: fullPhone,
+    };
 
     try {
-      // Step 1: Track/Update user in Interakt
-      const trackUserResponse = await fetch("https://api.interakt.ai/v1/public/track/users/", {
+      const res = await fetch("https://dash.botbiz.io/api/v1/whatsapp/send/template", {
         method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedPhoneNumber,
-          countryCode: countryCode,
-          traits: {
-            name: userInfo.name,
-            email: userInfo.email,
-            lastOrderDate: new Date().toISOString(),
-            totalOrders: 1,
-            lastPaymentId: paymentId,
-            shippingAddress: shippingAddress,
-            isGift: shipping.isGift,
-            isDifferentFromBiller: shipping.isDifferentFromBiller,
-          },
-        }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(params as Record<string, string>).toString(),
       });
 
-      const trackUserResult = await trackUserResponse.json();
+      const result = await res.json();
 
-      if (!trackUserResult.result) {
-        console.warn("Failed to track user:", trackUserResult.message);
-        // Continue with message sending even if tracking fails
-      }
+      // Botbiz response may vary; try to extract a message id
+      const messageId = result.id || result.message_id || result.data?.message_id || null;
+      const success = res.ok && (result.success || result.status === "success" || !!messageId);
 
-      // Step 2: Send WhatsApp message
-      const messageResponse = await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: countryCode,
-          phoneNumber: cleanedPhoneNumber,
-          type: "Template",
-          template: {
-            name: "purchase",
-            languageCode: "en",
-            bodyValues: [
-              userInfo.name, // {{1}} Customer name
-              orderItems, // {{2}} Order items
-              finalAmount.toFixed(0), // {{3}} Amount
-              shippingAddress, // {{4}} Shipping address
-              paymentId, // {{5}} Payment ID
-            ],
-          },
-        }),
-      });
-
-      const messageResult = await messageResponse.json();
-
-      if (!messageResult.id) {
-        throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
-      }
-
-      return {
-        userTracked: trackUserResult.result || false,
-        messageSent: true,
-        messageId: messageResult.id,
-      };
-    } catch (error) {
-      console.error("Error in WhatsApp messaging:", error);
       return {
         userTracked: false,
-        messageSent: false,
-        messageId: null,
-        error: error instanceof Error ? error.message : "Unknown error",
+        messageSent: !!messageId || success,
+        messageId,
+        error: success ? undefined : JSON.stringify(result),
       };
+    } catch (error) {
+      console.error("Error in Botbiz messaging:", error);
+      return { userTracked: false, messageSent: false, messageId: null, error: error instanceof Error ? error.message : "Unknown error" };
     }
   };
 
