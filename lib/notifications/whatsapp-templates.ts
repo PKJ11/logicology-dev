@@ -13,7 +13,7 @@ export const WHATSAPP_TEMPLATES: Record<WhatsAppTemplateKey, WhatsAppTemplateDef
     variables: ["name", "orderItems", "finalAmount", "shippingAddress", "paymentId"],
   },
   COMMUNITY_INVITE: {
-    templateId: process.env.BOTBIZ_TEMPLATE_COMMUNITY_INVITE || "",
+    templateId: process.env.BOTBIZ_TEMPLATE_COMMUNITY_INVITE || "425634",
     description: "Invite a friend to the PlayThinkers Community via WhatsApp.",
     variables: ["friendName", "inviterName", "communityName", "inviteLink"],
   },
