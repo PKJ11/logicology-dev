@@ -16,6 +16,7 @@ import {
   trackButtonClick,
 } from "@/lib/gtag-events";
 import { trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -679,32 +680,12 @@ const CartPage = () => {
   const isBillerPhoneValid = userInfo.phone.replace(/\D/g, "").length === 10;
   const isShippingPhoneValid = shipping.phone.replace(/\D/g, "").length === 10;
 
-  const sendInteraktWhatsAppMessage = async (paymentId: string, orderDescription: string) => {
-    // Use Botbiz template API instead of Interakt
+  const sendOrderConfirmationWhatsApp = async (paymentId: string, orderDescription: string) => {
     const targetPhone = userInfo.phone;
     if (!targetPhone) {
       console.warn("No phone number available for WhatsApp message");
       return { userTracked: false, messageSent: false, messageId: null, error: "No phone number provided" };
     }
-
-    let cleanedPhoneNumber = targetPhone.replace(/\D/g, "");
-    if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
-    } else if (cleanedPhoneNumber.startsWith("+91")) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
-    }
-
-    if (cleanedPhoneNumber.length !== 10) {
-      console.warn("Invalid phone number format:", targetPhone);
-      return { userTracked: false, messageSent: false, messageId: null, error: "Invalid phone number format" };
-    }
-
-    const fullPhone = `91${cleanedPhoneNumber}`; // Botbiz expects country code prefixed number like 917XXXXXXXXX
-
-    const BOTBIZ_API_TOKEN = process.env.BOTBIZ_API_TOKEN ||
-      "22772|IKy6S1FQBF6RJewFjiAqkzSMV5dElqPYas0M53Xa244e9a7e";
-    const BOTBIZ_PHONE_NUMBER_ID = process.env.BOTBIZ_PHONE_NUMBER_ID || "1109076355631500";
-    const BOTBIZ_TEMPLATE_ID = process.env.BOTBIZ_TEMPLATE_ID || "424547";
 
     const orderItems = cart.length > 0
       ? cart[0].name + (cart.length > 1 ? ` and ${cart.length - 1} more item(s)` : "")
@@ -712,41 +693,15 @@ const CartPage = () => {
 
     const shippingAddress = `${shipping.address ? shipping.address + ", " : ""}${shipping.city}, ${shipping.state} - ${shipping.pin}`;
 
-    const params: Record<string, string> = {
-      apiToken: BOTBIZ_API_TOKEN,
-      phone_number_id: BOTBIZ_PHONE_NUMBER_ID,
-      template_id: BOTBIZ_TEMPLATE_ID,
-      "templateVariable-name-1": userInfo.name || "",
-      "templateVariable-orderItems-2": orderItems,
-      "templateVariable-finalAmount-3": finalAmount.toFixed(0),
-      "templateVariable-shippingAddress-4": shippingAddress,
-      "templateVariable-paymentId-5": paymentId,
-      phone_number: fullPhone,
-    };
+    const result = await sendWhatsAppNotification("ORDER_CONFIRMATION", targetPhone, {
+      name: userInfo.name || "",
+      orderItems,
+      finalAmount: finalAmount.toFixed(0),
+      shippingAddress,
+      paymentId,
+    });
 
-    try {
-      const res = await fetch("https://dash.botbiz.io/api/v1/whatsapp/send/template", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(params as Record<string, string>).toString(),
-      });
-
-      const result = await res.json();
-
-      // Botbiz response may vary; try to extract a message id
-      const messageId = result.id || result.message_id || result.data?.message_id || null;
-      const success = res.ok && (result.success || result.status === "success" || !!messageId);
-
-      return {
-        userTracked: false,
-        messageSent: !!messageId || success,
-        messageId,
-        error: success ? undefined : JSON.stringify(result),
-      };
-    } catch (error) {
-      console.error("Error in Botbiz messaging:", error);
-      return { userTracked: false, messageSent: false, messageId: null, error: error instanceof Error ? error.message : "Unknown error" };
-    }
+    return { userTracked: false, messageSent: result.success, messageId: result.messageId, error: result.error };
   };
 
   const sendGSTInvoice = async (
@@ -880,7 +835,7 @@ const CartPage = () => {
 
       // Send WhatsApp message only to userInfo.phone
       try {
-        await sendInteraktWhatsAppMessage(paymentId, orderDescription);
+        await sendOrderConfirmationWhatsApp(paymentId, orderDescription);
       } catch (whatsappError) {
         console.error("WhatsApp message failed:", whatsappError);
         // Don't throw error here as email is primary, WhatsApp is secondary

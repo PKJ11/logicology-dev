@@ -13,6 +13,7 @@ import { ContentItem, TierId } from "../types/subscription";
 import Script from "next/script";
 import SubscriptionModal from "@/components/SubscriptionModal";
 import NavBar from "@/components/NavBar";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 interface UserData {
   id: string;
@@ -30,16 +31,6 @@ interface Worksheet {
   category: string;
   difficulty: string;
 }
-
-// Jio Interakt API configuration
-const INTERAKT_API_KEY = "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=";
-const INTERAKT_BASE_URL = "https://api.interakt.ai/v1/public";
-
-// WhatsApp template names
-const WHATSAPP_TEMPLATES = {
-  COMMUNITY_INVITE: "community_invite",
-  WELCOME: "community_welcome",
-};
 
 // Worksheets data with Worksheet001 to Worksheet005
 const WORKSHEETS: Worksheet[] = [
@@ -830,74 +821,25 @@ function CommunityPageContent() {
     };
   };
 
-  const sendInteraktMessage = async (
+  const sendCommunityInviteWhatsApp = async (
     phoneNumber: string,
-    templateName: string,
-    bodyValues: string[]
+    bodyValues: [friendName: string, inviterName: string, communityName: string, inviteLink: string]
   ): Promise<{ success: boolean; messageId?: string; error?: string }> => {
-    try {
-      const { countryCode, cleanedNumber } = extractCountryCode(phoneNumber);
-
-      if (cleanedNumber.length !== 10) {
-        throw new Error("Invalid phone number. Please enter a 10-digit Indian mobile number.");
-      }
-
-      const trackUserResponse = await fetch(`${INTERAKT_BASE_URL}/track/users/`, {
-        method: "POST",
-        headers: {
-          Authorization: INTERAKT_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedNumber,
-          countryCode: countryCode,
-          traits: {
-            name: friendName,
-            source: "community_invite",
-            invitedBy: userData?.name || "PlayThinkers Community",
-            invitedByEmail: userData?.email || "",
-            inviteDate: new Date().toISOString(),
-          },
-        }),
-      });
-
-      await trackUserResponse.json();
-
-      const messageResponse = await fetch(`${INTERAKT_BASE_URL}/message/`, {
-        method: "POST",
-        headers: {
-          Authorization: INTERAKT_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: countryCode,
-          phoneNumber: cleanedNumber,
-          type: "Template",
-          template: {
-            name: templateName,
-            languageCode: "en",
-            bodyValues: bodyValues,
-          },
-        }),
-      });
-
-      const messageResult = await messageResponse.json();
-
-      if (!messageResult.id) {
-        throw new Error(`Failed to send WhatsApp message`);
-      }
-
-      return {
-        success: true,
-        messageId: messageResult.id,
-      };
-    } catch (error: any) {
-      console.error("Error sending Interakt message:", error);
-      return {
-        success: false,
-        error: error.message || "Failed to send WhatsApp message",
-      };
+    const { cleanedNumber } = extractCountryCode(phoneNumber);
+    if (cleanedNumber.length !== 10) {
+      return { success: false, error: "Invalid phone number. Please enter a 10-digit Indian mobile number." };
     }
+
+    const [friendNameValue, inviterName, communityName, inviteLink] = bodyValues;
+
+    const result = await sendWhatsAppNotification("COMMUNITY_INVITE", phoneNumber, {
+      friendName: friendNameValue,
+      inviterName,
+      communityName,
+      inviteLink,
+    });
+
+    return { success: result.success, messageId: result.messageId ?? undefined, error: result.error };
   };
 
   const handleWhatsappInvite = async () => {
@@ -914,18 +856,14 @@ function CommunityPageContent() {
     setInviteStatus(null);
 
     try {
-      const bodyValues = [
+      const bodyValues: [string, string, string, string] = [
         friendName,
         userData?.name || "A friend",
         "PlayThinkers Community",
         "https://www.logicology.in/Community",
       ];
 
-      const result = await sendInteraktMessage(
-        friendNumber,
-        WHATSAPP_TEMPLATES.COMMUNITY_INVITE,
-        bodyValues
-      );
+      const result = await sendCommunityInviteWhatsApp(friendNumber, bodyValues);
 
       if (result.success) {
         setInviteStatus({

@@ -77,92 +77,9 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  // ─── WhatsApp messaging function (commented out) ───────────────────────────
-  // const sendInteraktWhatsAppMessage = async (
-  //   phoneNumber: string,
-  //   analyticsData: any,
-  //   userName: string = "Logicology Admin",
-  //   userEmail: string = "admin@logicology.in"
-  // ) => {
-  //   try {
-  //     const INTERAKT_API_KEY = "QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=";
-  //     let cleanedPhoneNumber = phoneNumber.replace(/\D/g, "");
-  //     if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
-  //       cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
-  //     } else if (cleanedPhoneNumber.startsWith("+91")) {
-  //       cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
-  //     }
-  //     if (cleanedPhoneNumber.length !== 10) throw new Error("Invalid phone number format");
-  //     const countryCode = "+91";
-  //     const dateText = formatDateRange(analyticsData.dateRange);
-  //     const templateValues = [
-  //       userName,
-  //       dateText,
-  //       analyticsData.totalUsers.toLocaleString(),
-  //       analyticsData.totalSessions.toLocaleString(),
-  //       analyticsData.pageViews.toLocaleString(),
-  //       analyticsData.conversionRate?.toFixed(1) || "0",
-  //     ];
-  //     const trackUserResponse = await fetch("https://api.interakt.ai/v1/public/track/users/", {
-  //       method: "POST",
-  //       headers: { Authorization: `Basic ${INTERAKT_API_KEY}`, "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         phoneNumber: cleanedPhoneNumber,
-  //         countryCode,
-  //         traits: { name: userName, email: userEmail, lastAnalyticsDate: new Date().toISOString(), userType: "admin", totalReports: 1 },
-  //       }),
-  //     });
-  //     const trackUserResult = await trackUserResponse.json();
-  //     const messageResponse = await fetch("https://api.interakt.ai/v1/public/message/", {
-  //       method: "POST",
-  //       headers: { Authorization: `Basic ${INTERAKT_API_KEY}`, "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         countryCode,
-  //         phoneNumber: cleanedPhoneNumber,
-  //         type: "Template",
-  //         template: { name: "analytics_report", languageCode: "en", bodyValues: templateValues },
-  //       }),
-  //     });
-  //     const messageResult = await messageResponse.json();
-  //     if (!messageResult.id) throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
-  //     return { userTracked: trackUserResult.result || false, messageSent: true, messageId: messageResult.id, phoneNumber: `+91${cleanedPhoneNumber}` };
-  //   } catch (error: any) {
-  //     return { userTracked: false, messageSent: false, messageId: null, error: error.message || "Unknown error" };
-  //   }
-  // };
-
-  // const sendToWhatsApp = async () => {
-  //   if (!analyticsData) return;
-  //   setSendingToWhatsApp(true);
-  //   setWhatsappStatus({ sending: true, success: false, message: "Sending to WhatsApp..." });
-  //   try {
-  //     const phoneNumbers = ["7756916144", "8080661208", "9860265047"];
-  //     const results = [];
-  //     for (const phoneNumber of phoneNumbers) {
-  //       try {
-  //         const result = await sendInteraktWhatsAppMessage(phoneNumber, analyticsData, "Logicology Admin", "admin@logicology.in");
-  //         results.push({ phoneNumber, success: result.messageSent, messageId: result.messageId, error: result.error });
-  //         await new Promise((resolve) => setTimeout(resolve, 500));
-  //       } catch (error: any) {
-  //         results.push({ phoneNumber, success: false, error: error.message });
-  //       }
-  //     }
-  //     const successfulSends = results.filter((r) => r.success);
-  //     const failedSends = results.filter((r) => !r.success);
-  //     if (successfulSends.length === phoneNumbers.length) {
-  //       setWhatsappStatus({ sending: false, success: true, message: `✅ Analytics report sent to ${successfulSends.length} numbers successfully!` });
-  //     } else if (successfulSends.length > 0) {
-  //       setWhatsappStatus({ sending: false, success: true, message: `✅ Sent to ${successfulSends.length}/${phoneNumbers.length} numbers. Failed: ${failedSends.map((f) => f.phoneNumber).join(", ")}` });
-  //     } else {
-  //       setWhatsappStatus({ sending: false, success: false, message: `❌ Failed to send to all numbers.` });
-  //     }
-  //   } catch (error: any) {
-  //     setWhatsappStatus({ sending: false, success: false, message: `❌ Error: ${error.message}` });
-  //   } finally {
-  //     setSendingToWhatsApp(false);
-  //   }
-  // };
-  // ───────────────────────────────────────────────────────────────────────────
+  // WhatsApp send-to-admin is disabled here; the live implementation lives in
+  // app/api/analytics/send-whatsapp/route.ts, which uses the ANALYTICS_REPORT
+  // template via lib/notifications/whatsapp-service.ts.
 
   const exportToCSV = () => {
     if (!analyticsData) return;

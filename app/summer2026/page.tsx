@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SiteFooter from "@/components/Footer";
 import { useRouter } from "next/navigation";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -2146,51 +2147,15 @@ function EnrollmentSection({
 
   // ── Send WhatsApp ─────────────────────────────────────────────────────────
   const sendWhatsApp = async (paymentId: string, base: number, total: number) => {
-    const cleanedPhone = form.phone.replace(/\D/g, "").slice(-10);
-    const { gstAmount } = calcGST(base);
+    if (!form.phone) return;
 
     try {
-      await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedPhone,
-          countryCode: "+91",
-          traits: {
-            name: form.parentName,
-            email: form.email,
-            lastPaymentId: paymentId,
-            campBatch: form.preferredBatch,
-          },
-        }),
-      });
-
-      // Format as separate values, NOT one long string
-      await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: "+91",
-          phoneNumber: cleanedPhone,
-          type: "Template",
-          template: {
-            name: "summer2026camp",
-            languageCode: "en",
-            bodyValues: [
-              form.parentName, // {{1}} Customer name
-              `Logicology Summer Workshop — ${form.preferredBatch}`, // {{2}} Order items
-              total.toFixed(0), // {{3}} Amount
-              `${form.childName}`, // {{4}} Student name or location
-              paymentId, // {{5}} Payment ID
-            ],
-          },
-        }),
+      await sendWhatsAppNotification("ORDER_CONFIRMATION", form.phone, {
+        name: form.parentName,
+        orderItems: `Logicology Summer Workshop — ${form.preferredBatch}`,
+        finalAmount: total.toFixed(0),
+        shippingAddress: form.childName,
+        paymentId,
       });
     } catch (err) {
       console.error("WhatsApp error:", err);

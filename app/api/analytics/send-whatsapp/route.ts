@@ -1,8 +1,6 @@
 // app/api/analytics/send-whatsapp/route.ts
 import { NextRequest, NextResponse } from "next/server";
-
-// Jio Interakt API Configuration
-const INTERAKT_API_KEY = "Q75zahlkaIZqDjuikQ4NZh7BSLF4Y9-teGgvWbDrH6cko=";
+import { sendWhatsAppTemplate } from "@/lib/notifications/whatsapp-service";
 
 // WhatsApp number to send to
 const WHATSAPP_NUMBER = "7756916144";
@@ -29,78 +27,34 @@ export async function POST(request: NextRequest) {
     // Format the message for WhatsApp template
     const dateText = formatDateRange(analyticsData?.dateRange || { startDate: "", endDate: "" });
 
-    // Prepare message values for template
-    const messageValues = [
-      "Logicology", // {{1}} Company name
-      dateText, // {{2}} Period
-      analyticsData?.totalUsers?.toString() || "0", // {{3}} Total Users
-      analyticsData?.totalSessions?.toString() || "0", // {{4}} Total Sessions
-      analyticsData?.pageViews?.toString() || "0", // {{5}} Page Views
-    ];
+    const variables = {
+      companyName: "Logicology",
+      period: dateText,
+      totalUsers: analyticsData?.totalUsers?.toString() || "0",
+      totalSessions: analyticsData?.totalSessions?.toString() || "0",
+      pageViews: analyticsData?.pageViews?.toString() || "0",
+    };
 
     console.log("📱 WhatsApp Message Details:");
     console.log("To: +91" + cleanedPhone);
-    console.log("Template: analytics_report");
-    console.log("Values:", messageValues);
+    console.log("Template: ANALYTICS_REPORT");
+    console.log("Values:", variables);
 
     try {
-      // Step 1: Track/Update user in Interakt
-      const trackUserResponse = await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${INTERAKT_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedPhone,
-          countryCode: "+91",
-          traits: {
-            name: "Logicology Admin",
-            email: "admin@logicology.in",
-            lastAnalyticsDate: new Date().toISOString(),
-            totalReports: 1,
-          },
-        }),
-      });
+      const result = await sendWhatsAppTemplate("ANALYTICS_REPORT", cleanedPhone, variables);
 
-      const trackUserResult = await trackUserResponse.json();
-      console.log("Track User Result:", trackUserResult);
-
-      // Step 2: Send WhatsApp message using Template
-      const messageResponse = await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${INTERAKT_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: "+91",
-          phoneNumber: cleanedPhone,
-          type: "Template",
-          template: {
-            name: "analytics_report", // Create this template in Interakt
-            languageCode: "en",
-            bodyValues: messageValues,
-          },
-        }),
-      });
-
-      const messageResult = await messageResponse.json();
-      console.log("Message Result:", messageResult);
-
-      if (messageResult.id) {
+      if (result.success) {
         return NextResponse.json({
           success: true,
           message: "Analytics report sent to WhatsApp successfully",
-          whatsappMessageId: messageResult.id,
+          whatsappMessageId: result.messageId,
           phoneNumber: `+91${cleanedPhone}`,
-          userTracked: trackUserResult.result || false,
           timestamp: new Date().toISOString(),
         });
       } else {
-        console.error("Interakt API Error:", messageResult);
+        console.error("Botbiz API Error:", result.error);
 
-        // Fallback to text message if template fails
+        // Fallback to text message if the template send fails
         const fallbackResult = await sendTextMessage(cleanedPhone, analyticsData, dateRange);
 
         return NextResponse.json({
@@ -112,8 +66,8 @@ export async function POST(request: NextRequest) {
           timestamp: new Date().toISOString(),
         });
       }
-    } catch (interaktError: any) {
-      console.error("Interakt API call failed:", interaktError);
+    } catch (botbizError: any) {
+      console.error("Botbiz API call failed:", botbizError);
 
       // Simulate success for demo purposes
       const fallbackResult = await sendTextMessage(cleanedPhone, analyticsData, dateRange);

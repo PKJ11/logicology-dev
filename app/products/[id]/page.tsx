@@ -12,6 +12,7 @@ import ContactUs from "@/components/ContactUs";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 import { trackViewItem, trackAddToCart, trackPurchase, trackButtonClick } from "@/lib/gtag-events";
 import {
   trackMetaPixelViewContent,
@@ -288,7 +289,7 @@ const CheckoutModal = ({
     localStorage.removeItem("appliedPromo");
   };
 
-  const sendInteraktWhatsAppMessage = async (
+  const sendOrderConfirmationWhatsApp = async (
     paymentId: string,
     orderDescription: string,
     razorpayContact?: string
@@ -305,94 +306,17 @@ const CheckoutModal = ({
       };
     }
 
-    let cleanedPhoneNumber = phoneNumber.replace(/\D/g, "");
-
-    if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
-    } else if (cleanedPhoneNumber.startsWith("+91")) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
-    }
-
-    if (cleanedPhoneNumber.length !== 10) {
-      console.warn("Invalid phone number format:", phoneNumber);
-      return {
-        userTracked: false,
-        messageSent: false,
-        messageId: null,
-        error: "Invalid phone number format",
-      };
-    }
-
-    const countryCode = "+91";
     const shippingAddress = `${shipping.city}, ${shipping.state}`;
 
-    try {
-      // Track/Update user in Interakt
-      await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedPhoneNumber,
-          countryCode: countryCode,
-          traits: {
-            name: userInfo.name,
-            email: userInfo.email,
-            lastOrderDate: new Date().toISOString(),
-            totalOrders: 1,
-            lastPaymentId: paymentId,
-            shippingAddress: shippingAddress,
-          },
-        }),
-      });
+    const result = await sendWhatsAppNotification("ORDER_CONFIRMATION", phoneNumber, {
+      name: userInfo.name,
+      orderItems: product.name,
+      finalAmount: finalAmount.toFixed(0),
+      shippingAddress,
+      paymentId,
+    });
 
-      // Send WhatsApp message
-      const messageResponse = await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: countryCode,
-          phoneNumber: cleanedPhoneNumber,
-          type: "Template",
-          template: {
-            name: "purchase",
-            languageCode: "en",
-            bodyValues: [
-              userInfo.name, // {{1}} Customer name
-              product.name, // {{2}} Product name
-              finalAmount.toFixed(0), // {{3}} Amount
-              shippingAddress, // {{4}} Shipping address
-              paymentId, // {{5}} Payment ID
-            ],
-          },
-        }),
-      });
-
-      const messageResult = await messageResponse.json();
-
-      if (!messageResult.id) {
-        throw new Error(`Failed to send WhatsApp message: ${JSON.stringify(messageResult)}`);
-      }
-
-      return {
-        userTracked: true,
-        messageSent: true,
-        messageId: messageResult.id,
-      };
-    } catch (error) {
-      console.error("Error in WhatsApp messaging:", error);
-      return {
-        userTracked: false,
-        messageSent: false,
-        messageId: null,
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
-    }
+    return { userTracked: false, messageSent: result.success, messageId: result.messageId, error: result.error };
   };
 
   const generateGSTReceipt = (discountAmount: number = 0) => {
@@ -571,7 +495,7 @@ const CheckoutModal = ({
       await emailRes.json();
 
       try {
-        await sendInteraktWhatsAppMessage(paymentId, orderDescription, razorpayContact);
+        await sendOrderConfirmationWhatsApp(paymentId, orderDescription, razorpayContact);
       } catch (whatsappError) {
         console.error("WhatsApp message failed:", whatsappError);
       }

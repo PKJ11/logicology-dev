@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 export default function FoldaxUserPage() {
   const [name, setName] = useState("");
@@ -54,70 +55,16 @@ export default function FoldaxUserPage() {
     }
   };
 
-  // Interakt: track user, then send WhatsApp
-  const sendInteraktWhatsAppMessage = async (name: string, email: string, phone: string) => {
+  const sendFoldaxWelcomeWhatsApp = async (name: string, email: string, phone: string) => {
     if (!phone) {
       return { messageSent: false, error: "No phone number provided" };
     }
-    let cleanedPhoneNumber = phone.replace(/\D/g, "");
-    if (cleanedPhoneNumber.startsWith("91") && cleanedPhoneNumber.length === 12) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(2);
-    } else if (cleanedPhoneNumber.startsWith("+91")) {
-      cleanedPhoneNumber = cleanedPhoneNumber.substring(3);
-    }
-    if (cleanedPhoneNumber.length !== 10) {
-      return { messageSent: false, error: "Invalid phone number format" };
-    }
-    const countryCode = "+91";
-    try {
-      // Step 1: Track/Update user in Interakt
-      const trackUserResponse = await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanedPhoneNumber,
-          countryCode,
-          traits: {
-            name,
-            email,
-            registeredAt: new Date().toISOString(),
-          },
-        }),
-      });
-      const trackUserResult = await trackUserResponse.json();
-      if (!trackUserResult.result) {
-        // Continue with message sending even if tracking fails
-        console.warn("Failed to track user:", trackUserResult.message);
-      }
-      // Step 2: Send WhatsApp message
-      const messageResponse = await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode,
-          phoneNumber: cleanedPhoneNumber,
-          type: "Template",
-          template: {
-            name: "foldax_test",
-            languageCode: "en",
-            bodyValues: ["Thank you for registering for Foldax!"],
-          },
-        }),
-      });
-      const messageResult = await messageResponse.json();
-      if (!messageResult.id) {
-        return { messageSent: false, error: "Failed to send WhatsApp message" };
-      }
-      return { messageSent: true };
-    } catch (error: any) {
-      return { messageSent: false, error: error.message };
-    }
+
+    const result = await sendWhatsAppNotification("FOLDAX_WELCOME", phone, {
+      message: "Thank you for registering for Foldax!",
+    });
+
+    return { messageSent: result.success, error: result.error };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -137,7 +84,7 @@ export default function FoldaxUserPage() {
       if (!result.success) throw new Error(result.error || "Failed to save user");
 
       // Send WhatsApp message
-      const waResult = await sendInteraktWhatsAppMessage(name, email, phone);
+      const waResult = await sendFoldaxWelcomeWhatsApp(name, email, phone);
       if (!waResult.messageSent) {
         console.warn("WhatsApp warning:", waResult.error);
         // Continue even if WhatsApp fails

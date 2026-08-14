@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { motion, AnimatePresence } from "framer-motion";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
+import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 const RAZORPAY_KEY_ID = "rzp_live_RNIwt54hh7eqmk";
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -540,44 +541,14 @@ export default function HeroCheckoutModal({
   };
 
   const sendWhatsApp = async (paymentId: string) => {
-    let clean = userInfo.phone.replace(/\D/g, "");
-    if (clean.startsWith("91") && clean.length === 12) clean = clean.substring(2);
-    if (clean.length !== 10) return;
+    if (!userInfo.phone) return;
     try {
-      await fetch("https://api.interakt.ai/v1/public/track/users/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber: clean,
-          countryCode: "+91",
-          traits: { name: userInfo.name, email: userInfo.email, lastPaymentId: paymentId },
-        }),
-      });
-      await fetch("https://api.interakt.ai/v1/public/message/", {
-        method: "POST",
-        headers: {
-          Authorization: "Basic QTc1emFobGthSVpxRGp1aWtRNE5aaDdCU0xGNFk5LXRFZ3ZXYkRySDZjbzo=",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countryCode: "+91",
-          phoneNumber: clean,
-          type: "Template",
-          template: {
-            name: "purchase",
-            languageCode: "en",
-            bodyValues: [
-              userInfo.name,
-              product.name,
-              finalAmount.toFixed(0),
-              `${shipping.city}, ${shipping.state}`,
-              paymentId,
-            ],
-          },
-        }),
+      await sendWhatsAppNotification("ORDER_CONFIRMATION", userInfo.phone, {
+        name: userInfo.name,
+        orderItems: product.name,
+        finalAmount: finalAmount.toFixed(0),
+        shippingAddress: `${shipping.city}, ${shipping.state}`,
+        paymentId,
       });
     } catch (e) {
       console.error("WhatsApp error", e);
