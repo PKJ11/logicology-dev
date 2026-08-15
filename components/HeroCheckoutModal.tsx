@@ -858,7 +858,7 @@ export default function HeroCheckoutModal({
                 <>
                   <Card>
                     <div className="mb-4 flex flex-col gap-0.5">
-                      <SectionLabel>Biller Details</SectionLabel>
+                      <SectionLabel>Billing Details</SectionLabel>
                       <p className="text-xs" style={{ color: TEXT_MUTED }}>
                         Used for billing & GST receipts
                       </p>
@@ -1446,7 +1446,7 @@ export default function HeroCheckoutModal({
 
                   {/* Biller */}
                   <Card>
-                    <SectionLabel>Biller</SectionLabel>
+                    <SectionLabel>Bill To</SectionLabel>
                     <div className="mt-2 flex flex-col gap-0.5">
                       <p className="text-sm font-bold" style={{ color: TEXT_PRIMARY }}>
                         {userInfo.name}
