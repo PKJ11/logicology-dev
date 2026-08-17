@@ -60,6 +60,10 @@ export default function GamesPage() {
 
   const isPrimeTime = (g: Game) => g.title === "Prime Time™";
 
+  const navigateToGame = (game: Game) => {
+    router.push(`/games/${toSlug(game.title)}`);
+  };
+
   const openModal = (game: Game) => {
     setSelectedGame(game);
     setIsModalOpen(true);
@@ -99,7 +103,7 @@ export default function GamesPage() {
             <div
               key={game.id}
               className="group relative cursor-pointer transition-all duration-300 hover:z-10"
-              onClick={() => openModal(game)}
+              onClick={() => navigateToGame(game)}
             >
               <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
                 {/* Coming Soon badge removed */}
@@ -132,7 +136,7 @@ export default function GamesPage() {
                       className="text-xs font-semibold text-brand-teal transition-colors hover:text-brand-coral"
                       onClick={(e) => {
                         e.stopPropagation();
-                        openModal(game);
+                        navigateToGame(game);
                       }}
                     >
                       View details →

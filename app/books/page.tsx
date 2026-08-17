@@ -60,6 +60,10 @@ export default function BooksPage() {
     },
   ];
 
+  const navigateToBook = (book: Book) => {
+    router.push(`/books/${toSlug(book.title)}`);
+  };
+
   const openModal = (book: Book) => {
     setSelectedBook(book);
     setIsModalOpen(true);
@@ -219,7 +223,7 @@ export default function BooksPage() {
                 key={book.id}
                 className="group relative cursor-pointer transition-all duration-300 hover:z-10"
                 onClick={() => {
-                  if (!isComingSoon) openModal(book);
+                  if (!isComingSoon) navigateToBook(book);
                 }}
               >
                 <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
@@ -254,7 +258,7 @@ export default function BooksPage() {
                         }`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (!isComingSoon) openModal(book);
+                          if (!isComingSoon) navigateToBook(book);
                         }}
                         disabled={isComingSoon}
                         aria-label={
