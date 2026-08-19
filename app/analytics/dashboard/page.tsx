@@ -17,6 +17,10 @@ import {
   Calendar,
   BarChart3,
   Activity,
+  Target,
+  ShoppingBag,
+  IndianRupee,
+  Gift,
 } from "lucide-react";
 
 interface AnalyticsData {
@@ -34,6 +38,24 @@ interface AnalyticsData {
   dateRange: { startDate: string; endDate: string };
 }
 
+interface MetaPixelData {
+  pixelId: string;
+  totalFires: number;
+  events: Array<{ eventName: string; count: number }>;
+}
+
+interface OrderRow {
+  id: string;
+  paymentId: string;
+  orderId: string;
+  customerName: string;
+  email: string;
+  totalAmount: number;
+  itemCount: number;
+  isGift: boolean;
+  createdAt: string;
+}
+
 export default function AnalyticsDashboard() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,9 +70,15 @@ export default function AnalyticsDashboard() {
   //   message: string;
   // } | null>(null);
   const [error, setError] = useState<string>("");
+  const [metaPixelData, setMetaPixelData] = useState<MetaPixelData | null>(null);
+  const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [ordersRevenue, setOrdersRevenue] = useState(0);
+  const [ordersLoading, setOrdersLoading] = useState(true);
 
   useEffect(() => {
     fetchAnalyticsData();
+    fetchMetaPixelData();
+    fetchOrders();
   }, [dateRange]);
 
   const fetchAnalyticsData = async () => {
@@ -74,6 +102,30 @@ export default function AnalyticsDashboard() {
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchMetaPixelData = async () => {
+    try {
+      const response = await fetch(`/api/analytics/meta-pixel?range=${dateRange}`);
+      const data = await response.json();
+      setMetaPixelData(data.data || null);
+    } catch (error) {
+      console.error("Error fetching Meta Pixel data:", error);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      const response = await fetch(`/api/analytics/orders?range=${dateRange}&limit=50`);
+      const data = await response.json();
+      setOrders(data.data || []);
+      setOrdersRevenue(data.totalRevenue || 0);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setOrdersLoading(false);
     }
   };
 
@@ -198,7 +250,11 @@ export default function AnalyticsDashboard() {
               Export CSV
             </button>
             <button
-              onClick={fetchAnalyticsData}
+              onClick={() => {
+                fetchAnalyticsData();
+                fetchMetaPixelData();
+                fetchOrders();
+              }}
               className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all"
               style={{ background: "#3B5BDB", color: "#fff" }}
             >
@@ -290,7 +346,7 @@ export default function AnalyticsDashboard() {
         {analyticsData && (
           <>
             {/* ── KPI Cards ───────────────────────────────────────────────── */}
-            <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {/* Total Users */}
               <div
                 className="flex items-center gap-5 rounded-2xl p-6"
@@ -371,6 +427,34 @@ export default function AnalyticsDashboard() {
                   </p>
                   <p className="text-3xl font-bold leading-none" style={{ color: "#1A1F36" }}>
                     {analyticsData.pageViews.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Orders Revenue */}
+              <div
+                className="flex items-center gap-5 rounded-2xl p-6"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: "#FFF7ED" }}
+                >
+                  <IndianRupee className="h-6 w-6" style={{ color: "#EA580C" }} />
+                </div>
+                <div>
+                  <p
+                    className="mb-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{ color: "#9CA3AF", letterSpacing: "0.1em" }}
+                  >
+                    Orders Revenue
+                  </p>
+                  <p className="text-3xl font-bold leading-none" style={{ color: "#1A1F36" }}>
+                    ₹{ordersRevenue.toLocaleString("en-IN")}
                   </p>
                 </div>
               </div>
@@ -480,7 +564,7 @@ export default function AnalyticsDashboard() {
             </div>
 
             {/* ── Bottom Row ──────────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
               {/* Device Distribution */}
               <div
                 className="overflow-hidden rounded-2xl"
@@ -598,6 +682,174 @@ export default function AnalyticsDashboard() {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Meta Pixel Events */}
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  background: "#fff",
+                  border: "1px solid #E5E8F0",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                }}
+              >
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ borderBottom: "1px solid #F1F3F9" }}
+                >
+                  <Target className="h-4 w-4" style={{ color: "#1877F2" }} />
+                  <div>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      Meta Pixel Events
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      {metaPixelData
+                        ? `${metaPixelData.totalFires.toLocaleString()} total fires`
+                        : "Facebook / Instagram pixel activity"}
+                    </p>
+                  </div>
+                </div>
+                <div className="divide-y" style={{ borderColor: "#F8F9FC" }}>
+                  {metaPixelData && metaPixelData.events.length > 0 ? (
+                    metaPixelData.events.map((event, index) => (
+                      <div key={index} className="flex items-center justify-between px-6 py-3">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                            style={{ background: "#EFF6FF", color: "#1877F2" }}
+                          >
+                            {index + 1}
+                          </span>
+                          <p className="text-sm font-medium" style={{ color: "#374151" }}>
+                            {event.eventName}
+                          </p>
+                        </div>
+                        <span
+                          className="text-sm font-semibold tabular-nums"
+                          style={{ color: "#1A1F36" }}
+                        >
+                          {event.count.toLocaleString()}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-6 py-8 text-center text-sm" style={{ color: "#9CA3AF" }}>
+                      No pixel data for this period
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ── Recent Orders ───────────────────────────────────────────── */}
+            <div
+              className="overflow-hidden rounded-2xl"
+              style={{
+                background: "#fff",
+                border: "1px solid #E5E8F0",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              }}
+            >
+              <div
+                className="flex items-center justify-between gap-3 px-6 py-4"
+                style={{ borderBottom: "1px solid #F1F3F9" }}
+              >
+                <div className="flex items-center gap-3">
+                  <ShoppingBag className="h-4 w-4" style={{ color: "#EA580C" }} />
+                  <div>
+                    <h3 className="text-sm font-semibold" style={{ color: "#1A1F36" }}>
+                      Recent Orders
+                    </h3>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>
+                      Latest checkouts in the selected period
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className="rounded-md px-2.5 py-1 text-xs font-semibold"
+                  style={{ background: "#F1F3F9", color: "#6B7280" }}
+                >
+                  {orders.length} orders
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr style={{ background: "#F8F9FC" }}>
+                      {["Payment ID", "Customer", "Email", "Items", "Amount", "Date"].map(
+                        (head) => (
+                          <th
+                            key={head}
+                            className="whitespace-nowrap px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                            style={{ color: "#9CA3AF", letterSpacing: "0.06em" }}
+                          >
+                            {head}
+                          </th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y" style={{ borderColor: "#F8F9FC" }}>
+                    {ordersLoading ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-8 text-center" style={{ color: "#9CA3AF" }}>
+                          Loading orders…
+                        </td>
+                      </tr>
+                    ) : orders.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-8 text-center" style={{ color: "#9CA3AF" }}>
+                          No orders for this period
+                        </td>
+                      </tr>
+                    ) : (
+                      orders.map((order) => (
+                        <tr key={order.id}>
+                          <td
+                            className="whitespace-nowrap px-6 py-3 font-medium"
+                            style={{ color: "#374151" }}
+                          >
+                            {order.paymentId}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-3" style={{ color: "#374151" }}>
+                            <span className="inline-flex items-center gap-1.5">
+                              {order.customerName}
+                              {order.isGift && (
+                                <Gift className="h-3.5 w-3.5" style={{ color: "#9333EA" }} />
+                              )}
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-3" style={{ color: "#6B7280" }}>
+                            {order.email}
+                          </td>
+                          <td
+                            className="whitespace-nowrap px-6 py-3 tabular-nums"
+                            style={{ color: "#6B7280" }}
+                          >
+                            {order.itemCount}
+                          </td>
+                          <td
+                            className="whitespace-nowrap px-6 py-3 font-semibold tabular-nums"
+                            style={{ color: "#1A1F36" }}
+                          >
+                            ₹{order.totalAmount.toLocaleString("en-IN")}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-3" style={{ color: "#9CA3AF" }}>
+                            {order.createdAt
+                              ? new Date(order.createdAt).toLocaleDateString("en-IN", {
+                                  day: "numeric",
+                                  month: "short",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })
+                              : "-"}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </>
