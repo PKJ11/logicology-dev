@@ -238,18 +238,14 @@ export async function GET(request: NextRequest) {
     console.error("❌ Google Analytics API error:", error);
     console.error("Error details:", error.response?.data || error.message);
 
-    // Return sample data for testing if API fails
-    const sampleData = getSampleAnalyticsData(range);
-
-    console.log("🔄 Using sample data for demonstration");
-
-    return NextResponse.json({
-      success: false,
-      error: error.message,
-      message: "Using sample data for demo",
-      sample: true,
-      data: sampleData,
-    });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || "Failed to fetch Google Analytics data",
+        data: null,
+      },
+      { status: 502 }
+    );
   }
 }
 
@@ -300,43 +296,3 @@ function calculateConversionRate(conversions: string, sessions: string): number 
   return (conv / sess) * 100;
 }
 
-// Sample data for testing
-function getSampleAnalyticsData(range: string) {
-  const { startDate, endDate } = getDateRange(range);
-
-  return {
-    totalUsers: Math.floor(Math.random() * 1000) + 500,
-    totalSessions: Math.floor(Math.random() * 1500) + 800,
-    pageViews: Math.floor(Math.random() * 5000) + 3000,
-    avgSessionDuration: Math.floor(Math.random() * 180) + 60,
-    bounceRate: Math.random() * 60 + 30,
-    topPages: [
-      { pageTitle: "Home Page", pageViews: 1200 },
-      { pageTitle: "Products", pageViews: 850 },
-      { pageTitle: "Contact Us", pageViews: 650 },
-      { pageTitle: "About", pageViews: 420 },
-      { pageTitle: "Blog", pageViews: 380 },
-    ],
-    topCountries: [
-      { country: "India", sessions: 1200 },
-      { country: "United States", sessions: 450 },
-      { country: "United Kingdom", sessions: 220 },
-      { country: "Canada", sessions: 180 },
-      { country: "Australia", sessions: 150 },
-    ],
-    devices: [
-      { device: "Mobile", sessions: 1200 },
-      { device: "Desktop", sessions: 800 },
-      { device: "Tablet", sessions: 150 },
-    ],
-    realTimeUsers: Math.floor(Math.random() * 50) + 10,
-    userEvents: [
-      { eventName: "page_view", eventCount: 2500, userCount: 800 },
-      { eventName: "click", eventCount: 1200, userCount: 450 },
-      { eventName: "scroll", eventCount: 850, userCount: 320 },
-      { eventName: "form_submit", eventCount: 120, userCount: 95 },
-    ],
-    conversionRate: Math.random() * 10 + 2,
-    dateRange: { startDate, endDate },
-  };
-}
