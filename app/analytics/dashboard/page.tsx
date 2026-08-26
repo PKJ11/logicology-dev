@@ -90,14 +90,8 @@ export default function AnalyticsDashboard() {
   useEffect(() => {
     fetchAnalyticsData();
     fetchMetaPixelData();
-  }, [dateRange]);
-
-  // Orders aren't tied to the GA date-range picker — many order documents
-  // predate the createdAt field, so we just show the most recent N instead
-  // of filtering by date. Fetched once on mount and again on manual refresh.
-  useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [dateRange]);
 
   const fetchAnalyticsData = async () => {
     try {
@@ -136,7 +130,7 @@ export default function AnalyticsDashboard() {
   const fetchOrders = async () => {
     try {
       setOrdersLoading(true);
-      const response = await fetch(`/api/analytics/orders?limit=7`);
+      const response = await fetch(`/api/analytics/orders?range=${dateRange}&limit=50`);
       const data = await response.json();
       setOrders(data.data || []);
       setOrdersRevenue(data.totalRevenue || 0);
@@ -829,7 +823,7 @@ export default function AnalyticsDashboard() {
                     Recent Orders
                   </h3>
                   <p className="text-xs" style={{ color: "#9CA3AF" }}>
-                    Most recent checkouts
+                    Latest checkouts in the selected period
                   </p>
                 </div>
               </div>
@@ -866,7 +860,7 @@ export default function AnalyticsDashboard() {
                   ) : orders.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-8 text-center" style={{ color: "#9CA3AF" }}>
-                        No orders yet
+                        No orders for this period
                       </td>
                     </tr>
                   ) : (
