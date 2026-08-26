@@ -11,24 +11,20 @@ const COLLECTION = "orders";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const range = searchParams.get("range") || "7days";
-  const limit = Math.min(Number(searchParams.get("limit")) || 50, 200);
+  const limit = Math.min(Number(searchParams.get("limit")) || 7, 200);
 
   let client: MongoClient | null = null;
 
   try {
-    const { startDate, endDate } = getDateRange(range);
-
     client = new MongoClient(MONGO_URI);
     await client.connect();
     const db = client.db(DB_NAME);
     const col = db.collection(COLLECTION);
 
-    const orders = await col
-      .find({ createdAt: { $gte: startDate, $lte: endDate } })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .toArray();
+    // Not all orders have a createdAt (older documents predate that field), so we
+    // sort by _id instead — every ObjectId encodes its insertion time, which gives
+    // us reliable "most recent first" ordering regardless of whether createdAt exists.
+    const orders = await col.find({}).sort({ _id: -1 }).limit(limit).toArray();
 
     const totalRevenue = orders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
 
@@ -43,7 +39,7 @@ export async function GET(request: NextRequest) {
         ? o.cart.reduce((sum: number, item: any) => sum + (Number(item.quantity) || 1), 0)
         : 0,
       isGift: !!o.isGift,
-      createdAt: o.createdAt,
+      createdAt: o.createdAt || o._id.getTimestamp().toISOString(),
     }));
 
     return NextResponse.json({
@@ -51,10 +47,6 @@ export async function GET(request: NextRequest) {
       data,
       count: data.length,
       totalRevenue,
-      dateRange: {
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-      },
     });
   } catch (error: any) {
     console.error("❌ Orders fetch error:", error.message);
@@ -68,37 +60,4 @@ export async function GET(request: NextRequest) {
   } finally {
     if (client) await client.close();
   }
-}
-
-function getDateRange(range: string) {
-  const now = new Date();
-  const endDate = new Date();
-  endDate.setHours(23, 59, 59, 999);
-
-  const startDate = new Date();
-
-  switch (range) {
-    case "today":
-      startDate.setHours(0, 0, 0, 0);
-      break;
-    case "yesterday":
-      startDate.setDate(now.getDate() - 1);
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setDate(now.getDate() - 1);
-      endDate.setHours(23, 59, 59, 999);
-      break;
-    case "7days":
-      startDate.setDate(now.getDate() - 7);
-      break;
-    case "30days":
-      startDate.setDate(now.getDate() - 30);
-      break;
-    case "90days":
-      startDate.setDate(now.getDate() - 90);
-      break;
-    default:
-      startDate.setDate(now.getDate() - 7);
-  }
-
-  return { startDate, endDate };
 }
