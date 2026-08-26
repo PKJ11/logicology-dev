@@ -222,7 +222,7 @@ export default function WhyImportant() {
               transition: `opacity 0.6s ease ${HEADING_DELAY}ms, transform 0.6s ease ${HEADING_DELAY}ms`,
             }}
           >
-            Why parents trust us over the toy aisle.
+            Why parents trust us at the toy aisle.
           </h2>
         </div>
 

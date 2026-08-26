@@ -32,7 +32,7 @@ const TESTIMONIALS: TestimonialData[] = [
       "My 7-year-old started Logicoland Volume 1 and finished the entire book in one sitting! She kept asking when the other books would arrive, and was so excited when the remaining four finally did.She even told her younger cousin, 'When you're a little older, I'll get these books for you too. They'll make your brain sharper!' Seeing her so eager to share something she enjoyed so much was wonderful. It's rare to find books that children genuinely look forward to reading.",
     name: "Mrunmayee Khedkar",
     role: "IT Professional, Pune",
-    photo: "",
+    photo: "https://ik.imagekit.io/pratik2002/murmaye.jpeg",
   },
   {
     video: "https://ik.imagekit.io/9z5o8gah3/testimonial.mp4",
