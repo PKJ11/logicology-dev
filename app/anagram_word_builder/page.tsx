@@ -72,6 +72,7 @@ function WordBuilderGame() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [hoveredDropIndex, setHoveredDropIndex] = useState<number | null>(null);
   const [showHint, setShowHint] = useState(false);
+  const [selectedLetterIndex, setSelectedLetterIndex] = useState<number | null>(null);
 
   const puzzle = PUZZLES[currentIndex];
   const isCompleted = completed[currentIndex];
@@ -82,12 +83,35 @@ function WordBuilderGame() {
     setFeedback(null);
     setShowHint(false);
     setHoveredDropIndex(null);
+    setSelectedLetterIndex(null);
   }, [currentIndex]);
 
   function setupPuzzle(index: number) {
     const target = PUZZLES[index];
     setWordCells(Array(target.word.length).fill(null));
     setAvailableLetters([...target.word.split("")].sort(() => Math.random() - 0.5));
+  }
+
+  // Places the letter sitting at `sourceIndex` in the tray into word slot
+  // `slotIndex` — shared by desktop drag-and-drop and the tap-to-place
+  // fallback that mobile/touch devices need (HTML5 DnD doesn't fire there).
+  function placeLetter(sourceIndex: number, slotIndex: number) {
+    const letter = availableLetters[sourceIndex];
+    if (!letter || wordCells[slotIndex] !== null) return;
+
+    const nextWordCells = [...wordCells];
+    nextWordCells[slotIndex] = letter;
+
+    const nextAvailable = [...availableLetters];
+    nextAvailable[sourceIndex] = "";
+
+    setWordCells(nextWordCells);
+    setAvailableLetters(nextAvailable);
+    setSelectedLetterIndex(null);
+
+    if (nextWordCells.every((cell) => cell !== null)) {
+      checkWord(nextWordCells.join(""));
+    }
   }
 
   function handleDragStart(letter: string, index: number, e: React.DragEvent) {
@@ -106,28 +130,26 @@ function WordBuilderGame() {
     if (wordCells[index] !== null) return;
 
     try {
-      const { letter, sourceIndex } = JSON.parse(e.dataTransfer.getData("text/plain"));
-      const nextWordCells = [...wordCells];
-      nextWordCells[index] = letter;
-
-      const nextAvailable = [...availableLetters];
-      nextAvailable[sourceIndex] = "";
-
-      setWordCells(nextWordCells);
-      setAvailableLetters(nextAvailable);
-
-      if (nextWordCells.every((cell) => cell !== null)) {
-        checkWord(nextWordCells.join(""));
-      }
+      const { sourceIndex } = JSON.parse(e.dataTransfer.getData("text/plain"));
+      placeLetter(sourceIndex, index);
     } catch {
       // ignore malformed drag payloads
     }
   }
 
+  function handleTrayLetterClick(index: number) {
+    if (isCompleted || !availableLetters[index]) return;
+    setSelectedLetterIndex((prev) => (prev === index ? null : index));
+  }
+
   function handleWordCellClick(index: number) {
     if (isCompleted) return;
     const letter = wordCells[index];
-    if (letter === null) return;
+
+    if (letter === null) {
+      if (selectedLetterIndex !== null) placeLetter(selectedLetterIndex, index);
+      return;
+    }
 
     const nextWordCells = [...wordCells];
     nextWordCells[index] = null;
@@ -193,7 +215,8 @@ function WordBuilderGame() {
         <div className="mb-6 text-center sm:mb-7">
           <h2 className="headingstyle mb-2 font-extrabold text-brand-tealDark">Word Builder</h2>
           <p className="textstyles mx-auto max-w-sm text-sm text-brand-tealDark/70 sm:text-base">
-            Drag the letters into the boxes to spell the word. Stuck? Tap Hint for a picture clue.
+            Tap a letter then tap a box (or drag it) to spell the word. Stuck? Tap Hint for a
+            picture clue.
           </p>
 
           <div className="mx-auto mt-4 max-w-xs sm:mt-5">
@@ -270,13 +293,17 @@ function WordBuilderGame() {
               key={`source-${index}`}
               draggable={!!letter}
               onDragStart={(e) => handleDragStart(letter, index, e)}
+              onClick={() => handleTrayLetterClick(index)}
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 sm:h-12 sm:w-12 sm:text-lg ${
-                letter ? "cursor-grab" : "pointer-events-none opacity-0"
+                letter ? "cursor-pointer sm:cursor-grab" : "pointer-events-none opacity-0"
               }`}
               style={{
-                backgroundColor: SILVER,
+                backgroundColor: selectedLetterIndex === index ? SILVER_LIGHT : SILVER,
                 color: BLACK,
-                boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                boxShadow:
+                  selectedLetterIndex === index
+                    ? `0 0 0 2px ${TEAL}`
+                    : "0 1px 2px rgba(0,0,0,0.08)",
               }}
             >
               {letter}
@@ -297,13 +324,13 @@ function WordBuilderGame() {
               onDrop={(e) => handleDrop(index, e)}
               onClick={() => handleWordCellClick(index)}
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 sm:h-12 sm:w-12 sm:text-lg ${
-                letter ? "cursor-pointer" : "cursor-default"
+                letter ? "cursor-pointer" : "cursor-pointer"
               }`}
               style={{
                 backgroundColor: letter ? SILVER_LIGHT : SILVER,
                 color: BLACK,
                 boxShadow:
-                  hoveredDropIndex === index
+                  hoveredDropIndex === index || (selectedLetterIndex !== null && !letter)
                     ? `0 0 0 2px ${TEAL}`
                     : letter
                       ? isCompleted
