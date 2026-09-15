@@ -193,7 +193,7 @@ function WordBuilderGame() {
         <div className="mb-6 text-center sm:mb-7">
           <h2 className="headingstyle mb-2 font-extrabold text-brand-tealDark">Word Builder</h2>
           <p className="textstyles mx-auto max-w-sm text-sm text-brand-tealDark/70 sm:text-base">
-            Drag the letters into the boxes to spell the word in the picture.
+            Drag the letters into the boxes to spell the word. Stuck? Tap Hint for a picture clue.
           </p>
 
           <div className="mx-auto mt-4 max-w-xs sm:mt-5">
@@ -259,16 +259,6 @@ function WordBuilderGame() {
             {feedback}
           </motion.div>
         )}
-
-        {/* Picture cue */}
-        <div className="mb-6 flex justify-center">
-          <div
-            className="flex h-24 w-24 items-center justify-center rounded-2xl bg-brand-grayBg p-3 sm:h-28 sm:w-28"
-            style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.06)" }}
-          >
-            <img src={puzzle.image} alt={puzzle.category} className="h-full w-full object-contain" />
-          </div>
-        </div>
 
         {/* Available letters */}
         <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide text-brand-tealDark/50 sm:text-xs">

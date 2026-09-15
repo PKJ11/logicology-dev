@@ -7,29 +7,32 @@ type Puzzle = {
   word: string;
   scrambled: string;
   category: string;
+  image: string;
 };
 
+const IMAGE_DIR = "/Images/anagram%20images";
+
 const INITIAL_PUZZLES: Puzzle[] = [
-  { word: "cake", scrambled: "kace", category: "Food" },
-  { word: "bird", scrambled: "brid", category: "Animal" },
-  { word: "jump", scrambled: "jupm", category: "Action" },
-  { word: "star", scrambled: "srat", category: "Sky" },
-  { word: "dance", scrambled: "cande", category: "Activity" },
-  { word: "apple", scrambled: "alppe", category: "Fruit" },
-  { word: "fruit", scrambled: "urfit", category: "Food" },
-  { word: "horse", scrambled: "sorhe", category: "Animal" },
-  { word: "shirt", scrambled: "thirs", category: "Clothing" },
-  { word: "green", scrambled: "geern", category: "Color" },
-  { word: "friend", scrambled: "feirnd", category: "People" },
-  { word: "bottle", scrambled: "tobtle", category: "Object" },
-  { word: "burger", scrambled: "gurber", category: "Food" },
-  { word: "pencil", scrambled: "pecnil", category: "School" },
-  { word: "orange", scrambled: "roange", category: "Fruit" },
-  { word: "school", scrambled: "lchoos", category: "Place" },
-  { word: "rainbow", scrambled: "roinbaw", category: "Nature" },
-  { word: "tuesday", scrambled: "suetday", category: "Day" },
-  { word: "teacher", scrambled: "reachet", category: "People" },
-  { word: "pumpkin", scrambled: "punpkim", category: "Food" },
+  { word: "cake", scrambled: "kace", category: "Food", image: `${IMAGE_DIR}/cake.svg` },
+  { word: "bird", scrambled: "brid", category: "Animal", image: `${IMAGE_DIR}/bird.svg` },
+  { word: "jump", scrambled: "jupm", category: "Action", image: `${IMAGE_DIR}/jump.svg` },
+  { word: "star", scrambled: "srat", category: "Sky", image: `${IMAGE_DIR}/star.svg` },
+  { word: "dance", scrambled: "cande", category: "Activity", image: `${IMAGE_DIR}/dance.svg` },
+  { word: "apple", scrambled: "alppe", category: "Fruit", image: `${IMAGE_DIR}/apple.svg` },
+  { word: "fruit", scrambled: "urfit", category: "Food", image: `${IMAGE_DIR}/fruit.svg` },
+  { word: "horse", scrambled: "sorhe", category: "Animal", image: `${IMAGE_DIR}/horse.svg` },
+  { word: "shirt", scrambled: "thirs", category: "Clothing", image: `${IMAGE_DIR}/shirt.svg` },
+  { word: "green", scrambled: "geern", category: "Color", image: `${IMAGE_DIR}/green.svg` },
+  { word: "friend", scrambled: "feirnd", category: "People", image: `${IMAGE_DIR}/friend.svg` },
+  { word: "bottle", scrambled: "tobtle", category: "Object", image: `${IMAGE_DIR}/bottle.svg` },
+  { word: "burger", scrambled: "gurber", category: "Food", image: `${IMAGE_DIR}/burger.svg` },
+  { word: "pencil", scrambled: "pecnil", category: "School", image: `${IMAGE_DIR}/pencil.svg` },
+  { word: "orange", scrambled: "roange", category: "Fruit", image: `${IMAGE_DIR}/orange.svg` },
+  { word: "school", scrambled: "lchoos", category: "Place", image: `${IMAGE_DIR}/school.svg` },
+  { word: "rainbow", scrambled: "roinbaw", category: "Nature", image: `${IMAGE_DIR}/rainbow.svg` },
+  { word: "tuesday", scrambled: "suetday", category: "Day", image: `${IMAGE_DIR}/tuesday.svg` },
+  { word: "teacher", scrambled: "reachet", category: "People", image: `${IMAGE_DIR}/teacher.svg` },
+  { word: "pumpkin", scrambled: "punpkim", category: "Food", image: `${IMAGE_DIR}/pumpkin.svg` },
 ];
 
 // Brand palette (see tailwind.config.ts -> theme.colors.brand)
@@ -148,23 +151,6 @@ function AnagramGame() {
   function goPrev() {
     if (currentIndex > 0) setCurrentIndex((i) => i - 1);
   }
-
-  // First mismatched letter and the position it needs to swap with.
-  const hintIndices = (() => {
-    const scrambled = puzzle.scrambled.split("");
-    const target = puzzle.word.split("");
-    let a = -1;
-    for (let i = 0; i < scrambled.length; i++) {
-      if (scrambled[i] !== target[i]) {
-        a = i;
-        break;
-      }
-    }
-    if (a === -1) return null;
-    const b = scrambled.indexOf(target[a], a + 1);
-    if (b === -1) return null;
-    return [a, b] as const;
-  })();
 
   const completedCount = completed.filter(Boolean).length;
   const progress = (completedCount / puzzles.length) * 100;
@@ -327,7 +313,7 @@ function AnagramGame() {
 
       {/* Hint modal */}
       <AnimatePresence>
-        {showHint && hintIndices && (
+        {showHint && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
             initial={{ opacity: 0 }}
@@ -341,31 +327,16 @@ function AnagramGame() {
               exit={{ scale: 0.3, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[300px] rounded-2xl bg-white p-5 text-center shadow-2xl sm:max-w-xs sm:p-6"
+              className="w-full max-w-[280px] rounded-2xl bg-white p-6 text-center shadow-2xl sm:max-w-xs"
             >
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.15em]" style={{ color: TEAL }}>
                 Hint
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5">
-                {letters.map((letter, i) => {
-                  const isHintCell = hintIndices.includes(i);
-                  return (
-                    <div
-                      key={i}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold sm:h-11 sm:w-11 sm:text-base"
-                      style={{
-                        backgroundColor: isHintCell ? "#FBE8C6" : SILVER,
-                        boxShadow: isHintCell ? `0 0 0 2px ${GOLD}` : "none",
-                        color: BLACK,
-                      }}
-                    >
-                      {letter.toUpperCase()}
-                    </div>
-                  );
-                })}
+              <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-2xl bg-brand-grayBg p-4 sm:h-36 sm:w-36">
+                <img src={puzzle.image} alt={puzzle.category} className="h-full w-full object-contain" />
               </div>
               <p className="mt-4 text-sm text-brand-tealDark/70">
-                Swap the two highlighted letters to complete the word.
+                It's a {puzzle.word.length}-letter word — a {puzzle.category.toLowerCase()}.
               </p>
             </motion.div>
           </motion.div>
