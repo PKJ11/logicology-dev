@@ -46,7 +46,7 @@ const BLACK = "#3d3b40";
 // their ring/border communicates state.
 const SILVER = "#D7DADC";
 const SILVER_LIGHT = "#E9EBEC";
-const BAR_GREY = "#9CA3AF";
+const BAR_GREY = "rgba(0,0,0,0.12)";
 
 export default function AnagramPage() {
   return (
