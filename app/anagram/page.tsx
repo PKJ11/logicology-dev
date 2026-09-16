@@ -46,6 +46,7 @@ const BLACK = "#3d3b40";
 // their ring/border communicates state.
 const SILVER = "#D7DADC";
 const SILVER_LIGHT = "#E9EBEC";
+const BAR_GREY = "#9CA3AF";
 
 export default function AnagramPage() {
   return (
@@ -187,7 +188,7 @@ function AnagramGame() {
             <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
               <div
                 className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${progress}%`, backgroundColor: TEAL }}
+                style={{ width: `${progress}%`, backgroundColor: BAR_GREY }}
               />
             </div>
           </div>
@@ -276,7 +277,7 @@ function AnagramGame() {
               key={idx}
               className="h-1 w-4 rounded-full transition-all duration-300 sm:w-6"
               style={{
-                backgroundColor: puzzle.scrambled[idx] === puzzle.word[idx] ? TEAL : "rgba(0,0,0,0.12)",
+                backgroundColor: puzzle.scrambled[idx] === puzzle.word[idx] ? BAR_GREY : "rgba(0,0,0,0.12)",
               }}
             />
           ))}

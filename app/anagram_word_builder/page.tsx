@@ -49,6 +49,7 @@ const BLACK = "#3d3b40";
 // Uniform grey-silver tile colors — cells never shift to blue/green, only
 // their ring/border communicates state.
 const SILVER = "#D7DADC";
+const BAR_GREY = "#9CA3AF";
 const SILVER_LIGHT = "#E9EBEC";
 
 export default function AnagramWordBuilderPage() {
@@ -231,7 +232,7 @@ function WordBuilderGame() {
             <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
               <div
                 className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${progress}%`, backgroundColor: TEAL }}
+                style={{ width: `${progress}%`, backgroundColor: BAR_GREY }}
               />
             </div>
           </div>
