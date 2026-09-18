@@ -40,10 +40,10 @@ const teamMembers = [
   },
 
   {
-    name: "Gauri Bhople",
-    role: "Designer (Animation & Video)",
+    name: "You could be this!",
+    role: "",
     image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
-    bio: "Gauri is the newest member of Logicology’s design team, with a keen interest in video animation. As she builds her expertise under the guidance of Jasneet and the team, she contributes fresh ideas to content and design. Logicology continues to look out for passionate designers to join the team—though only the very best make the cut.",
+    bio: "",
     linkedin: "",
   },
   {

@@ -474,10 +474,10 @@ function OurTeam() {
     },
 
     {
-      name: "Gauri Bhople",
-      role: "Designer",
+      name: "You could be this!",
+      role: "",
       image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
-      bio: "We’re always on the lookout for passionate designers to join Logicology’s creative journey.",
+      bio: "",
     },
     {
       name: "You could be the next!",
