@@ -271,17 +271,7 @@ function AnagramGame() {
         </div>
 
         {/* Word length indicator */}
-        <div className="mb-6 flex flex-wrap justify-center gap-1 sm:mb-7 sm:gap-1.5">
-          {puzzle.word.split("").map((_, idx) => (
-            <div
-              key={idx}
-              className="h-1 w-4 rounded-full transition-all duration-300 sm:w-6"
-              style={{
-                backgroundColor: puzzle.scrambled[idx] === puzzle.word[idx] ? BAR_GREY : "rgba(0,0,0,0.12)",
-              }}
-            />
-          ))}
-        </div>
+        
 
         {/* Navigation */}
         <div className="flex items-center justify-between gap-2 sm:gap-3">
