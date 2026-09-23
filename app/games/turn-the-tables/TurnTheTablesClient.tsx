@@ -196,13 +196,13 @@ function TurnTablesHero() {
 
   function handleBuyNow() {
     setCheckoutProduct({
-      name: "Turn Tables",
+      name: "Turn the Tables",
       price: "₹299",
       initialprice: "₹399",
       razorpayItemId: "item_RsD9AhoF8idQ21",
       description:
         "A fast-paced card game built around multiplication, strategy and friendly competition.",
-      image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+      image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
       rating: 5,
       specialOffer: "",
       category: "games",
@@ -212,19 +212,19 @@ function TurnTablesHero() {
 
   function handleAddToCart() {
     addToCart({
-      name: "Turn Tables",
+      name: "Turn the Tables",
       price: "₹299",
       initialprice: "₹399",
       razorpayItemId: "item_RsD9AhoF8idQ21",
       description:
         "A fast-paced card game built around multiplication, strategy and friendly competition.",
-      image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
+      image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
       rating: 5,
     });
-    toast.success("Turn Tables added to cart!");
+    toast.success("Turn the Tables added to cart!");
     if (typeof window !== "undefined" && (window as any).fbq) {
       (window as any).fbq("track", "AddToCart", {
-        content_name: "Turn Tables",
+        content_name: "Turn the Tables",
         value: 299,
         currency: "INR",
       });
@@ -1019,7 +1019,7 @@ export function WhyImportant() {
 
 // Product configuration for Turn The Tables
 const TURN_TABLES = {
-  name: "Turn The Tables",
+  name: "Turn the Tables",
   price: "₹299",
   initialprice: "₹399",
   razorpayItemId: "item_RsD9AhoF8idQ21",
@@ -1140,7 +1140,7 @@ export function TurnTablesBuyBlock() {
       image: TURN_TABLES.image,
       rating: TURN_TABLES.rating ?? 5,
     });
-    toast.success("Turn The Tables added to cart!");
+    toast.success("Turn the Tables added to cart!");
     if (typeof window !== "undefined" && (window as any).fbq) {
       (window as any).fbq("track", "AddToCart", {
         content_name: TURN_TABLES.name,

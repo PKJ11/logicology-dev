@@ -124,7 +124,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   function addToCart(product: Omit<CartProduct, "quantity">) {
     setCart((prev) => {
-      const idx = prev.findIndex((p) => p.name === product.name);
+      // Match on razorpayItemId so the same product added from different pages
+      // (which may use slightly different names) merges into one cart line.
+      const idx = prev.findIndex((p) =>
+        product.razorpayItemId
+          ? p.razorpayItemId === product.razorpayItemId
+          : p.name === product.name
+      );
       let next: CartProduct[];
       if (idx > -1) {
         next = prev.map((p, i) => (i === idx ? { ...p, quantity: p.quantity + 1 } : p));
