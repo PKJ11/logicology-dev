@@ -45,6 +45,10 @@ const GRAY_TEXT = "#707070";
 const GRAY_LIGHT = "#F2F2F2";
 const OFFWHITE = "#FCFCFC";
 
+// Mascot logo shown at the top of the card.
+const LOGO_URL =
+  "https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538";
+
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');`;
 
 export default function AnagramPage() {
@@ -206,11 +210,8 @@ function AnagramGame() {
         </div>
 
         {/* Mascot logo */}
-        <div
-          className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full sm:h-20 sm:w-20"
-          style={{ backgroundColor: TEAL }}
-        >
-          <Bot className="h-7 w-7 text-white sm:h-10 sm:w-10" strokeWidth={2} />
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full sm:h-20 sm:w-20">
+          <img src={LOGO_URL} alt="Logicology logo" className="h-full w-full object-contain" />
         </div>
 
         {/* Title */}

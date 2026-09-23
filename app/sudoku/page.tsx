@@ -13,6 +13,10 @@ const GRAY_TEXT = "#707070";
 const GRAY_LIGHT = "#F2F2F2";
 const OFFWHITE = "#FCFCFC";
 
+// Mascot logo shown at the top of the card.
+const LOGO_URL =
+  "https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538";
+
 const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');`;
 
 export default function SudokuPage() {
@@ -183,9 +187,8 @@ function SudokuSlider() {
         {/* Mascot logo */}
         <div
           className="mx-auto mb-[clamp(4px,1vh,10px)] flex h-[clamp(44px,7vh,72px)] w-[clamp(44px,7vh,72px)] items-center justify-center rounded-full"
-          style={{ backgroundColor: TEAL }}
         >
-          <Bot className="h-[52%] w-[52%] text-white" strokeWidth={2} />
+          <img src={LOGO_URL} alt="Logicology logo" className="h-full w-full object-contain" />
         </div>
 
         {/* Title */}
