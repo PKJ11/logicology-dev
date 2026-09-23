@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { PartyPopper, X } from "lucide-react";
 
 type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -39,23 +40,39 @@ const PUZZLES: Puzzle[] = [
   { id: 20, word: "UMBRELLA", category: "Object", difficulty: "Hard", image: `${IMAGE_DIR}/umbrella.svg` },
 ];
 
-// Brand palette (see tailwind.config.ts -> theme.colors.brand)
-const TEAL = "#0A8A80";
-const TEAL_DARK = "#0B3F44";
-const CORAL = "#E45C48";
-const GOLD = "#fbb041";
-const BLACK = "#3d3b40";
+// Palette pulled from the "Word Builder" Adobe XD spec.
+const NAVY = "#1B4552";
+const TEAL = "#009A88";
+const ORANGE = "#FA9E15";
+const ORANGE_LIGHT = "#FBB041";
+const GRAY_TEXT = "#707070";
+const GRAY_LIGHT = "#F2F2F2";
+const OFFWHITE = "#FCFCFC";
 
-// Uniform grey-silver tile colors — cells never shift to blue/green, only
-// their ring/border communicates state.
-const SILVER = "#D7DADC";
-const BAR_GREY = "#9CA3AF";
-const SILVER_LIGHT = "#E9EBEC";
+// Mascot logo shown at the top of the card.
+const LOGO_URL =
+  "https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538";
+
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');`;
+
+function shuffleWord(word: string): string[] {
+  const letters = word.split("");
+  if (letters.length <= 1) return letters;
+  let shuffled = letters;
+  do {
+    shuffled = [...letters].sort(() => Math.random() - 0.5);
+  } while (shuffled.join("") === word);
+  return shuffled;
+}
 
 export default function AnagramWordBuilderPage() {
   return (
-    <main className="min-h-screen bg-brand-grayBg text-brand-tealDark">
-      <section id="anagram-word-builder">
+    <main
+      className="h-screen w-full overflow-hidden text-brand-tealDark"
+      style={{ backgroundColor: NAVY }}
+    >
+      <style dangerouslySetInnerHTML={{ __html: FONT_IMPORT }} />
+      <section id="anagram-word-builder" className="h-full w-full">
         <WordBuilderGame />
       </section>
     </main>
@@ -63,106 +80,49 @@ export default function AnagramWordBuilderPage() {
 }
 
 function WordBuilderGame() {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [trayLetters, setTrayLetters] = useState<string[]>([]);
   const [wordCells, setWordCells] = useState<(string | null)[]>([]);
-  const [availableLetters, setAvailableLetters] = useState<string[]>([]);
+  const [selectedTrayIndex, setSelectedTrayIndex] = useState<number | null>(null);
+  const [hoveredCellIndex, setHoveredCellIndex] = useState<number | null>(null);
   const [completed, setCompleted] = useState<boolean[]>(() => PUZZLES.map(() => false));
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [hoveredDropIndex, setHoveredDropIndex] = useState<number | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const [selectedLetterIndex, setSelectedLetterIndex] = useState<number | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const puzzle = PUZZLES[currentIndex];
   const isCompleted = completed[currentIndex];
-  const completedCount = completed.filter(Boolean).length;
 
   useEffect(() => {
     setupPuzzle(currentIndex);
-    setFeedback(null);
+    setSelectedTrayIndex(null);
+    setHoveredCellIndex(null);
     setShowHint(false);
-    setHoveredDropIndex(null);
-    setSelectedLetterIndex(null);
+    setShowSuccess(false);
   }, [currentIndex]);
 
   function setupPuzzle(index: number) {
     const target = PUZZLES[index];
+    setTrayLetters(shuffleWord(target.word));
     setWordCells(Array(target.word.length).fill(null));
-    setAvailableLetters([...target.word.split("")].sort(() => Math.random() - 0.5));
   }
 
-  // Places the letter sitting at `sourceIndex` in the tray into word slot
-  // `slotIndex` — shared by desktop drag-and-drop and the tap-to-place
-  // fallback that mobile/touch devices need (HTML5 DnD doesn't fire there).
   function placeLetter(sourceIndex: number, slotIndex: number) {
-    const letter = availableLetters[sourceIndex];
+    const letter = trayLetters[sourceIndex];
     if (!letter || wordCells[slotIndex] !== null) return;
 
     const nextWordCells = [...wordCells];
     nextWordCells[slotIndex] = letter;
 
-    const nextAvailable = [...availableLetters];
-    nextAvailable[sourceIndex] = "";
+    const nextTray = [...trayLetters];
+    nextTray[sourceIndex] = "";
 
     setWordCells(nextWordCells);
-    setAvailableLetters(nextAvailable);
-    setSelectedLetterIndex(null);
+    setTrayLetters(nextTray);
+    setSelectedTrayIndex(null);
 
     if (nextWordCells.every((cell) => cell !== null)) {
       checkWord(nextWordCells.join(""));
     }
-  }
-
-  function handleDragStart(letter: string, index: number, e: React.DragEvent) {
-    e.dataTransfer.setData("text/plain", JSON.stringify({ letter, sourceIndex: index }));
-    e.dataTransfer.effectAllowed = "move";
-  }
-
-  function handleDragOver(index: number, e: React.DragEvent) {
-    e.preventDefault();
-    if (wordCells[index] === null) setHoveredDropIndex(index);
-  }
-
-  function handleDrop(index: number, e: React.DragEvent) {
-    e.preventDefault();
-    setHoveredDropIndex(null);
-    if (wordCells[index] !== null) return;
-
-    try {
-      const { sourceIndex } = JSON.parse(e.dataTransfer.getData("text/plain"));
-      placeLetter(sourceIndex, index);
-    } catch {
-      // ignore malformed drag payloads
-    }
-  }
-
-  function handleTrayLetterClick(index: number) {
-    if (isCompleted || !availableLetters[index]) return;
-    setSelectedLetterIndex((prev) => (prev === index ? null : index));
-  }
-
-  function handleWordCellClick(index: number) {
-    if (isCompleted) return;
-    const letter = wordCells[index];
-
-    if (letter === null) {
-      if (selectedLetterIndex !== null) placeLetter(selectedLetterIndex, index);
-      return;
-    }
-
-    const nextWordCells = [...wordCells];
-    nextWordCells[index] = null;
-    setWordCells(nextWordCells);
-
-    const emptySlot = availableLetters.findIndex((l) => l === "");
-    if (emptySlot !== -1) {
-      const nextAvailable = [...availableLetters];
-      nextAvailable[emptySlot] = letter;
-      setAvailableLetters(nextAvailable);
-    }
-    setFeedback(null);
   }
 
   function checkWord(formedWord: string) {
@@ -172,21 +132,69 @@ function WordBuilderGame() {
         next[currentIndex] = true;
         return next;
       });
-      setFeedback(`Well done — "${puzzle.word}" is correct.`);
-    } else {
-      setFeedback("Not quite — try rearranging the letters.");
-      window.setTimeout(() => setFeedback(null), 1500);
+      setShowSuccess(true);
     }
+  }
+
+  function handleTrayClick(index: number) {
+    if (isCompleted || !trayLetters[index]) return;
+    setSelectedTrayIndex((prev) => (prev === index ? null : index));
+  }
+
+  function handleCellClick(index: number) {
+    if (isCompleted) return;
+    const letter = wordCells[index];
+
+    if (letter === null) {
+      if (selectedTrayIndex !== null) placeLetter(selectedTrayIndex, index);
+      return;
+    }
+
+    const nextWordCells = [...wordCells];
+    nextWordCells[index] = null;
+    setWordCells(nextWordCells);
+
+    const emptyTraySlot = trayLetters.findIndex((l) => l === "");
+    if (emptyTraySlot !== -1) {
+      const nextTray = [...trayLetters];
+      nextTray[emptyTraySlot] = letter;
+      setTrayLetters(nextTray);
+    }
+  }
+
+  function handleDragStart(index: number, e: React.DragEvent) {
+    e.dataTransfer.setData("text/plain", String(index));
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function handleDragOver(index: number, e: React.DragEvent) {
+    e.preventDefault();
+    if (wordCells[index] === null) setHoveredCellIndex(index);
+  }
+
+  function handleDrop(index: number, e: React.DragEvent) {
+    e.preventDefault();
+    setHoveredCellIndex(null);
+    if (isCompleted || wordCells[index] !== null) return;
+
+    const sourceIndex = Number(e.dataTransfer.getData("text/plain"));
+    if (!Number.isNaN(sourceIndex)) placeLetter(sourceIndex, index);
   }
 
   function resetPuzzle() {
     setupPuzzle(currentIndex);
+    setSelectedTrayIndex(null);
+    setShowSuccess(false);
     setCompleted((prev) => {
       const next = [...prev];
       next[currentIndex] = false;
       return next;
     });
-    setFeedback(null);
+  }
+
+  function resetAll() {
+    setCompleted(PUZZLES.map(() => false));
+    setCurrentIndex(0);
   }
 
   function goNext() {
@@ -197,151 +205,177 @@ function WordBuilderGame() {
     if (currentIndex > 0) setCurrentIndex((i) => i - 1);
   }
 
-  function getHint() {
-    setShowHint(true);
-    window.setTimeout(() => setShowHint(false), 3000);
-  }
-
-  const progress = (completedCount / PUZZLES.length) * 100;
+  const completedCount = completed.filter(Boolean).length;
+  const progress = completedCount / PUZZLES.length;
+  const RING_RADIUS = 19;
+  const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
   return (
-    <section ref={sectionRef} className="w-full bg-brand-grayBg px-3 py-10 sm:px-6 sm:py-16 md:py-20">
+    <div className="flex h-full w-full items-center justify-center px-3 py-3 sm:px-6 sm:py-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mx-auto w-full max-w-[640px] rounded-[22px] bg-white p-4 shadow-soft ring-1 ring-black/5 sm:p-10"
+        className="relative mx-auto w-full max-w-[640px] rounded-[28px] p-4 shadow-soft ring-1 ring-black/5 sm:p-8"
+        style={{ backgroundColor: OFFWHITE, maxHeight: "calc(100vh - 24px)", overflow: "hidden" }}
       >
-        {/* Header */}
-        <div className="mb-6 text-center sm:mb-7">
-          <h2 className="headingstyle mb-2 font-extrabold text-brand-tealDark">Word Builder</h2>
-          <p className="textstyles mx-auto max-w-sm text-sm text-brand-tealDark/70 sm:text-base">
-            Tap a letter then tap a box (or drag it) to spell the word. Stuck? Tap Hint for a
-            picture clue.
-          </p>
+        {/* Close button */}
+        <Link
+          href="/games"
+          aria-label="Exit game"
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-white shadow-sm transition-transform duration-200 hover:scale-110 sm:right-6 sm:top-6 sm:h-9 sm:w-9"
+          style={{ backgroundColor: ORANGE }}
+        >
+          <X className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={3} />
+        </Link>
 
-          <div className="mx-auto mt-4 max-w-xs sm:mt-5">
-            <div className="mb-1.5 flex justify-between text-[11px] font-medium text-brand-tealDark/60 sm:text-xs">
-              <span>
-                Puzzle {currentIndex + 1} of {PUZZLES.length}
-              </span>
-              <span>
-                {completedCount} / {PUZZLES.length} completed
-              </span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${progress}%`, backgroundColor: BAR_GREY }}
+        {/* Puzzle counter — top-left */}
+        <div className="mb-3 flex items-center justify-start gap-2.5 pr-10 sm:mb-2 sm:pr-12">
+          <div
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: NAVY }}
+          >
+            <svg viewBox="0 0 44 44" className="absolute inset-0 h-11 w-11 -rotate-90">
+              <circle
+                cx={22}
+                cy={22}
+                r={RING_RADIUS}
+                fill="none"
+                stroke="rgba(255,255,255,0.2)"
+                strokeWidth={3}
               />
-            </div>
+              <circle
+                cx={22}
+                cy={22}
+                r={RING_RADIUS}
+                fill="none"
+                stroke={ORANGE_LIGHT}
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeDasharray={RING_CIRCUMFERENCE}
+                strokeDashoffset={RING_CIRCUMFERENCE * (1 - progress)}
+              />
+            </svg>
+            <span className="relative text-xs font-bold text-white sm:text-sm">{currentIndex + 1}</span>
           </div>
+          <span className="text-[11px] font-medium sm:text-xs" style={{ color: GRAY_TEXT }}>
+            Puzzle {currentIndex + 1} of {PUZZLES.length}
+          </span>
         </div>
 
-        {/* Category + controls */}
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-2.5 rounded-xl bg-brand-grayBg px-3 py-2.5 sm:mb-6 sm:gap-3 sm:px-4 sm:py-3">
-          <div>
-            <span className="text-xs font-semibold text-brand-tealDark sm:text-sm">
-              {puzzle.category} &middot; {puzzle.difficulty}
+        {/* Mascot logo */}
+        <div
+          className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full sm:h-20 sm:w-20"
+          
+        >
+          <img
+            src={LOGO_URL}
+            alt="Logicology logo"
+            className="h-[100%] w-[100%] object-contain"
+          />
+        </div>
+
+        {/* Title */}
+        <h2
+          className="text-center text-2xl sm:text-4xl"
+          style={{ fontFamily: "'Alfa Slab One', serif", color: TEAL }}
+        >
+          Word Builder
+        </h2>
+        <p className="mx-auto mt-2 max-w-sm text-center text-xs sm:text-base" style={{ color: GRAY_TEXT }}>
+          Tap A Letter Then Tap A Box (Or Drag It) To Spell The Word. Stuck? Tap Hint For A Picture
+          Clue.
+        </p>
+
+        {/* Category + level pill, with HINT / RESET buttons outside it */}
+        <div className="mb-6 mt-5 flex flex-wrap items-center justify-between gap-2.5 sm:mt-7 sm:gap-3">
+          <div
+            className="w-fit max-w-full rounded-full px-4 py-2.5"
+            style={{ backgroundColor: GRAY_LIGHT }}
+          >
+            <span
+              className="whitespace-nowrap text-xs font-semibold sm:text-sm"
+              style={{ color: NAVY }}
+            >
+              Category: {puzzle.category} | Level: {puzzle.difficulty}
             </span>
-            {isCompleted && (
-              <span
-                className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold sm:text-xs"
-                style={{ backgroundColor: "rgba(10,138,128,0.12)", color: TEAL }}
-              >
-                Completed
-              </span>
-            )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex shrink-0 gap-2">
             <button
-              onClick={getHint}
-              className="rounded-full px-3.5 py-1.5 text-[11px] font-semibold text-brand-black transition-all duration-200 hover:scale-105 sm:px-4 sm:text-xs"
-              style={{ backgroundColor: GOLD }}
+              onClick={() => setShowHint(true)}
+              className="rounded-full px-3.5 py-1.5 text-[11px] font-bold tracking-wide transition-transform duration-200 hover:scale-105 sm:px-4 sm:text-xs"
+              style={{ backgroundColor: ORANGE_LIGHT, color: NAVY }}
             >
-              Hint
+              HINT
             </button>
             <button
               onClick={resetPuzzle}
-              className="rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:scale-105 sm:px-4 sm:text-xs"
-              style={{ borderColor: TEAL, color: TEAL }}
+              className="rounded-full px-3.5 py-1.5 text-[11px] font-bold tracking-wide text-white transition-transform duration-200 hover:scale-105 sm:px-4 sm:text-xs"
+              style={{ backgroundColor: TEAL }}
             >
-              Reset
+              RESET
             </button>
           </div>
         </div>
 
-        {/* Feedback */}
-        {feedback && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-5 rounded-lg px-4 py-2.5 text-center text-sm font-medium"
-            style={{ backgroundColor: "rgba(10,138,128,0.1)", color: TEAL_DARK }}
-          >
-            {feedback}
-          </motion.div>
-        )}
-
-        {/* Available letters */}
-        <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide text-brand-tealDark/50 sm:text-xs">
+        {/* Letter tray (source) */}
+        <p
+          className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide sm:text-xs"
+          style={{ color: GRAY_TEXT }}
+        >
           Drag from here
         </p>
-        <div className="mb-6 flex flex-wrap justify-center gap-1.5 sm:gap-3">
-          {availableLetters.map((letter, index) => (
-            <div
-              key={`source-${index}`}
-              draggable={!!letter}
-              onDragStart={(e) => handleDragStart(letter, index, e)}
-              onClick={() => handleTrayLetterClick(index)}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 sm:h-12 sm:w-12 sm:text-lg ${
+        <div className="mb-6 flex flex-wrap justify-center gap-2 sm:gap-3">
+          {trayLetters.map((letter, index) => (
+            <button
+              key={`tray-${index}`}
+              draggable={!!letter && !isCompleted}
+              onDragStart={(e) => handleDragStart(index, e)}
+              onClick={() => handleTrayClick(index)}
+              disabled={isCompleted || !letter}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 text-xl font-bold transition-all duration-150 sm:h-16 sm:w-16 sm:text-2xl ${
                 letter ? "cursor-pointer sm:cursor-grab" : "pointer-events-none opacity-0"
               }`}
               style={{
-                backgroundColor: selectedLetterIndex === index ? SILVER_LIGHT : SILVER,
-                color: BLACK,
-                boxShadow:
-                  selectedLetterIndex === index
-                    ? `0 0 0 2px ${TEAL}`
-                    : "0 1px 2px rgba(0,0,0,0.08)",
+                borderColor: TEAL,
+                backgroundColor: selectedTrayIndex === index ? "rgba(0,154,136,0.14)" : OFFWHITE,
+                color: TEAL,
+                transform: selectedTrayIndex === index ? "scale(1.08)" : "scale(1)",
               }}
             >
               {letter}
-            </div>
+            </button>
           ))}
         </div>
 
-        {/* Word slots */}
-        <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide text-brand-tealDark/50 sm:text-xs">
+        {/* Word slots (target) */}
+        <p
+          className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide sm:text-xs"
+          style={{ color: GRAY_TEXT }}
+        >
           Drop here
         </p>
-        <div className="mb-7 flex flex-wrap justify-center gap-1.5 sm:gap-3">
+        <div className="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3">
           {wordCells.map((letter, index) => (
-            <div
-              key={`target-${index}`}
+            <button
+              key={`cell-${index}`}
               onDragOver={(e) => handleDragOver(index, e)}
-              onDragLeave={() => setHoveredDropIndex(null)}
+              onDragLeave={() => setHoveredCellIndex(null)}
               onDrop={(e) => handleDrop(index, e)}
-              onClick={() => handleWordCellClick(index)}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 sm:h-12 sm:w-12 sm:text-lg ${
-                letter ? "cursor-pointer" : "cursor-pointer"
-              }`}
+              onClick={() => handleCellClick(index)}
+              disabled={isCompleted && !letter}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 text-xl font-bold transition-all duration-150 sm:h-16 sm:w-16 sm:text-2xl"
               style={{
-                backgroundColor: letter ? SILVER_LIGHT : SILVER,
-                color: BLACK,
-                boxShadow:
-                  hoveredDropIndex === index || (selectedLetterIndex !== null && !letter)
-                    ? `0 0 0 2px ${TEAL}`
-                    : letter
-                      ? isCompleted
-                        ? `0 0 0 2px ${TEAL}`
-                        : "0 1px 2px rgba(0,0,0,0.08)"
-                      : "inset 0 0 0 1.5px rgba(11,63,68,0.25)",
+                borderColor: TEAL,
+                borderStyle: letter ? "solid" : "dashed",
+                backgroundColor: letter ? OFFWHITE : GRAY_LIGHT,
+                color: TEAL,
+                transform: hoveredCellIndex === index ? "scale(1.08)" : "scale(1)",
               }}
             >
               {letter}
-            </div>
+            </button>
           ))}
         </div>
 
@@ -350,66 +384,105 @@ function WordBuilderGame() {
           <button
             onClick={goPrev}
             disabled={currentIndex === 0}
-            className="rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 sm:px-4 sm:py-2 sm:text-sm"
-            style={{ borderColor: TEAL_DARK, color: TEAL_DARK }}
+            className="rounded-full px-3.5 py-1.5 text-[11px] font-bold tracking-wide text-white transition-transform duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 sm:px-6 sm:py-2 sm:text-sm"
+            style={{ backgroundColor: ORANGE_LIGHT }}
           >
-            Previous
+            PREVIOUS
           </button>
 
           <button
-            onClick={() => {
-              setCompleted(PUZZLES.map(() => false));
-              setCurrentIndex(0);
-            }}
-            className="text-[11px] font-medium text-brand-tealDark/50 underline-offset-2 hover:underline sm:text-xs"
+            onClick={resetAll}
+            className="text-[11px] font-medium underline-offset-2 hover:underline sm:text-xs"
+            style={{ color: GRAY_TEXT }}
           >
-            Reset all
+            RESET ALL
           </button>
 
           <button
             onClick={goNext}
             disabled={!isCompleted || currentIndex === PUZZLES.length - 1}
-            className="rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 sm:px-5 sm:py-2 sm:text-sm"
-            style={{ backgroundColor: CORAL }}
+            className="rounded-full px-5 py-1.5 text-[11px] font-bold tracking-wide text-white transition-transform duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 sm:px-7 sm:py-2 sm:text-sm"
+            style={{ backgroundColor: TEAL }}
           >
-            Next
+            NEXT
           </button>
         </div>
       </motion.div>
 
+      {/* Success modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <ModalBackdrop onClose={() => setShowSuccess(false)}>
+            <p className="text-lg font-semibold sm:text-xl" style={{ color: NAVY }}>
+              Well done
+            </p>
+            <div
+              className="mx-auto my-4 flex h-24 w-24 items-center justify-center rounded-2xl sm:h-28 sm:w-28"
+              style={{ backgroundColor: GRAY_LIGHT }}
+            >
+              <PartyPopper className="h-10 w-10 sm:h-12 sm:w-12" style={{ color: ORANGE }} />
+            </div>
+            <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+              &ldquo;{puzzle.word}&rdquo; is correct
+            </p>
+          </ModalBackdrop>
+        )}
+      </AnimatePresence>
+
       {/* Hint modal */}
       <AnimatePresence>
         {showHint && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowHint(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.3, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.3, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[280px] rounded-2xl bg-white p-6 text-center shadow-2xl sm:max-w-xs"
+          <ModalBackdrop onClose={() => setShowHint(false)}>
+            <p
+              className="text-xs font-bold uppercase tracking-[0.15em] sm:text-sm"
+              style={{ color: NAVY }}
             >
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.15em]" style={{ color: TEAL }}>
-                Hint
-              </p>
-              <div
-                className="mx-auto flex h-32 w-32 items-center justify-center rounded-2xl bg-brand-grayBg p-4 sm:h-36 sm:w-36"
-              >
-                <img src={puzzle.image} alt={puzzle.category} className="h-full w-full object-contain" />
-              </div>
-              <p className="mt-4 text-sm text-brand-tealDark/70">
-                It's a {puzzle.word.length}-letter word — a {puzzle.category.toLowerCase()}.
-              </p>
-            </motion.div>
-          </motion.div>
+              Hint
+            </p>
+            <div
+              className="mx-auto my-4 flex h-24 w-24 items-center justify-center rounded-2xl p-4 sm:h-28 sm:w-28"
+              style={{ backgroundColor: GRAY_LIGHT }}
+            >
+              <img src={puzzle.image} alt={puzzle.category} className="h-full w-full object-contain" />
+            </div>
+            <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+              It&apos;s a {puzzle.word.length}-letter word — a {puzzle.category.toLowerCase()}.
+            </p>
+          </ModalBackdrop>
         )}
       </AnimatePresence>
-    </section>
+    </div>
+  );
+}
+
+function ModalBackdrop({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.3, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.3, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[280px] rounded-2xl p-6 text-center shadow-2xl sm:max-w-xs"
+        style={{ backgroundColor: OFFWHITE }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-white transition-transform duration-200 hover:scale-110"
+          style={{ backgroundColor: ORANGE }}
+        >
+          <X className="h-3.5 w-3.5" strokeWidth={3} />
+        </button>
+        {children}
+      </motion.div>
+    </motion.div>
   );
 }
