@@ -1,32 +1,45 @@
 "use client";
 
-import NavBar from "@/components/NavBar";
-import SiteFooter from "@/components/Footer";
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { PartyPopper, X } from "lucide-react";
+
+// Palette matched to the rest of the design system (Word Builder / Letter Swap / Color Sudoku).
+const NAVY = "#1B4552";
+const TEAL = "#009A88";
+const ORANGE = "#FA9E15";
+const ORANGE_LIGHT = "#FBB041";
+const GRAY_TEXT = "#707070";
+const GRAY_LIGHT = "#F2F2F2";
+const OFFWHITE = "#FCFCFC";
+
+const LOGO_URL =
+  "https://ik.imagekit.io/pratik2002/logo-logicology-removebg-preview.png?updatedAt=1760432002538";
+
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');`;
 
 export default function SymmetryPatternPage() {
   return (
-    <main className="bg-brand-grayBg text-brand-tealDark">
-      <NavBar />
-      <section id="symmetry-game">
+    <main className="h-screen w-full overflow-hidden" style={{ backgroundColor: NAVY }}>
+      <style dangerouslySetInnerHTML={{ __html: FONT_IMPORT }} />
+      <section id="symmetry-game" className="h-full w-full">
         <SymmetryPatternGame />
       </section>
-      <SiteFooter />
     </main>
   );
 }
 
 function SymmetryPatternGame() {
-  const sectionRef = useRef(null);
-
   const gridSize = 6;
-  const BLANK_CELL_COLOR = "#f5deb3";
+  const BLANK_CELL_COLOR = GRAY_LIGHT;
 
-  const colors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#ff8c00"];
+  // Legend / picker colors — ordered to match the reference design.
+  const colors = ["#e74c3c", "#2ecc71", "#3498db", "#f1c40f", "#ff8c00", "#9b59b6"];
 
   const [isSymmetric, setIsSymmetric] = useState(false);
-  const [draggedColor, setDraggedColor] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [activeCell, setActiveCell] = useState<{ row: number; col: number } | null>(null);
+  const [showRules, setShowRules] = useState(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   const solutionGrid = [
@@ -56,8 +69,14 @@ function SymmetryPatternGame() {
 
   const [grid, setGrid] = useState(initialGrid);
 
+  // A cell is "locked" (a fixed given) if it started with a real color — this never changes,
+  // regardless of what the user later places in the cells that started blank.
+  const lockedMask = initialGrid.map((row) => row.map((c) => c !== BLANK_CELL_COLOR));
+
+  const isLocked = (row: number, col: number) => lockedMask[row][col];
+  const isEditable = (row: number, col: number) => !isLocked(row, col);
+  const isDraggable = (row: number, col: number) => grid[row][col] !== BLANK_CELL_COLOR;
   const isBlankCell = (row: number, col: number) => grid[row][col] === BLANK_CELL_COLOR;
-  const isColorCell = (row: number, col: number) => !isBlankCell(row, col);
 
   const checkSolution = (currentGrid: string[][]) => {
     for (let i = 0; i < gridSize; i++)
@@ -66,10 +85,9 @@ function SymmetryPatternGame() {
   };
 
   const handleDragStart = (row: number, col: number, e: React.DragEvent) => {
-    if (!isColorCell(row, col)) return;
+    if (!isDraggable(row, col)) return;
     e.dataTransfer.setData("text/plain", JSON.stringify({ row, col, color: grid[row][col] }));
     e.dataTransfer.effectAllowed = "copy";
-    setDraggedColor(grid[row][col]);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -79,7 +97,7 @@ function SymmetryPatternGame() {
 
   const handleDrop = (row: number, col: number, e: React.DragEvent) => {
     e.preventDefault();
-    if (!isBlankCell(row, col)) return;
+    if (!isEditable(row, col)) return;
     try {
       const data = JSON.parse(e.dataTransfer.getData("text/plain"));
       const newGrid = grid.map((r) => [...r]);
@@ -89,11 +107,10 @@ function SymmetryPatternGame() {
     } catch (error) {
       console.error("Drop error:", error);
     }
-    setDraggedColor(null);
   };
 
   const handleCellClick = (row: number, col: number) => {
-    if (!isBlankCell(row, col)) return;
+    if (!isEditable(row, col)) return;
     setActiveCell((prev) => (prev && prev.row === row && prev.col === col ? null : { row, col }));
   };
 
@@ -109,7 +126,12 @@ function SymmetryPatternGame() {
     setGrid(initialGrid);
     setIsSymmetric(false);
     setActiveCell(null);
+    setShowSuccess(false);
   };
+
+  useEffect(() => {
+    if (isSymmetric) setShowSuccess(true);
+  }, [isSymmetric]);
 
   useEffect(() => {
     if (!activeCell) return;
@@ -122,140 +144,304 @@ function SymmetryPatternGame() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [activeCell]);
 
+  const getPopoverPosition = (row: number, col: number, size: number): React.CSSProperties => {
+    const cellPct = 100 / size;
+    const top = `${row * cellPct}%`;
+    // The top row has no room to open upward inside the card, so it opens downward instead
+    // (anchored to the bottom of that row) while every other row opens above the cell as usual.
+    const verticalTransform = row === 0 ? `calc(${cellPct}% + 8px)` : "calc(-100% - 8px)";
+
+    if (col === 0) {
+      return { left: "0%", top, transform: `translate(0, ${verticalTransform})` };
+    }
+    if (col === size - 1) {
+      return { left: "100%", top, transform: `translate(-100%, ${verticalTransform})` };
+    }
+    return { left: `${(col + 0.5) * cellPct}%`, top, transform: `translate(-50%, ${verticalTransform})` };
+  };
+
+  const getBorderClass = (i: number, j: number) => {
+    const classes: string[] = [];
+    if (i === 0) classes.push("border-t");
+    if (i === gridSize - 1) classes.push("border-b");
+    if (j === 0) classes.push("border-l");
+    if (j === gridSize - 1) classes.push("border-r");
+    if (i < gridSize - 1) classes.push("border-b");
+    if (j < gridSize - 1) classes.push("border-r");
+    if (i === 2) classes.push("border-b-[3px]");
+    if (j === 2) classes.push("border-r-[3px]");
+    return classes.join(" ") + " border-black/25";
+  };
+
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden bg-brand-grayBg">
-      <div className="mx-auto px-3 py-12 sm:px-5 sm:py-16 md:max-w-[75vw] md:py-20 lg:mx-auto lg:max-w-[75vw]">
-        <div className="grid items-center gap-12 md:grid-cols-2">
-          {/* ── LEFT: Text Content ── */}
-          <div className="space-y-6 sm:px-4">
-            <h3 className="headingstyle font-heading font-extrabold text-brand-teal">
-              Complete the Symmetric Pattern
-            </h3>
+    <div className="flex h-full w-full items-center justify-center px-3 py-[clamp(6px,2vh,20px)]">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative mx-auto flex w-full max-w-[720px] flex-col rounded-[28px] px-[clamp(16px,4vw,32px)] py-[clamp(14px,2.2vh,28px)] shadow-soft ring-1 ring-black/5"
+        style={{ backgroundColor: OFFWHITE, maxHeight: "calc(100vh - 16px)", overflow: "hidden" }}
+      >
+        {/* Close button */}
+        <button
+          aria-label="Exit game"
+          className="absolute right-[clamp(12px,2vw,24px)] top-[clamp(12px,2vh,24px)] flex h-[clamp(28px,4vh,34px)] w-[clamp(28px,4vh,34px)] items-center justify-center rounded-full text-white shadow-sm transition-transform duration-200 hover:scale-110"
+          style={{ backgroundColor: ORANGE }}
+        >
+          <X className="h-[45%] w-[45%]" strokeWidth={3} />
+        </button>
 
-            <div>
-              <p className="textstyles mt-4 font-sans text-brand-tealDark/80">
-                Fill in the blank cells to complete the perfectly symmetric colour pattern. The
-                rules you need to follow are:
-              </p>
-              <ol className="mt-3 list-decimal space-y-2 pl-6 text-brand-tealDark/90">
-                <li>The pattern must be symmetric along the vertical axis (left ↔ right).</li>
-                <li>The pattern must be symmetric along the horizontal axis (top ↔ bottom).</li>
-                <li>
-                  Drag a colour from any filled cell onto a blank cell — or click a blank cell to
-                  pick a colour from the palette that pops up above it.
-                </li>
-              </ol>
+        {/* Puzzle label — top-left */}
+        <div className="mb-[clamp(2px,0.8vh,8px)] pr-[clamp(34px,5vh,44px)] text-left">
+          <span className="text-[clamp(11px,1.5vh,13px)] font-medium" style={{ color: GRAY_TEXT }}>
+            Puzzle 1
+          </span>
+        </div>
+
+        {/* Mascot logo */}
+        <div
+          className="mx-auto mb-[clamp(4px,1vh,10px)] flex h-[clamp(44px,7vh,72px)] w-[clamp(44px,7vh,72px)] items-center justify-center rounded-full"
+        >
+          <img src={LOGO_URL} alt="Logicology logo" className="h-[100%] w-[100%] object-contain" />
+        </div>
+
+        {/* Title */}
+        <h2
+          className="text-center text-[clamp(20px,3.6vh,34px)]"
+          style={{ fontFamily: "'Alfa Slab One', serif", color: TEAL }}
+        >
+          Symmetric Pattern
+        </h2>
+        <p
+          className="mx-auto mt-[clamp(2px,0.8vh,8px)] max-w-md text-center text-[clamp(10px,1.4vh,14px)]"
+          style={{ color: GRAY_TEXT }}
+        >
+          Fill In The Blank Cells To Complete The Perfectly Symmetric Colour Pattern.
+        </p>
+
+        {/* Game row: legend | grid | rules/reset */}
+        <div className="relative mx-auto mt-[clamp(8px,1.8vh,20px)] w-full max-w-[600px]">
+          <div className="flex w-full items-start justify-center gap-[clamp(8px,2vw,20px)]">
+            {/* Vertical color legend — view-only */}
+            <div
+              className="flex min-h-[clamp(160px,32vh,260px)] flex-col items-center justify-start gap-[clamp(8px,1.8vh,16px)] rounded-full px-[clamp(7px,1.4vw,14px)] py-[clamp(12px,2.6vh,24px)]"
+              style={{ backgroundColor: GRAY_LIGHT }}
+            >
+              {colors.map((color) => (
+                <span
+                  key={color}
+                  className="h-[clamp(18px,3.2vh,28px)] w-[clamp(18px,3.2vh,28px)] shrink-0 rounded-full shadow"
+                  style={{ backgroundColor: color, boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }}
+                />
+              ))}
             </div>
 
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <button
-                  onClick={handleReset}
-                  className="group inline-flex max-w-[220px] items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 text-[16px] font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
+            {/* Grid */}
+            <div className="relative w-full max-w-[clamp(220px,42vh,340px)]">
+              <div
+                className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-hidden rounded-2xl ring-1 ring-black/10"
+                style={{ backgroundColor: GRAY_LIGHT }}
+              >
+                {grid.map((row, i) =>
+                  row.map((cell, j) => {
+                    const cellDraggable = isDraggable(i, j);
+                    const cellEditable = isEditable(i, j);
+
+                    return (
+                      <div
+                        key={`${i}-${j}`}
+                        draggable={cellDraggable}
+                        onDragStart={(e) => handleDragStart(i, j, e)}
+                        onDragOver={cellEditable ? handleDragOver : undefined}
+                        onDrop={cellEditable ? (e) => handleDrop(i, j, e) : undefined}
+                        onClick={() => handleCellClick(i, j)}
+                        style={{ backgroundColor: cell }}
+                        className={`relative flex aspect-square w-full items-center justify-center transition-all duration-200 ${getBorderClass(
+                          i,
+                          j
+                        )} ${
+                          cellEditable
+                            ? "cursor-pointer hover:brightness-95"
+                            : cellDraggable
+                              ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
+                              : "cursor-default"
+                        }`}
+                        role="button"
+                        aria-label={
+                          isBlankCell(i, j)
+                            ? `Row ${i + 1} col ${j + 1} - empty`
+                            : `Row ${i + 1} col ${j + 1} - ${cell}${cellEditable ? " (tap to change)" : ""}`
+                        }
+                      />
+                    );
+                  })
+                )}
+              </div>
+
+              {/* Floating color popover above the active cell — a sibling of the grid so the
+                  grid's own overflow-hidden (used for rounded corners) never clips it. */}
+              {activeCell && (
+                <div
+                  ref={popupRef}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute z-10 flex items-center gap-1.5 rounded-full px-[clamp(8px,1.6vw,12px)] py-[clamp(4px,1vh,7px)] shadow-lg ring-1 ring-black/10"
+                  style={{
+                    backgroundColor: OFFWHITE,
+                    ...getPopoverPosition(activeCell.row, activeCell.col, gridSize),
+                  }}
                 >
-                  Reset Pattern
-                </button>
-              </div>
-            </div>
-
-            <p className="text-sm text-brand-tealDark/80">
-              Blank cells remaining:{" "}
-              <span className="font-semibold text-brand-tealDark">
-                {grid.flat().filter((c) => c === BLANK_CELL_COLOR).length}
-              </span>
-            </p>
-          </div>
-
-          {/* ── RIGHT: Game Grid ── */}
-          <div className="rounded-[26px] bg-white p-3 transition-transform duration-500 hover:scale-[1.02]">
-            <div className="relative overflow-visible rounded-[20px] bg-brand-grayBg p-4">
-              <div className="w-full">
-                <div className="grid w-full touch-manipulation select-none grid-cols-6 gap-0 overflow-visible rounded-lg">
-                  {grid.map((row, i) =>
-                    row.map((cell, j) => {
-                      const isDraggable = isColorCell(i, j);
-                      const isEditable = isBlankCell(i, j);
-                      const isActive = activeCell?.row === i && activeCell?.col === j;
-
-                      const getPopupAlignClass = () => {
-                        if (j === 0) return "left-0";
-                        if (j === gridSize - 1) return "right-0";
-                        return "left-1/2 -translate-x-1/2";
-                      };
-
-                      const getBorderClass = () => {
-                        let classes: string[] = [];
-                        if (i === 0) classes.push("border-t border-black/30");
-                        if (i === gridSize - 1) classes.push("border-b border-black/30");
-                        if (j === 0) classes.push("border-l border-black/30");
-                        if (j === gridSize - 1) classes.push("border-r border-black/30");
-                        if (i < gridSize - 1) classes.push("border-b border-black/30");
-                        if (j < gridSize - 1) classes.push("border-r border-black/30");
-                        if (i === 2) classes.push("border-b-2 border-black/40");
-                        if (j === 2) classes.push("border-r-2 border-black/40");
-                        return classes.join(" ");
-                      };
-
-                      return (
-                        <div
-                          key={`${i}-${j}`}
-                          draggable={isDraggable}
-                          onDragStart={(e) => handleDragStart(i, j, e)}
-                          onDragOver={isEditable ? handleDragOver : undefined}
-                          onDrop={isEditable ? (e) => handleDrop(i, j, e) : undefined}
-                          onClick={() => handleCellClick(i, j)}
-                          style={{ backgroundColor: cell }}
-                          className={`relative flex aspect-square w-full items-center justify-center transition-all duration-300 ${getBorderClass()} ${
-                            isEditable
-                              ? "cursor-pointer hover:brightness-95"
-                              : isDraggable
-                                ? "cursor-grab hover:opacity-90 active:cursor-grabbing"
-                                : "cursor-default"
-                          }`}
-                          role="button"
-                          aria-label={
-                            isEditable
-                              ? `Row ${i + 1} col ${j + 1} - empty`
-                              : `Row ${i + 1} col ${j + 1} - ${cell}`
-                          }
-                        >
-                          {cell === BLANK_CELL_COLOR && (
-                            <span className="text-[10px] text-gray-500 opacity-60">+</span>
-                          )}
-
-                          {isActive && (
-                            <div
-                              ref={popupRef}
-                              onClick={(e) => e.stopPropagation()}
-                              className={`absolute bottom-full z-50 mb-2 flex gap-1.5 rounded-full border border-black/10 bg-white p-2 shadow-lg ${getPopupAlignClass()}`}
-                            >
-                              {colors.map((color) => (
-                                <button
-                                  key={color}
-                                  onClick={() => handleColorPick(i, j, color)}
-                                  className="h-6 w-6 shrink-0 rounded-full ring-1 ring-black/10 transition-transform hover:scale-110"
-                                  style={{ backgroundColor: color }}
-                                  aria-label={`Fill with ${color}`}
-                                />
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-
-              {isSymmetric && (
-                <div className="mt-4 rounded-xl bg-[#4CAF50] px-4 py-3 text-center text-sm font-semibold text-white">
-                  🎉 Perfect symmetry! Well done!
+                  {colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => handleColorPick(activeCell.row, activeCell.col, color)}
+                      aria-label={`Fill with ${color}`}
+                      className="h-[clamp(14px,2.4vh,22px)] w-[clamp(14px,2.4vh,22px)] shrink-0 rounded-full transition-transform duration-150 hover:scale-125"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
                 </div>
               )}
             </div>
+
+            {/* RULES / RESET — stacked on the right */}
+            <div className="flex flex-col gap-[clamp(4px,1vh,8px)]">
+              <button
+                onClick={() => setShowRules(true)}
+                className="rounded-full px-[clamp(10px,2.2vw,16px)] py-[clamp(5px,1.1vh,8px)] text-[clamp(10px,1.3vh,12px)] font-bold tracking-wide transition-transform duration-200 hover:scale-105"
+                style={{ backgroundColor: ORANGE_LIGHT, color: NAVY }}
+              >
+                RULES
+              </button>
+              <button
+                onClick={handleReset}
+                className="rounded-full px-[clamp(10px,2.2vw,16px)] py-[clamp(5px,1.1vh,8px)] text-[clamp(10px,1.3vh,12px)] font-bold tracking-wide text-white transition-transform duration-200 hover:scale-105"
+                style={{ backgroundColor: TEAL }}
+              >
+                RESET
+              </button>
+            </div>
           </div>
+
+          <p
+            className="mt-[clamp(6px,1.4vh,12px)] text-center text-[clamp(10px,1.3vh,12px)]"
+            style={{ color: GRAY_TEXT }}
+          >
+            Select box and fill color
+          </p>
         </div>
-      </div>
-    </section>
+
+        {/* Navigation — single puzzle, so both ends are disabled */}
+        <div className="mt-[clamp(10px,2vh,20px)] flex items-center justify-between gap-2">
+          <button
+            disabled
+            className="rounded-full px-[clamp(14px,3vw,22px)] py-[clamp(6px,1.2vh,9px)] text-[clamp(10px,1.4vh,13px)] font-bold tracking-wide text-white opacity-30"
+            style={{ backgroundColor: ORANGE_LIGHT }}
+          >
+            PREVIOUS
+          </button>
+          <button
+            disabled
+            className="rounded-full px-[clamp(14px,3vw,22px)] py-[clamp(6px,1.2vh,9px)] text-[clamp(10px,1.4vh,13px)] font-bold tracking-wide text-white opacity-30"
+            style={{ backgroundColor: TEAL }}
+          >
+            NEXT
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Success modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowSuccess(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.3, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.3, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-[280px] rounded-2xl p-6 text-center shadow-2xl sm:max-w-xs"
+              style={{ backgroundColor: OFFWHITE }}
+            >
+              <button
+                onClick={() => setShowSuccess(false)}
+                aria-label="Close"
+                className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-white transition-transform duration-200 hover:scale-110"
+                style={{ backgroundColor: ORANGE }}
+              >
+                <X className="h-3.5 w-3.5" strokeWidth={3} />
+              </button>
+
+              <p className="text-lg font-semibold sm:text-xl" style={{ color: NAVY }}>
+                Great job!
+              </p>
+              <div
+                className="mx-auto my-4 flex h-24 w-24 items-center justify-center rounded-2xl sm:h-28 sm:w-28"
+                style={{ backgroundColor: GRAY_LIGHT }}
+              >
+                <PartyPopper className="h-10 w-10 sm:h-12 sm:w-12" style={{ color: ORANGE }} />
+              </div>
+              <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+                Perfect symmetry — you solved it.
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Rules modal */}
+      <AnimatePresence>
+        {showRules && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowRules(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.3, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.3, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-sm rounded-2xl p-6 text-center shadow-2xl sm:max-w-md"
+              style={{ backgroundColor: OFFWHITE }}
+            >
+              <button
+                onClick={() => setShowRules(false)}
+                aria-label="Close"
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-white transition-transform duration-200 hover:scale-110"
+                style={{ backgroundColor: ORANGE }}
+              >
+                <X className="h-4 w-4" strokeWidth={3} />
+              </button>
+
+              <p className="text-sm font-bold uppercase tracking-[0.15em] sm:text-base" style={{ color: NAVY }}>
+                Rules
+              </p>
+
+              <div className="mt-5 space-y-4 text-left sm:text-center">
+                <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+                  The pattern must be symmetric along the vertical axis (left ↔ right).
+                </p>
+                <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+                  The pattern must be symmetric along the horizontal axis (top ↔ bottom).
+                </p>
+                <p className="text-sm sm:text-base" style={{ color: GRAY_TEXT }}>
+                  Drag a colour from any filled cell onto a blank cell — or click a blank cell to
+                  pick a colour from the palette that pops up above it.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
