@@ -72,7 +72,7 @@ const cards = [
         Researched, not <br /> rebranded
       </>
     ),
-    body: "Every concept tested until a child can start solo. Shows them that they are important.",
+    body: "Every concept is tested with children until they can start playing on their own.",
     side: "left",
   },
   {

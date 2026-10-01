@@ -91,7 +91,7 @@ const SiteFooter = () => {
                     </Link>
                     <Link
                       aria-label="LinkedIn"
-                      href="https://www.linkedin.com/company/11215891/admin/dashboard/"
+                      href="https://www.linkedin.com/company/11215891/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-brand-buttonYellowBefore hover:text-brand-black"

@@ -339,7 +339,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
             <SmartCard card={TEXT_COLUMN_CARDS[0]} isInView={isInView} popDelay={0.4} />
             <SmartCard card={TEXT_COLUMN_CARDS[1]} isInView={isInView} popDelay={0.48} /> */}
 
-            <motion.h1
+            <motion.h2
               className="mb-5  leading-[1.1] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -351,7 +351,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
               transition={{ duration: 0.7, delay: 0.25 }}
             >
               The math game that <br/> secretly teaches number <br/> sense and strategy.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
@@ -461,7 +461,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
               Empowering Minds
             </motion.p> */}
 
-            <motion.h1
+            <motion.h2
               className="mb-4 font-bold leading-[1.15] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -480,7 +480,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
               teaches number
               
               sense & strategy.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-6 max-w-[300px] text-[20px]  leading-snug text-white"

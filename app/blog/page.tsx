@@ -1,5 +1,16 @@
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
+import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema, pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Logic & Brain Games Blog for Parents | Logicology",
+  description:
+    "Practical ideas from educators on building logical thinking, problem-solving and number sense in children, with screen-free activities you can try at home.",
+  path: "/blog",
+  ogTitle: "Logic & Brain Games Blog for Parents",
+});
 
 // Blog data array
 const blogs = [
@@ -26,6 +37,7 @@ const blogs = [
 export default function BlogListPage() {
   return (
     <>
+      <JsonLd data={breadcrumbSchema([["Blog", "/blog"]])} />
       <NavBar />
       <main className="min-h-screen bg-gradient-to-b from-brand-grayBg to-white pb-16 pt-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

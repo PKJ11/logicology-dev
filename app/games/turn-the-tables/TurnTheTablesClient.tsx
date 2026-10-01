@@ -471,7 +471,7 @@ function TurnTablesHero() {
                     {slides[0].pretitle}
                   </motion.p>
 
-                  <motion.h1
+                  <motion.p
                     className="my-2 leading-[1.15] text-white"
                     style={{
                       fontFamily: "var(--font-outfit), sans-serif",
@@ -487,7 +487,7 @@ function TurnTablesHero() {
                     that finally
                     <br />
                     clicks.
-                  </motion.h1>
+                  </motion.p>
 
                   {/* Mobile price flag */}
                   {/* <motion.div

@@ -222,7 +222,7 @@ export default function HeroSlide3({ isInView }: SlideProps) {
             <SwingingCard card={TEXT_COLUMN_CARDS[0]} isInView={isInView} popDelay={0.42} />
             <SwingingCard card={TEXT_COLUMN_CARDS[1]} isInView={isInView} popDelay={0.5} />
 
-            <motion.h1
+            <motion.h2
               className="mb-5 leading-[1.1] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -236,7 +236,7 @@ export default function HeroSlide3({ isInView }: SlideProps) {
               Multiplication that
               <br />
               finally clicks.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
@@ -347,7 +347,7 @@ export default function HeroSlide3({ isInView }: SlideProps) {
           </div>
 
           <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
-            <motion.h1
+            <motion.h2
               className="mb-4 font-bold leading-[1.15] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -364,7 +364,7 @@ export default function HeroSlide3({ isInView }: SlideProps) {
               that finally
               <br />
               clicks.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-6 max-w-[300px] text-[20px]  leading-snug text-white"

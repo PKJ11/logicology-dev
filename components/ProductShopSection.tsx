@@ -20,7 +20,7 @@ type FeaturedProduct = HeroProductConfig & {
 const FEATURED: FeaturedProduct[] = [
   {
     name: "Prime Time",
-    displayName: "PrimeTime™",
+    displayName: "Prime Time™",
     price: "₹1,499",
     initialprice: "₹1,999",
     razorpayItemId: "item_RNn1BJlJAJ9sM8",

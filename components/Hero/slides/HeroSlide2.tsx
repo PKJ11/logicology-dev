@@ -246,7 +246,7 @@ export default function HeroSlide2({ isInView }: SlideProps) {
               popDelay={0.5}
             />
 
-            <motion.h1
+            <motion.h2
               className="mb-5 leading-[1.1] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -259,7 +259,7 @@ export default function HeroSlide2({ isInView }: SlideProps) {
             >Big ideas turned
 <br />
 into child&apos;s play.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-8 max-w-[420px] text-[18px] leading-7 text-white lg:text-[21.33px]"
@@ -359,7 +359,7 @@ into child&apos;s play.
           </div>
 
           <div className="relative z-20 flex flex-col items-center px-6 pb-20 pt-2 text-center">
-            <motion.h1
+            <motion.h2
               className="mb-4 font-bold leading-[1.15] text-white"
               style={{
                 fontFamily: "var(--font-outfit), sans-serif",
@@ -376,7 +376,7 @@ into child&apos;s play.
               turned into
               <br />
               child's play.
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="mb-6 max-w-[300px] text-[20px]  leading-snug text-white"

@@ -2,8 +2,17 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { altForImage } from "@/lib/imageAlts";
 
-export default function MediaLayout({ videoSrc, image }: { videoSrc: string; image: string }) {
+export default function MediaLayout({
+  videoSrc,
+  image,
+  alt,
+}: {
+  videoSrc: string;
+  image: string;
+  alt?: string;
+}) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [showCenterClose, setShowCenterClose] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -53,11 +62,10 @@ export default function MediaLayout({ videoSrc, image }: { videoSrc: string; ima
           <div className="relative h-full w-full">
             <Image
               src={image}
-              alt="Main visual"
+              alt={alt ?? altForImage(image)}
               fill
               className="object-cover"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px"
-              priority
             />
           </div>
         </div>

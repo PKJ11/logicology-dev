@@ -79,8 +79,9 @@ export default function ImportanceBubbles() {
                   <div className="relative" style={{ width: 300, height: 300 }}>
                     <Image
                       src={it.bubble}
-                      alt={`bubble for ${it.title}`}
+                      alt=""
                       fill
+                      sizes="(max-width: 768px) 300px, 340px"
                       className="h-[200px] w-[200px] object-contain md:h-[250px] md:w-[250px] lg:h-[320px] lg:w-[320px] xl:h-[340px] xl:w-[340px]"
                     />
                   </div>

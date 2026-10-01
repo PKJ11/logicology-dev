@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import SiteFooter from "@/components/Footer";
 import Community from "@/components/Community";
 import Image from "next/image";
-import Head from "next/head";
 import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
 
 interface UserData {
@@ -80,138 +79,6 @@ const WORKSHEETS: Worksheet[] = [
 ];
 
 /* ============================================================
-   SHARED HEAD / SEO COMPONENT
-============================================================ */
-function CommunityPageHead() {
-  return (
-    <Head>
-      <title>PlayThinkers – A Community for Playful Learning | Logicology</title>
-      <meta
-        name="description"
-        content="Join PlayThinkers by Logicology — a community sharing ideas, activities and perspectives on screen-free, playful learning for children. Come think and play."
-      />
-      <meta
-        name="keywords"
-        content="PlayThinkers community, free worksheets for kids, printable puzzles, maze games, word search, colouring activities, logic puzzles, Logicology, educational activities, kids learning, critical thinking worksheets"
-      />
-      <meta
-        name="robots"
-        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-      />
-      <meta name="author" content="Logicology" />
-      <meta name="publisher" content="Logicology" />
-      <link rel="canonical" href="https://www.logicology.in/Community" />
-
-      {/* Open Graph */}
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://www.logicology.in/Community" />
-      <meta property="og:site_name" content="Logicology" />
-      <meta
-        property="og:title"
-        content="PlayThinkers Community – Free Worksheets & Kids Activities"
-      />
-      <meta
-        property="og:description"
-        content="Join thousands of families in the PlayThinkers Community. Get free printable worksheets, logic puzzles, and creative activities for kids of all ages."
-      />
-      <meta
-        property="og:image"
-        content="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?tr=w-1200,h-630,c-at_max"
-      />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta
-        property="og:image:alt"
-        content="PlayThinkers Community by Logicology – free educational worksheets for kids"
-      />
-      <meta property="og:locale" content="en_IN" />
-
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content="https://www.logicology.in/Community" />
-      <meta name="twitter:title" content="PlayThinkers Community – Free Worksheets for Kids" />
-      <meta
-        name="twitter:description"
-        content="Access exclusive printable worksheets, logic puzzles, and creative activities. Join the PlayThinkers Community today!"
-      />
-      <meta
-        name="twitter:image"
-        content="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?tr=w-1200,h-630,c-at_max"
-      />
-      <meta
-        name="twitter:image:alt"
-        content="PlayThinkers Community by Logicology – educational worksheets for kids"
-      />
-
-      {/* Schema.org — WebPage */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "PlayThinkers Community",
-            url: "https://www.logicology.in/Community",
-            description:
-              "Join the PlayThinkers Community to access exclusive printable worksheets, logic puzzles, maze games, and creative activities for kids.",
-            publisher: {
-              "@type": "Organization",
-              name: "Logicology",
-              url: "https://www.logicology.in",
-              logo: "https://ik.imagekit.io/pratik11/logicology-logo.png",
-            },
-            breadcrumb: {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Home",
-                  item: "https://www.logicology.in",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Community",
-                  item: "https://www.logicology.in/Community",
-                },
-              ],
-            },
-          }),
-        }}
-      />
-
-      {/* Schema.org — ItemList of worksheets */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: "PlayThinkers Community Worksheets",
-            description:
-              "Free printable worksheets for kids including maze games, word searches, colouring activities, and logic puzzles.",
-            url: "https://www.logicology.in/Community",
-            itemListElement: WORKSHEETS.map((ws, index) => ({
-              "@type": "ListItem",
-              position: index + 1,
-              item: {
-                "@type": "CreativeWork",
-                name: `${ws.title} Worksheet`,
-                description: ws.description,
-                educationalUse: "Practice",
-                learningResourceType: "Worksheet",
-                publisher: { "@type": "Organization", name: "Logicology" },
-              },
-            })),
-          }),
-        }}
-      />
-    </Head>
-  );
-}
-
-/* ============================================================
    SHARED HEADER COMPONENT
 ============================================================ */
 function CommunityHeader({
@@ -234,6 +101,7 @@ function CommunityHeader({
                   src="https://ik.imagekit.io/pratik2002/PLAY%20THINKERS%20LOGO%20WHITE%20VERSION.png?updatedAt=1767353542986"
                   alt="PlayThinkers by Logicology – community logo"
                   fill
+                  sizes="192px"
                   className="object-contain"
                   priority
                 />
@@ -428,7 +296,7 @@ export default function CommunityPage() {
   if (isLoading) {
     return (
       <>
-        <CommunityPageHead />
+        <h1 className="sr-only">Join the Logicology Community: free printable puzzles for kids</h1>
         <div className="flex min-h-screen items-center justify-center bg-brand-grayBg">
           <div className="text-center">
             <div
@@ -447,8 +315,8 @@ export default function CommunityPage() {
   if (!userData) {
     return (
       <div className="min-h-screen bg-brand-grayBg">
-        <CommunityPageHead />
         <CommunityHeader userData={null} />
+        <h1 className="sr-only">Join the Logicology Community: free printable puzzles for kids</h1>
         <Community />
 
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -515,7 +383,6 @@ export default function CommunityPage() {
   /* ── Logged-in view ── */
   return (
     <div className="min-h-screen bg-brand-grayBg">
-      <CommunityPageHead />
       <CommunityHeader userData={userData} onLogout={handleLogout} />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

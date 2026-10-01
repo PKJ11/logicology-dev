@@ -109,6 +109,8 @@ export default function BrandPromise() {
   return (
     <>
       <section id="brand-promise" className="w-full bg-brand-teal" ref={ref}>
+        {/* Page H1 for search engines/screen readers; visually hidden so the design is unchanged. */}
+        <h1 className="sr-only">Brain games and logic puzzles that make kids love thinking</h1>
         <div className="px-4 md:mx-auto md:max-w-[75vw] lg:mx-auto lg:max-w-[75vw] lg:px-8">
           <div className="overflow-hidden py-12 text-white">
             <div className="flex flex-col items-center md:flex-row">
@@ -123,6 +125,7 @@ export default function BrandPromise() {
               >
                 <MediaLayout
                   image="https://ik.imagekit.io/pratik11/CHILDREN-THINK-THEY-ARE-PALYING.png"
+                  alt="Children think they're playing. Parents know they're learning."
                   videoSrc=""
                 />
               </motion.div>

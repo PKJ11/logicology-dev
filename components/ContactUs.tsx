@@ -2,7 +2,8 @@ import MediaLayout from "@/components/MediaLayout"; // Ensure this import path i
 import NavBar from "./NavBar";
 import SiteFooter from "./Footer";
 
-function ContactUs() {
+function ContactUs({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
+  const Heading = headingLevel;
   return (
     <>
       <NavBar />
@@ -12,7 +13,7 @@ function ContactUs() {
           <div className="grid items-center gap-10 md:grid-cols-2">
             {/* Left: text & contact details */}
             <div className="text-white">
-              <h2 className="headingstyle mb-10 font-extrabold">Contact Us</h2>
+              <Heading className="headingstyle mb-10 font-extrabold">Contact Us</Heading>
 
               <ul className="space-y-8">
                 {/* Phone */}

@@ -1331,6 +1331,7 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
                     src={mainImage}
                     alt="Prime Time Game Image"
                     fill
+                    sizes="(max-width: 768px) 80vw, 40vw"
                     className="object-cover"
                     priority
                   />
@@ -1350,7 +1351,7 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
                           } `}
                         >
                           <div className="relative h-full w-full overflow-hidden rounded-[25px] bg-white">
-                            <Image src={src} alt={`thumbnail-${i}`} fill className="object-cover" />
+                            <Image src={src} alt={`thumbnail-${i}`} fill sizes="120px" className="object-cover" />
                           </div>
                         </button>
                       ))
@@ -1366,7 +1367,7 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
                           } `}
                         >
                           <div className="relative h-full w-full overflow-hidden rounded-[25px] bg-white">
-                            <Image src={src} alt={`thumbnail-${i}`} fill className="object-cover" />
+                            <Image src={src} alt={`thumbnail-${i}`} fill sizes="120px" className="object-cover" />
                           </div>
                         </button>
                       ))}
@@ -1724,7 +1725,7 @@ const BigAddToCartBanner = ({ benefits }: { benefits?: string }) => {
             <div className="flex justify-center">
               <div className="aspect-square w-[90%] overflow-hidden rounded-[35px] border-[12px] border-[#6d2e46] p-3">
                 <div className="relative h-full w-full overflow-hidden rounded-[25px] bg-white">
-                  <Image src={img} alt="Benefit Image" fill className="object-cover" />
+                  <Image src={img} alt="Benefit Image" fill sizes="(max-width: 768px) 90vw, 45vw" className="object-cover" />
                 </div>
               </div>
             </div>
@@ -1942,7 +1943,7 @@ const Footer = () => {
                     </Link>
                     <Link
                       aria-label="LinkedIn"
-                      href="https://www.linkedin.com/company/11215891/admin/dashboard/"
+                      href="https://www.linkedin.com/company/11215891/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border border-transparent bg-white/10 p-2 transition hover:border-white/10 hover:bg-white hover:text-[#0B3F44]"

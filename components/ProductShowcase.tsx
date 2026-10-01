@@ -263,7 +263,7 @@ const ProductShowcase = () => {
 
       <section className="bg-[#6A294D] py-16 text-center text-white">
         <div className="mx-auto w-[80vw]">
-          <h2 className="mb-4 text-4xl font-bold">Our Products</h2>
+          <h1 className="mb-4 text-4xl font-bold">Our Products</h1>
           <p className="mx-auto mb-8 max-w-xl text-lg">
             At Logicology we endeavour to make learning fun so that children learn while they play.
           </p>
@@ -375,6 +375,7 @@ const ProductShowcase = () => {
                       src={product.image}
                       alt={product.name}
                       fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                     />
                     <div

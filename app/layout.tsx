@@ -10,10 +10,17 @@ import MetaCapiPageView from "@/components/MetaCapiPageView";
 import { EdgeStoreProvider } from "./lib/edgestore";
 import { TiersProvider } from "./contexts/TiersContext";
 import { ToastProvider } from "./contexts/ToastContext";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, organizationSchema, websiteSchema } from "@/lib/seo";
 
+// Site-wide defaults. Every public route overrides title, description and canonical
+// via its own page.tsx / layout.tsx (see lib/seo.ts → pageMetadata).
 export const metadata: Metadata = {
-  title: "Logicology",
-  description: "Empowering Minds Through STEM Play and Logic-Based Learning",
+  metadataBase: new URL(SITE_URL),
+  title: "Logicology – Brain Games & Logic Puzzles for Kids",
+  description:
+    "Screen-free brain games, logic puzzle books and math board games for kids aged 6–16. Designed by educators, loved by kids.",
+  openGraph: { siteName: "Logicology", locale: "en_IN", type: "website" },
 };
 
 const outfit = Outfit({ subsets: ["latin"], display: "swap", variable: "--font-outfit" });
@@ -47,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body>
+        <JsonLd data={[organizationSchema, websiteSchema]} />
         <CartProvider>
           <EdgeStoreProvider>
             {/* <TiersProvider> */}

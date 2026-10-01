@@ -99,7 +99,7 @@ const navItems = [
   { name: "Books", href: "/books", hasDropdown: true, type: "books" },
   { name: "Shop", href: "/products" },
   { name: "About Us", href: "/about" },
-  { name: "Community", href: "Community" },
+  { name: "Community", href: "/community" },
 ];
 
 /* ================= Utils ================= */
@@ -326,6 +326,7 @@ export default function NavBar() {
                                 src={game.imageUrl}
                                 alt={game.title}
                                 fill
+                                sizes="64px"
                                 className="rounded-md object-cover"
                               />
                             </div>
@@ -379,6 +380,7 @@ export default function NavBar() {
                                 src={book.imageUrl}
                                 alt={book.title}
                                 fill
+                                sizes="64px"
                                 className="rounded-md object-cover"
                               />
                             </div>
@@ -560,7 +562,7 @@ export default function NavBar() {
               About Us
             </Link>
             <Link
-              href="Community"
+              href="/community"
               onClick={closeAll}
               className="relative block py-1 after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-tealDark after:transition-all after:duration-300 after:content-[''] hover:text-brand-tealDark hover:after:w-full"
             >

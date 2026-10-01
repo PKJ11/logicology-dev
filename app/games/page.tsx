@@ -1,267 +1,171 @@
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import Head from "next/head";
-import NavBar from "@/components/NavBar";
-import { useRouter } from "next/navigation";
-import SiteFooter from "@/components/Footer";
+import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
+import CollectionGuide, { GuideLink, type Faq } from "@/components/seo/CollectionGuide";
+import { breadcrumbSchema, faqSchema, pageMetadata } from "@/lib/seo";
+import GamesClient from "./GamesClient";
 
-interface Game {
-  id: number;
-  title: string;
-  imageUrl: string;
-  description: string;
-  author: string;
-  rating: number;
-  category: string;
-  players?: string;
-  duration?: string;
+export const metadata: Metadata = pageMetadata({
+  title: "Brain Games for Kids – Math & Logic Board Games | Logicology",
+  description:
+    "Brain games for kids that build logic, number sense and strategy. Shop Prime Time and Turn the Tables, screen-free math games the whole family enjoys.",
+  path: "/games",
+  ogTitle: "Brain Games for Kids – Math & Logic Board Games",
+  image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?tr=w-1200,h-630,c-at_max",
+});
+
+const faqs: Faq[] = [
+  {
+    q: "What age is Prime Time suitable for?",
+    a: "Prime Time is designed for ages 8 and up and plays with 2–6 players. Younger children can join in on a team with an adult, and adults genuinely enjoy the strategy too.",
+  },
+  {
+    q: "Do kids need to know prime numbers before playing Prime Time?",
+    a: "No. The game introduces prime and composite numbers as part of play, so children learn the idea by using it. Most kids are confidently spotting primes after a couple of rounds.",
+  },
+  {
+    q: "What age is Turn the Tables for?",
+    a: "Turn the Tables suits children from about 6 years old who are starting to learn multiplication, and stays fun for older kids who want to get faster with their times tables.",
+  },
+  {
+    q: "Are these games good for classrooms?",
+    a: "Yes. Both games play in 15–40 minutes with up to 6 players, which fits a class period or a math lab rotation. Schools also use them for math clubs and inter-house tournaments. Contact us for bulk and school orders.",
+  },
+  {
+    q: "Are Logicology games screen-free?",
+    a: "Yes. Every Logicology game is a physical card or board game. Our online puzzles are optional extras, never a requirement to play.",
+  },
+];
+
+function GamesGuide() {
+  return (
+    <CollectionGuide
+      faqs={faqs}
+      sections={[
+        {
+          heading: "What are brain games for kids?",
+          body: (
+            <>
+              <p>
+                Brain games are games where winning depends on thinking: spotting patterns,
+                planning ahead, working with numbers and adapting when the situation changes. Unlike
+                worksheets, children play them because they want to, which means they practise
+                those thinking skills far more often and for far longer.
+              </p>
+              <p>
+                At Logicology we design brain games as educators first. Each game is built around a
+                real concept from the school curriculum, like prime numbers or multiplication, and
+                then tested with children until the learning is hidden inside the fun.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "What skills do brain games build?",
+          body: (
+            <>
+              <p>
+                <strong>Logic and reasoning:</strong> every move asks “what happens if I play this?”,
+                which is the habit at the heart of logical thinking.
+              </p>
+              <p>
+                <strong>Number sense:</strong> in{" "}
+                <GuideLink href="/games/prime-time">Prime Time</GuideLink>, children work with
+                primes, composites and factors again and again, so the ideas become intuitive
+                instead of memorised.
+              </p>
+              <p>
+                <strong>Strategy:</strong> choosing which card to hold back and when to strike
+                teaches planning and weighing options.
+              </p>
+              <p>
+                <strong>Focus and fluency:</strong>{" "}
+                <GuideLink href="/games/turn-the-tables">Turn the Tables</GuideLink> rewards quick,
+                accurate multiplication, so times tables get faster through play rather than drills.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "Choosing a brain game by age",
+          body: (
+            <>
+              <p>
+                <strong>Ages 6–8:</strong> start with games that make one skill feel like a race.
+                Turn the Tables is ideal once your child begins multiplication, and the{" "}
+                <GuideLink href="/books">Logicoland puzzle books</GuideLink> build early logic with
+                colourful, step-by-step puzzles.
+              </p>
+              <p>
+                <strong>Ages 8–12:</strong> this is the sweet spot for Prime Time. Children are
+                ready for strategy, and the game strengthens the number work they meet in classes 4
+                to 7.
+              </p>
+              <p>
+                <strong>Ages 12+ and adults:</strong> both games scale up with smarter play. Older
+                children use deeper strategy, which is why families keep playing together.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "How to get the most out of brain games at home",
+          body: (
+            <>
+              <p>
+                Short and regular beats long and rare. Two or three 20-minute games a week do more
+                for a child&apos;s thinking than one marathon session a month. Keep a game on the
+                dining table or in the car bag so it is easy to say yes to “one more round”.
+              </p>
+              <p>
+                Play alongside your child rather than just supervising. Think out loud about your
+                own moves (“I&apos;ll keep this card because 7 is prime”) so they hear what
+                strategic thinking sounds like. Then ask them to explain their move. Putting
+                reasoning into words is where much of the learning happens.
+              </p>
+              <p>
+                Finally, let them lose sometimes. Learning to recover from a bad hand, spot what went
+                wrong and try a new plan is a thinking skill in its own right.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "Why screen-free games work better than apps",
+          body: (
+            <p>
+              Learning apps can hold attention, but they often reward fast tapping over careful
+              thinking. A card or board game slows things down: children talk through their moves,
+              explain their reasoning, lose gracefully and try again. Playing face to face with
+              parents, siblings or friends also builds the patience and communication skills that
+              no screen can teach.
+            </p>
+          ),
+        },
+        {
+          heading: "How schools use Logicology games",
+          body: (
+            <p>
+              Teachers use Prime Time and Turn the Tables in math labs, activity periods and math
+              clubs, and as the basis for inter-school tournaments. Because each game needs only a
+              table and a few minutes to learn, a whole class can be playing in one period. For
+              school sets and bulk pricing, visit our{" "}
+              <GuideLink href="/bulk-order">bulk order page</GuideLink> or{" "}
+              <GuideLink href="/contact-us">get in touch</GuideLink>.
+            </p>
+          ),
+        },
+      ]}
+    />
+  );
 }
 
-const toSlug = (title: string) =>
-  title
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
-
-export default function GamesPage() {
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
-
-  const games: Game[] = [
-    {
-      id: 1,
-      title: "Prime Time™",
-      imageUrl: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
-      description:
-        "A thrilling math-based card game that challenges players to create prime numbers from their hand. Combine strategy and arithmetic skills to outsmart your opponents in this engaging educational game.",
-      author: "Logicology",
-      rating: 4.9,
-      category: "Math Strategy",
-      players: "2-6",
-      duration: "15-30 min",
-    },
-    {
-      id: 2,
-      title: "Turn the Tables",
-      imageUrl:
-        "https://ik.imagekit.io/pratik11/TURN%20THE%20TABLE%20%20BOX%20MOCKUP.png?updatedAt=1757747148360",
-      description:
-        "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
-      author: "Logicology",
-      rating: 4.8,
-      category: "Math Strategy",
-      players: "2-6",
-      duration: "20-40 min",
-    },
-  ];
-
-  const isPrimeTime = (g: Game) => g.title === "Prime Time™";
-
-  const navigateToGame = (game: Game) => {
-    router.push(`/games/${toSlug(game.title)}`);
-  };
-
-  const openModal = (game: Game) => {
-    setSelectedGame(game);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedGame(null);
-  };
-
-  const handleGetStarted = () => {
-    if (!selectedGame) return;
-    if (isPrimeTime(selectedGame)) {
-      router.push(`/games/${toSlug(selectedGame.title)}`);
-    }
-  };
-
+export default function Page() {
   return (
     <>
-      <NavBar />
-      <div className="min-h-screen bg-brand-hero p-6 text-brand-tealDark sm:p-8 md:p-10">
-        <Head>
-          <title>Games Collection</title>
-        </Head>
-
-        <header className="mb-6 sm:mb-8">
-          <h1 className="text-center text-3xl font-extrabold tracking-tight text-brand-teal sm:text-4xl md:text-5xl">
-            Games Collection
-          </h1>
-          <p className="mt-2 text-center text-brand-tealDark/75">
-            Handpicked games to spark curiosity, learning, and fun.
-          </p>
-        </header>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-7 lg:grid-cols-3 xl:grid-cols-4">
-          {games.map((game) => (
-            <div
-              key={game.id}
-              className="group relative cursor-pointer transition-all duration-300 hover:z-10"
-              onClick={() => navigateToGame(game)}
-            >
-              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-black/5 transition-shadow hover:shadow-brand">
-                {/* Coming Soon badge removed */}
-
-                <div className="relative mb-3 aspect-[3/4] max-h-[48vh] w-full overflow-hidden rounded-2xl">
-                  <Image
-                    src={game.imageUrl}
-                    alt={game.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col">
-                  <h3 className="mb-1 text-xl font-bold text-brand-tealDark">{game.title}</h3>
-                  <p className="mb-2 text-xs text-brand-tealDark/70">by {game.author}</p>
-
-                  <div className="mb-3">
-                    <span className="inline-block rounded-full bg-brand-teal/10 px-2 py-1 text-xs font-medium text-brand-teal">
-                      {game.category}
-                    </span>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-brand-coral px-2.5 py-1 text-xs font-semibold text-white">
-                      ★ {game.rating}
-                    </span>
-                    <button
-                      className="text-xs font-semibold text-brand-teal transition-colors hover:text-brand-coral"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigateToGame(game);
-                      }}
-                    >
-                      View details →
-                    </button>
-                  </div>
-                </div>
-
-                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 transition-all group-hover:ring-2 group-hover:ring-brand-teal/35" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Modal for all games */}
-        {isModalOpen && selectedGame && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-            <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-4xl bg-white text-brand-tealDark shadow-brand">
-              <div className="relative">
-                <button
-                  onClick={closeModal}
-                  className="absolute right-4 top-4 z-10 rounded-full bg-brand-teal p-2 text-white transition-colors hover:bg-brand-coral"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-
-                <div className="grid md:grid-cols-2">
-                  <div className="relative h-72 md:h-full">
-                    <Image
-                      src={selectedGame.imageUrl}
-                      alt={selectedGame.title}
-                      fill
-                      className="rounded-t-4xl object-cover md:rounded-l-4xl md:rounded-tr-none"
-                    />
-                    {/* Coming Soon overlay removed */}
-                  </div>
-
-                  <div className="p-6 sm:p-8">
-                    <h2 className="mb-1 text-3xl font-extrabold text-brand-teal">
-                      {selectedGame.title}
-                    </h2>
-                    <p className="mb-2 text-brand-tealDark/75">by {selectedGame.author}</p>
-
-                    <div className="mb-4 flex items-center">
-                      <span className="inline-block rounded-full bg-brand-teal/15 px-3 py-1 text-sm font-medium text-brand-teal">
-                        {selectedGame.category}
-                      </span>
-                    </div>
-
-                    <div className="mb-6 flex items-center">
-                      <div className="flex text-brand-gold">
-                        {[...Array(5)].map((_, i) => (
-                          <svg
-                            key={i}
-                            xmlns="http://www.w3.org/2000/svg"
-                            className={`h-5 w-5 ${
-                              i < Math.floor(selectedGame.rating)
-                                ? "fill-current"
-                                : "fill-none stroke-current"
-                            }`}
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                            />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="ml-2 text-brand-tealDark/70">{selectedGame.rating}/5</span>
-                    </div>
-
-                    <div className="mb-6 grid grid-cols-2 gap-4">
-                      <div className="rounded-2xl bg-brand-teal/5 p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">Players</p>
-                        <p className="font-semibold text-brand-teal">{selectedGame.players}</p>
-                      </div>
-                      <div className="rounded-2xl bg-brand-teal/5 p-3 text-center">
-                        <p className="text-sm text-brand-tealDark/70">Duration</p>
-                        <p className="font-semibold text-brand-teal">{selectedGame.duration}</p>
-                      </div>
-                    </div>
-
-                    <p className="mb-8 text-brand-tealDark/85">{selectedGame.description}</p>
-
-                    {isPrimeTime(selectedGame) ? (
-                      <button
-                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-coral bg-transparent px-6 py-3 font-semibold text-brand-coral transition-colors hover:bg-brand-coral hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-coral/40 active:scale-[.99]"
-                        onClick={handleGetStarted}
-                      >
-                        Know More about {selectedGame.title}
-                      </button>
-                    ) : (
-                      <button
-                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand-teal bg-transparent px-6 py-3 font-semibold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal/40 active:scale-[.99]"
-                        onClick={() => {
-                          // You can add functionality for other games here
-                          console.log(`View details for ${selectedGame.title}`);
-                        }}
-                      >
-                        View Game Details
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      <SiteFooter />
+      <JsonLd data={[breadcrumbSchema([["Games", "/games"]]), faqSchema(faqs)]} />
+      <GamesClient>
+        <GamesGuide />
+      </GamesClient>
     </>
   );
 }
