@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SiteFooter from "@/components/Footer";
 import { useRouter } from "next/navigation";
-import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
+import { confirmCheckoutPayment, PAYMENT_ID_PLACEHOLDER } from "@/lib/orders/checkout-client";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -2116,8 +2116,8 @@ function EnrollmentSection({
     return Object.keys(e).length === 0;
   };
 
-  // ── Send GST invoice email ────────────────────────────────────────────────
-  const sendGSTInvoiceEmail = async (paymentId: string, formSnapshot: FormData, base: number) => {
+  // ── GST invoice email (sent by the server once payment is confirmed) ──────
+  const buildGSTInvoiceEmail = (paymentId: string, formSnapshot: FormData, base: number) => {
     const emailHtml = generateConfirmationEmail(
       paymentId,
       formSnapshot.parentName,
@@ -2132,34 +2132,27 @@ function EnrollmentSection({
 
     const emailRecipients = [formSnapshot.email, "orders@logicology.in"];
 
-    const emailRes = await fetch("/api/send-invoice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: emailRecipients,
-        subject: `Logicology GST Invoice – Enrollment Confirmed (${paymentId})`,
-        html: emailHtml,
-      }),
-    });
-
-    return emailRes.json();
+    return {
+      to: emailRecipients,
+      subject: `Logicology GST Invoice – Enrollment Confirmed (${paymentId})`,
+      html: emailHtml,
+    };
   };
 
-  // ── Send WhatsApp ─────────────────────────────────────────────────────────
-  const sendWhatsApp = async (paymentId: string, base: number, total: number) => {
-    if (!form.phone) return;
+  // ── WhatsApp (sent by the server once payment is confirmed) ───────────────
+  const buildWhatsApp = (paymentId: string, total: number) => {
+    if (!form.phone) return null;
 
-    try {
-      await sendWhatsAppNotification("ORDER_CONFIRMATION", form.phone, {
+    return {
+      phone: form.phone,
+      variables: {
         name: form.parentName,
         orderItems: `Logicology Summer Workshop — ${form.preferredBatch}`,
         finalAmount: total.toFixed(0),
         shippingAddress: form.childName,
         paymentId,
-      });
-    } catch (err) {
-      console.error("WhatsApp error:", err);
-    }
+      },
+    };
   };
 
   const handleSubmit = useCallback(async () => {
@@ -2176,14 +2169,62 @@ function EnrollmentSection({
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Pass the TOTAL (incl. GST) amount to Razorpay
-      const res = await fetch("/api/razorpay-order", {
+      const orderDescription = `Summer Workshop Enrollment — ${form.preferredBatch} for ${form.childName}`;
+      const formSnapshot = { ...form };
+      const base = baseAmountRef.current;
+      const total = activeFeeRef.current;
+      const { gstAmount: gst } = calcGST(base);
+
+      // Pass the TOTAL (incl. GST) amount to Razorpay. The server stores the registration +
+      // invoice + WhatsApp now, and completes them after payment even if this page never
+      // gets the Razorpay callback.
+      const res = await fetch("/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: activeFeeRef.current,
+          amount: total,
           currency: "INR",
           receipt: `camp_${Date.now()}`,
+          kind: "summer_camp",
+          record: {
+            customerInfo: {
+              name: formSnapshot.parentName,
+              email: formSnapshot.email,
+              phone: formSnapshot.phone,
+            },
+            items: [
+              {
+                name: `Logicology Summer Workshop — ${formSnapshot.preferredBatch}`,
+                price: total,
+                quantity: 1,
+                itemId: "summer-camp",
+              },
+            ],
+            paymentInfo: {
+              amount: total,
+              currency: "INR",
+              status: "completed",
+              description: orderDescription,
+            },
+            totals: {
+              baseAmount: base,
+              gstAmount: gst,
+              gstRate: GST_RATE,
+              total: total,
+              discount: 0,
+            },
+            discountCode: null,
+            campDetails: {
+              childName: formSnapshot.childName,
+              childAge: formSnapshot.childAge,
+              childGrade: formSnapshot.childGrade,
+              batch: formSnapshot.preferredBatch,
+              allergies: formSnapshot.allergies,
+              referral: formSnapshot.referral,
+            },
+          },
+          email: buildGSTInvoiceEmail(PAYMENT_ID_PLACEHOLDER, formSnapshot, total),
+          whatsapp: buildWhatsApp(PAYMENT_ID_PLACEHOLDER, total),
         }),
       });
 
@@ -2199,8 +2240,6 @@ function EnrollmentSection({
         return;
       }
 
-      const orderDescription = `Summer Workshop Enrollment — ${form.preferredBatch} for ${form.childName}`;
-
       const options = {
         key: RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -2210,70 +2249,12 @@ function EnrollmentSection({
         order_id: order.id,
         handler: async function (response: any) {
           setIsPaymentProcessing(true);
-          const formSnapshot = { ...form };
-          const base = baseAmountRef.current;
-          const total = activeFeeRef.current;
-          const { gstAmount: gst } = calcGST(base);
 
           try {
-            // 1. Save registration — capture the returned registrationId
-            const saveRes = await fetch("/api/save-summer-camp-registration", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                customerInfo: {
-                  name: formSnapshot.parentName,
-                  email: formSnapshot.email,
-                  phone: formSnapshot.phone,
-                },
-                items: [
-                  {
-                    name: `Logicology Summer Workshop — ${formSnapshot.preferredBatch}`,
-                    price: total,
-                    quantity: 1,
-                    itemId: "summer-camp",
-                  },
-                ],
-                paymentInfo: {
-                  paymentId: response.razorpay_payment_id,
-                  orderId: response.razorpay_order_id,
-                  amount: total,
-                  currency: "INR",
-                  status: "completed",
-                  description: orderDescription,
-                },
-                totals: {
-                  baseAmount: base,
-                  gstAmount: gst,
-                  gstRate: GST_RATE,
-                  total: total,
-                  discount: 0,
-                },
-                discountCode: null,
-                campDetails: {
-                  childName: formSnapshot.childName,
-                  childAge: formSnapshot.childAge,
-                  childGrade: formSnapshot.childGrade,
-                  batch: formSnapshot.preferredBatch,
-                  allergies: formSnapshot.allergies,
-                  referral: formSnapshot.referral,
-                },
-              }),
-            });
-
-            const saveData = await saveRes.json();
-            const registrationId = saveData.registrationId ?? response.razorpay_payment_id;
-
-            // 2. Send GST invoice email
-            const inclusiveTotal = activeFeeRef.current;
-            await sendGSTInvoiceEmail(response.razorpay_payment_id, formSnapshot, inclusiveTotal);
-
-            // 3. Send WhatsApp (non-critical)
-            try {
-              await sendWhatsApp(response.razorpay_payment_id, base, total);
-            } catch (wpErr) {
-              console.error("WhatsApp failed (non-critical):", wpErr);
-            }
+            // 1-3. Save registration + send GST invoice email and WhatsApp
+            //      (server-side, idempotent with the Razorpay webhook)
+            const confirmResult = await confirmCheckoutPayment(response);
+            const registrationId = confirmResult.recordId ?? response.razorpay_payment_id;
 
             // 4. Reset form
             setForm({

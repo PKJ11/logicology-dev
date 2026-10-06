@@ -16,7 +16,7 @@ import {
   trackButtonClick,
 } from "@/lib/gtag-events";
 import { trackMetaPixelPurchase, trackMetaPixelInitiateCheckout } from "@/lib/meta-pixel-events";
-import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
+import { confirmCheckoutPayment, PAYMENT_ID_PLACEHOLDER } from "@/lib/orders/checkout-client";
 
 // GST Utility Functions
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -680,11 +680,12 @@ const CartPage = () => {
   const isBillerPhoneValid = userInfo.phone.replace(/\D/g, "").length === 10;
   const isShippingPhoneValid = shipping.phone.replace(/\D/g, "").length === 10;
 
-  const sendOrderConfirmationWhatsApp = async (paymentId: string, orderDescription: string) => {
+  // WhatsApp sent to userInfo.phone by the server once payment is confirmed (see lib/orders/fulfillment.ts)
+  const buildOrderConfirmationWhatsApp = (paymentId: string) => {
     const targetPhone = userInfo.phone;
     if (!targetPhone) {
       console.warn("No phone number available for WhatsApp message");
-      return { userTracked: false, messageSent: false, messageId: null, error: "No phone number provided" };
+      return null;
     }
 
     const orderItems = cart.length > 0
@@ -693,159 +694,135 @@ const CartPage = () => {
 
     const shippingAddress = `${shipping.address ? shipping.address + ", " : ""}${shipping.city}, ${shipping.state} - ${shipping.pin}`;
 
-    const result = await sendWhatsAppNotification("ORDER_CONFIRMATION", targetPhone, {
-      name: userInfo.name || "",
-      orderItems,
-      finalAmount: finalAmount.toFixed(0),
-      shippingAddress,
-      paymentId,
-    });
-
-    return { userTracked: false, messageSent: result.success, messageId: result.messageId, error: result.error };
+    return {
+      phone: targetPhone,
+      variables: {
+        name: userInfo.name || "",
+        orderItems,
+        finalAmount: finalAmount.toFixed(0),
+        shippingAddress,
+        paymentId,
+      },
+    };
   };
 
-  const sendGSTInvoice = async (
-    paymentId: string,
-    orderDescription: string,
-    razorpayContact?: string
-  ) => {
-    try {
-      // Generate GST receipt with discount
-      const gstReceiptHtml = generateGSTReceipt(cart, itemDetails, discountAmount);
+  // GST invoice email sent by the server once payment is confirmed (see lib/orders/fulfillment.ts)
+  const buildGSTInvoiceEmail = (paymentId: string) => {
+    // Generate GST receipt with discount
+    const gstReceiptHtml = generateGSTReceipt(cart, itemDetails, discountAmount);
 
-      // Determine recipient details for email
-      const recipientName = shipping.isDifferentFromBiller ? shipping.name : userInfo.name;
-      const recipientEmail =
-        shipping.isDifferentFromBiller && shipping.email ? shipping.email : userInfo.email;
-      const recipientPhone = shipping.isDifferentFromBiller ? shipping.phone : userInfo.phone;
+    // Determine recipient details for email
+    const recipientName = shipping.isDifferentFromBiller ? shipping.name : userInfo.name;
+    const recipientEmail =
+      shipping.isDifferentFromBiller && shipping.email ? shipping.email : userInfo.email;
+    const recipientPhone = shipping.isDifferentFromBiller ? shipping.phone : userInfo.phone;
 
-      // Create email content
-      const emailHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
-          <!-- Header -->
-          <div style="background: #0A8A80; padding: 30px; text-align: center; color: white;">
-            <h1 style="margin: 0; font-size: 32px;">Payment Successful!</h1>
-            <p style="margin: 10px 0 0; font-size: 18px; opacity: 0.9;">Thank you for your purchase from Logicology</p>
-          </div>
+    // Create email content
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
+        <!-- Header -->
+        <div style="background: #0A8A80; padding: 30px; text-align: center; color: white;">
+          <h1 style="margin: 0; font-size: 32px;">Payment Successful!</h1>
+          <p style="margin: 10px 0 0; font-size: 18px; opacity: 0.9;">Thank you for your purchase from Logicology</p>
+        </div>
 
-          <!-- Order Summary -->
-          <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
-            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Order Confirmation</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-              <div>
-                <strong style="color: #333;">Payment ID:</strong><br>
-                <span style="color: #666;">${paymentId}</span>
-              </div>
-              <div>
-                <strong style="color: #333;">Order Date:</strong><br>
-                <span style="color: #666;">${new Date().toLocaleDateString("en-IN", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}</span>
-              </div>
-              <div>
-                <strong style="color: #333;">Biller Name:</strong><br>
-                <span style="color: #666;">${userInfo.name}</span>
-              </div>
-              <div>
-                <strong style="color: #333;">Biller Email:</strong><br>
-                <span style="color: #666;">${userInfo.email}</span>
-              </div>
-              <div>
-                <strong style="color: #333;">Recipient Name:</strong><br>
-                <span style="color: #666;">${recipientName}</span>
-              </div>
-              <div>
-                <strong style="color: #333;">Recipient Contact:</strong><br>
-                <span style="color: #666;">${recipientPhone}</span>
-              </div>
-              ${
-                shipping.isGift
-                  ? `<div style="grid-column: span 2; padding: 10px; background: #FFF3CD; border-radius: 5px; text-align: center;">
-                      <strong style="color: #856404;">🎁 This order is marked as a gift</strong>
-                    </div>`
-                  : ""
-              }
-              ${
-                appliedPromo
-                  ? `<div>
-                      <strong style="color: #333;">Promo Code Applied:</strong><br>
-                      <span style="color: #666;">${appliedPromo.promoCode} (Saved ₹${discountAmount})</span>
-                    </div>`
-                  : ""
-              }
+        <!-- Order Summary -->
+        <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
+          <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Order Confirmation</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+              <strong style="color: #333;">Payment ID:</strong><br>
+              <span style="color: #666;">${paymentId}</span>
             </div>
-          </div>
-
-          <!-- GST Invoice -->
-          ${gstReceiptHtml}
-
-          <!-- Shipping Information -->
-          <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
-            <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Shipping Details</h3>
-            <div style="line-height: 1.8; color: #333;">
-              <strong>${shipping.name}</strong><br>
-              ${shipping.address}<br>
-              ${shipping.building}, ${shipping.street}<br>
-              ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ""}
-              ${shipping.city}, ${shipping.state} - ${shipping.pin}<br>
-              📞 ${shipping.phone}
-              ${shipping.email ? `<br>📧 ${shipping.email}` : ""}
+            <div>
+              <strong style="color: #333;">Order Date:</strong><br>
+              <span style="color: #666;">${new Date().toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}</span>
             </div>
-          </div>
-
-          <!-- Support Section -->
-          <div style="text-align: center; padding: 25px; background: #0B3F44; color: white; margin: 20px; border-radius: 10px;">
-            <h3 style="margin: 0 0 15px; color: white;">Need Assistance?</h3>
-            <p style="margin: 0; opacity: 0.9; line-height: 1.6;"> 📧 Email: <span style="color: #0A8A80;">support@logicology.in</span> <br> 📱 WhatsApp: <span style="color: #0A8A80;">8446980747</span><br> <small>Please mention your Payment ID: ${paymentId}</small> </p>
-          </div>
-
-          <!-- Footer -->
-          <div style="text-align: center; padding: 20px; color: #666; font-size: 12px; border-top: 1px solid #ddd;">
-            <p style="margin: 0;">
-              This is a system generated GST invoice. For any queries, please contact our support team.<br>
-              <strong>Logicology - Learn To Play. Play To Learn </strong>
-            </p>
+            <div>
+              <strong style="color: #333;">Biller Name:</strong><br>
+              <span style="color: #666;">${userInfo.name}</span>
+            </div>
+            <div>
+              <strong style="color: #333;">Biller Email:</strong><br>
+              <span style="color: #666;">${userInfo.email}</span>
+            </div>
+            <div>
+              <strong style="color: #333;">Recipient Name:</strong><br>
+              <span style="color: #666;">${recipientName}</span>
+            </div>
+            <div>
+              <strong style="color: #333;">Recipient Contact:</strong><br>
+              <span style="color: #666;">${recipientPhone}</span>
+            </div>
+            ${
+              shipping.isGift
+                ? `<div style="grid-column: span 2; padding: 10px; background: #FFF3CD; border-radius: 5px; text-align: center;">
+                    <strong style="color: #856404;">🎁 This order is marked as a gift</strong>
+                  </div>`
+                : ""
+            }
+            ${
+              appliedPromo
+                ? `<div>
+                    <strong style="color: #333;">Promo Code Applied:</strong><br>
+                    <span style="color: #666;">${appliedPromo.promoCode} (Saved ₹${discountAmount})</span>
+                  </div>`
+                : ""
+            }
           </div>
         </div>
-      `;
 
-      // Send email to both biller and recipient (if different)
-      const emailRecipients = [userInfo.email, "orders@logicology.in"];
-      if (shipping.isDifferentFromBiller && shipping.email) {
-        emailRecipients.push(shipping.email);
-      }
+        <!-- GST Invoice -->
+        ${gstReceiptHtml}
 
-      const HOSTINGER_EMAIL = process.env.HOSTINGER_EMAIL || "orders@logicology.in";
-      const emailRes = await fetch("/api/send-invoice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: emailRecipients,
-          cc: ["orders@logicology.in"],
-          subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
-          html: emailHtml,
-        }),
-      });
+        <!-- Shipping Information -->
+        <div style="padding: 25px; background: #F5F6F7; margin: 20px; border-radius: 10px;">
+          <h3 style="color: #0B3F44; margin-bottom: 15px; border-bottom: 2px solid #0A8A80; padding-bottom: 10px;">Shipping Details</h3>
+          <div style="line-height: 1.8; color: #333;">
+            <strong>${shipping.name}</strong><br>
+            ${shipping.address}<br>
+            ${shipping.building}, ${shipping.street}<br>
+            ${shipping.landmark ? `Landmark: ${shipping.landmark}<br>` : ""}
+            ${shipping.city}, ${shipping.state} - ${shipping.pin}<br>
+            📞 ${shipping.phone}
+            ${shipping.email ? `<br>📧 ${shipping.email}` : ""}
+          </div>
+        </div>
 
-      const emailResult = await emailRes.json();
+        <!-- Support Section -->
+        <div style="text-align: center; padding: 25px; background: #0B3F44; color: white; margin: 20px; border-radius: 10px;">
+          <h3 style="margin: 0 0 15px; color: white;">Need Assistance?</h3>
+          <p style="margin: 0; opacity: 0.9; line-height: 1.6;"> 📧 Email: <span style="color: #0A8A80;">support@logicology.in</span> <br> 📱 WhatsApp: <span style="color: #0A8A80;">8446980747</span><br> <small>Please mention your Payment ID: ${paymentId}</small> </p>
+        </div>
 
-      // Send WhatsApp message only to userInfo.phone
-      try {
-        await sendOrderConfirmationWhatsApp(paymentId, orderDescription);
-      } catch (whatsappError) {
-        console.error("WhatsApp message failed:", whatsappError);
-        // Don't throw error here as email is primary, WhatsApp is secondary
-      }
+        <!-- Footer -->
+        <div style="text-align: center; padding: 20px; color: #666; font-size: 12px; border-top: 1px solid #ddd;">
+          <p style="margin: 0;">
+            This is a system generated GST invoice. For any queries, please contact our support team.<br>
+            <strong>Logicology - Learn To Play. Play To Learn </strong>
+          </p>
+        </div>
+      </div>
+    `;
 
-      return { success: true, emailSent: emailResult.success };
-    } catch (error: any) {
-      console.error("Error sending GST invoice:", error);
-      return { success: false, error: error.message };
+    // Send email to both biller and recipient (if different)
+    const emailRecipients = [userInfo.email, "orders@logicology.in"];
+    if (shipping.isDifferentFromBiller && shipping.email) {
+      emailRecipients.push(shipping.email);
     }
+
+    return {
+      to: emailRecipients,
+      cc: ["orders@logicology.in"],
+      subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
+      html: emailHtml,
+    };
   };
 
   const handleCheckout = useCallback(async () => {
@@ -889,15 +866,34 @@ const CartPage = () => {
         saveAddressToLocalStorage();
       }
 
+      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}${shipping.isGift ? " |  Gift" : ""}`;
+
       // Amount in paise (use final amount after discount)
       const amount = Math.round(finalAmount);
-      const res = await fetch("/api/razorpay-order", {
+      // The server stores the order + invoice + WhatsApp now, and completes them after payment
+      // even if this page never gets the Razorpay callback.
+      const res = await fetch("/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount,
           currency: "INR",
           receipt: `receipt_${Date.now()}`,
+          kind: "order",
+          record: {
+            userInfo,
+            shipping,
+            cart,
+            razorpayDesc: orderDescription,
+            totalAmount: finalAmount,
+            discountAmount: discountAmount,
+            appliedPromo: appliedPromo,
+            isGift: shipping.isGift,
+            isDifferentFromBiller: shipping.isDifferentFromBiller,
+            rzpDeviceId: getRzpDeviceId(), // links order → cart_events
+          },
+          email: buildGSTInvoiceEmail(PAYMENT_ID_PLACEHOLDER),
+          whatsapp: buildOrderConfirmationWhatsApp(PAYMENT_ID_PLACEHOLDER),
         }),
       });
 
@@ -907,8 +903,6 @@ const CartPage = () => {
         setIsProcessing(false);
         return;
       }
-
-      const orderDescription = `Order for ${cart.map((i) => `${i.name} (Qty: ${i.quantity})`).join(", ")}${appliedPromo ? ` | Promo: ${appliedPromo.promoCode}` : ""}${shipping.isGift ? " |  Gift" : ""}`;
 
       const options = {
         key: RAZORPAY_KEY_ID,
@@ -953,33 +947,8 @@ const CartPage = () => {
               response.razorpay_payment_id
             );
 
-            // Save order info
-            await fetch("/api/save-order-info", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                userInfo,
-                shipping,
-                cart,
-                paymentId: response.razorpay_payment_id,
-                orderId: response.razorpay_order_id,
-                razorpayDesc: orderDescription,
-                razorpayContact: response.razorpay_contact,
-                totalAmount: finalAmount,
-                discountAmount: discountAmount,
-                appliedPromo: appliedPromo,
-                isGift: shipping.isGift,
-                isDifferentFromBiller: shipping.isDifferentFromBiller,
-                rzpDeviceId: getRzpDeviceId(), // ← NEW: links order → cart_events
-              }),
-            });
-
-            // Send GST invoice
-            const invoiceResult = await sendGSTInvoice(
-              response.razorpay_payment_id,
-              orderDescription,
-              response.razorpay_contact
-            );
+            // Save order + send GST invoice and WhatsApp (server-side, idempotent with the webhook)
+            await confirmCheckoutPayment(response);
 
             // Clear cart and reset
             clearCart();

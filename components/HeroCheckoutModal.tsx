@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { motion, AnimatePresence } from "framer-motion";
 import { INDIAN_STATES_AND_UTS } from "@/app/utils/indianStates";
-import { sendWhatsAppNotification } from "@/lib/notifications/whatsapp-client";
+import { confirmCheckoutPayment, PAYMENT_ID_PLACEHOLDER } from "@/lib/orders/checkout-client";
 
 const RAZORPAY_KEY_ID = "rzp_live_RNIwt54hh7eqmk";
 const COMPANY_GST_NUMBER = "27AADCL3493J1Z6";
@@ -540,22 +540,22 @@ export default function HeroCheckoutModal({
       </div>`;
   };
 
-  const sendWhatsApp = async (paymentId: string) => {
-    if (!userInfo.phone) return;
-    try {
-      await sendWhatsAppNotification("ORDER_CONFIRMATION", userInfo.phone, {
+  // WhatsApp + invoice email are sent by the server once payment is confirmed (see lib/orders/fulfillment.ts)
+  const buildWhatsApp = (paymentId: string) => {
+    if (!userInfo.phone) return null;
+    return {
+      phone: userInfo.phone,
+      variables: {
         name: userInfo.name,
         orderItems: product.name,
         finalAmount: finalAmount.toFixed(0),
         shippingAddress: `${shipping.city}, ${shipping.state}`,
         paymentId,
-      });
-    } catch (e) {
-      console.error("WhatsApp error", e);
-    }
+      },
+    };
   };
 
-  const sendInvoice = async (paymentId: string) => {
+  const buildInvoiceEmail = (paymentId: string) => {
     const discount = appliedPromo?.discountAmount ?? 0;
     const recipientName = shipping.isDifferentFromBiller ? shipping.name : userInfo.name;
     const recipientEmail =
@@ -588,20 +588,11 @@ export default function HeroCheckoutModal({
       </div>`;
     const emails = [userInfo.email, "orders@logicology.in"];
     if (shipping.isDifferentFromBiller && shipping.email) emails.push(shipping.email);
-    try {
-      await fetch("/api/send-invoice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: emails,
-          subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
-          html: emailHtml,
-        }),
-      });
-      await sendWhatsApp(paymentId);
-    } catch (e) {
-      console.error("Invoice error", e);
-    }
+    return {
+      to: emails,
+      subject: `Logicology GST Invoice - Payment Confirmed (${paymentId})`,
+      html: emailHtml,
+    };
   };
 
   const handleCheckout = async () => {
@@ -609,13 +600,38 @@ export default function HeroCheckoutModal({
     setIsProcessing(true);
     try {
       if (!selectedAddress) saveAddress();
-      const res = await fetch("/api/razorpay-order", {
+      // The server stores the order + invoice + WhatsApp now, and completes them after payment
+      // even if this page never gets the Razorpay callback.
+      const res = await fetch("/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: Math.round(finalAmount),
           currency: "INR",
           receipt: `receipt_${Date.now()}`,
+          kind: "order",
+          record: {
+            userInfo,
+            shipping,
+            cart: [
+              {
+                name: product.name,
+                price: product.price,
+                razorpayItemId: product.razorpayItemId,
+                description: product.description,
+                image: product.image,
+                rating: product.rating ?? 5,
+                quantity: 1,
+              },
+            ],
+            totalAmount: finalAmount,
+            discountAmount: appliedPromo?.discountAmount ?? 0,
+            appliedPromo,
+            isGift: shipping.isGift,
+            isDifferentFromBiller: shipping.isDifferentFromBiller,
+          },
+          email: buildInvoiceEmail(PAYMENT_ID_PLACEHOLDER),
+          whatsapp: buildWhatsApp(PAYMENT_ID_PLACEHOLDER),
         }),
       });
       const { order } = await res.json();
@@ -634,33 +650,8 @@ export default function HeroCheckoutModal({
         handler: async (response: any) => {
           try {
             setIsPaymentProcessing(true);
-            await fetch("/api/save-order-info", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                userInfo,
-                shipping,
-                cart: [
-                  {
-                    name: product.name,
-                    price: product.price,
-                    razorpayItemId: product.razorpayItemId,
-                    description: product.description,
-                    image: product.image,
-                    rating: product.rating ?? 5,
-                    quantity: 1,
-                  },
-                ],
-                paymentId: response.razorpay_payment_id,
-                orderId: response.razorpay_order_id,
-                totalAmount: finalAmount,
-                discountAmount: appliedPromo?.discountAmount ?? 0,
-                appliedPromo,
-                isGift: shipping.isGift,
-                isDifferentFromBiller: shipping.isDifferentFromBiller,
-              }),
-            });
-            await sendInvoice(response.razorpay_payment_id);
+            // Save order + send invoice and WhatsApp (server-side, idempotent with the webhook)
+            await confirmCheckoutPayment(response);
             onClose();
             setStep(1);
             setSelectedAddress("");
