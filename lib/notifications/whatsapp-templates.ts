@@ -11,6 +11,11 @@ export const WHATSAPP_TEMPLATES: Record<WhatsAppTemplateKey, WhatsAppTemplateDef
     description:
       "Purchase/order confirmation sent after a successful payment (cart checkout, buy-now, summer camp enrollment).",
     variables: ["name", "orderItems", "finalAmount", "shippingAddress", "paymentId"],
+    // Internal copy of every order confirmation; comma-separated override via env.
+    ccPhoneNumbers: (process.env.WHATSAPP_ORDER_CC_NUMBERS || "9860265047")
+      .split(",")
+      .map((n) => n.trim())
+      .filter(Boolean),
   },
   COMMUNITY_INVITE: {
     templateId: process.env.BOTBIZ_TEMPLATE_COMMUNITY_INVITE || "425634",

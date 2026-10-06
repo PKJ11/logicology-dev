@@ -58,17 +58,41 @@ export async function sendWhatsAppTemplate(
     orderedVariables[name] = variables[name] ?? "";
   });
 
-  try {
-    return await sendBotbizTemplateMessage({
-      templateId: template.templateId,
-      phoneNumber: fullPhone,
-      variables: orderedVariables,
-    });
-  } catch (error) {
-    return {
-      success: false,
-      messageId: null,
-      error: error instanceof Error ? error.message : "Unknown Botbiz error",
-    };
-  }
+  const sendOne = async (phone: string): Promise<SendWhatsAppResult> => {
+    try {
+      return await sendBotbizTemplateMessage({
+        templateId: template.templateId,
+        phoneNumber: phone,
+        variables: orderedVariables,
+      });
+    } catch (error) {
+      return {
+        success: false,
+        messageId: null,
+        error: error instanceof Error ? error.message : "Unknown Botbiz error",
+      };
+    }
+  };
+
+  // CC copies go out alongside the main send; their outcome never affects the caller's result.
+  const ccPhones = Array.from(
+    new Set(
+      (template.ccPhoneNumbers || [])
+        .map(normalizeIndianPhoneNumber)
+        .filter((phone): phone is string => !!phone && phone !== fullPhone)
+    )
+  );
+
+  const [result, ...ccResults] = await Promise.all([
+    sendOne(fullPhone),
+    ...ccPhones.map(sendOne),
+  ]);
+
+  ccResults.forEach((ccResult, i) => {
+    if (!ccResult.success) {
+      console.error(`WhatsApp CC for "${templateKey}" to ${ccPhones[i]} failed:`, ccResult.error);
+    }
+  });
+
+  return result;
 }

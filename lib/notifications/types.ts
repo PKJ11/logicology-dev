@@ -10,6 +10,8 @@ export interface WhatsAppTemplateDefinition<V extends string = string> {
   description: string;
   /** Ordered variable names — position N maps to Botbiz's templateVariable-<name>-N. */
   variables: readonly V[];
+  /** Extra numbers that get a copy of every send of this template (e.g. an internal order alert). */
+  ccPhoneNumbers?: readonly string[];
 }
 
 export interface SendWhatsAppResult {
