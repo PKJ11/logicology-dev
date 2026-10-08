@@ -24,6 +24,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CTAButton from "@/components/CTAButton";
 import MediaLayoutRight from "@/components/MediaLayoutRight";
+import VideoModal from "@/components/VideoModal";
 // ─────────────────────────────────────────────
 // Shared Design Tokens
 // ─────────────────────────────────────────────
@@ -1017,6 +1018,119 @@ export function WhyImportant() {
   );
 }
 
+// ─────────────────────────────────────────────
+// Explainer video — "See How It's Played"
+// ─────────────────────────────────────────────
+// TODO: replace with the Turn The Tables explainer video link (youtu.be/<id> or youtube.com/watch?v=<id>)
+const EXPLAINER_YT = "";
+
+function ExplainerVideo() {
+  const [open, setOpen] = useState(false);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  // Shows a "Coming Soon" state until EXPLAINER_YT is filled in.
+  const comingSoon = !EXPLAINER_YT;
+
+  return (
+    <section
+      ref={sectionRef}
+      id="ExplainerVideo"
+      className="w-full bg-brand-grayBg px-4 pb-16 pt-12 md:px-8"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+          className="headingstyle text-center font-heading font-extrabold leading-tight text-brand-black"
+        >
+          See How It's Played
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="textstyles mb-6 text-center text-brand-black"
+        >
+          {comingSoon ? (
+            <>
+              Our short explainer video is on its way.
+              <br />
+              Check back soon to see Turn The Tables™ in action.
+            </>
+          ) : (
+            <>
+              Watch the short explainer to see Turn The Tables™ in action
+              <br />
+              and learn the rules in just a few minutes.
+            </>
+          )}
+        </motion.p>
+
+        <motion.button
+          type="button"
+          disabled={comingSoon}
+          onClick={() => setOpen(true)}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          whileHover={comingSoon ? undefined : { scale: 1.01 }}
+          whileTap={comingSoon ? undefined : { scale: 0.99 }}
+          className={`relative block w-full overflow-hidden rounded-2xl border-0 p-0 shadow-[0_4px_24px_rgba(0,0,0,0.12)] ${
+            comingSoon ? "cursor-default" : "cursor-pointer"
+          }`}
+          style={{ aspectRatio: "16 / 7" }}
+          aria-label={
+            comingSoon
+              ? "Turn The Tables™ explainer video coming soon"
+              : "Watch How to Play Turn The Tables™"
+          }
+        >
+          <Image
+            src="https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE_withbackground_d0b4XcVqQ.png"
+            alt="How to Play Turn The Tables™"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1152px) 100vw, 1152px"
+          />
+
+          {/* Dark scrim */}
+          <div className={`absolute inset-0 ${comingSoon ? "bg-black/55" : "bg-black/30"}`} />
+
+          {/* Play button + label */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+            {comingSoon && (
+              <span className="rounded-full bg-[#fbb041] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#3d3b40] shadow-[0_2px_10px_rgba(0,0,0,0.25)] sm:text-sm">
+                Coming Soon
+              </span>
+            )}
+            <div
+              className={`flex h-[68px] w-[68px] items-center justify-center rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.25)] ${
+                comingSoon ? "bg-white/60" : "bg-white/90"
+              }`}
+            >
+              <svg className="ml-1 h-7 w-7 text-[#555]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <span className="text-[15px] font-bold tracking-wide text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]">
+              {comingSoon ? "Explainer Video Coming Soon" : "Watch How to Play"}
+            </span>
+          </div>
+        </motion.button>
+      </div>
+
+      <VideoModal
+        open={open}
+        onClose={() => setOpen(false)}
+        youtubeUrl={EXPLAINER_YT}
+        title="How to Play Turn The Tables™"
+      />
+    </section>
+  );
+}
+
 // Product configuration for Turn The Tables
 const TURN_TABLES = {
   name: "Turn the Tables",
@@ -1724,6 +1838,7 @@ export default function TurnTheTablesClient() {
       <GameDetails />
       <WhyImportant />
       <TurnTablesBuyBlock />
+      <ExplainerVideo />
       {/* <WhyLogicologySection /> */}
       <Community />
       <Footer />
