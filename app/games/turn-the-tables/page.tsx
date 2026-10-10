@@ -35,12 +35,26 @@ const productSchema = {
   },
 };
 
+const videoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "How to Play Turn the Tables | Rules, Card Matches & Special Cards",
+  description:
+    "How to play Turn the Tables, the multiplication card game by Logicology: the rules, matching cards and how the special cards work.",
+  thumbnailUrl: "https://i.ytimg.com/vi/dD9NqngVWHE/hqdefault.jpg",
+  uploadDate: "2026-10-09T05:30:36-07:00",
+  duration: "PT2M34S",
+  embedUrl: "https://www.youtube.com/embed/dD9NqngVWHE",
+  contentUrl: "https://www.youtube.com/watch?v=dD9NqngVWHE",
+};
+
 export default function TurnTheTablesPage() {
   return (
     <>
       <JsonLd
         data={[
           productSchema,
+          videoSchema,
           breadcrumbSchema([
             ["Games", "/games"],
             ["Turn the Tables", "/games/turn-the-tables"],

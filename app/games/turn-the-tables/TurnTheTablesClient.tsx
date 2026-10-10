@@ -1021,8 +1021,7 @@ export function WhyImportant() {
 // ─────────────────────────────────────────────
 // Explainer video — "See How It's Played"
 // ─────────────────────────────────────────────
-// TODO: replace with the Turn The Tables explainer video link (youtu.be/<id> or youtube.com/watch?v=<id>)
-const EXPLAINER_YT = "";
+const EXPLAINER_YT = "https://www.youtube.com/watch?v=dD9NqngVWHE";
 
 function ExplainerVideo() {
   const [open, setOpen] = useState(false);
