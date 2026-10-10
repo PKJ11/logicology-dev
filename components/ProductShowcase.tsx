@@ -19,7 +19,7 @@ import HeroCheckoutModal, { HeroProductConfig } from "@/components/HeroCheckoutM
 const products = [
   {
     name: "Prime Time",
-    price: "₹1,499",
+    price: "₹1,799",
     initialprice: undefined,
     razorpayItemId: "item_RNn1BJlJAJ9sM8",
     description: "Prime Time Board Game",

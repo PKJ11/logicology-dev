@@ -21,7 +21,7 @@ const FEATURED: FeaturedProduct[] = [
   {
     name: "Prime Time",
     displayName: "Prime Time™",
-    price: "₹1,499",
+    price: "₹1,799",
     initialprice: "₹1,999",
     razorpayItemId: "item_RNn1BJlJAJ9sM8",
     description: "The addictive numbers board game that makes prime thinking second nature.",

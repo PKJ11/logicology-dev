@@ -1131,7 +1131,7 @@ const ProductSection = ({ product, loading }: { product?: any; loading?: boolean
     subtitle: "Strategic Math Game for All Ages",
     description:
       "A lightning-quick numbers game that rewards smart matching and prime-factor insights. Perfect for 2–6 players, ages 8+.",
-    price: "₹1,499",
+    price: "₹1,799",
     initialprice: "₹2,499",
     discount: "40%",
     razorpayItemId: "prime-time-logicology-01",

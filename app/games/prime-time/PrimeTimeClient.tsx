@@ -54,7 +54,7 @@ function Hero() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutProduct, setCheckoutProduct] = useState<HeroProductConfig>({
     name: "Prime Time™",
-    price: "₹1,499",
+    price: "₹1,799",
     initialprice: "₹1,999",
     razorpayItemId: "item_RNn1BJlJAJ9sM8",
     description: "The addictive numbers board game that makes prime thinking second nature.",
@@ -91,7 +91,7 @@ function Hero() {
       description:
         "Players compete, strategize and try to outsmart each other. As the game unfolds, primes, factors and number patterns begin to make sense naturally, without ever feeling like a maths lesson.",
       supporting: "",
-      cta: "Buy Now ₹1,499",
+      cta: "Buy Now ₹1,799",
       ctaLink: "/products",
       secondaryCta: "Add to Cart",
       secondaryCtaLink: "/products",
@@ -102,7 +102,7 @@ function Hero() {
   function handleBuyNow() {
     setCheckoutProduct({
       name: "Prime Time™",
-      price: "₹1,499",
+      price: "₹1,799",
       initialprice: "₹1,999",
       razorpayItemId: "item_RNn1BJlJAJ9sM8",
       description: "The addictive numbers board game that makes prime thinking second nature.",
@@ -117,7 +117,7 @@ function Hero() {
   function handleAddToCart() {
     addToCart({
       name: "Prime Time™",
-      price: "₹1,499",
+      price: "₹1,799",
       initialprice: "₹1,999",
       razorpayItemId: "item_RNn1BJlJAJ9sM8",
       description: "The addictive numbers board game that makes prime thinking second nature.",
@@ -128,7 +128,7 @@ function Hero() {
     if (typeof window !== "undefined" && (window as any).fbq) {
       (window as any).fbq("track", "AddToCart", {
         content_name: "Prime Time™",
-        value: 1499,
+        value: 1799,
         currency: "INR",
       });
     }
@@ -237,7 +237,7 @@ function Hero() {
                       className="hs1-buy-btn inline-block rounded-full px-8 py-4 text-center text-[18px] font-semibold"
                       style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
                     >
-                      Buy Now ₹1,499
+                      Buy Now ₹1,799
                     </button>
 
                     <button
@@ -388,7 +388,7 @@ function Hero() {
                     className="hs1-buy-btn w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
                     style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
                   >
-                    Buy Now ₹1,499
+                    Buy Now ₹1,799
                   </button>
 
                   <button
@@ -1472,7 +1472,7 @@ function InteractiveGames() {
 // ─────────────────────────────────────────────────────────────────
 const PRIME_TIME: HeroProductConfig = {
   name: "Prime Time™",
-  price: "₹1,499",
+  price: "₹1,799",
   initialprice: "₹1,999",
   razorpayItemId: "item_RNn1BJlJAJ9sM8",
   description: "The addictive numbers board game that makes prime thinking second nature.",
@@ -1777,7 +1777,7 @@ export function PrimeTimeBuyBlock() {
     if (typeof window !== "undefined" && (window as any).fbq) {
       (window as any).fbq("track", "AddToCart", {
         content_name: PRIME_TIME.name,
-        value: 1499,
+        value: 1799,
         currency: "INR",
       });
     }
@@ -1879,7 +1879,7 @@ export function PrimeTimeBuyBlock() {
                   className="font-heading text-[38px] font-extrabold leading-none"
                   style={{ color: TEXT_DARK }}
                 >
-                  ₹1,499
+                  ₹1,799
                 </span>
                 <span
                   className="font-sans text-lg line-through"
@@ -1918,7 +1918,7 @@ export function PrimeTimeBuyBlock() {
                   className="ptb-buy-btn relative flex items-center justify-center overflow-hidden rounded-full px-8 py-3.5 text-[15px] font-extrabold"
                 >
                   <span className="relative flex items-center gap-2">
-                    Buy Now — ₹1,499
+                    Buy Now — ₹1,799
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"

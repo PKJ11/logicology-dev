@@ -375,7 +375,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
                 className="hs1-buy-btn inline-block rounded-full px-8 py-4 text-center text-[18px]  font-semibold"
                 style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
               >
-                Buy Now ₹1,499
+                Buy Now ₹1,799
               </button>
 
               {/* View details — transparent with white border, becomes amber on hover */}
@@ -504,7 +504,7 @@ export default function HeroSlide1({ isInView }: SlideProps) {
                 className="hs1-buy-btn w-[260px] rounded-full py-4 text-center text-[16px] font-semibold"
                 style={{ fontFamily: "var(--font-outfit), sans-serif", cursor: "pointer" }}
               >
-                Buy Now ₹1,499
+                Buy Now ₹1,799
               </button>
 
               {/* Mobile View details */}

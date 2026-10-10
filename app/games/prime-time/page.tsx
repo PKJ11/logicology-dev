@@ -35,7 +35,7 @@ const productSchema = {
     "@type": "Offer",
     url: URL,
     priceCurrency: "INR",
-    price: "1499",
+    price: "1799",
     availability: "https://schema.org/InStock",
     itemCondition: "https://schema.org/NewCondition",
     seller: { "@id": `${SITE_URL}/#organization` },
