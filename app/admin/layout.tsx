@@ -89,6 +89,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               isOpen={isSidebarOpen}
             />
             <NavItem href="/admin/users" icon="👥" label="Users" isOpen={isSidebarOpen} />
+            <NavItem href="/admin/orders" icon="📦" label="Orders" isOpen={isSidebarOpen} />
             {/* <NavItem href="/admin/analytics" icon="📈" label="Analytics" isOpen={isSidebarOpen} /> */}
           </ul>
         </nav>
