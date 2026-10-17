@@ -63,6 +63,16 @@ const PROMO_CODES: Record<string, PromoCodeDetails> = {
       { matchAmount: 999, finalPrice: 650 }, // full set of 5
     ],
   },
+
+  // Prime Time exclusive: snaps the ₹1,799 Prime Time game to ₹1,299.
+  // Update matchAmount if the Prime Time price changes.
+  ME1299: {
+    type: "price_tiers",
+    minAmount: 0,
+    tiers: [
+      { matchAmount: 1799, finalPrice: 1299 }, // Prime Time (single unit)
+    ],
+  },
 };
 
 const TOLERANCE = 1; // rupees, to absorb any rounding
