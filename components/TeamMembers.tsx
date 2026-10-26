@@ -13,28 +13,28 @@ const teamMembers = [
   {
     name: "Gayatri Phadnis",
     role: "Co-Founder, Head of Content & Strategy",
-    image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758535847610",
+    image: "https://ik.imagekit.io/pratik11/gaytri.png",
     bio: "Gayatri is the creative force behind Logicology’s content. She leads innovation, content strategy, and development with a sharp, logical mind and a deep understanding of young learners. As a mother, she draws inspiration from her parenting journey, crafting content that is both engaging and educational for children.",
     linkedin: "https://www.linkedin.com/in/gayatri-phadnis-vyas/",
   },
   {
     name: "Kartik Girish Vyas",
     role: "Co-Founder, Head of Marketing & Partnerships",
-    image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758535847610",
+    image: "https://ik.imagekit.io/pratik11/kartik.png",
     bio: "Kartik is the marketing mind at Logicology. A people’s person, he focuses on partnerships, talent development, and community building. A teacher at heart, Kartik loves interacting with young children. A quintessential critic, he often serves as the sounding board for refining creative ideas at Logicology.",
     linkedin: "https://www.linkedin.com/in/kartik-girish-vyas-b567496/",
   },
   {
     name: "Jasneet Singh Babra",
     role: "Head of Design",
-    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
+    image: "https://ik.imagekit.io/pratik11/jasneet.png",
     bio: "Jasneet is the first non-founder associate at Logicology and heads the design team. Design is his true passion, and he owns all major creative projects. From books and games to websites and marketing collateral, Jasneet’s modern, slick designs define the visual identity of Logicology.",
     linkedin: "https://www.linkedin.com/in/jasneet-singh-babra-1a979a1b7/",
   },
   {
     name: "Pratik Kumar Jha",
     role: "Head of Technology",
-    image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758535847610",
+    image: "https://ik.imagekit.io/pratik11/pratik.png",
     bio: "Pratik is the technology lead at Logicology. A passionate technologist, he manages the entire tech stack—from the website, community, and e-shop to interactive games and modules. Always on the lookout for new features, Pratik drives all of Logicology’s technology initiatives.",
     linkedin: "https://www.linkedin.com/in/pratik-kumar-jha-b95473259/",
   },
@@ -45,12 +45,14 @@ const teamMembers = [
     image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758535847610",
     bio: "",
     linkedin: "",
+    placeholder: true,
   },
   {
     name: "You could be the next!",
     role: "",
     image: "https://ik.imagekit.io/pratik11/2.png?updatedAt=1758540542961",
     bio: "",
+    placeholder: true,
   },
 ];
 
@@ -107,6 +109,21 @@ export default function TeamPage() {
               Builders, educators, and designers united by a simple belief: learning should feel
               like play.
             </motion.p>
+
+            {/* Group photo */}
+            <motion.div variants={fadeUp} className="relative mt-10 w-full max-w-5xl">
+              <div className="pointer-events-none absolute -inset-2 rounded-4xl bg-gradient-to-br from-brand-teal/20 via-transparent to-brand-coral/20 blur-xl" />
+              <div className="relative aspect-[3/2] overflow-hidden rounded-4xl shadow-soft ring-1 ring-black/5">
+                <Image
+                  src="https://ik.imagekit.io/pratik11/team.png"
+                  alt="The Logicology team: Gayatri Phadnis, Kartik Girish Vyas, Jasneet Singh Babra and Pratik Kumar Jha"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -127,7 +144,13 @@ export default function TeamPage() {
                 <div className="grid gap-0 md:grid-cols-2 md:gap-6 lg:gap-10">
                   {/* Image left */}
                   <div className="relative order-1 md:order-1">
-                    <div className="group relative h-80 sm:h-96 md:h-full">
+                    <div
+                      className={`group relative ${
+                        m.placeholder
+                          ? "h-80 sm:h-96 md:h-full"
+                          : "h-[28rem] sm:h-[32rem] md:h-full md:min-h-[32rem]"
+                      }`}
+                    >
                       {/* Framed image card */}
                       <div className="absolute inset-4 rounded-4xl bg-gradient-to-br from-white to-white/70 shadow-soft" />
                       <motion.div
@@ -139,7 +162,7 @@ export default function TeamPage() {
                           alt={m.name}
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-contain object-center"
+                          className={m.placeholder ? "object-contain object-center" : "object-cover object-[center_15%]"}
                           priority={idx < 2}
                         />
                         {/* Subtle overlay for readability */}

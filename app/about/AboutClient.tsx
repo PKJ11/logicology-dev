@@ -299,25 +299,25 @@ function OurTeam() {
     {
       name: "Gayatri Phadnis",
       role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/1.png?updatedAt=1758540542961",
+      image: "https://ik.imagekit.io/pratik11/gaytri.png?tr=w-500",
       bio: "Creative force behind Logicology’s content. Leads innovation, strategy, and development with a parent’s perspective.",
     },
     {
       name: "Kartik Girish Vyas",
       role: "Co-Founder",
-      image: "https://ik.imagekit.io/pratik11/4.png?updatedAt=1758540542961",
+      image: "https://ik.imagekit.io/pratik11/kartik.png?tr=w-500",
       bio: "Marketing and partnerships lead. A teacher at heart who refines ideas and drives community growth.",
     },
     {
       name: "Jasneet Singh Babra",
       role: "Head of Design",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      image: "https://ik.imagekit.io/pratik11/jasneet.png?tr=w-500",
       bio: "Owns all design projects at Logicology. Brings sleek, modern visuals across books, games, and digital media.",
     },
     {
       name: "Pratik Kumar Jha",
       role: "Head of Technology",
-      image: "https://ik.imagekit.io/pratik11/3.png?updatedAt=1758540542961",
+      image: "https://ik.imagekit.io/pratik11/pratik.png?tr=w-500",
       bio: "Drives the entire tech stack—from website and e-shop to interactive games and modules.",
     },
 
@@ -407,7 +407,7 @@ function OurTeam() {
                   <img
                     src={m.image}
                     alt={m.name}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 flex items-end bg-black/0 transition-all duration-300 group-hover:bg-black/10">
                     <div className="w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
@@ -450,7 +450,7 @@ function OurTeam() {
               <img
                 src={teamMembers[active].image}
                 alt={teamMembers[active].name}
-                className="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+                className="mx-auto mb-4 h-32 w-32 rounded-full object-cover object-top"
               />
               <h3 className="text-center text-2xl font-bold text-gray-900">
                 {teamMembers[active].name}
