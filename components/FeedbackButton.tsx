@@ -1,13 +1,23 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import FeedbackForm from "@/components/FeedbackForm";
+import { useFeedbackTabHidden } from "@/lib/feedbackVisibility";
+
+// Routes where the whole page is a play screen, so the tab would cover controls.
+const NO_TAB_ROUTES = ["/sudoku"];
 
 export default function FeedbackButton() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() ?? "";
+  const hiddenByGame = useFeedbackTabHidden();
+  const hideTab =
+    hiddenByGame || NO_TAB_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/"));
 
   return (
     <>
       {/* Feedback Button */}
+      {!hideTab && (
       <button
         onClick={() => setOpen(true)}
         className="fixed right-0 top-1/2 z-50 -translate-y-1/2 rounded-l-lg bg-brand-gold px-4 py-2 text-white shadow-lg transition-all hover:bg-brand-gold/90"
@@ -16,6 +26,7 @@ export default function FeedbackButton() {
       >
         Feedback
       </button>
+      )}
       {/* Feedback Modal */}
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

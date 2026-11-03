@@ -10,6 +10,8 @@ const ROUTES: [path: string, changeFrequency: "weekly" | "monthly", priority: nu
   ["/products", "weekly", 0.9],
   ["/games/prime-time", "weekly", 0.8],
   ["/games/turn-the-tables", "weekly", 0.8],
+  ["/speed-maths", "weekly", 0.8],
+  ["/sudoku", "monthly", 0.6],
   ["/books/logicoland-series", "weekly", 0.8],
   ["/logicoland/volume-5", "monthly", 0.7],
   ["/about", "monthly", 0.6],

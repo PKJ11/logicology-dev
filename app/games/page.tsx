@@ -137,7 +137,10 @@ function GamesGuide() {
               thinking. A card or board game slows things down: children talk through their moves,
               explain their reasoning, lose gracefully and try again. Playing face to face with
               parents, siblings or friends also builds the patience and communication skills that
-              no screen can teach.
+              no screen can teach. When you do want a quick screen session, our free{" "}
+              <GuideLink href="/speed-maths">Speed Maths games</GuideLink> build calculation
+              speed, and <GuideLink href="/sudoku">Colour Sudoku</GuideLink> is a gentle first
+              logic puzzle.
             </p>
           ),
         },

@@ -66,6 +66,16 @@ const SiteFooter = () => {
                         Philosophy
                       </Link>
                     </li>
+                    <li>
+                      <Link href="/speed-maths" className="hover:underline">
+                        Speed Maths
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/sudoku" className="hover:underline">
+                        Colour Sudoku
+                      </Link>
+                    </li>
                   </ul>
                 </div>
                 <div>
