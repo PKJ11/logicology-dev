@@ -31,6 +31,14 @@ const nextConfig = {
       { source: "/books/logicoland", destination: "/books/logicoland-series", permanent: true },
       { source: "/books/logicoland-volume-1", destination: "/books/logicoland-series", permanent: true },
       { source: "/logicoland-volume-1", destination: "/books/logicoland-series", permanent: true },
+
+      // Renamed team page (camelCase → lowercase).
+      { source: "/about/teamMembers", destination: "/about/team", permanent: true },
+      { source: "/about/teammembers", destination: "/about/team", permanent: true },
+
+      // Old blog CTA targets that never existed.
+      { source: "/games/board-games", destination: "/games", permanent: true },
+      { source: "/games/digital", destination: "/speed-maths", permanent: true },
     ];
   },
 };

@@ -533,7 +533,7 @@ function OurTeam() {
             <div className="mt-6">
               <CTAButton
                 text="View all team members"
-                href="/about/teamMembers"
+                href="/about/team"
                 bg="#fbb041"
                 color="#3d3b40"
                 hoverBg="#fa9e15"

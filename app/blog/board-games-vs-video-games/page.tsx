@@ -1,9 +1,41 @@
+import type { Metadata } from "next";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, articleSchema, breadcrumbSchema, pageMetadata } from "@/lib/seo";
+
+const PATH = "/blog/board-games-vs-video-games";
+const DESCRIPTION =
+  "Board games or video games: which helps kids learn more? We compare social skills, focus, screen time and maths learning, and explain how to balance both.";
+const HERO_IMAGE = `${SITE_URL}/Images/blogimge/4.png`;
+
+export const metadata: Metadata = pageMetadata({
+  title: "Board Games vs Video Games for Kids' Learning | Logicology",
+  description: DESCRIPTION,
+  path: PATH,
+  ogTitle: "Board Games vs Video Games: Which is Better for Kids' Education?",
+  image: HERO_IMAGE,
+  imageAlt: "Board Games vs Video Games Comparison",
+});
 
 export default function BoardGamesVsVideoGamesPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          articleSchema({
+            headline: "Board Games vs Video Games: Which is Better for Kids' Education?",
+            description: DESCRIPTION,
+            path: PATH,
+            datePublished: "2024-03-20",
+            image: HERO_IMAGE,
+          }),
+          breadcrumbSchema([
+            ["Blog", "/blog"],
+            ["Board Games vs Video Games", PATH],
+          ]),
+        ]}
+      />
       <NavBar />
       <main className="min-h-screen bg-gradient-to-b from-brand-grayBg to-white pb-16 pt-24">
         <article className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -1028,7 +1060,7 @@ export default function BoardGamesVsVideoGamesPage() {
 
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
-                href="/games/board-games"
+                href="/games"
                 className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-brand-teal to-brand-tealDark px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-brand"
               >
                 <span>Explore Board Games</span>
@@ -1048,7 +1080,7 @@ export default function BoardGamesVsVideoGamesPage() {
               </Link>
 
               <Link
-                href="/games/digital"
+                href="/speed-maths"
                 className="to-pink group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-brand-coral px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-brand"
               >
                 <span>Explore Digital Games</span>

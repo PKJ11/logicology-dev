@@ -950,7 +950,7 @@ export default function BoardGamesVsVideoGamesPage() {
 
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
-                href="/games/board-games"
+                href="/games"
                 className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-brand-teal to-brand-tealDark px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-brand"
               >
                 <span>Explore Board Games</span>
@@ -970,7 +970,7 @@ export default function BoardGamesVsVideoGamesPage() {
               </Link>
 
               <Link
-                href="/games/digital"
+                href="/speed-maths"
                 className="to-pink group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-brand-coral px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-brand"
               >
                 <span>Explore Digital Games</span>

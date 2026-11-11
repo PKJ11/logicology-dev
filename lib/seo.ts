@@ -65,6 +65,35 @@ export function pageMetadata({
 
 // ── JSON-LD builders ─────────────────────────────────────────
 
+export const TEAM_PATH = "/about/team";
+
+// Founders, as shown on /about/team. Kartik's @id matches the Person node on kartikvyas.in
+// so search and AI systems can join the two sites into one entity.
+export const founders = [
+  {
+    "@type": "Person",
+    "@id": `${SITE_URL}${TEAM_PATH}#gayatri-phadnis`,
+    name: "Gayatri Phadnis",
+    jobTitle: "Co-Founder, Head of Content & Strategy",
+    url: `${SITE_URL}${TEAM_PATH}`,
+    image: "https://ik.imagekit.io/pratik11/gaytri.png",
+    worksFor: { "@id": `${SITE_URL}/#organization` },
+    sameAs: ["https://www.linkedin.com/in/gayatri-phadnis-vyas/"],
+  },
+  {
+    "@type": "Person",
+    "@id": "https://www.kartikvyas.in/#person",
+    name: "Kartik Girish Vyas",
+    jobTitle: "Co-Founder, Head of Marketing & Partnerships",
+    url: "https://www.kartikvyas.in",
+    image: "https://ik.imagekit.io/pratik11/kartik.png",
+    worksFor: { "@id": `${SITE_URL}/#organization` },
+    sameAs: ["https://www.linkedin.com/in/kartik-girish-vyas-b567496/", `${SITE_URL}${TEAM_PATH}`],
+  },
+] as const;
+
+export const personSchemas = founders.map((p) => ({ "@context": "https://schema.org", ...p }));
+
 export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -76,6 +105,7 @@ export const organizationSchema = {
   description:
     "Logicology is a Nagpur-based learning company founded by educators, creating screen-free brain games, math board games and logic puzzle books for kids.",
   sameAs: SOCIAL_PROFILES,
+  founder: founders.map(({ "@id": id, name, url }) => ({ "@type": "Person", "@id": id, name, url })),
   address: {
     "@type": "PostalAddress",
     addressLocality: "Nagpur",
@@ -112,6 +142,47 @@ export function breadcrumbSchema(items: [string, string][]) {
       name,
       item: absoluteUrl(path),
     })),
+  };
+}
+
+interface ArticleSeo {
+  headline: string;
+  description: string;
+  path: string;
+  /** ISO date matching the date shown on the page. */
+  datePublished: string;
+  /** Only set when the article text itself was really updated. */
+  dateModified?: string;
+  image?: string;
+  /** Set to a founder's @id once the real writer/reviewer is confirmed; defaults to the organisation. */
+  authorId?: string;
+}
+
+export function articleSchema({
+  headline,
+  description,
+  path,
+  datePublished,
+  dateModified,
+  image,
+  authorId,
+}: ArticleSeo) {
+  const person = authorId ? founders.find((f) => f["@id"] === authorId) : undefined;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    url: absoluteUrl(path),
+    mainEntityOfPage: absoluteUrl(path),
+    datePublished,
+    ...(dateModified ? { dateModified } : {}),
+    ...(image ? { image } : {}),
+    author: person
+      ? { "@type": "Person", "@id": person["@id"], name: person.name, url: person.url }
+      : { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: SITE_NAME, url: SITE_URL },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    inLanguage: "en-IN",
   };
 }
 

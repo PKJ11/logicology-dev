@@ -4,7 +4,7 @@ import NavBar from "@/components/NavBar";
 import Community from "@/components/Community";
 import Footer from "@/components/Footer";
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -1829,7 +1829,7 @@ function WhyLogicologySection() {
 // ─────────────────────────────────────────────
 // Root Client Component
 // ─────────────────────────────────────────────
-export default function TurnTheTablesClient() {
+export default function TurnTheTablesClient({ children }: { children?: ReactNode }) {
   return (
     <main>
       <NavBar />
@@ -1839,6 +1839,8 @@ export default function TurnTheTablesClient() {
       <TurnTablesBuyBlock />
       <ExplainerVideo />
       {/* <WhyLogicologySection /> */}
+      {/* Server-rendered specs + FAQ from page.tsx */}
+      {children}
       <Community />
       <Footer />
     </main>

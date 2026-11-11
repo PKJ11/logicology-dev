@@ -25,7 +25,7 @@ import MediaLayoutRight from "@/components/MediaLayoutRight";
 import VideoModal from "@/components/VideoModal";
 import { motion, useInView } from "framer-motion";
 
-export default function PrimeTimeLanding() {
+export default function PrimeTimeLanding({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <main className="min-h-screen bg-brand-hero">
@@ -41,6 +41,8 @@ export default function PrimeTimeLanding() {
         <LostCardHelper />
         <PrimeTimeBuyBlock />
         <GallerySection />
+        {/* Server-rendered specs + FAQ from page.tsx */}
+        {children}
         <Community />
         <Footer />
       </main>

@@ -28,7 +28,7 @@ const faqs: Faq[] = [
   },
   {
     q: "Are these games good for classrooms?",
-    a: "Yes. Both games play in 15–40 minutes with up to 6 players, which fits a class period or a math lab rotation. Schools also use them for math clubs and inter-house tournaments. Contact us for bulk and school orders.",
+    a: "Yes. Prime Time takes 15–30 minutes and Turn the Tables 15–20 minutes, each with 2–6 players, which fits a class period or a math lab rotation. Schools also use them for math clubs and inter-house tournaments. Contact us for bulk and school orders.",
   },
   {
     q: "Are Logicology games screen-free?",

@@ -106,9 +106,10 @@ export default function BulkOrderForm() {
       className="mx-auto max-w-lg space-y-5 rounded-xl bg-white p-6 shadow-lg"
       onSubmit={handleSubmit}
     >
-      <h2 className="mb-2 text-center text-2xl font-bold text-[#0A8A80]">
+      {/* Page H1 for /bulk-order (same classes as the old h2, so it looks identical). */}
+      <h1 className="mb-2 text-center text-2xl font-bold text-[#0A8A80]">
         Bulk Order / Return Gifts
-      </h2>
+      </h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <input
           type="text"

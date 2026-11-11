@@ -1,4 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, articleSchema, breadcrumbSchema, pageMetadata } from "@/lib/seo";
+
+const PATH = "/blog/top-10-logic-based-learning-activities";
+const DESCRIPTION =
+  "Logic activities kids can try at home, from Sudoku, tangrams and chess to logic grid puzzles and screen-free coding games, with tips on choosing the right one.";
+const HERO_IMAGE = `${SITE_URL}/Images/blogimge/1.png`;
+
+export const metadata: Metadata = pageMetadata({
+  title: "Logic-Based Learning Activities Kids Can Try at Home | Logicology",
+  description: DESCRIPTION,
+  path: PATH,
+  ogTitle: "Logic-Based Learning Activities Kids Can Try at Home",
+  image: HERO_IMAGE,
+});
 
 // Dummy blog data for now
 const blogs = [
@@ -13,7 +29,23 @@ const blogs = [
 export default function BlogListPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">Logicology Blog</h1>
+      <JsonLd
+        data={[
+          articleSchema({
+            headline: "Top 10 Logic-Based Learning Activities for Kids: Boost Their Skills",
+            description: DESCRIPTION,
+            path: PATH,
+            datePublished: "2024-03-15",
+            image: HERO_IMAGE,
+          }),
+          breadcrumbSchema([
+            ["Blog", "/blog"],
+            ["Top 10 Logic-Based Learning Activities", PATH],
+          ]),
+        ]}
+      />
+      {/* Was a second <h1>; same look, the article title below is now the only H1. */}
+      <p className="mb-6 font-heading text-3xl font-bold">Logicology Blog</p>
       <ul className="mb-12 space-y-6">
         {blogs.map((blog) => (
           <li key={blog.id} className="border-b pb-4">
