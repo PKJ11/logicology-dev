@@ -36,7 +36,7 @@ const products = [
     description:
       "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents.",
     image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-    rating: 5,
+    rating: 4.7,
     specialOffer: "",
     category: "games",
   },
@@ -407,7 +407,7 @@ const ProductShowcase = () => {
 
                   {/* Stars */}
                   <div className="mt-1.5 flex items-center gap-0.5 sm:mt-3">
-                    {Array.from({ length: product.rating }).map((_, i) => (
+                    {Array.from({ length: Math.round(product.rating) }).map((_, i) => (
                       <svg
                         key={i}
                         className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5"

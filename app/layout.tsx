@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Logicology – Brain Games & Logic Puzzles for Kids",
   description:
-    "Screen-free brain games, logic puzzle books and math board games for kids aged 6–16. Designed by educators, loved by kids.",
+    "Screen-free brain games, logic puzzle books and math board games for kids aged 5–16. Designed by educators, loved by kids.",
   openGraph: { siteName: "Logicology", locale: "en_IN", type: "website" },
 };
 

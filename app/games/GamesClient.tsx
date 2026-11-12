@@ -52,10 +52,10 @@ export default function GamesPage({ children }: { children?: ReactNode }) {
       description:
         "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
       author: "Logicology",
-      rating: 4.8,
+      rating: 4.7,
       category: "Math Strategy",
       players: "2-6",
-      duration: "20-40 min",
+      duration: "15-20 min",
     },
   ];
 

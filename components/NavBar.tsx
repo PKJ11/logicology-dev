@@ -53,10 +53,10 @@ const games: Game[] = [
     description:
       "An exciting multiplication-based card game where players match numbers on cards to outplay their opponents. Special strategy cards like Wild, Up, Down, Turn, and Streak add twists that keep the game fresh and unpredictable.",
     author: "Logicology",
-    rating: 4.8,
+    rating: 4.7,
     category: "Math Strategy",
     players: "2-6",
-    duration: "20-40 min",
+    duration: "15-20 min",
   },
 ];
 
@@ -70,26 +70,6 @@ const books: Book[] = [
       "Welcome to Logicoland, a vibrant puzzle world that makes logic feel simple and fun. Each activity uses clear, color-coded hints and bite-sized steps so kids learn how to think, not just guess. From matching and patterns to starter Sudoku, children build focus, reasoning, and confidence—one colorful challenge at a time.",
     author: "Logicology",
     rating: 4.8,
-  },
-  {
-    id: 2,
-    title: "Speed Maths",
-    imageUrl:
-      "https://ik.imagekit.io/pratik11/SPEED%20MATHS%20COVER%20MOCKUP.png?updatedAt=1757748179754",
-    description:
-      "Sharpen your mental math skills with Speed Maths! Packed with fun drills, rapid challenges, and clever tricks, this book trains children to calculate faster while enjoying the thrill of beating the clock. A perfect blend of practice and play to build confidence in arithmetic.",
-    author: "Logicology",
-    rating: 4.7,
-  },
-  {
-    id: 3,
-    title: "Hidden in the Jungle",
-    imageUrl:
-      "https://ik.imagekit.io/pratik11/HIDDEN%20IN%20THE%20JUNGLE%20MOCKUP.png?updatedAt=1757748179906",
-    description:
-      "A fast-paced observation and deduction card game where players race to spot hidden animals camouflaged in the jungle. Quick eyes and sharp focus are the key to winning in this exciting family-friendly adventure.",
-    author: "Logicology",
-    rating: 4.7,
   },
 ];
 

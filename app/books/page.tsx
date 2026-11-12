@@ -7,7 +7,7 @@ import BooksClient from "./BooksClient";
 export const metadata: Metadata = pageMetadata({
   title: "Logic Puzzle Books for Kids | Logicoland Series | Logicology",
   description:
-    "Logic puzzle and activity books for kids aged 6–16. The five-volume Logicoland series builds reasoning, pattern spotting and problem-solving skills.",
+    "Logic puzzle and activity books for kids aged 5–8. The five-volume Logicoland series builds reasoning, pattern spotting and problem-solving skills.",
   path: "/books",
   ogTitle: "Logic Puzzle Books for Kids – Logicoland Series",
   image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max",
@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs: Faq[] = [
   {
     q: "What age are the Logicoland books for?",
-    a: "Logicoland starts gently for children from about 6 years old and the later volumes stretch older children well into their teens. Each volume steps up in difficulty, so children can grow through the series.",
+    a: "Logicoland is designed for children aged 5–8. Volume 1 starts gently and each volume steps up in difficulty, so children can grow through the series.",
   },
   {
     q: "Do the volumes need to be done in order?",
@@ -83,10 +83,11 @@ function BooksGuide() {
           heading: "Choosing the right logic book by age",
           body: (
             <p>
-              For ages 6–8, begin with Volume 1 and work through it together at first. Children aged
-              8–12 usually move quickly through Volumes 1 and 2 and enjoy the challenge of Volumes 3
-              and 4. Confident older children and teens can start anywhere, and often head straight
-              for Volume 5. If your child enjoys numbers, pair the books with our{" "}
+              Logicoland is made for ages 5–8. Five-year-olds should begin with Volume 1 and work
+              through it together with a parent at first. Six- and seven-year-olds usually move
+              quickly through Volumes 1 and 2 and enjoy the challenge of Volumes 3 and 4. Confident
+              eight-year-olds can start anywhere, and often head straight for Volume 5. If your
+              child enjoys numbers, pair the books with our{" "}
               <GuideLink href="/games">brain games for kids</GuideLink>.
             </p>
           ),

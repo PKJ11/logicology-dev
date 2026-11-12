@@ -31,7 +31,7 @@ export const SLIDE3_PRODUCT: HeroProductConfig = {
   razorpayItemId: "item_RsD9AhoF8idQ21",
   description: "Turn the Tables Strategy Game",
   image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE.png?updatedAt=1780465309198",
-  rating: 5,
+  rating: 4.7,
   specialOffer: "",
   category: "games",
 };

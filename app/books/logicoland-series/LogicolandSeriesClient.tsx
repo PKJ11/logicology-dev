@@ -235,7 +235,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                   >
-                    The Logicoland Series • Ages 5+
+                    The Logicoland Series • Ages 5–8
                   </motion.p>
 
                   <motion.h1
@@ -387,7 +387,7 @@ function HeroVideo({ isActive }: { isActive: boolean }) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
                   >
-                    The Logicoland Series • Ages 5+
+                    The Logicoland Series • Ages 5–8
                   </motion.p>
 
                   <motion.p
@@ -683,7 +683,7 @@ function PrintablesSection({ isActive }: { isActive: boolean }) {
 const LOGICOLAND_SET: HeroProductConfig = {
   name: "Logicoland Set (All Volumes)",
   price: "₹999",
-  initialprice: undefined,
+  initialprice: "₹1,495",
   razorpayItemId: "item_SSxJhDUqb7HTiy",
   description: "Every volume in one box — the complete thinking skills collection.",
   image: "https://ik.imagekit.io/pratik11/LOGICOLAND-HERO-IMAGE.png?updatedAt=1781163914607",
@@ -1422,6 +1422,12 @@ export function LogicolandBuyBlock() {
                   style={{ color: TEXT_DARK }}
                 >
                   ₹999
+                </span>
+                <span
+                  className="font-sans text-lg line-through"
+                  style={{ color: TEXT_DARK, opacity: 0.4 }}
+                >
+                  ₹1,495
                 </span>
                 <span
                   className="rounded-full px-2.5 py-1 font-sans text-[11px] font-bold uppercase tracking-wide"

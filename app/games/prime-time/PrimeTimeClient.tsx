@@ -1495,10 +1495,10 @@ const CROSS_SELL: CrossSellProduct[] = [
     name: "Logicoland Set (All Volumes)",
     displayName: "Complete Logicoland Set",
     price: "₹999",
-    initialprice: undefined,
+    initialprice: "₹1,495",
     razorpayItemId: "item_SSxJhDUqb7HTiy",
     description: "Every volume in one box — the complete thinking skills collection.",
-    blurb: "Five volumes of logic puzzles for ages 6–16. The full collection in one box.",
+    blurb: "Five volumes of logic puzzles for ages 5–8. The full collection in one box.",
     image: "https://ik.imagekit.io/pratik11/LOGICOLAND-HERO-IMAGE.png?updatedAt=1781163914607",
     rating: 4.8,
     specialOffer: "",
@@ -1514,7 +1514,7 @@ const CROSS_SELL: CrossSellProduct[] = [
     description: "A fast-paced multiplication card game with wild strategy twists.",
     blurb: "A fast-paced multiplication card game. Pairs brilliantly with Prime Time™.",
     image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-    rating: 4.8,
+    rating: 4.7,
     specialOffer: "",
     category: "games",
     tag: "25% Off",
@@ -1893,7 +1893,7 @@ export function PrimeTimeBuyBlock() {
                   className="rounded-full px-2.5 py-1 font-sans text-[11px] font-bold uppercase tracking-wide"
                   style={{ backgroundColor: TAG_COLOR, color: TEXT_DARK }}
                 >
-                  Save ₹500
+                  Save ₹200
                 </span>
               </motion.div>
 

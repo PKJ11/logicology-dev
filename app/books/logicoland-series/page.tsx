@@ -4,11 +4,11 @@ import { SITE_URL, breadcrumbSchema, pageMetadata } from "@/lib/seo";
 import LogicolandSeriesClient from "./LogicolandSeriesClient";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Logicoland – Logic Puzzle Books for Kids 6–16 | Logicology",
+  title: "Logicoland – Logic Puzzle Books for Kids 5–8 | Logicology",
   description:
-    "Five volumes of logic puzzles and brain challenges for ages 6–16. Buy single volumes or the complete Logicoland set.",
+    "Five volumes of logic puzzles and brain challenges for ages 5–8. Buy single volumes or the complete Logicoland set.",
   path: "/books/logicoland-series",
-  ogTitle: "Logicoland – Logic Puzzle Books for Kids 6–16",
+  ogTitle: "Logicoland – Logic Puzzle Books for Kids 5–8",
   image: "https://ik.imagekit.io/pratik11/LOGICOLAND-ALL-5-BOOK-COVERS.png?tr=w-1200,h-630,c-at_max",
 });
 
@@ -23,7 +23,7 @@ const productSchema = {
     "Five volumes of logic puzzles and brain challenges for kids: colour Sudoku, patterns, symmetry, mazes and path puzzles that build reasoning and problem-solving skills.",
   brand: { "@type": "Brand", name: "Logicology" },
   category: "Books > Children's Activity Books",
-  audience: { "@type": "PeopleAudience", suggestedMinAge: 6 },
+  audience: { "@type": "PeopleAudience", suggestedMinAge: 5, suggestedMaxAge: 8 },
   offers: {
     "@type": "AggregateOffer",
     url: `${SITE_URL}/books/logicoland-series`,

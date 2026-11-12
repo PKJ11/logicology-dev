@@ -102,7 +102,7 @@ function TurnTheTablesGuide() {
                   { label: "Play time", value: "15 to 20 minutes" },
                   { label: "Skills", value: "Multiplication facts, times-table fluency and strategy" },
                   { label: "Contents", value: "64 number cards and 26 special cards" },
-                  { label: "Type", value: "Screen-free multiplication card game with a patent-pending design" },
+                  { label: "Type", value: "Screen-free multiplication card game" },
                   { label: "Maths needed", value: "None" },
                   { label: "Price", value: "₹299 (MRP ₹399)" },
                   { label: "Return gifts", value: "Return-Gift Bundle: 20 copies for ₹4,000" },

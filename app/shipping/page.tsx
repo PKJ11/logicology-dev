@@ -70,9 +70,9 @@ export default function ShippingPolicy() {
               <h2 className="font-heading text-2xl font-bold text-gray-900">Shipping Charges</h2>
               <div className="prose prose-gray mt-3 max-w-none">
                 <ul>
-                  <li>FREE Shipping on all orders worth ₹999 or above.</li>
+                  <li>FREE Shipping on all orders worth ₹499 or above.</li>
                   <li>
-                    For orders below ₹999, a flat shipping charge of ₹99 will be applied at
+                    For orders below ₹499, a flat shipping charge of ₹99 will be applied at
                     checkout.
                   </li>
                 </ul>

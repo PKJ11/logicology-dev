@@ -40,7 +40,7 @@ const FEATURED: FeaturedProduct[] = [
     razorpayItemId: "item_RsD9AhoF8idQ21",
     description: "A fast-paced multiplication card game with wild strategy twists.",
     image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png",
-    rating: 5,
+    rating: 4.7,
     specialOffer: "",
     category: "games",
     tag: "25% Off",
@@ -53,7 +53,7 @@ const FEATURED: FeaturedProduct[] = [
     price: "₹249",
     initialprice: "₹299",
     razorpayItemId: "item_S4UBymXQ91Vmk4",
-    description: "Five volumes of logic puzzles and brain challenges for ages 6–16.",
+    description: "Five volumes of logic puzzles and brain challenges for ages 5–8.",
     image:
       "https://ik.imagekit.io/pratik2002/VOLUMNE%201/VERTICAL%20BOOK%20COVER%20MOCKUP%20VOLUNE%201.png?updatedAt=1773912123121",
     rating: 5,

@@ -14,7 +14,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Brain Games & Logic Puzzles for Kids | Logicology",
   description:
-    "Screen-free brain games, logic puzzle books and math board games for kids aged 6–16. Designed by educators, loved by kids. Shop Prime Time & Logicoland.",
+    "Screen-free brain games, logic puzzle books and math board games for kids aged 5–16. Designed by educators, loved by kids. Shop Prime Time & Logicoland.",
   path: "/",
   ogTitle: "Logicology – Brain Games & Logic Puzzles for Kids",
   imageAlt: "Children playing Prime Time, a math board game by Logicology",

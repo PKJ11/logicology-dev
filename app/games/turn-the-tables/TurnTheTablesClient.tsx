@@ -161,7 +161,7 @@ function TurnTablesHero() {
     description:
       "A fast-paced card game built around multiplication, strategy and friendly competition.",
     image: "https://ik.imagekit.io/pratik2002/primetime_imag1.png?updatedAt=1757032084370",
-    rating: 5,
+    rating: 4.7,
     specialOffer: "",
     category: "games",
   });
@@ -175,8 +175,7 @@ function TurnTablesHero() {
   }, []);
 
   const TRUST_ITEMS = [
-    { text: "4.8 · Designed by educators" },
-    { text: "Patent-pending design" },
+    { text: "4.7 · Designed by educators" },
     { text: "2–6 players" },
     { text: "Card game" },
     { text: "No maths knowledge needed" },
@@ -204,7 +203,7 @@ function TurnTablesHero() {
       description:
         "A fast-paced card game built around multiplication, strategy and friendly competition.",
       image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-      rating: 5,
+      rating: 4.7,
       specialOffer: "",
       category: "games",
     });
@@ -220,7 +219,7 @@ function TurnTablesHero() {
       description:
         "A fast-paced card game built around multiplication, strategy and friendly competition.",
       image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-      rating: 5,
+      rating: 4.7,
     });
     toast.success("Turn the Tables added to cart!");
     if (typeof window !== "undefined" && (window as any).fbq) {
@@ -1138,7 +1137,7 @@ const TURN_TABLES = {
   razorpayItemId: "item_RsD9AhoF8idQ21",
   description: "Fast turns. Smart moves. Multiplication that finally clicks.",
   image: "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-BOX-IMAGE.png?updatedAt=1781172932797",
-  rating: 5,
+  rating: 4.7,
   specialOffer: "Save ₹100",
   category: "games",
 };
@@ -1152,7 +1151,7 @@ const RETURN_GIFT_BUNDLE = {
   description: "Perfect for Birthdays, Competitions & Events",
   image:
     "https://ik.imagekit.io/pratik11/TURN-THE-TABLE-HERO-IMAGE_withbackground_d0b4XcVqQ.png?updatedAt=1781606906880",
-  rating: 5,
+  rating: 4.7,
   specialOffer: "Perfect for Birthdays, Competitions & Events",
   category: "bundles",
 };
@@ -1383,7 +1382,7 @@ export function TurnTablesBuyBlock() {
                   ))}
                 </div>
                 <span className="font-sans text-sm" style={{ color: TEXT_DARK, opacity: 0.45 }}>
-                  5.0 · New arrival
+                  4.7 · New arrival
                 </span>
               </motion.div>
 
